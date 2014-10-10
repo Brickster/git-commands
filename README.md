@@ -1,4 +1,3 @@
-git-commands
-============
+# git-commands
 
 A collection of custom git commands
