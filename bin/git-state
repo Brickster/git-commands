@@ -4,6 +4,14 @@
 # A more concise and comprehensive version of `git status` and `git log` in one command.
 #
 
+while getopts ":h" opt; do
+    case $opt in
+        h)  man git-state; exit 0;;
+        \?) echo "Invalid option: -$OPTARG" >&2; exit 1;;
+        *)  echo "Unimplemented option: -$OPTARG" >&2; exit 1;;
+    esac
+done
+
 green='\x1B[0;32m'
 nocolor='\x1B[0m'
 
