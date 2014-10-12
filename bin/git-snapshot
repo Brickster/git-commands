@@ -1,0 +1,31 @@
+#! /bin/bash
+
+message=
+while getopts ":m:h" opt; do
+    case $opt in
+        m)  message="$OPTARG";;
+        h)  echo "Used to create a snapshot."; exit 0;;
+        \?) echo "Invalid option: -$OPTARG" >&2; exit 1;;
+        :)  echo "Option -$OPTARG requires an argument." >&2; exit 1;;
+        *)  echo "Unimplemented option: -$OPTARG" >&2; exit 1;;
+    esac
+done
+
+# get snapshot count
+stashs=$(git stash list 2>&1)
+IFS=$'\n' read -rd '' -a stashs <<< "$stashs"
+count=0
+for stash in "${stashs[@]}"
+do
+    if [[ $stash =~ ^.*snapshot\@\{[[:digit:]]+\}.*$ ]]; then
+        ((count++))
+    fi
+done
+
+if [[ -z "$message" ]]; then
+    # no message, use the last commit
+    message=$(git log -1 --oneline)
+fi
+
+git stash save -u --quiet "snapshot@{$count} $message" 
+void=$(git stash apply --quiet) # apply won't shut up so swallow the output
