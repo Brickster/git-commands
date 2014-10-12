@@ -1,0 +1,16 @@
+.\" Manpage for git-snapshot.
+.\" Contact vivek@nixcraft.net.in to correct errors or typos.
+.TH man 1 "2014-10-11" "1.0" "git-snapshot man page"
+.SH NAME
+Create a snapshot of the changes in a dirty working directory
+.SH SYNOPSIS
+git snapshot [-m <message>]
+.SH DESCRIPTION
+Use git snapshot to record the current state of the working directory without reverting it. The snapshot is stored using git stash prepended with snapshot@{i} to differentiate it and stashes created normally.
+.SH OPTIONS
+.PP 
+\-m
+.RS 4
+Message used when creating the stash entry. This has no effect on the snapshot@{i} part of the label.
+.SH AUTHOR
+Marcus Rosenow
