@@ -1,0 +1,14 @@
+#! /bin/bash
+
+#
+# A more concise and comprehensive version of `git status` and `git log` in one command.
+#
+
+green='\x1B[0;32m'
+nocolor='\x1B[0m'
+
+git status --short --branch
+echo -e "## ${green}log${nocolor}"
+git log -10 --oneline
+echo -e "## ${green}branches${nocolor}"
+git branch -v
