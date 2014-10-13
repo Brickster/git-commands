@@ -3,7 +3,11 @@
 .SH NAME
 git-snapshot - create a snapshot of the changes in a dirty working directory
 .SH SYNOPSIS
-git snapshot [-m <message>]
+.sp
+.nf
+git snapshot [-m <message>] [-h]
+git snapshot list
+git snapshot clear
 .SH DESCRIPTION
 Used to record the current state of the working directory without reverting it. The snapshot is stored using git stash prepended with snapshot@{i} to differentiate it and stashes created normally.
 .SH OPTIONS
@@ -16,6 +20,16 @@ Message used when creating the stash entry. This has no effect on the snapshot@{
 \-h
 .RS 4
 Display git-snapshot man page.
+.RE
+.PP 
+list
+.RS 4
+List all snapshots.
+.RE
+.PP 
+clear
+.RS 4
+Remove all snapshots.
 .RE
 .SH AUTHOR
 Marcus Rosenow

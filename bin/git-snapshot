@@ -1,31 +1,80 @@
 #! /bin/bash
 
-message=
-while getopts ":m:h" opt; do
-    case $opt in
-        m)  message="$OPTARG";;
-        h)  man git-snapshot; exit 0;;
-        \?) echo "Invalid option: -$OPTARG" >&2; exit 1;;
-        :)  echo "Option -$OPTARG requires an argument." >&2; exit 1;;
-        *)  echo "Unimplemented option: -$OPTARG" >&2; exit 1;;
-    esac
-done
+main()
+{
+    message=
+    while getopts ":m:h" opt; do
+        case $opt in
+            m)  message="$OPTARG";;
+            h)  man git-snapshot; exit 0;;
+            \?) echo "Invalid option: -$OPTARG" >&2; exit 1;;
+            :)  echo "Option -$OPTARG requires an argument." >&2; exit 1;;
+            *)  echo "Unimplemented option: -$OPTARG" >&2; exit 1;;
+        esac
+    done
 
-# get snapshot count
-stashs=$(git stash list 2>&1)
-IFS=$'\n' read -rd '' -a stashs <<< "$stashs"
-count=0
-for stash in "${stashs[@]}"
-do
-    if [[ $stash =~ ^.*snapshot\@\{[[:digit:]]+\}.*$ ]]; then
-        ((count++))
+    # get snapshot count
+    stashs=$(git stash list 2>&1)
+    IFS=$'\n' read -rd '' -a stashs <<< "$stashs"
+    count=0
+    for stash in "${stashs[@]}"
+    do
+        if [[ $stash =~ ^.*snapshot\@\{[[:digit:]]+\}.*$ ]]; then
+            ((count++))
+        fi
+    done
+
+    if [[ -z "$message" ]]; then
+        # no message, use the last commit
+        message=$(git log -1 --oneline)
     fi
-done
 
-if [[ -z "$message" ]]; then
-    # no message, use the last commit
-    message=$(git log -1 --oneline)
+    git stash save -u --quiet "snapshot@{$count} $message" 
+    void=$(git stash apply --quiet) # apply won't shut up so swallow the output
+}
+
+clear()
+{
+    stashs=$(git stash list 2>&1)
+    IFS=$'\n' read -rd '' -a stashs <<< "$stashs"
+
+    count=0
+    total=${#stashs[@]}
+    for stash in "${stashs[@]}"
+    do
+        if [[ $stash =~ ^.*snapshot\@\{[[:digit:]]+\}.*$ ]]; then
+            git stash drop stash@{$count} --quiet
+            clear # recurse
+        fi
+        ((count++))
+    done
+
+    exit 0
+}
+
+list()
+{
+    stashs=$(git stash list 2>&1)
+    IFS=$'\n' read -rd '' -a stashs <<< "$stashs"
+
+    if (( ${#stashs[@]} == 0 )); then
+        echo "No snapshots"
+        exit 1
+    fi
+
+    count=0
+    for stash in "${stashs[@]}"
+    do
+        if [[ $stash =~ ^.*snapshot\@\{[[:digit:]]+\}.*$ ]]; then
+            echo "$stash"
+        fi
+    done
+    exit 0
+}
+
+if [[ "$1" == "clear" ]]; then
+    clear
+elif [[ "$1" == "list" ]]; then
+    list
 fi
-
-git stash save -u --quiet "snapshot@{$count} $message" 
-void=$(git stash apply --quiet) # apply won't shut up so swallow the output
+main "$@"
