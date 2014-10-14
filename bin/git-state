@@ -20,3 +20,5 @@ echo -e "## ${green}log${nocolor}"
 git log -10 --oneline
 echo -e "## ${green}branches${nocolor}"
 git branch -v
+echo -e "## ${green}stashes${nocolor}"
+git stash list --oneline
