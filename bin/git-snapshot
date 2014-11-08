@@ -1,15 +1,15 @@
 #! /bin/bash
 
-main()
+function main
 {
     message=
     while getopts ":m:h" opt; do
         case $opt in
             m)  message="$OPTARG";;
-            h)  man git-snapshot; exit 0;;
-            \?) echo "Invalid option: -$OPTARG" >&2; exit 1;;
-            :)  echo "Option -$OPTARG requires an argument." >&2; exit 1;;
-            *)  echo "Unimplemented option: -$OPTARG" >&2; exit 1;;
+            h)  help;;
+            \?) error "Invalid option: -$OPTARG";;
+            :)  error "Option -$OPTARG requires an argument.";;
+            *)  error "Unimplemented option: -$OPTARG";;
         esac
     done
 
@@ -33,7 +33,30 @@ main()
     void=$(git stash apply --quiet) # apply won't shut up so swallow the output
 }
 
-clear()
+#
+# Echos text to strerr.
+#
+# $1: the text to echo
+#
+function error
+{
+    echo "$1" >&2
+    exit 1
+}
+
+#
+# Shows git-snapshot man page.
+#
+function help
+{
+    man git-snapshot
+    exit 0
+}
+
+#
+# Clears all snapshots.
+#
+function clear
 {
     stashs=$(git stash list 2>&1)
     IFS=$'\n' read -rd '' -a stashs <<< "$stashs"
@@ -52,14 +75,16 @@ clear()
     exit 0
 }
 
-list()
+#
+# Lists all snapshots.
+#
+function list
 {
     stashs=$(git stash list 2>&1)
     IFS=$'\n' read -rd '' -a stashs <<< "$stashs"
 
     if (( ${#stashs[@]} == 0 )); then
-        echo "No snapshots"
-        exit 1
+        error "No snapshots"
     fi
 
     count=0

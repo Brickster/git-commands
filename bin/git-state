@@ -4,38 +4,37 @@
 # A more concise and comprehensive version of `git status` and `git log` in one command.
 #
 
-help()
+#
+# Echos text to strerr.
+#
+# $1: the text to echo
+#
+function error
+{
+    echo "$1" >&2
+    exit 1
+}
+
+#
+# Shows git-state man page.
+#
+function help
 {
     man git-state
-    return
+    exit 0
 }
 
 while getopts ":h-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
-                help)
-                    help
-                    exit 0
-                    ;;
-                *)
-                    echo "Unimplemented option --${OPTARG}" >&2
-                    exit 1
-                    ;;
+                help)   help;;
+                *)      error "Unimplemented option --${OPTARG}";;
             esac
             ;;
-        h)
-            help
-            exit 0
-            ;;
-        \?) 
-            echo "Invalid option: -$OPTARG" >&2
-            exit 1
-            ;;
-        *)  
-            echo "Unimplemented option: -$OPTARG" >&2
-            exit 1
-            ;;
+        h)  help;;
+        \?) error "Invalid option: -$OPTARG";;
+        *)  error "Unimplemented option: -$OPTARG";;
     esac
 done
 
