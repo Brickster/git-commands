@@ -1,0 +1,17 @@
+# git-changes(1) -- lists the commits between this branch and another
+
+## SYNOPSIS
+
+`git changes` [(`-c`|`--count`)] [(`-h`|`--help`)]
+
+## DESCRIPTION
+
+`git-changes` lists the commits between the current branch and another from HEAD to their merge base.
+
+## OPTIONS
+
+* `-c`|`--count`:
+	Prints the total changes instead of listing them.
+
+* `-h`|`--help`:
+	Display git-changes man page.
