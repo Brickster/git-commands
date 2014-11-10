@@ -1,0 +1,44 @@
+#! /bin/bash
+
+function error
+{
+    echo "$1" >&2
+    exit 1
+}
+
+function help
+{
+    man git-changes
+    exit 0
+}
+
+get_count=false
+while getopts ":ch-:" opt; do
+    case $opt in
+        -)
+            case "${OPTARG}" in
+                help)   help;;
+                count)  get_count=true;;
+                *)      error "Unimplemented option --${OPTARG}";;
+            esac
+            ;;
+        c)  get_count=true;;
+        h)  help;;
+        \?) error "Invalid option: -$OPTARG";;
+        *)  error "Unimplemented option: -$OPTARG";;
+    esac
+done
+
+merge_base=$(git merge-base master HEAD)
+
+if [ $get_count = true ]; then
+
+    # only print the changes count
+    logs=$(git log --oneline "$merge_base"..HEAD)
+    echo -e "$logs"
+    IFS=$'\n' read -rd '' -a logs <<< "$logs"
+    echo "${#logs[@]}"
+
+else
+    git log --oneline "$merge_base"..HEAD
+fi
