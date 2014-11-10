@@ -1,0 +1,26 @@
+# git-snapshot(1) -- create a snapshot of the changes in a dirty working directory
+
+## SYNOPSIS
+
+`git snapshot` [(`-m`|`--message`) <message>]  
+`git snapshot` [(`-h`|`--help`)]  
+`git snapshot list`  
+`git snapshot clear`
+
+## DESCRIPTION
+
+Used to record the current state of the working directory without reverting it. The snapshot is stored using git stash prepended with snapshot@{i} to differentiate it and stashes created normally.
+
+## OPTIONS
+
+* `-m`|`--message` <message>:
+	Message used when creating the stash entry. This has no effect on the snapshot@{i} part of the label.
+
+* `-h`|`--help`:
+	Display git-snapshot man page.
+
+* `list`:
+	List all snapshots.
+
+* `clear`:
+	Remove all snapshots.
