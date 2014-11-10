@@ -3,8 +3,22 @@
 function main
 {
     message=
-    while getopts ":m:h" opt; do
+    while getopts ":hm:-:" opt; do
         case $opt in
+            -)
+                case "${OPTARG}" in
+                    message)
+                        message="${!OPTIND}"
+                        OPTIND=$(( $OPTIND + 1 ))
+                        ;;
+                    help)
+                        help
+                        ;;
+                    *)
+                        error "Unimplemented option --${OPTARG}"
+                        ;;
+                esac
+                ;;
             m)  message="$OPTARG";;
             h)  help;;
             \?) error "Invalid option: -$OPTARG";;
