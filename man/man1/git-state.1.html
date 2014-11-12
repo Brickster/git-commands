@@ -72,7 +72,7 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>git state</code> [(<code>-h</code>|<code>--help</code>)] [(<code>-l</code>|<code>--log</code>) <var>count</var>] [--no-log]</p>
+<p><code>git state</code> [(<code>-h</code>|<code>--help</code>)] [(<code>-l</code>|<code>--log</code>) <var>count</var>] [--no-log] [--no-status]</p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
@@ -83,7 +83,8 @@
 <dl>
 <dt><code>-h</code>|<code>--help</code></dt><dd><p>  Display git-state man page.</p></dd>
 <dt><code>-l</code>|<code>--log</code> <var>count</var></dt><dd><p>  Limits commits in the log section. If less than 1, the section is skipped.</p></dd>
-<dt><code>--no-log</code></dt><dd><p>  Shorthand for <code>-l</code> 0 or <code>--log</code> 0.</p></dd>
+<dt><code>--no-log</code></dt><dd><p>  Don't output the log section. Equivalent to <code>-l</code> 0 or <code>--log</code> 0.</p></dd>
+<dt><code>--no-status</code></dt><dd><p>  Don't output the status section.</p></dd>
 </dl>
 
 

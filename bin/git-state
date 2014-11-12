@@ -25,6 +25,7 @@ function help
 }
 
 log_count=10
+no_status=false
 while getopts ":hl:-:" opt; do
     case $opt in
         -)
@@ -33,9 +34,10 @@ while getopts ":hl:-:" opt; do
                     log_count="${!OPTIND}"
                     OPTIND=$(( $OPTIND + 1 ))
                     ;;
-                no-log) log_count=0;;
-                help)   help;;
-                *)      error "Unimplemented option --${OPTARG}";;
+                no-log)     log_count=0;;
+                no-status)  no_status=true;;
+                help)       help;;
+                *)          error "Unimplemented option --${OPTARG}";;
             esac
             ;;
         l)  log_count="$OPTARG";;
@@ -49,7 +51,9 @@ green='\x1B[0;32m'
 nocolor='\x1B[0m'
 
 # status
-git status --short --branch
+if ! $no_status; then
+    git status --short --branch
+fi
 
 if (( $log_count > 0 )); then
     echo -e "## ${green}log${nocolor}"
