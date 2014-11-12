@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git state` [(`-h`|`--help`)] [(`-l`|`--log`) <count>] [--no-log] [--full-log] [--no-status] [--no-branches] [--no-stashes]
+`git state` [(`-h`|`--help`)] [(`-l`|`--log`) <count>] [`--no-log`] [`--full-log`] [`--no-status`] [`--no-branches`] [`--no-stashes`]
 
 ## DESCRIPTION
 
