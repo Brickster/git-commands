@@ -7,7 +7,7 @@
 \fBgit\-state\fR \- View the state of the working tree
 .
 .SH "SYNOPSIS"
-\fBgit state\fR [(\fB\-h\fR|\fB\-\-help\fR)]
+\fBgit state\fR [(\fB\-h\fR|\fB\-\-help\fR)] [(\fB\-l\fR|\fB\-\-log\fR) \fIcount\fR] [\-\-no\-log]
 .
 .SH "DESCRIPTION"
 Used to see a more concise and comprehensive view of the working directory\. The output includes results from git status, git log, git branch, and git stash\.
@@ -17,4 +17,12 @@ Used to see a more concise and comprehensive view of the working directory\. The
 .TP
 \fB\-h\fR|\fB\-\-help\fR
 Display git\-state man page\.
+.
+.TP
+\fB\-l\fR|\fB\-\-log\fR \fIcount\fR
+Limits commits in the log section\. If less than 1, the section is skipped\.
+.
+.TP
+\fB\-\-no\-log\fR
+Shorthand for \fB\-l\fR 0 or \fB\-\-log\fR 0\.
 
