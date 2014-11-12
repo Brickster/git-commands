@@ -7,7 +7,7 @@
 \fBgit\-state\fR \- View the state of the working tree
 .
 .SH "SYNOPSIS"
-\fBgit state\fR [(\fB\-h\fR|\fB\-\-help\fR)] [(\fB\-l\fR|\fB\-\-log\fR) \fIcount\fR] [\fB\-\-no\-log\fR] [\fB\-\-full\-log\fR] [\fB\-\-no\-status\fR] [\fB\-\-no\-branches\fR] [\fB\-\-no\-stashes\fR]
+\fBgit state\fR [(\fB\-h\fR|\fB\-\-help\fR)] [(\fB\-l\fR|\fB\-\-log\fR) \fIcount\fR] [(\fB\-L\fR|\fB\-\-no\-log\fR)] [\fB\-\-full\-log\fR] [(\fB\-S\fR|\fB\-\-no\-status\fR)] [(\fB\-B\fR|\fB\-\-no\-branches\fR)] [(\fB\-T\fR|\fB\-\-no\-stashes\fR)]
 .
 .SH "DESCRIPTION"
 Used to see a more concise and comprehensive view of the working directory\. The output includes results from git status, git log, git branch, and git stash\.
@@ -23,7 +23,7 @@ Display git\-state man page\.
 Limits commits in the log section\. If less than 1, the section is skipped\.
 .
 .TP
-\fB\-\-no\-log\fR
+\fB\-L\fR|\fB\-\-no\-log\fR
 Don\'t output the log section\. Equivalent to \fB\-l\fR 0 or \fB\-\-log\fR 0\.
 .
 .TP
@@ -31,14 +31,14 @@ Don\'t output the log section\. Equivalent to \fB\-l\fR 0 or \fB\-\-log\fR 0\.
 Output the entire log regardless of size\.
 .
 .TP
-\fB\-\-no\-status\fR
+\fB\-S\fR|\fB\-\-no\-status\fR
 Don\'t output the status section\.
 .
 .TP
-\fB\-\-no\-branches\fR
+\fB\-B\fR|\fB\-\-no\-branches\fR
 Don\'t output the branches section\.
 .
 .TP
-\fB\-\-no\-stashes\fR
+\fB\-T\fR|\fB\-\-no\-stashes\fR
 Don\'t output the stashes section\.
 

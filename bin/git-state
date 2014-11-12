@@ -29,7 +29,7 @@ no_status=false
 no_branches=false
 no_stashes=false
 full_log=false
-while getopts ":hl:-:" opt; do
+while getopts ":hLSBTl:-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
@@ -47,6 +47,10 @@ while getopts ":hl:-:" opt; do
             esac
             ;;
         l)  log_count="$OPTARG";;
+        L)  log_count=0;;
+        S)  no_status=true;;
+        B)  no_branches=true;;
+        T)  no_stashes=true;;
         h)  help;;
         \?) error "Invalid option: -$OPTARG";;
         *)  error "Unimplemented option: -$OPTARG";;

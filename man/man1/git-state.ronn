@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git state` [(`-h`|`--help`)] [(`-l`|`--log`) <count>] [`--no-log`] [`--full-log`] [`--no-status`] [`--no-branches`] [`--no-stashes`]
+`git state` [(`-h`|`--help`)] [(`-l`|`--log`) <count>] [(`-L`|`--no-log`)] [`--full-log`] [(`-S`|`--no-status`)] [(`-B`|`--no-branches`)] [(`-T`|`--no-stashes`)]
 
 ## DESCRIPTION
 
@@ -16,17 +16,17 @@ Used to see a more concise and comprehensive view of the working directory. The 
 * `-l`|`--log` <count>:
     Limits commits in the log section. If less than 1, the section is skipped.
 
-* `--no-log`:
+* `-L`|`--no-log`:
     Don't output the log section. Equivalent to `-l` 0 or `--log` 0.
 
 * `--full-log`:
     Output the entire log regardless of size.
 
-* `--no-status`:
+* `-S`|`--no-status`:
     Don't output the status section.
 
-* `--no-branches`:
+* `-B`|`--no-branches`:
     Don't output the branches section.
 
-* `--no-stashes`:
+* `-T`|`--no-stashes`:
     Don't output the stashes section.
