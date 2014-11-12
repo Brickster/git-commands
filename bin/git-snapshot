@@ -52,6 +52,34 @@ function main
 }
 
 #
+# Deletes a snapshot.
+#
+# $1: the snapshot to delete
+#
+function delete
+{
+    snapshot="$2"
+
+    if [[ -z "$snapshot" ]]; then
+        error 'A snapshot must be specified using "git snapshot delete <snapshot>"'
+    fi
+
+    stashs=$(git stash list 2>&1)
+    IFS=$'\n' read -rd '' -a stashs <<< "$stashs"
+
+    for ((i=0; i<${#stashs[@]}; i++)); do
+        stash=${stashs[i]}
+        if [[ $stash =~ ^.*"$snapshot".*$ ]]; then
+            git stash drop stash@{$i} --quiet
+            echo "Deleted $snapshot"
+            exit 0
+        fi
+    done
+
+    exit 0
+}
+
+#
 # Echos text to strerr.
 #
 # $1: the text to echo
@@ -115,5 +143,7 @@ if [[ "$1" == "clear" ]]; then
     clear
 elif [[ "$1" == "list" ]]; then
     list
+elif [[ "$1" == "delete" ]]; then
+    delete "$@"
 fi
 main "$@"
