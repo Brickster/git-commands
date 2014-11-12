@@ -7,7 +7,7 @@ A collection of custom git commands
 Used to see a more concise and comprehensive view of the working directory. The output includes results from git status, git log, and git branch.
 
 ```bash
-git state [(-h|--help)] [(-l|--log) <count>] [--no-log] [--no-status] [--no-branches] [--no-stashes]
+git state [(-h|--help)] [(-l|--log) <count>] [--no-log] [--full-log] [--no-status] [--no-branches] [--no-stashes]
 ```
 
 ## snapshot
