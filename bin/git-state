@@ -26,6 +26,7 @@ function help
 
 log_count=10
 no_status=false
+no_branches=false
 while getopts ":hl:-:" opt; do
     case $opt in
         -)
@@ -36,6 +37,7 @@ while getopts ":hl:-:" opt; do
                     ;;
                 no-log)     log_count=0;;
                 no-status)  no_status=true;;
+                no-branches)  no_branches=true;;
                 help)       help;;
                 *)          error "Unimplemented option --${OPTARG}";;
             esac
@@ -61,8 +63,10 @@ if (( $log_count > 0 )); then
 fi
 
 # branches
-echo -e "## ${green}branches${nocolor}"
-git branch -v
+if ! $no_branches; then
+    echo -e "## ${green}branches${nocolor}"
+    git branch -v
+fi
 
 # stashes
 echo -e "## ${green}stashes${nocolor}"
