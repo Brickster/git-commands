@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git state` [(`-h`|`--help`)]
+`git state` [(`-h`|`--help`)] [(`-l`|`--log`) <count>] [--no-log]
 
 ## DESCRIPTION
 
@@ -12,3 +12,9 @@ Used to see a more concise and comprehensive view of the working directory. The 
 
 * `-h`|`--help`:
 	Display git-state man page.
+
+* `-l`|`--log` <count>:
+    Limits commits in the log section. If less than 1, the section is skipped.
+
+* `--no-log`:
+    Don't output the log section. Equivalent to `-l` 0 or `--log` 0.
