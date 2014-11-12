@@ -27,14 +27,17 @@ function main
         esac
     done
 
-    # get snapshot count
+    # get the last snapshot ID
     stashs=$(git stash list 2>&1)
     IFS=$'\n' read -rd '' -a stashs <<< "$stashs"
-    count=0
+    max_stash_id=-1
     for stash in "${stashs[@]}"
     do
-        if [[ $stash =~ ^.*snapshot\@\{[[:digit:]]+\}.*$ ]]; then
-            ((count++))
+        regex="^.*snapshot\@\{([[:digit:]]+)\}.*$"
+        if [[ $stash =~ $regex ]]; then
+            if (( "$max_stash_id" < "${BASH_REMATCH[1]}" )); then
+                max_stash_id="${BASH_REMATCH[1]}"
+            fi
         fi
     done
 
@@ -43,8 +46,9 @@ function main
         message=$(git log -1 --oneline)
     fi
 
-    git stash save -u --quiet "snapshot@{$count} $message" 
-    void=$(git stash apply --quiet) # apply won't shut up so swallow the output
+    ((max_stash_id++))
+    git stash save -u --quiet "snapshot@{$max_stash_id} $message" 
+    git stash apply --quiet > /dev/null 2>&1 # apply won't shut up so swallow the output
 }
 
 #
