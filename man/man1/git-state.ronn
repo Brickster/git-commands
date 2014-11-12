@@ -24,3 +24,6 @@ Used to see a more concise and comprehensive view of the working directory. The 
 
 * `--no-branches`:
     Don't output the branches section.
+
+* `--no-stashes`:
+    Don't output the stashes section.
