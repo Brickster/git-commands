@@ -18,4 +18,5 @@ Used to record the current state of the working directory without reverting it. 
 git snapshot [-m <message>] [-h]
 git snapshot list
 git snapshot clear
+git snapshot delete <snapshot>
 ```

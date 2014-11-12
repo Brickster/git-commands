@@ -18,6 +18,9 @@
 .br
 \fBgit snapshot clear\fR
 .
+.br
+\fBgit snapshot delete\fR \fIsnapshot\fR
+.
 .SH "DESCRIPTION"
 Used to record the current state of the working directory without reverting it\. The snapshot is stored using git stash prepended with snapshot@{i} to differentiate it and stashes created normally\.
 .
@@ -38,4 +41,8 @@ List all snapshots\.
 .TP
 \fBclear\fR
 Remove all snapshots\.
+.
+.TP
+\fBdelete\fR \fIsnapshot\fR
+Delete an individual snapshot in the form snapshot@{\fIid\fR}\.
 
