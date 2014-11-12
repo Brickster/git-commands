@@ -27,6 +27,7 @@ function help
 log_count=10
 no_status=false
 no_branches=false
+no_stashes=false
 while getopts ":hl:-:" opt; do
     case $opt in
         -)
@@ -35,11 +36,12 @@ while getopts ":hl:-:" opt; do
                     log_count="${!OPTIND}"
                     OPTIND=$(( $OPTIND + 1 ))
                     ;;
-                no-log)     log_count=0;;
-                no-status)  no_status=true;;
-                no-branches)  no_branches=true;;
-                help)       help;;
-                *)          error "Unimplemented option --${OPTARG}";;
+                no-log)         log_count=0;;
+                no-status)      no_status=true;;
+                no-branches)    no_branches=true;;
+                no-stashes)     no_stashes=true;;
+                help)           help;;
+                *)              error "Unimplemented option --${OPTARG}";;
             esac
             ;;
         l)  log_count="$OPTARG";;
@@ -69,5 +71,7 @@ if ! $no_branches; then
 fi
 
 # stashes
-echo -e "## ${green}stashes${nocolor}"
-git stash list --oneline
+if ! $no_stashes; then
+    echo -e "## ${green}stashes${nocolor}"
+    git stash list --oneline
+fi
