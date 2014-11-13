@@ -1,5 +1,8 @@
 #! /bin/bash
 
+STASH_ID_REGEX="^stash@\{([[:digit:]]+)\}.*$"
+DROP_HASH_REGEX="^.*\(([[:xdigit:]]+)\)$"
+
 function main
 {
     message=
@@ -71,8 +74,7 @@ function apply
         if [[ $stash =~ ^.*"$snapshot".*$ ]]; then
 
             # get the snapshot's stash ID
-            stash_id_regex="^stash@\{([[:digit:]]+)\}.*$"
-            [[ $stash =~ $stash_id_regex ]]
+            [[ $stash =~ $STASH_ID_REGEX ]]
             stash_count=${BASH_REMATCH[1]}
 
             git stash apply stash@{$stash_count}
@@ -104,14 +106,12 @@ function delete
         if [[ $stash =~ ^.*"$snapshot".*$ ]]; then
 
             # get the snapshot's stash ID
-            stash_id_regex="^stash@\{([[:digit:]]+)\}.*$"
-            [[ $stash =~ $stash_id_regex ]]
+            [[ $stash =~ $STASH_ID_REGEX ]]
             stash_count=${BASH_REMATCH[1]}
 
             # delete the corresponding stash and get it's hash
             drop_output=$(git stash drop stash@{$stash_count})
-            hash_regex="^.*\(([[:xdigit:]]+)\)$"
-            [[ $drop_output =~ $hash_regex ]]
+            [[ $drop_output =~ $DROP_HASH_REGEX ]]
             stash_hash=${BASH_REMATCH[1]}
 
             echo "Deleted $snapshot ($stash_hash)"
