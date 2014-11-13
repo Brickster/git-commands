@@ -87,16 +87,16 @@ function apply
 }
 
 #
-# Deletes a snapshot.
+# Drops a snapshot.
 #
-# $1: the snapshot to delete
+# $1: the snapshot to drop
 #
-function delete
+function drop
 {
     snapshot="$1"
 
     if [[ -z "$snapshot" ]]; then
-        error 'A snapshot must be specified using "git snapshot delete <snapshot>"'
+        error 'A snapshot must be specified using "git snapshot drop <snapshot>"'
     fi
 
     snapshots=$(git snapshot list 2>&1)
@@ -109,12 +109,12 @@ function delete
             [[ $stash =~ $STASH_ID_REGEX ]]
             stash_count=${BASH_REMATCH[1]}
 
-            # delete the corresponding stash and get it's hash
+            # drop the corresponding stash and get its hash
             drop_output=$(git stash drop stash@{$stash_count})
             [[ $drop_output =~ $DROP_HASH_REGEX ]]
             stash_hash=${BASH_REMATCH[1]}
 
-            echo "Deleted $snapshot ($stash_hash)"
+            echo "Dropped $snapshot ($stash_hash)"
             exit 0
         fi
     done
@@ -187,8 +187,8 @@ if [[ "$1" == "clear" ]]; then
     clear
 elif [[ "$1" == "list" ]]; then
     list
-elif [[ "$1" == "delete" ]]; then
-    delete "$2"
+elif [[ "$1" == "drop" ]]; then
+    drop "$2"
 elif [[ "$1" == "apply" ]]; then
     apply "$2"
 fi

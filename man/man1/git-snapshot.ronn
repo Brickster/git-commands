@@ -6,7 +6,7 @@
 `git snapshot` [(`-h`|`--help`)]  
 `git snapshot list`  
 `git snapshot clear`  
-`git snapshot delete` <snapshot>  
+`git snapshot drop` <snapshot>  
 `git snapshot apply` <snapshot>
 
 ## DESCRIPTION
@@ -27,8 +27,8 @@ Used to record the current state of the working directory without reverting it. 
 * `clear`:
 	Remove all snapshots.
 
-* `delete` <snapshot>:
-    Delete an individual snapshot in the form snapshot@{<id>}.
+* `drop` <snapshot>:
+    Drop an individual snapshot in the form snapshot@{<id>}.
 
 * `apply` <snapshot>:
     Apply a snapshot in the form snapshot@{<id>}.
