@@ -58,25 +58,36 @@ function main
 #
 function delete
 {
-    snapshot="$2"
+    snapshot="$1"
 
     if [[ -z "$snapshot" ]]; then
         error 'A snapshot must be specified using "git snapshot delete <snapshot>"'
     fi
 
-    stashs=$(git stash list 2>&1)
-    IFS=$'\n' read -rd '' -a stashs <<< "$stashs"
+    snapshots=$(git snapshot list 2>&1)
+    IFS=$'\n' read -rd '' -a snapshots <<< "$snapshots"
 
-    for ((i=0; i<${#stashs[@]}; i++)); do
-        stash=${stashs[i]}
+    for stash in "${snapshots[@]}"; do
         if [[ $stash =~ ^.*"$snapshot".*$ ]]; then
-            git stash drop stash@{$i} --quiet
-            echo "Deleted $snapshot"
+
+            # get the snapshot's stash ID
+            stash_id_regex="^stash@\{([[:digit:]]+)\}.*$"
+            [[ $stash =~ $stash_id_regex ]]
+            stash_count=${BASH_REMATCH[1]}
+
+            # delete the corresponding stash and get it's hash
+            drop_output=$(git stash drop stash@{$stash_count})
+            hash_regex="^.*\(([[:xdigit:]]+)\)$"
+            [[ $drop_output =~ $hash_regex ]]
+            stash_hash=${BASH_REMATCH[1]}
+
+            echo "Deleted $snapshot ($stash_hash)"
             exit 0
         fi
     done
 
-    exit 0
+    error "fatal: Log for 'snapshot' only has no entry $snapshot."
+    exit 1
 }
 
 #
@@ -144,6 +155,6 @@ if [[ "$1" == "clear" ]]; then
 elif [[ "$1" == "list" ]]; then
     list
 elif [[ "$1" == "delete" ]]; then
-    delete "$@"
+    delete "$2"
 fi
 main "$@"
