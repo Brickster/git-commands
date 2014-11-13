@@ -52,6 +52,39 @@ function main
 }
 
 #
+# Apply a snapshot
+#
+# $1: the snapshot to apply
+#
+function apply
+{
+    snapshot="$1"
+
+    if [[ -z "$snapshot" ]]; then
+        error 'A snapshot must be specified using "git snapshot apply <snapshot>"'
+    fi
+
+    snapshots=$(git snapshot list 2>&1)
+    IFS=$'\n' read -rd '' -a snapshots <<< "$snapshots"
+
+    for stash in "${snapshots[@]}"; do
+        if [[ $stash =~ ^.*"$snapshot".*$ ]]; then
+
+            # get the snapshot's stash ID
+            stash_id_regex="^stash@\{([[:digit:]]+)\}.*$"
+            [[ $stash =~ $stash_id_regex ]]
+            stash_count=${BASH_REMATCH[1]}
+
+            git stash apply stash@{$stash_count}
+            exit 0
+        fi
+    done
+
+    error "fatal: Log for 'snapshot' only has no entry $snapshot."
+    exit 1
+}
+
+#
 # Deletes a snapshot.
 #
 # $1: the snapshot to delete
@@ -156,5 +189,7 @@ elif [[ "$1" == "list" ]]; then
     list
 elif [[ "$1" == "delete" ]]; then
     delete "$2"
+elif [[ "$1" == "apply" ]]; then
+    apply "$2"
 fi
 main "$@"

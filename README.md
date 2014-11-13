@@ -19,4 +19,5 @@ git snapshot [(-m|--message) <message>] [(-h|--help)]
 git snapshot list
 git snapshot clear
 git snapshot delete <snapshot>
+git snapshot apply <snapshot>
 ```
