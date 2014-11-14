@@ -28,7 +28,6 @@ log_count=10
 no_status=false
 no_branches=false
 no_stashes=false
-full_log=false
 while getopts ":hLSBTl:-:" opt; do
     case $opt in
         -)
@@ -37,7 +36,7 @@ while getopts ":hLSBTl:-:" opt; do
                     log_count="${!OPTIND}"
                     OPTIND=$(( $OPTIND + 1 ))
                     ;;
-                full-log)       full_log=true;;
+                full-log)       log_count=-1;;
                 no-log)         log_count=0;;
                 no-status)      no_status=true;;
                 no-branches)    no_branches=true;;
@@ -65,12 +64,9 @@ if ! $no_status; then
     git status --short --branch
 fi
 
-if $full_log; then
+if (( $log_count != 0 )); then
     echo -e "## ${green}log${nocolor}"
-    git log --oneline
-elif (( $log_count > 0 )); then
-    echo -e "## ${green}log${nocolor}"
-    git log -"$log_count" --oneline
+    git log -n "$log_count" --oneline
 fi
 
 # branches
