@@ -21,3 +21,11 @@ git snapshot clear
 git snapshot drop <snapshot>
 git snapshot apply <snapshot>
 ```
+
+## changes
+
+Used to list the commits between this branch and another.
+
+```bash
+git changes [(-c|--count)] [(-h|--help)]
+```
