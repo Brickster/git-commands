@@ -24,6 +24,20 @@ function help
     exit 0
 }
 
+#
+# Determines whether there are stashes or not
+#
+function stash_not_empty
+{
+    stashes=$(git stash list 2>&1)
+    IFS=$'\n' read -rd '' -a stashes <<< "$stashes"
+
+    if (( ${#stashes[@]} == 0 )); then
+        return 1
+    fi
+    return 0
+}
+
 log_count=10
 no_status=false
 no_branches=false
@@ -76,7 +90,7 @@ if ! $no_branches; then
 fi
 
 # stashes
-if ! $no_stashes; then
+if ! $no_stashes && stash_not_empty; then
     echo -e "## ${green}stashes${nocolor}"
     git stash list --oneline
 fi
