@@ -77,7 +77,8 @@
 <code>git snapshot list</code><br />
 <code>git snapshot clear</code><br />
 <code>git snapshot drop</code> <var>snapshot</var><br />
-<code>git snapshot apply</code> <var>snapshot</var></p>
+<code>git snapshot apply</code> <var>snapshot</var><br />
+<code>git snapshot pop</code> <var>snapshot</var></p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
@@ -92,6 +93,7 @@
 <dt class="flush"><code>clear</code></dt><dd><p>  Remove all snapshots.</p></dd>
 <dt><code>drop</code> <var>snapshot</var></dt><dd><p>  Drop an individual snapshot in the form snapshot@{<var>id</var>}.</p></dd>
 <dt><code>apply</code> <var>snapshot</var></dt><dd><p>  Apply a snapshot in the form snapshot@{<var>id</var>}.</p></dd>
+<dt><code>pop</code> <var>snapshot</var></dt><dd><p>  Apply then drop a snapshot in the form snapshot@{<var>id</var>}.</p></dd>
 </dl>
 
 
