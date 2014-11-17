@@ -215,15 +215,9 @@ function list
     exit 0
 }
 
-if [[ "$1" == "clear" ]]; then
-    clear
-elif [[ "$1" == "list" ]]; then
-    list
-elif [[ "$1" == "drop" ]]; then
-    drop "$2"
-elif [[ "$1" == "apply" ]]; then
-    apply "$2"
-elif [[ "$1" == "pop" ]]; then
-    pop "$2"
+if [[ "$1" =~ ^(clear|list)$ ]]; then
+    "$1"
+elif [[ "$1" =~ ^(drop|apply|pop)$ ]]; then
+    "$1" "$2"
 fi
 main "$@"
