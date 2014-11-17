@@ -7,7 +7,8 @@
 `git snapshot list`  
 `git snapshot clear`  
 `git snapshot drop` <snapshot>  
-`git snapshot apply` <snapshot>
+`git snapshot apply` <snapshot>  
+`git snapshot pop` <snapshot>
 
 ## DESCRIPTION
 
@@ -32,3 +33,6 @@ Used to record the current state of the working directory without reverting it. 
 
 * `apply` <snapshot>:
     Apply a snapshot in the form snapshot@{<id>}.
+
+* `pop` <snapshot>:
+	Apply then drop a snapshot in the form snapshot@{<id>}.
