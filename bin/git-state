@@ -42,7 +42,8 @@ log_count=10
 no_status=false
 no_branches=false
 no_stashes=false
-while getopts ":hLSBTl:-:" opt; do
+show_empty=false
+while getopts ":heLSBTl:-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
@@ -55,10 +56,12 @@ while getopts ":hLSBTl:-:" opt; do
                 no-status)      no_status=true;;
                 no-branches)    no_branches=true;;
                 no-stashes)     no_stashes=true;;
+                show-empty)     show_empty=true;;
                 help)           help;;
                 *)              error "Unimplemented option --${OPTARG}";;
             esac
             ;;
+        e)  show_empty=true;;
         l)  log_count="$OPTARG";;
         L)  log_count=0;;
         S)  no_status=true;;
@@ -90,7 +93,7 @@ if ! $no_branches; then
 fi
 
 # stashes
-if ! $no_stashes && stash_not_empty; then
+if ! $no_stashes && ( $show_empty || stash_not_empty ); then
     echo -e "## ${green}stashes${nocolor}"
     git stash list --oneline
 fi
