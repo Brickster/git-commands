@@ -2,13 +2,16 @@
 
 ## SYNOPSIS
 
-`git changes` [(`-c`|`--count`)] [(`-h`|`--help`)]
+`git changes` [(`-b`|`--branch`) <branch>] [(`-c`|`--count`)] [(`-h`|`--help`)]
 
 ## DESCRIPTION
 
 `git-changes` lists the commits between the current branch and another from HEAD to their merge base.
 
 ## OPTIONS
+
+* `-b`|`--branch`:
+    Show the commits between HEAD and <branch>. When not specified, master is used.
 
 * `-c`|`--count`:
 	Prints the total changes instead of listing them.

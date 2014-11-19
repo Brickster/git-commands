@@ -13,15 +13,21 @@ function help
 }
 
 get_count=false
-while getopts ":ch-:" opt; do
+branch="master"
+while getopts ":chb:-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
+                branch) 
+                        branch="${!OPTIND}"
+                        OPTIND=$(( $OPTIND + 1 ))
+                        ;;
                 help)   help;;
                 count)  get_count=true;;
                 *)      error "Unimplemented option --${OPTARG}";;
             esac
             ;;
+        b)  branch="$OPTARG";;
         c)  get_count=true;;
         h)  help;;
         \?) error "Invalid option: -$OPTARG";;
@@ -29,7 +35,7 @@ while getopts ":ch-:" opt; do
     esac
 done
 
-merge_base=$(git merge-base master HEAD)
+merge_base=$(git merge-base $branch HEAD)
 
 if [ $get_count = true ]; then
 
