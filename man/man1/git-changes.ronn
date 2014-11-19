@@ -6,7 +6,7 @@
 
 ## DESCRIPTION
 
-`git-changes` lists the commits between the current branch and another from HEAD to their merge base.
+`git-changes` lists the commits between the current branch and another. Changes are defined as the commits between HEAD and the merge base calculated using the current and a user specified branch.
 
 ## OPTIONS
 
