@@ -35,7 +35,6 @@ if [ $get_count = true ]; then
 
     # only print the changes count
     logs=$(git log --oneline "$merge_base"..HEAD)
-    echo -e "$logs"
     IFS=$'\n' read -rd '' -a logs <<< "$logs"
     echo "${#logs[@]}"
 
