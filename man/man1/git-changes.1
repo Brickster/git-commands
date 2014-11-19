@@ -7,12 +7,16 @@
 \fBgit\-changes\fR \- lists the commits between this branch and another
 .
 .SH "SYNOPSIS"
-\fBgit changes\fR [(\fB\-c\fR|\fB\-\-count\fR)] [(\fB\-h\fR|\fB\-\-help\fR)]
+\fBgit changes\fR [(\fB\-b\fR|\fB\-\-branch\fR) \fIbranch\fR] [(\fB\-c\fR|\fB\-\-count\fR)] [(\fB\-h\fR|\fB\-\-help\fR)]
 .
 .SH "DESCRIPTION"
 \fBgit\-changes\fR lists the commits between the current branch and another from HEAD to their merge base\.
 .
 .SH "OPTIONS"
+.
+.TP
+\fB\-b\fR|\fB\-\-branch\fR
+Show the commits between HEAD and \fIbranch\fR\. When not specified, master is used\.
 .
 .TP
 \fB\-c\fR|\fB\-\-count\fR

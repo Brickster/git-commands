@@ -28,5 +28,5 @@ git snapshot pop <snapshot>
 Used to list the commits between this branch and another.
 
 ```bash
-git changes [(-c|--count)] [(-h|--help)]
+git changes [(-b|--branch) <branch>] [(-c|--count)] [(-h|--help)]
 ```
