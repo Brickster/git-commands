@@ -38,13 +38,16 @@ function stash_not_empty
     return 0
 }
 
+green='\x1B[0;32m'
+nocolor='\x1B[0m'
+
 log_count=10
 no_status=false
 no_branches=false
 no_stashes=false
 show_empty=false
 color="auto"
-while getopts ":hceLSBTl:-:" opt; do
+while getopts ":hcCeLSBTl:-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
@@ -59,11 +62,21 @@ while getopts ":hceLSBTl:-:" opt; do
                 no-stashes)     no_stashes=true;;
                 show-empty)     show_empty=true;;
                 color)          color="always";;
+                no-color)
+                    color="never"
+                    green=""
+                    nocolor=""
+                    ;;
                 help)           help;;
                 *)              error "Unimplemented option --${OPTARG}";;
             esac
             ;;
         c)  color="always";;
+        C)
+            color="never"
+            green=""
+            nocolor=""
+            ;;
         e)  show_empty=true;;
         l)  log_count="$OPTARG";;
         L)  log_count=0;;
@@ -76,15 +89,12 @@ while getopts ":hceLSBTl:-:" opt; do
     esac
 done
 
-green='\x1B[0;32m'
-nocolor='\x1B[0m'
-
 # status
 if ! $no_status; then
     # make sure status will output ANSI codes
     # this must be done using config since status has no --color option
     status_color=$(git config color.status)
-    git config color.status always
+    git config color.status "$color"
 
     git status --short --branch
 
