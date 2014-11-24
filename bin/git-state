@@ -43,7 +43,8 @@ no_status=false
 no_branches=false
 no_stashes=false
 show_empty=false
-while getopts ":heLSBTl:-:" opt; do
+color="auto"
+while getopts ":hceLSBTl:-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
@@ -57,10 +58,12 @@ while getopts ":heLSBTl:-:" opt; do
                 no-branches)    no_branches=true;;
                 no-stashes)     no_stashes=true;;
                 show-empty)     show_empty=true;;
+                color)          color="always";;
                 help)           help;;
                 *)              error "Unimplemented option --${OPTARG}";;
             esac
             ;;
+        c)  color="always";;
         e)  show_empty=true;;
         l)  log_count="$OPTARG";;
         L)  log_count=0;;
@@ -78,22 +81,34 @@ nocolor='\x1B[0m'
 
 # status
 if ! $no_status; then
+    # make sure status will output ANSI codes
+    # this must be done using config since status has no --color option
+    status_color=$(git config color.status)
+    git config color.status always
+
     git status --short --branch
+
+    # reset color.status to its original setting
+    if [[ -z "$status_color" ]]; then
+        git config --unset color.status
+    else
+        git config color.status "$status_color"
+    fi
 fi
 
 if (( $log_count != 0 )); then
     echo -e "## ${green}log${nocolor}"
-    git log -n "$log_count" --oneline
+    git log -n "$log_count" --oneline --color="$color"
 fi
 
 # branches
 if ! $no_branches; then
     echo -e "## ${green}branches${nocolor}"
-    git branch -v
+    git branch -v --color="$color"
 fi
 
 # stashes
 if ! $no_stashes && ( $show_empty || stash_not_empty ); then
     echo -e "## ${green}stashes${nocolor}"
-    git stash list --oneline
+    git stash list --oneline --color="$color"
 fi

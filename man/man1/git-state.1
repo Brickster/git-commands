@@ -7,7 +7,7 @@
 \fBgit\-state\fR \- View the state of the working tree
 .
 .SH "SYNOPSIS"
-\fBgit state\fR [(\fB\-h\fR|\fB\-\-help\fR)] [(\fB\-l\fR|\fB\-\-log\fR) \fIcount\fR] [(\fB\-L\fR|\fB\-\-no\-log\fR)] [\fB\-\-full\-log\fR] [(\fB\-S\fR|\fB\-\-no\-status\fR)] [(\fB\-B\fR|\fB\-\-no\-branches\fR)] [(\fB\-T\fR|\fB\-\-no\-stashes\fR)] [(\fB\-e\fR|\fB\-\-show\-empty\fR)]
+\fBgit state\fR [(\fB\-h\fR|\fB\-\-help\fR)] [(\fB\-l\fR|\fB\-\-log\fR) \fIcount\fR] [(\fB\-L\fR|\fB\-\-no\-log\fR)] [\fB\-\-full\-log\fR] [(\fB\-S\fR|\fB\-\-no\-status\fR)] [(\fB\-B\fR|\fB\-\-no\-branches\fR)] [(\fB\-T\fR|\fB\-\-no\-stashes\fR)] [(\fB\-e\fR|\fB\-\-show\-empty\fR)] [(\fB\-c\fR|\fB\-\-color\fR)]
 .
 .SH "DESCRIPTION"
 Used to see a more concise and comprehensive view of the working directory\. The output includes results from git status, git log, git branch, and git stash\.
@@ -45,4 +45,8 @@ Don\'t output the stashes section\.
 .TP
 \fB\-e\fR|\fB\-\-show\-empty\fR
 Show empty sections rather than omitting them\.
+.
+.TP
+\fB\-c\fR|\fB\-\-color\fR
+Always color output\.
 
