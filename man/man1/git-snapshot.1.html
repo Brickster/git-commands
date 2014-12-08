@@ -72,8 +72,8 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>git snapshot</code> [(<code>-m</code>|<code>--message</code>) <var>message</var>]<br />
-<code>git snapshot</code> [(<code>-h</code>|<code>--help</code>)]<br />
+<p><code>git snapshot</code> [(<code>-h</code>|<code>--help</code>)]<br />
+<code>git snapshot save</code> <var>message</var><br />
 <code>git snapshot list</code><br />
 <code>git snapshot clear</code><br />
 <code>git snapshot drop</code> <var>snapshot</var><br />
@@ -87,8 +87,8 @@
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
-<dt><code>-m</code>|<code>--message</code> <var>message</var></dt><dd><p>  Message used when creating the stash entry. This has no effect on the snapshot@{i} part of the label.</p></dd>
 <dt><code>-h</code>|<code>--help</code></dt><dd><p>  Display git-snapshot man page.</p></dd>
+<dt><code>save</code> <var>message</var></dt><dd><p>  Save a snapshot with a given message. If no message is supplied, the last commit is used. Optionally, <code>save</code> can be omitted but you cannot supply a message to avoid accidental snapshots due to mistyped subcommands.</p></dd>
 <dt class="flush"><code>list</code></dt><dd><p>  List all snapshots.</p></dd>
 <dt class="flush"><code>clear</code></dt><dd><p>  Remove all snapshots.</p></dd>
 <dt><code>drop</code> <var>snapshot</var></dt><dd><p>  Drop an individual snapshot in the form snapshot@{<var>id</var>}.</p></dd>
@@ -100,7 +100,7 @@
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>November 2014</li>
+    <li class='tc'>December 2014</li>
     <li class='tr'>git-snapshot(1)</li>
   </ol>
 
