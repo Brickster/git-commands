@@ -2,8 +2,8 @@
 
 ## SYNOPSIS
 
-`git snapshot` [(`-m`|`--message`) <message>]  
 `git snapshot` [(`-h`|`--help`)]  
+`git snapshot save` <message>  
 `git snapshot list`  
 `git snapshot clear`  
 `git snapshot drop` <snapshot>  
@@ -16,11 +16,11 @@ Used to record the current state of the working directory without reverting it. 
 
 ## OPTIONS
 
-* `-m`|`--message` <message>:
-	Message used when creating the stash entry. This has no effect on the snapshot@{i} part of the label.
-
 * `-h`|`--help`:
 	Display git-snapshot man page.
+
+* `save` <message>:
+    Save a snapshot with a given message. If no message is supplied, the last commit is used. Optionally, `save` can be omitted but you cannot supply a message to avoid accidental snapshots due to mistyped subcommands.
 
 * `list`:
 	List all snapshots.

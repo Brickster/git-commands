@@ -15,7 +15,8 @@ git state [(-h|--help)] [(-l|--log) <count>] [(-L|--no-log)] [--full-log] [(-S|-
 Used to record the current state of the working directory without reverting it. The snapshot is stored using git stash prepended with snapshot@{i} to differentiate it and stashes created normally.
 
 ```bash
-git snapshot [(-m|--message) <message>] [(-h|--help)]
+git snapshot [(-h|--help)]
+git snapshot save <message>
 git snapshot list
 git snapshot clear
 git snapshot drop <snapshot>
