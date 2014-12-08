@@ -27,6 +27,9 @@
 .br
 \fBgit snapshot pop\fR \fIsnapshot\fR
 .
+.br
+\fBgit snapshot show\fR \fIsnapshot\fR
+.
 .SH "DESCRIPTION"
 Used to record the current state of the working directory without reverting it\. The snapshot is stored using git stash prepended with snapshot@{i} to differentiate it and stashes created normally\.
 .
@@ -59,4 +62,8 @@ Apply a snapshot in the form snapshot@{\fIid\fR}\.
 .TP
 \fBpop\fR \fIsnapshot\fR
 Apply then drop a snapshot in the form snapshot@{\fIid\fR}\.
+.
+.TP
+\fBshow\fR \fIsnapshot\fR
+Show the details of a snapshot in the form snapshot@{\fIid\fR}\.
 
