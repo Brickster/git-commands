@@ -29,8 +29,18 @@ function save
     ((max_stash_id++))
     git stash save -u --quiet "snapshot@{$max_stash_id} $message" 
     git stash apply --quiet > /dev/null 2>&1 # apply won't shut up so swallow the output
+}
 
-    exit 0
+function pop
+{
+    snapshot="$1"
+
+    if [[ -z "$snapshot" ]]; then
+        error "A snapshot must be specified using \"git snapshot pop <snapshot>\""
+    fi
+
+    stash_redirect "apply" "$snapshot"
+    drop "$snapshot"
 }
 
 #
@@ -59,7 +69,7 @@ function stash_redirect
             stash_count=${BASH_REMATCH[1]}
 
             git stash "$subcommand" stash@{$stash_count}
-            exit 0
+            return
         fi
     done
 
@@ -96,7 +106,7 @@ function drop
             stash_hash=${BASH_REMATCH[1]}
 
             echo "Dropped $snapshot ($stash_hash)"
-            exit 0
+            return
         fi
     done
 
@@ -153,8 +163,6 @@ function clear
         fi
         ((count++))
     done
-
-    exit 0
 }
 
 #
@@ -172,19 +180,22 @@ function list
             echo "$stash"
         fi
     done
-    exit 0
 }
 
 if [[ "$1" =~ ^(clear|list)$ ]]; then
     "$1"
-elif [[ "$1" == "drop" ]]; then
-    drop "$2"
-elif [[ "$1" =~ ^(apply|pop|show)$ ]]; then
+    exit 0
+elif [[ "$1" =~ ^(drop|pop)$ ]]; then
+    "$1" "$2"
+    exit 0
+elif [[ "$1" =~ ^(apply|show)$ ]]; then
     stash_redirect "$1" "$2"
+    exit 0
 elif [[ "$1" =~ ^(save)$ ]]; then
     args=("$@") # so I can split the input
     args=("${args[@]:1}")
     save "$args"
+    exit 0
 elif [[ ! -z "$1" ]] && [[ ! "$1" =~ ^-.*$ ]]; then
     usage_error
 fi
