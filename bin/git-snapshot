@@ -34,16 +34,18 @@ function save
 }
 
 #
-# Pop a snapshot
+# Redirects a snapshot subcommand to its stash counterpart
 #
-# $1: the snapshot to pop
+# $1: the subcommand to redirect to
+# $2: the snapshot to show
 #
-function pop
+function stash_redirect
 {
-    snapshot="$1"
+    subcommand="$1"
+    snapshot="$2"
 
     if [[ -z "$snapshot" ]]; then
-        error 'A snapshot must be specified using "git snapshot pop <snapshot>"'
+        error "A snapshot must be specified using \"git snapshot $subcommand <snapshot>\""
     fi
 
     snapshots=$(git snapshot list 2>&1)
@@ -56,71 +58,7 @@ function pop
             [[ $stash =~ $STASH_ID_REGEX ]]
             stash_count=${BASH_REMATCH[1]}
 
-            git stash pop stash@{$stash_count}
-            exit 0
-        fi
-    done
-
-    error "fatal: Log for 'snapshot' has no entry $snapshot."
-    exit 1
-}
-
-#
-# Apply a snapshot
-#
-# $1: the snapshot to apply
-#
-function apply
-{
-    snapshot="$1"
-
-    if [[ -z "$snapshot" ]]; then
-        error 'A snapshot must be specified using "git snapshot apply <snapshot>"'
-    fi
-
-    snapshots=$(git snapshot list 2>&1)
-    IFS=$'\n' read -rd '' -a snapshots <<< "$snapshots"
-
-    for stash in "${snapshots[@]}"; do
-        if [[ $stash =~ ^.*"$snapshot".*$ ]]; then
-
-            # get the snapshot's stash ID
-            [[ $stash =~ $STASH_ID_REGEX ]]
-            stash_count=${BASH_REMATCH[1]}
-
-            git stash apply stash@{$stash_count}
-            exit 0
-        fi
-    done
-
-    error "fatal: Log for 'snapshot' has no entry $snapshot."
-    exit 1
-}
-
-#
-# Show a snapshot
-#
-# $1: the snapshot to show
-#
-function show
-{
-    snapshot="$1"
-
-    if [[ -z "$snapshot" ]]; then
-        error 'A snapshot must be specified using "git snapshot show <snapshot>"'
-    fi
-
-    snapshots=$(git snapshot list 2>&1)
-    IFS=$'\n' read -rd '' -a snapshots <<< "$snapshots"
-
-    for stash in "${snapshots[@]}"; do
-        if [[ $stash =~ ^.*"$snapshot".*$ ]]; then
-
-            # get the snapshot's stash ID
-            [[ $stash =~ $STASH_ID_REGEX ]]
-            stash_count=${BASH_REMATCH[1]}
-
-            git stash show stash@{$stash_count}
+            git stash "$subcommand" stash@{$stash_count}
             exit 0
         fi
     done
@@ -239,8 +177,10 @@ function list
 
 if [[ "$1" =~ ^(clear|list)$ ]]; then
     "$1"
-elif [[ "$1" =~ ^(drop|apply|pop|show)$ ]]; then
-    "$1" "$2"
+elif [[ "$1" == "drop" ]]; then
+    drop "$2"
+elif [[ "$1" =~ ^(apply|pop|show)$ ]]; then
+    stash_redirect "$1" "$2"
 elif [[ "$1" =~ ^(save)$ ]]; then
     args=("$@") # so I can split the input
     args=("${args[@]:1}")
