@@ -22,6 +22,7 @@ git snapshot clear
 git snapshot drop <snapshot>
 git snapshot apply <snapshot>
 git snapshot pop <snapshot>
+git snapshot show <snapshot>
 ```
 
 ## changes
