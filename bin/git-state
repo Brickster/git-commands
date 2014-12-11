@@ -38,6 +38,39 @@ function stash_not_empty
     return 0
 }
 
+#
+# Echos a section of the state.
+#
+# Optionally, the output can be echoed in pretty format. Pretty format includes pre- and a- pended newlines 
+# as well as tabs starting every line.
+#
+# $1: the section title
+# $2: the text to pretty print
+# $3: whether the section should be echoed in pretty format
+#
+function echo_section
+{
+    title="$1"
+    text="$2"
+    use_pretty="$3"
+
+    echo -e "## ${green}$title${nocolor}"
+    if $use_pretty; then
+
+        IFS=$'\n' read -rd '' -a text <<< "$text"
+        tab="    "
+
+        echo
+        count=${#text[@]}
+        for ((i=0;i<count;i++)); do
+            echo "$tab${text[i]}"
+        done
+        echo
+    else
+        echo -e "$text"
+    fi
+}
+
 green='\x1B[0;32m'
 nocolor='\x1B[0m'
 
@@ -46,8 +79,9 @@ no_status=false
 no_branches=false
 no_stashes=false
 show_empty=false
-color="auto"
-while getopts ":hcCeLSBTl:-:" opt; do
+color="always"
+pretty=false
+while getopts ":hpcCeLSBTl:-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
@@ -62,6 +96,7 @@ while getopts ":hcCeLSBTl:-:" opt; do
                 no-stashes)     no_stashes=true;;
                 show-empty)     show_empty=true;;
                 color)          color="always";;
+                pretty)         pretty=true;;
                 no-color)
                     color="never"
                     green=""
@@ -83,6 +118,7 @@ while getopts ":hcCeLSBTl:-:" opt; do
         S)  no_status=true;;
         B)  no_branches=true;;
         T)  no_stashes=true;;
+        p)  pretty=true;;
         h)  help;;
         \?) error "Invalid option: -$OPTARG";;
         *)  error "Unimplemented option: -$OPTARG";;
@@ -107,18 +143,18 @@ if ! $no_status; then
 fi
 
 if (( $log_count != 0 )); then
-    echo -e "## ${green}log${nocolor}"
-    git log -n "$log_count" --oneline --color="$color"
+    log_output=$(git log -n "$log_count" --oneline --color="$color")
+    echo_section "log" "$log_output" "$pretty"
 fi
 
 # branches
 if ! $no_branches; then
-    echo -e "## ${green}branches${nocolor}"
-    git branch -v --color="$color"
+    branch_output=$(git branch -v --color="$color")
+    echo_section "branches" "$branch_output" "$pretty"
 fi
 
 # stashes
 if ! $no_stashes && ( $show_empty || stash_not_empty ); then
-    echo -e "## ${green}stashes${nocolor}"
-    git stash list --oneline --color="$color"
+    stash_output=$(git stash list --oneline --color="$color")
+    echo_section "stashes" "$stash_output" "$pretty"
 fi
