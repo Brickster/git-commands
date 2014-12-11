@@ -54,8 +54,8 @@ function echo_section
     text="$2"
     use_pretty="$3"
 
-    echo -e "## ${green}$title${nocolor}"
-    if $use_pretty; then
+    echo -e "# ${green}$title${nocolor}"
+    if $use_pretty && [[ ! -z "$text" ]]; then
 
         IFS=$'\n' read -rd '' -a text <<< "$text"
         tab="    "
@@ -66,7 +66,11 @@ function echo_section
             echo "$tab${text[i]}"
         done
         echo
-    else
+
+    elif $use_pretty; then
+        # there's no text but we still want some nicer formatting
+        echo
+    elif [[ ! -z "$text" ]]; then
         echo -e "$text"
     fi
 }
@@ -132,7 +136,16 @@ if ! $no_status; then
     status_color=$(git config color.status)
     git config color.status "$color"
 
-    git status --short --branch
+    # get the --branch part of 'git status --short --branch'
+    status_info=$(git status --short --branch)
+    IFS=$'\n' read -rd '' -a status_info <<< "$status_info"
+    title="${status_info[0]}"
+    title="${title##"## "}"
+    
+    status_info=$(git status --short)
+
+    # an extra $nocolor used to make color print in its own coloring
+    echo_section "status $nocolor($title)" "$status_info" "$pretty"
 
     # reset color.status to its original setting
     if [[ -z "$status_color" ]]; then
