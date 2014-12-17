@@ -1,0 +1,22 @@
+# git-settings(1) -- more ways to view and edit config files
+
+## SYNOPSIS
+
+`git-settings` [(`-h`|`--help`)]  
+`git-settings` [(`--local`|`--global`|`--system`)] `--destroy-section` <section>  
+`git-settings` [(`--local`|`--global`|`--system`)] `--print-section` <section>
+
+## DESCRIPTION
+
+`git-settings` is a compliment to `git-config` that adds missing functionality.
+
+## OPTIONS
+
+* `--destory-section` <section>:
+    Destory a section from the local, global, and system config files.
+
+* `--print-section` <section>:
+    Print a section from the local, global, and system config files. Optionally, a specific configation can be specified and only the section present in that file will be printed.
+
+* `-h`|`--help`:
+    Display git-settings man page.
