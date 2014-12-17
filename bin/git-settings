@@ -1,0 +1,95 @@
+#! /bin/bash
+
+#
+# Echos text to strerr.
+#
+# $1: the text to echo
+#
+function error
+{
+    echo "$1" >&2
+    exit 1
+}
+
+#
+# Shows git-settings man page.
+#
+function help
+{
+    man git-settings
+    exit 0
+}
+
+#
+# Removes a section from local, global, and system config files.
+#
+# $1: the section to destroy
+#
+function destroy_section
+{
+    local section="$1"
+
+    # destory from each section and silence output
+    git config --local --remove-section "$section" &>/dev/null
+    git config --global --remove-section "$section" &>/dev/null
+    git config --system --remove-section "$section" &>/dev/null
+}
+
+#
+# Prints a given section.
+#
+# This is a section level version of git config --list.
+#
+# $1: the section to print
+# $2: the configuration to use
+#
+function print_section
+{
+    local section="$1"
+    local configuration="$2"
+
+    # get list of config settings
+    configs=$(git config --list --"$configuration")
+    IFS=$'\n' read -rd '' -a configs <<< "$configs"
+
+    # parse the listed config for the relevant section
+    for config in "${configs[@]}"
+    do
+        regex="^$section.*$"
+        if [[ "$config" =~ $regex ]]; then
+            echo "$config"
+        fi
+    done
+}
+
+configuration="local"
+while getopts ":lgsh-:" opt; do
+    case $opt in
+        -)
+            case "${OPTARG}" in
+                help)   help;;
+                local)  configuration="local";;
+                global) configuration="global";;
+                system) configuration="system";;
+                destroy-section)    
+                    section="${!OPTIND}"
+                    OPTIND=$(( $OPTIND + 1 ))
+                    destroy_section "$section"
+                    ;;
+                print-section)
+                    section="${!OPTIND}"
+                    OPTIND=$(( $OPTIND + 1 ))
+                    print_section "$section" "$configuration"
+                    ;;
+                *)      error "Unimplemented option --${OPTARG}";;
+            esac
+            ;;
+        h)  help;;
+        l)  configuration="local";;
+        g)  configuration="global";;
+        s)  configuration="system";;
+        \?) error "Invalid option: -$OPTARG";;
+        :)  error "Option -$OPTARG requires an argument.";;
+        *)  error "Unimplemented option: -$OPTARG";;
+    esac
+done
