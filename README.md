@@ -32,3 +32,13 @@ Used to list the commits between this branch and another.
 ```bash
 git changes [(-b|--branch) <branch>] [(-c|--count)] [(-h|--help)]
 ```
+
+## settings
+
+Used as a compliment to `git-config` by adding missing features.
+
+```bash
+git-settings [(-h|--help)]  
+git-settings [(--local|--global|--system)] --destroy-section <section>  
+git-settings [(--local|--global|--system)] --print-section <section>
+```
