@@ -79,13 +79,14 @@ green='\x1B[0;32m'
 nocolor='\x1B[0m'
 
 log_count=10
+reflog_count=5
 no_status=false
 no_branches=false
 no_stashes=false
 show_empty=false
 color="always"
 pretty=false
-while getopts ":hpcCeLSBTl:-:" opt; do
+while getopts ":hpcCeLSBRTl:r:-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
@@ -93,8 +94,14 @@ while getopts ":hpcCeLSBTl:-:" opt; do
                     log_count="${!OPTIND}"
                     OPTIND=$(( $OPTIND + 1 ))
                     ;;
+                reflog)
+                    reflog_count="${!OPTIND}"
+                    OPTIND=$(( $OPTIND + 1 ))
+                    ;;
                 full-log)       log_count=-1;;
                 no-log)         log_count=0;;
+                full-reflog)    reflog_count=-1;;
+                no-reflog)      reflog_count=0;;
                 no-status)      no_status=true;;
                 no-branches)    no_branches=true;;
                 no-stashes)     no_stashes=true;;
@@ -118,6 +125,8 @@ while getopts ":hpcCeLSBTl:-:" opt; do
             ;;
         e)  show_empty=true;;
         l)  log_count="$OPTARG";;
+        r)  reflog_count="$OPTARG";;
+        R)  reflog_count=0;;
         L)  log_count=0;;
         S)  no_status=true;;
         B)  no_branches=true;;
@@ -158,6 +167,12 @@ fi
 if (( $log_count != 0 )); then
     log_output=$(git log -n "$log_count" --oneline --color="$color")
     echo_section "log" "$log_output" "$pretty"
+fi
+
+# reflog
+if (( $reflog_count != 0 )); then
+    reflog_output=$(git reflog -n "$reflog_count" --color="$color")
+    echo_section "reflog" "$reflog_output" "$pretty"
 fi
 
 # branches

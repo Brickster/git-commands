@@ -7,7 +7,7 @@
 \fBgit\-state\fR \- View the state of the working tree
 .
 .SH "SYNOPSIS"
-\fBgit state\fR [(\fB\-h\fR|\fB\-\-help\fR)] [(\fB\-l\fR|\fB\-\-log\fR) \fIcount\fR] [(\fB\-L\fR|\fB\-\-no\-log\fR)] [\fB\-\-full\-log\fR] [(\fB\-S\fR|\fB\-\-no\-status\fR)] [(\fB\-B\fR|\fB\-\-no\-branches\fR)] [(\fB\-T\fR|\fB\-\-no\-stashes\fR)] [(\fB\-e\fR|\fB\-\-show\-empty\fR)] [(\fB\-c\fR|\fB\-\-color\fR)] [(\fB\-C\fR|\fB\-\-no\-color\fR)] [(\fB\-p\fR|\fB\-\-pretty\fR)]
+\fBgit state\fR [(\fB\-h\fR|\fB\-\-help\fR)] [(\fB\-l\fR|\fB\-\-log\fR) \fIcount\fR] [(\fB\-L\fR|\fB\-\-no\-log\fR)] [\fB\-\-full\-log\fR] [(\fB\-r\fR|\fB\-\-reflog\fR) \fIcount\fR] [(\fB\-R\fR|\fB\-\-no\-reflog\fR)] [\fB\-\-full\-reflog\fR] [(\fB\-S\fR|\fB\-\-no\-status\fR)] [(\fB\-B\fR|\fB\-\-no\-branches\fR)] [(\fB\-T\fR|\fB\-\-no\-stashes\fR)] [(\fB\-e\fR|\fB\-\-show\-empty\fR)] [(\fB\-c\fR|\fB\-\-color\fR)] [(\fB\-C\fR|\fB\-\-no\-color\fR)] [(\fB\-p\fR|\fB\-\-pretty\fR)]
 .
 .SH "DESCRIPTION"
 Used to see a more concise and comprehensive view of the working directory\. The output includes results from git status, git log, git branch, and git stash\.
@@ -29,6 +29,18 @@ Don\'t output the log section\. Equivalent to \fB\-l\fR 0 or \fB\-\-log\fR 0\.
 .TP
 \fB\-\-full\-log\fR
 Output the entire log regardless of size\.
+.
+.TP
+\fB\-r\fR|\fB\-\-reflog\fR \fIcount\fR
+Limits actions in the reflog section\. If less than 1, the section is skipped\.
+.
+.TP
+\fB\-R\fR|\fB\-\-no\-reflog\fR
+Don\'t output the reflog section\. Equivalent to \fB\-r\fR 0 or \fB\-\-reflog\fR 0\.
+.
+.TP
+\fB\-\-full\-reflog\fR
+Output the entire reflog regardless of size\.
 .
 .TP
 \fB\-S\fR|\fB\-\-no\-status\fR
