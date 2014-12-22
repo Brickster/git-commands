@@ -78,10 +78,9 @@ function echo_section
 green='\x1B[0;32m'
 nocolor='\x1B[0m'
 
-no_stashes=false
 show_empty=false
 color="always"
-while getopts ":hpcCeLsSbBRTl:r:-:" opt; do
+while getopts ":hpcCeLsSbBRtTl:r:-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
@@ -101,7 +100,8 @@ while getopts ":hpcCeLsSbBRTl:r:-:" opt; do
                 no-status)      show_status=false;;
                 branches)       show_branches=true;;
                 no-branches)    show_branches=false;;
-                no-stashes)     no_stashes=true;;
+                stashes)        show_stashes=true;;
+                no-stashes)     show_stashes=false;;
                 show-empty)     show_empty=true;;
                 color)          color="always";;
                 pretty)         format="pretty";;
@@ -135,7 +135,8 @@ while getopts ":hpcCeLsSbBRTl:r:-:" opt; do
         S)  show_status=false;;
         b)  show_branches=true;;
         B)  show_branches=false;;
-        T)  no_stashes=true;;
+        t)  show_stashes=true;;
+        T)  show_stashes=false;;
         p)  format="pretty";;
         h)  help;;
         \?) error "Invalid option: -$OPTARG";;
@@ -150,6 +151,7 @@ show_reflog="${show_reflog:-"$(git settings -d true git-state.reflog.show)"}"
 reflog_count="${reflog_count:-"$(git settings -d 5 git-state.reflog.count)"}"
 show_status="${show_status:-"$(git settings -d true git-state.status.show)"}"
 show_branches="${show_branches:-"$(git settings -d true git-state.branches.show)"}"
+show_stashes="${show_stashes:-"$(git settings -d true git-state.stashes.show)"}"
 
 # determine formatting
 format="${format:-$(git settings -d compact git-state.format)}"
@@ -203,7 +205,7 @@ if $show_branches; then
 fi
 
 # stashes
-if ! $no_stashes && ( $show_empty || stash_not_empty ); then
+if $show_stashes && ( $show_empty || stash_not_empty ); then
     stash_output=$(git stash list --oneline --color="$color")
     echo_section "stashes" "$stash_output" "$pretty"
 fi
