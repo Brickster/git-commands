@@ -41,7 +41,7 @@ function stash_not_empty
 #
 # Echos a section of the state.
 #
-# Optionally, the output can be echoed in pretty format. Pretty format includes pre- and a- pended newlines 
+# Optionally, the output can be echoed in pretty format. Pretty format includes pre- and a- pended newlines
 # as well as tabs starting every line.
 #
 # $1: the section title
@@ -78,8 +78,6 @@ function echo_section
 green='\x1B[0;32m'
 nocolor='\x1B[0m'
 
-log_count=10
-reflog_count=5
 no_status=false
 no_branches=false
 no_stashes=false
@@ -124,10 +122,16 @@ while getopts ":hpcCeLSBRTl:r:-:" opt; do
             nocolor=""
             ;;
         e)  show_empty=true;;
-        l)  log_count="$OPTARG";;
-        r)  reflog_count="$OPTARG";;
+        l)
+            log_count="$OPTARG"
+            show_log=true
+            ;;
+        L)  show_log=false;;
+        r)
+            reflog_count="$OPTARG"
+            show_reflog=true
+            ;;
         R)  reflog_count=0;;
-        L)  log_count=0;;
         S)  no_status=true;;
         B)  no_branches=true;;
         T)  no_stashes=true;;
@@ -137,6 +141,12 @@ while getopts ":hpcCeLSBRTl:r:-:" opt; do
         *)  error "Unimplemented option: -$OPTARG";;
     esac
 done
+
+# load unset values from config
+show_log="${show_log:-"$(git settings -d true git-state.log.show)"}"
+log_count="${log_count:-"$(git settings -d 10 git-state.log.count)"}"
+show_reflog="${show_reflog:-"$(git settings -d true git-state.reflog.show)"}"
+reflog_count="${reflog_count:-"$(git settings -d 5 git-state.reflog.count)"}"
 
 # status
 if ! $no_status; then
@@ -150,7 +160,7 @@ if ! $no_status; then
     IFS=$'\n' read -rd '' -a status_info <<< "$status_info"
     title="${status_info[0]}"
     title="${title##"## "}"
-    
+
     status_info=$(git status --short)
 
     # an extra $nocolor used to make color print in its own coloring
@@ -164,13 +174,13 @@ if ! $no_status; then
     fi
 fi
 
-if (( $log_count != 0 )); then
+if $show_log && (( $log_count != 0 )); then
     log_output=$(git log -n "$log_count" --oneline --color="$color")
     echo_section "log" "$log_output" "$pretty"
 fi
 
 # reflog
-if (( $reflog_count != 0 )); then
+if $show_reflog && (( $reflog_count != 0 )); then
     reflog_output=$(git reflog -n "$reflog_count" --color="$color")
     echo_section "reflog" "$reflog_output" "$pretty"
 fi

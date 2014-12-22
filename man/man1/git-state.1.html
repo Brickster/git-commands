@@ -57,6 +57,7 @@
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
     <a href="#OPTIONS">OPTIONS</a>
+    <a href="#CONFIGURATION">CONFIGURATION</a>
   </div>
 
   <ol class='man-decor man-head man head'>
@@ -96,6 +97,16 @@
 <dt><code>-c</code>|<code>--color</code></dt><dd><p>  Always color output.</p></dd>
 <dt><code>-C</code>|<code>--no-color</code></dt><dd><p>  Never color output.</p></dd>
 <dt><code>-p</code>|<code>--pretty</code></dt><dd><p>  Display in pretty format.</p></dd>
+</dl>
+
+
+<h2 id="CONFIGURATION">CONFIGURATION</h2>
+
+<dl>
+<dt><code>git-state.log.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether log should show when no other related flags are specified.</p></dd>
+<dt><code>git-state.log.count</code> <var>int</var></dt><dd><p>  The default log length. Can be overridden using the <code>-d</code>|<code>--log</code> <var>count</var> option.</p></dd>
+<dt><code>git-state.reflog.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether reflog should show when no other related flags are specified.</p></dd>
+<dt><code>git-state.log.count</code> <var>int</var></dt><dd><p>  The default reflog length. Can be overridden using the <code>-r</code>|<code>--reflog</code> <var>count</var> option.</p></dd>
 </dl>
 
 
