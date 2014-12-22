@@ -95,35 +95,62 @@ Display in pretty format\.
 \fBgit\-state\.log\.show\fR \fIbool\fR
 True or false flag determining whether the log section should show when no other related flags are specified\.
 .
+.IP
+Default: true
+.
 .TP
 \fBgit\-state\.log\.count\fR \fIint\fR
 The default log length\. Can be overridden using the \fB\-d\fR|\fB\-\-log\fR \fIcount\fR option\.
+.
+.IP
+Default: 10
 .
 .TP
 \fBgit\-state\.reflog\.show\fR \fIbool\fR
 True or false flag determining whether the reflog section should show when no other related flags are specified\.
 .
+.IP
+Default: true
+.
 .TP
 \fBgit\-state\.log\.count\fR \fIint\fR
 The default reflog length\. Can be overridden using the \fB\-r\fR|\fB\-\-reflog\fR \fIcount\fR option\.
+.
+.IP
+Default: 5
 .
 .TP
 \fBgit\-state\.format\fR \fIstring\fR
 The default formatting for git\-state\. Valid options include: \fBpretty\fR and \fBcompact\fR\. If no value is specified or an invalid value is entered, compact is used\. The option \fB\-p|\-\-pretty\fR will override this setting\.
 .
+.IP
+Default: true
+.
 .TP
 \fBgit\-state\.status\.show\fR \fIbool\fR
 True or false flag determining whether the status section should show when no other related flags are specified\. Options (\fB\-s\fR|\fB\-\-status\fR) and (\fB\-S\fR|\fB\-\-no\-status\fR) override this value\.
+.
+.IP
+Default: true
 .
 .TP
 \fBgit\-state\.branches\.show\fR \fIbool\fR
 True or false flag determining whether the branches section should show when no other related flags are specified\. Options (\fB\-b\fR|\fB\-\-branches\fR) and (\fB\-B\fR|\fB\-\-no\-branches\fR) override this value\.
 .
+.IP
+Default: true
+.
 .TP
 \fBgit\-state\.stashes\.show\fR \fIbool\fR
 True or false flag determining whether the stashes section should show when no other related flags are specified\. Options (\fB\-t\fR|\fB\-\-stashes\fR) and (\fB\-T\fR|\fB\-\-no\-stashes\fR) override this value\.
 .
+.IP
+Default: true
+.
 .TP
 \fBgit\-state\.show\-empty\fR \fIbool\fR
 True or false flag determining whether empty sections should be shown\. Options (\fB\-e\fR|\fB\-\-show\-empty\fR) and (\fB\-E\fR|\fB\-\-no\-show\-empty\fR) override this value\.
+.
+.IP
+Default: false
 
