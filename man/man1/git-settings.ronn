@@ -16,7 +16,7 @@
     Destroy a section from the local, global, and system config files.
 
 * `print` [(`--local`|`--global`|`--system`)] <section>:
-    Print a section from the local, global, and system config files. Optionally, a specific configation can be specified and only the section present in that file will be printed.
+    Print a section from the local, global, and system config files. Optionally, a specific configuration can be specified and only the section present in that file will be printed.
 
 * `-h`|`--help`:
     Display git-settings man page.
