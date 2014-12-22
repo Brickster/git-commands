@@ -7,6 +7,9 @@
 \fBgit\-settings\fR \- more ways to view and edit config files
 .
 .SH "SYNOPSIS"
+\fBgit settings\fR [(\fB\-d\fR|\fB\-\-default\fR) \fIvalue\fR] \fIkey\fR
+.
+.br
 \fBgit settings\fR [(\fB\-h\fR|\fB\-\-help\fR)]
 .
 .br
@@ -21,12 +24,16 @@
 .SH "OPTIONS"
 .
 .TP
+\fB\-d\fR|\fB\-\-default\fR \fIkey\fR
+A default value to use when no setting exists for a given \fIkey\fR\.
+.
+.TP
 \fBdestroy\fR \fIsection\fR
 Destroy a section from the local, global, and system config files\.
 .
 .TP
 \fBprint\fR [(\fB\-\-local\fR|\fB\-\-global\fR|\fB\-\-system\fR)] \fIsection\fR
-Print a section from the local, global, and system config files\. Optionally, a specific configation can be specified and only the section present in that file will be printed\.
+Print a section from the local, global, and system config files\. Optionally, a specific configuration can be specified and only the section present in that file will be printed\.
 .
 .TP
 \fB\-h\fR|\fB\-\-help\fR
