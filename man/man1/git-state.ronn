@@ -52,3 +52,17 @@ Used to see a more concise and comprehensive view of the working directory. The 
 
 * `-p`|`--pretty`:
     Display in pretty format.
+
+## CONFIGURATION
+
+* `git-state.log.show` <bool>:
+	True or false flag determining whether log should show when no other related flags are specified.
+
+* `git-state.log.count` <int>:
+	The default log length. Can be overridden using the `-d`|`--log` <count> option.
+
+* `git-state.reflog.show` <bool>:
+	True or false flag determining whether reflog should show when no other related flags are specified.
+
+* `git-state.log.count` <int>:
+	The default reflog length. Can be overridden using the `-r`|`--reflog` <count> option.
