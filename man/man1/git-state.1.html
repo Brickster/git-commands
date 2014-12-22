@@ -107,15 +107,33 @@
 <h2 id="CONFIGURATION">CONFIGURATION</h2>
 
 <dl>
-<dt><code>git-state.log.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether the log section should show when no other related flags are specified.</p></dd>
-<dt><code>git-state.log.count</code> <var>int</var></dt><dd><p>  The default log length. Can be overridden using the <code>-d</code>|<code>--log</code> <var>count</var> option.</p></dd>
-<dt><code>git-state.reflog.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether the reflog section should show when no other related flags are specified.</p></dd>
-<dt><code>git-state.log.count</code> <var>int</var></dt><dd><p>  The default reflog length. Can be overridden using the <code>-r</code>|<code>--reflog</code> <var>count</var> option.</p></dd>
-<dt><code>git-state.format</code> <var>string</var></dt><dd><p>  The default formatting for git-state. Valid options include: <code>pretty</code> and <code>compact</code>. If no value is specified or an invalid value is entered, compact is used. The option <code>-p|--pretty</code> will override this setting.</p></dd>
-<dt><code>git-state.status.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether the status section should show when no other related flags are specified. Options (<code>-s</code>|<code>--status</code>) and (<code>-S</code>|<code>--no-status</code>) override this value.</p></dd>
-<dt><code>git-state.branches.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether the branches section should show when no other related flags are specified. Options (<code>-b</code>|<code>--branches</code>) and (<code>-B</code>|<code>--no-branches</code>) override this value.</p></dd>
-<dt><code>git-state.stashes.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether the stashes section should show when no other related flags are specified. Options (<code>-t</code>|<code>--stashes</code>) and (<code>-T</code>|<code>--no-stashes</code>) override this value.</p></dd>
-<dt><code>git-state.show-empty</code> <var>bool</var></dt><dd><p>  True or false flag determining whether empty sections should be shown. Options (<code>-e</code>|<code>--show-empty</code>) and (<code>-E</code>|<code>--no-show-empty</code>) override this value.</p></dd>
+<dt><code>git-state.log.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether the log section should show when no other related flags are specified.</p>
+
+<p>  Default: true</p></dd>
+<dt><code>git-state.log.count</code> <var>int</var></dt><dd><p>  The default log length. Can be overridden using the <code>-d</code>|<code>--log</code> <var>count</var> option.</p>
+
+<p>  Default: 10</p></dd>
+<dt><code>git-state.reflog.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether the reflog section should show when no other related flags are specified.</p>
+
+<p>  Default: true</p></dd>
+<dt><code>git-state.log.count</code> <var>int</var></dt><dd><p>  The default reflog length. Can be overridden using the <code>-r</code>|<code>--reflog</code> <var>count</var> option.</p>
+
+<p>  Default: 5</p></dd>
+<dt><code>git-state.format</code> <var>string</var></dt><dd><p>  The default formatting for git-state. Valid options include: <code>pretty</code> and <code>compact</code>. If no value is specified or an invalid value is entered, compact is used. The option <code>-p|--pretty</code> will override this setting.</p>
+
+<p>  Default: true</p></dd>
+<dt><code>git-state.status.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether the status section should show when no other related flags are specified. Options (<code>-s</code>|<code>--status</code>) and (<code>-S</code>|<code>--no-status</code>) override this value.</p>
+
+<p>  Default: true</p></dd>
+<dt><code>git-state.branches.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether the branches section should show when no other related flags are specified. Options (<code>-b</code>|<code>--branches</code>) and (<code>-B</code>|<code>--no-branches</code>) override this value.</p>
+
+<p>  Default: true</p></dd>
+<dt><code>git-state.stashes.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether the stashes section should show when no other related flags are specified. Options (<code>-t</code>|<code>--stashes</code>) and (<code>-T</code>|<code>--no-stashes</code>) override this value.</p>
+
+<p>  Default: true</p></dd>
+<dt><code>git-state.show-empty</code> <var>bool</var></dt><dd><p>  True or false flag determining whether empty sections should be shown. Options (<code>-e</code>|<code>--show-empty</code>) and (<code>-E</code>|<code>--no-show-empty</code>) override this value.</p>
+
+<p>  Default: false</p></dd>
 </dl>
 
 
