@@ -78,11 +78,10 @@ function echo_section
 green='\x1B[0;32m'
 nocolor='\x1B[0m'
 
-no_branches=false
 no_stashes=false
 show_empty=false
 color="always"
-while getopts ":hpcCeLsSBRTl:r:-:" opt; do
+while getopts ":hpcCeLsSbBRTl:r:-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
@@ -100,7 +99,8 @@ while getopts ":hpcCeLsSBRTl:r:-:" opt; do
                 no-reflog)      reflog_count=0;;
                 status)         show_status=true;;
                 no-status)      show_status=false;;
-                no-branches)    no_branches=true;;
+                branches)       show_branches=true;;
+                no-branches)    show_branches=false;;
                 no-stashes)     no_stashes=true;;
                 show-empty)     show_empty=true;;
                 color)          color="always";;
@@ -133,7 +133,8 @@ while getopts ":hpcCeLsSBRTl:r:-:" opt; do
         R)  reflog_count=0;;
         s)  show_status=true;;
         S)  show_status=false;;
-        B)  no_branches=true;;
+        b)  show_branches=true;;
+        B)  show_branches=false;;
         T)  no_stashes=true;;
         p)  format="pretty";;
         h)  help;;
@@ -148,6 +149,7 @@ log_count="${log_count:-"$(git settings -d 10 git-state.log.count)"}"
 show_reflog="${show_reflog:-"$(git settings -d true git-state.reflog.show)"}"
 reflog_count="${reflog_count:-"$(git settings -d 5 git-state.reflog.count)"}"
 show_status="${show_status:-"$(git settings -d true git-state.status.show)"}"
+show_branches="${show_branches:-"$(git settings -d true git-state.branches.show)"}"
 
 # determine formatting
 format="${format:-$(git settings -d compact git-state.format)}"
@@ -195,7 +197,7 @@ if $show_reflog && (( $reflog_count != 0 )); then
 fi
 
 # branches
-if ! $no_branches; then
+if $show_branches; then
     branch_output=$(git branch -v --color="$color")
     echo_section "branches" "$branch_output" "$pretty"
 fi

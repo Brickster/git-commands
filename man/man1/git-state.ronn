@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git state` [(`-l`|`--log`) <count>] [(`-L`|`--no-log`)] [`--full-log`] [(`-r`|`--reflog`) <count>] [(`-R`|`--no-reflog`)] [`--full-reflog`] [(`-s`|`--status`)] [(`-S`|`--no-status`)] [(`-B`|`--no-branches`)] [(`-T`|`--no-stashes`)] [(`-e`|`--show-empty`)] [(`-c`|`--color`)] [(`-C`|`--no-color`)] [(`-p`|`--pretty`)]<br>
+`git state` [(`-l`|`--log`) <count>] [(`-L`|`--no-log`)] [`--full-log`] [(`-r`|`--reflog`) <count>] [(`-R`|`--no-reflog`)] [`--full-reflog`] [(`-s`|`--status`)] [(`-S`|`--no-status`)] [(`-b`|`--branches`)] [(`-B`|`--no-branches`)] [(`-T`|`--no-stashes`)] [(`-e`|`--show-empty`)] [(`-c`|`--color`)] [(`-C`|`--no-color`)] [(`-p`|`--pretty`)]<br>
 `git state` [(`-h`|`--help`)]
 
 ## DESCRIPTION
@@ -38,8 +38,11 @@ Used to see a more concise and comprehensive view of the working directory. The 
 * `-S`|`--no-status`:
     Don't print the status section.
 
+* `-b`|`--branches`:
+	Print the branches section.
+
 * `-B`|`--no-branches`:
-    Don't output the branches section.
+    Don't print the branches section.
 
 * `-T`|`--no-stashes`:
     Don't output the stashes section.
@@ -75,3 +78,6 @@ Used to see a more concise and comprehensive view of the working directory. The 
 
 * `git-state.status.show` <bool>:
 	True or false flag determining whether the status section should show when no other related flags are specified. Options (`-s`|`--status`) and (`-S`|`--no-status`) override this value.
+
+* `git-state.branches.show` <bool>:
+	True or false flag determining whether the branches section should show when no other related flags are specified. Options (`-b`|`--branches`) and (`-B`|`--no-branches`) override this value.
