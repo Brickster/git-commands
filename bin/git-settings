@@ -25,7 +25,10 @@ function help
 #
 function usage_error
 {
-    error "usage: git settings [flags]"
+    error "usage: git settings [(-d|--default) <value>] <key>
+   or: git settings [(-h|--help)]
+   or: git settings destroy <section>
+   or: git settings print [(--local|--global|--system)] <section>"
 }
 
 #
@@ -98,11 +101,55 @@ function print
     done
 }
 
+function default
+{
+    local default=
+    local key_index=1
+
+    while getopts ":d:-:" opt; do
+        case $opt in
+            -)
+                case "${OPTARG}" in
+                    default)
+                        default="${!OPTIND}"
+                        OPTIND=$(( $OPTIND + 1 ))
+                        key_index=$((key_index + 2))
+                        ;;
+                    *)  error "Unimplemented option --${OPTARG}";;
+                esac
+                ;;
+            d)
+                default="$OPTARG"
+                key_index=$((key_index + 2))
+                ;;
+            \?) error "Invalid option: -$OPTARG";;
+            :)  error "Option -$OPTARG requires an argument.";;
+            *)  error "Unimplemented option: -$OPTARG";;
+        esac
+        # key_index=$((key_index + 1))
+    done
+
+    if (( $# != 0 )) && (( $key_index == $# )); then
+        args=("$@")
+        key=${args[$key_index-1]}
+    else
+        error "usage: git section [(-d|--default) <default>] <key>"
+    fi
+
+    local value=$(git config $key)
+    if [[ -z $value ]]; then
+        value="$default"
+    fi
+    echo "$value"
+}
+
 if [[ "$1" =~ ^(destroy|print)$ ]]; then
     args=("$@") # so I can split the input
     args=("${args[@]:1}")
     "$1" "${args[@]}"
     exit 0
+elif (( $# == 0 )); then
+    usage_error
 fi
 
-usage_error
+default "$@"

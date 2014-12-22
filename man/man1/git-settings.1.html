@@ -72,7 +72,8 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>git settings</code> [(<code>-h</code>|<code>--help</code>)]<br />
+<p><code>git settings</code> [(<code>-d</code>|<code>--default</code>) <var>value</var>] <var>key</var><br />
+<code>git settings</code> [(<code>-h</code>|<code>--help</code>)]<br />
 <code>git settings destroy</code> [(<code>--local</code>|<code>--global</code>|<code>--system</code>)] <var>section</var><br />
 <code>git settings print</code> [(<code>--local</code>|<code>--global</code>|<code>--system</code>)] <var>section</var></p>
 
@@ -83,8 +84,9 @@
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
+<dt><code>-d</code>|<code>--default</code> <var>key</var></dt><dd><p>  A default value to use when no setting exists for a given <var>key</var>.</p></dd>
 <dt><code>destroy</code> <var>section</var></dt><dd><p>  Destroy a section from the local, global, and system config files.</p></dd>
-<dt><code>print</code> [(<code>--local</code>|<code>--global</code>|<code>--system</code>)] <var>section</var></dt><dd><p>  Print a section from the local, global, and system config files. Optionally, a specific configation can be specified and only the section present in that file will be printed.</p></dd>
+<dt><code>print</code> [(<code>--local</code>|<code>--global</code>|<code>--system</code>)] <var>section</var></dt><dd><p>  Print a section from the local, global, and system config files. Optionally, a specific configuration can be specified and only the section present in that file will be printed.</p></dd>
 <dt><code>-h</code>|<code>--help</code></dt><dd><p>  Display git-settings man page.</p></dd>
 </dl>
 
