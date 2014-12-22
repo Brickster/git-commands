@@ -7,7 +7,7 @@
 \fBgit\-state\fR \- View the state of the working tree
 .
 .SH "SYNOPSIS"
-\fBgit state\fR [(\fB\-l\fR|\fB\-\-log\fR) \fIcount\fR] [(\fB\-L\fR|\fB\-\-no\-log\fR)] [\fB\-\-full\-log\fR] [(\fB\-r\fR|\fB\-\-reflog\fR) \fIcount\fR] [(\fB\-R\fR|\fB\-\-no\-reflog\fR)] [\fB\-\-full\-reflog\fR] [(\fB\-s\fR|\fB\-\-status\fR)] [(\fB\-S\fR|\fB\-\-no\-status\fR)] [(\fB\-b\fR|\fB\-\-branches\fR)] [(\fB\-B\fR|\fB\-\-no\-branches\fR)] [(\fB\-t\fR|\fB\-\-stashes\fR)] [(\fB\-T\fR|\fB\-\-no\-stashes\fR)] [(\fB\-e\fR|\fB\-\-show\-empty\fR)] [(\fB\-c\fR|\fB\-\-color\fR)] [(\fB\-C\fR|\fB\-\-no\-color\fR)] [(\fB\-p\fR|\fB\-\-pretty\fR)]
+\fBgit state\fR [(\fB\-l\fR|\fB\-\-log\fR) \fIcount\fR] [(\fB\-L\fR|\fB\-\-no\-log\fR)] [\fB\-\-full\-log\fR] [(\fB\-r\fR|\fB\-\-reflog\fR) \fIcount\fR] [(\fB\-R\fR|\fB\-\-no\-reflog\fR)] [\fB\-\-full\-reflog\fR] [(\fB\-s\fR|\fB\-\-status\fR)] [(\fB\-S\fR|\fB\-\-no\-status\fR)] [(\fB\-b\fR|\fB\-\-branches\fR)] [(\fB\-B\fR|\fB\-\-no\-branches\fR)] [(\fB\-t\fR|\fB\-\-stashes\fR)] [(\fB\-T\fR|\fB\-\-no\-stashes\fR)] [(\fB\-e\fR|\fB\-\-show\-empty\fR)] [(\fB\-E\fR|\fB\-\-no\-show\-empty\fR)] [(\fB\-c\fR|\fB\-\-color\fR)] [(\fB\-C\fR|\fB\-\-no\-color\fR)] [(\fB\-p\fR|\fB\-\-pretty\fR)]
 .
 .br
 \fBgit state\fR [(\fB\-h\fR|\fB\-\-help\fR)]
@@ -74,6 +74,10 @@ Don\'t print the stashes section\.
 Show empty sections rather than omitting them\.
 .
 .TP
+\fB\-E\fR|\fB\-\-no\-show\-empty\fR
+Omit empty sections\. This does not apply to the status section\.
+.
+.TP
 \fB\-c\fR|\fB\-\-color\fR
 Always color output\.
 .
@@ -118,4 +122,8 @@ True or false flag determining whether the branches section should show when no 
 .TP
 \fBgit\-state\.stashes\.show\fR \fIbool\fR
 True or false flag determining whether the stashes section should show when no other related flags are specified\. Options (\fB\-t\fR|\fB\-\-stashes\fR) and (\fB\-T\fR|\fB\-\-no\-stashes\fR) override this value\.
+.
+.TP
+\fBgit\-state\.show\-empty\fR \fIbool\fR
+True or false flag determining whether empty sections should be shown\. Options (\fB\-e\fR|\fB\-\-show\-empty\fR) and (\fB\-E\fR|\fB\-\-no\-show\-empty\fR) override this value\.
 

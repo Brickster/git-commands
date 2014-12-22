@@ -78,9 +78,8 @@ function echo_section
 green='\x1B[0;32m'
 nocolor='\x1B[0m'
 
-show_empty=false
 color="always"
-while getopts ":hpcCeLsSbBRtTl:r:-:" opt; do
+while getopts ":hpcCeELsSbBRtTl:r:-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
@@ -103,6 +102,7 @@ while getopts ":hpcCeLsSbBRtTl:r:-:" opt; do
                 stashes)        show_stashes=true;;
                 no-stashes)     show_stashes=false;;
                 show-empty)     show_empty=true;;
+                no-show-empty)  show_empty=false;;
                 color)          color="always";;
                 pretty)         format="pretty";;
                 no-color)
@@ -121,6 +121,7 @@ while getopts ":hpcCeLsSbBRtTl:r:-:" opt; do
             nocolor=""
             ;;
         e)  show_empty=true;;
+        E)  show_empty=false;;
         l)
             log_count="$OPTARG"
             show_log=true
@@ -152,6 +153,7 @@ reflog_count="${reflog_count:-"$(git settings -d 5 git-state.reflog.count)"}"
 show_status="${show_status:-"$(git settings -d true git-state.status.show)"}"
 show_branches="${show_branches:-"$(git settings -d true git-state.branches.show)"}"
 show_stashes="${show_stashes:-"$(git settings -d true git-state.stashes.show)"}"
+show_empty="${show_empty:-"$(git settings -d false git-state.show-empty)"}"
 
 # determine formatting
 format="${format:-$(git settings -d compact git-state.format)}"

@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git state` [(`-l`|`--log`) <count>] [(`-L`|`--no-log`)] [`--full-log`] [(`-r`|`--reflog`) <count>] [(`-R`|`--no-reflog`)] [`--full-reflog`] [(`-s`|`--status`)] [(`-S`|`--no-status`)] [(`-b`|`--branches`)] [(`-B`|`--no-branches`)] [(`-t`|`--stashes`)] [(`-T`|`--no-stashes`)] [(`-e`|`--show-empty`)] [(`-c`|`--color`)] [(`-C`|`--no-color`)] [(`-p`|`--pretty`)]<br>
+`git state` [(`-l`|`--log`) <count>] [(`-L`|`--no-log`)] [`--full-log`] [(`-r`|`--reflog`) <count>] [(`-R`|`--no-reflog`)] [`--full-reflog`] [(`-s`|`--status`)] [(`-S`|`--no-status`)] [(`-b`|`--branches`)] [(`-B`|`--no-branches`)] [(`-t`|`--stashes`)] [(`-T`|`--no-stashes`)] [(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)] [(`-c`|`--color`)] [(`-C`|`--no-color`)] [(`-p`|`--pretty`)]<br>
 `git state` [(`-h`|`--help`)]
 
 ## DESCRIPTION
@@ -53,6 +53,9 @@ Used to see a more concise and comprehensive view of the working directory. The 
 * `-e`|`--show-empty`:
     Show empty sections rather than omitting them.
 
+* `-E`|`--no-show-empty`:
+	Omit empty sections. This does not apply to the status section.
+
 * `-c`|`--color`:
     Always color output.
 
@@ -87,3 +90,6 @@ Used to see a more concise and comprehensive view of the working directory. The 
 
 * `git-state.stashes.show` <bool>:
 	True or false flag determining whether the stashes section should show when no other related flags are specified. Options (`-t`|`--stashes`) and (`-T`|`--no-stashes`) override this value.
+
+* `git-state.show-empty` <bool>:
+	True or false flag determining whether empty sections should be shown. Options (`-e`|`--show-empty`) and (`-E`|`--no-show-empty`) override this value.
