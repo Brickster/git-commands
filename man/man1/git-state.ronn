@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git state` [(`-l`|`--log`) <count>] [(`-L`|`--no-log`)] [`--full-log`] [(`-r`|`--reflog`) <count>] [(`-R`|`--no-reflog`)] [`--full-reflog`] [(`-S`|`--no-status`)] [(`-B`|`--no-branches`)] [(`-T`|`--no-stashes`)] [(`-e`|`--show-empty`)] [(`-c`|`--color`)] [(`-C`|`--no-color`)] [(`-p`|`--pretty`)]  
+`git state` [(`-l`|`--log`) <count>] [(`-L`|`--no-log`)] [`--full-log`] [(`-r`|`--reflog`) <count>] [(`-R`|`--no-reflog`)] [`--full-reflog`] [(`-S`|`--no-status`)] [(`-B`|`--no-branches`)] [(`-T`|`--no-stashes`)] [(`-e`|`--show-empty`)] [(`-c`|`--color`)] [(`-C`|`--no-color`)] [(`-p`|`--pretty`)]<br>
 `git state` [(`-h`|`--help`)]
 
 ## DESCRIPTION
@@ -66,3 +66,6 @@ Used to see a more concise and comprehensive view of the working directory. The 
 
 * `git-state.log.count` <int>:
 	The default reflog length. Can be overridden using the `-r`|`--reflog` <count> option.
+
+* `git-state.format` <string>:
+	The default formatting for git-state. Valid options include: `pretty` and `compact`. If no value is specified or an invalid value is entered, compact is used. The option `-p|--pretty` will override this setting.
