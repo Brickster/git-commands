@@ -7,7 +7,7 @@
 \fBgit\-state\fR \- View the state of the working tree
 .
 .SH "SYNOPSIS"
-\fBgit state\fR [(\fB\-l\fR|\fB\-\-log\fR) \fIcount\fR] [(\fB\-L\fR|\fB\-\-no\-log\fR)] [\fB\-\-full\-log\fR] [(\fB\-r\fR|\fB\-\-reflog\fR) \fIcount\fR] [(\fB\-R\fR|\fB\-\-no\-reflog\fR)] [\fB\-\-full\-reflog\fR] [(\fB\-s\fR|\fB\-\-status\fR)] [(\fB\-S\fR|\fB\-\-no\-status\fR)] [(\fB\-B\fR|\fB\-\-no\-branches\fR)] [(\fB\-T\fR|\fB\-\-no\-stashes\fR)] [(\fB\-e\fR|\fB\-\-show\-empty\fR)] [(\fB\-c\fR|\fB\-\-color\fR)] [(\fB\-C\fR|\fB\-\-no\-color\fR)] [(\fB\-p\fR|\fB\-\-pretty\fR)]
+\fBgit state\fR [(\fB\-l\fR|\fB\-\-log\fR) \fIcount\fR] [(\fB\-L\fR|\fB\-\-no\-log\fR)] [\fB\-\-full\-log\fR] [(\fB\-r\fR|\fB\-\-reflog\fR) \fIcount\fR] [(\fB\-R\fR|\fB\-\-no\-reflog\fR)] [\fB\-\-full\-reflog\fR] [(\fB\-s\fR|\fB\-\-status\fR)] [(\fB\-S\fR|\fB\-\-no\-status\fR)] [(\fB\-b\fR|\fB\-\-branches\fR)] [(\fB\-B\fR|\fB\-\-no\-branches\fR)] [(\fB\-T\fR|\fB\-\-no\-stashes\fR)] [(\fB\-e\fR|\fB\-\-show\-empty\fR)] [(\fB\-c\fR|\fB\-\-color\fR)] [(\fB\-C\fR|\fB\-\-no\-color\fR)] [(\fB\-p\fR|\fB\-\-pretty\fR)]
 .
 .br
 \fBgit state\fR [(\fB\-h\fR|\fB\-\-help\fR)]
@@ -54,8 +54,12 @@ Print the status section\.
 Don\'t print the status section\.
 .
 .TP
+\fB\-b\fR|\fB\-\-branches\fR
+Print the branches section\.
+.
+.TP
 \fB\-B\fR|\fB\-\-no\-branches\fR
-Don\'t output the branches section\.
+Don\'t print the branches section\.
 .
 .TP
 \fB\-T\fR|\fB\-\-no\-stashes\fR
@@ -102,4 +106,8 @@ The default formatting for git\-state\. Valid options include: \fBpretty\fR and 
 .TP
 \fBgit\-state\.status\.show\fR \fIbool\fR
 True or false flag determining whether the status section should show when no other related flags are specified\. Options (\fB\-s\fR|\fB\-\-status\fR) and (\fB\-S\fR|\fB\-\-no\-status\fR) override this value\.
+.
+.TP
+\fBgit\-state\.branches\.show\fR \fIbool\fR
+True or false flag determining whether the branches section should show when no other related flags are specified\. Options (\fB\-b\fR|\fB\-\-branches\fR) and (\fB\-B\fR|\fB\-\-no\-branches\fR) override this value\.
 
