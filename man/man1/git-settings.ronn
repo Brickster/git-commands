@@ -3,7 +3,7 @@
 ## SYNOPSIS
 
 `git settings` [(`-h`|`--help`)]<br>
-`git settings destroy` [(`--local`|`--global`|`--system`)] <section><br>
+`git settings destroy` <section><br>
 `git settings print` [(`--local`|`--global`|`--system`)] <section>
 
 ## DESCRIPTION
