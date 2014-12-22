@@ -2,9 +2,9 @@
 
 ## SYNOPSIS
 
-`git-settings` [(`-h`|`--help`)]  
-`git-settings` [(`--local`|`--global`|`--system`)] `--destroy-section` <section>  
-`git-settings` [(`--local`|`--global`|`--system`)] `--print-section` <section>
+`git settings` [(`-h`|`--help`)]<br>
+`git settings destroy` [(`--local`|`--global`|`--system`)] <section><br>
+`git settings print` [(`--local`|`--global`|`--system`)] <section>
 
 ## DESCRIPTION
 
@@ -12,10 +12,10 @@
 
 ## OPTIONS
 
-* `--destory-section` <section>:
-    Destory a section from the local, global, and system config files.
+* `destroy` <section>:
+    Destroy a section from the local, global, and system config files.
 
-* `--print-section` <section>:
+* `print` [(`--local`|`--global`|`--system`)] <section>:
     Print a section from the local, global, and system config files. Optionally, a specific configation can be specified and only the section present in that file will be printed.
 
 * `-h`|`--help`:

@@ -7,13 +7,13 @@
 \fBgit\-settings\fR \- more ways to view and edit config files
 .
 .SH "SYNOPSIS"
-\fBgit\-settings\fR [(\fB\-h\fR|\fB\-\-help\fR)]
+\fBgit settings\fR [(\fB\-h\fR|\fB\-\-help\fR)]
 .
 .br
-\fBgit\-settings\fR [(\fB\-\-local\fR|\fB\-\-global\fR|\fB\-\-system\fR)] \fB\-\-destroy\-section\fR \fIsection\fR
+\fBgit settings destroy\fR [(\fB\-\-local\fR|\fB\-\-global\fR|\fB\-\-system\fR)] \fIsection\fR
 .
 .br
-\fBgit\-settings\fR [(\fB\-\-local\fR|\fB\-\-global\fR|\fB\-\-system\fR)] \fB\-\-print\-section\fR \fIsection\fR
+\fBgit settings print\fR [(\fB\-\-local\fR|\fB\-\-global\fR|\fB\-\-system\fR)] \fIsection\fR
 .
 .SH "DESCRIPTION"
 \fBgit\-settings\fR is a compliment to \fBgit\-config\fR that adds missing functionality\.
@@ -21,11 +21,11 @@
 .SH "OPTIONS"
 .
 .TP
-\fB\-\-destory\-section\fR \fIsection\fR
-Destory a section from the local, global, and system config files\.
+\fBdestroy\fR \fIsection\fR
+Destroy a section from the local, global, and system config files\.
 .
 .TP
-\fB\-\-print\-section\fR \fIsection\fR
+\fBprint\fR [(\fB\-\-local\fR|\fB\-\-global\fR|\fB\-\-system\fR)] \fIsection\fR
 Print a section from the local, global, and system config files\. Optionally, a specific configation can be specified and only the section present in that file will be printed\.
 .
 .TP

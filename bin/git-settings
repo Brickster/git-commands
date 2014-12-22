@@ -21,11 +21,19 @@ function help
 }
 
 #
+# Shows usage error
+#
+function usage_error
+{
+    error "usage: git settings [flags]"
+}
+
+#
 # Removes a section from local, global, and system config files.
 #
 # $1: the section to destroy
 #
-function destroy_section
+function destroy
 {
     local section="$1"
 
@@ -43,10 +51,38 @@ function destroy_section
 # $1: the section to print
 # $2: the configuration to use
 #
-function print_section
+function print
 {
-    local section="$1"
-    local configuration="$2"
+    local configuration=
+    local section=
+    local section_index=1
+
+    while getopts ":lgs-:" opt; do
+        case $opt in
+            -)
+                case "${OPTARG}" in
+                    local)  configuration="local";;
+                    global) configuration="global";;
+                    system) configuration="system";;
+                    *)      error "Unimplemented option --${OPTARG}";;
+                esac
+                ;;
+            l)  configuration="local";;
+            g)  configuration="global";;
+            s)  configuration="system";;
+            \?) error "Invalid option: -$OPTARG";;
+            :)  error "Option -$OPTARG requires an argument.";;
+            *)  error "Unimplemented option: -$OPTARG";;
+        esac
+        section_index=$((section_index + 1))
+    done
+
+    if (( $# != 0 )) && (( $section_index == $# )); then
+        args=("$@")
+        section=${args[$section_index-1]}
+    else
+        error "usage: git section print <section>"
+    fi
 
     # get list of config settings
     configs=$(git config --list --"$configuration")
@@ -62,34 +98,11 @@ function print_section
     done
 }
 
-configuration="local"
-while getopts ":lgsh-:" opt; do
-    case $opt in
-        -)
-            case "${OPTARG}" in
-                help)   help;;
-                local)  configuration="local";;
-                global) configuration="global";;
-                system) configuration="system";;
-                destroy-section)    
-                    section="${!OPTIND}"
-                    OPTIND=$(( $OPTIND + 1 ))
-                    destroy_section "$section"
-                    ;;
-                print-section)
-                    section="${!OPTIND}"
-                    OPTIND=$(( $OPTIND + 1 ))
-                    print_section "$section" "$configuration"
-                    ;;
-                *)      error "Unimplemented option --${OPTARG}";;
-            esac
-            ;;
-        h)  help;;
-        l)  configuration="local";;
-        g)  configuration="global";;
-        s)  configuration="system";;
-        \?) error "Invalid option: -$OPTARG";;
-        :)  error "Option -$OPTARG requires an argument.";;
-        *)  error "Unimplemented option: -$OPTARG";;
-    esac
-done
+if [[ "$1" =~ ^(destroy|print)$ ]]; then
+    args=("$@") # so I can split the input
+    args=("${args[@]:1}")
+    "$1" "${args[@]}"
+    exit 0
+fi
+
+usage_error
