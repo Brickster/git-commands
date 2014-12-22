@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git state` [(`-l`|`--log`) <count>] [(`-L`|`--no-log`)] [`--full-log`] [(`-r`|`--reflog`) <count>] [(`-R`|`--no-reflog`)] [`--full-reflog`] [(`-S`|`--no-status`)] [(`-B`|`--no-branches`)] [(`-T`|`--no-stashes`)] [(`-e`|`--show-empty`)] [(`-c`|`--color`)] [(`-C`|`--no-color`)] [(`-p`|`--pretty`)]<br>
+`git state` [(`-l`|`--log`) <count>] [(`-L`|`--no-log`)] [`--full-log`] [(`-r`|`--reflog`) <count>] [(`-R`|`--no-reflog`)] [`--full-reflog`] [(`-s`|`--status`)] [(`-S`|`--no-status`)] [(`-B`|`--no-branches`)] [(`-T`|`--no-stashes`)] [(`-e`|`--show-empty`)] [(`-c`|`--color`)] [(`-C`|`--no-color`)] [(`-p`|`--pretty`)]<br>
 `git state` [(`-h`|`--help`)]
 
 ## DESCRIPTION
@@ -32,8 +32,11 @@ Used to see a more concise and comprehensive view of the working directory. The 
 * `--full-reflog`:
     Output the entire reflog regardless of size.
 
+* `-s`|`--status`:
+	Print the status section.
+
 * `-S`|`--no-status`:
-    Don't output the status section.
+    Don't print the status section.
 
 * `-B`|`--no-branches`:
     Don't output the branches section.
@@ -56,16 +59,19 @@ Used to see a more concise and comprehensive view of the working directory. The 
 ## CONFIGURATION
 
 * `git-state.log.show` <bool>:
-	True or false flag determining whether log should show when no other related flags are specified.
+	True or false flag determining whether the log section should show when no other related flags are specified.
 
 * `git-state.log.count` <int>:
 	The default log length. Can be overridden using the `-d`|`--log` <count> option.
 
 * `git-state.reflog.show` <bool>:
-	True or false flag determining whether reflog should show when no other related flags are specified.
+	True or false flag determining whether the reflog section should show when no other related flags are specified.
 
 * `git-state.log.count` <int>:
 	The default reflog length. Can be overridden using the `-r`|`--reflog` <count> option.
 
 * `git-state.format` <string>:
 	The default formatting for git-state. Valid options include: `pretty` and `compact`. If no value is specified or an invalid value is entered, compact is used. The option `-p|--pretty` will override this setting.
+
+* `git-state.status.show` <bool>:
+	True or false flag determining whether the status section should show when no other related flags are specified. Options (`-s`|`--status`) and (`-S`|`--no-status`) override this value.
