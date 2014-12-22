@@ -78,12 +78,11 @@ function echo_section
 green='\x1B[0;32m'
 nocolor='\x1B[0m'
 
-no_status=false
 no_branches=false
 no_stashes=false
 show_empty=false
 color="always"
-while getopts ":hpcCeLSBRTl:r:-:" opt; do
+while getopts ":hpcCeLsSBRTl:r:-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
@@ -99,7 +98,8 @@ while getopts ":hpcCeLSBRTl:r:-:" opt; do
                 no-log)         log_count=0;;
                 full-reflog)    reflog_count=-1;;
                 no-reflog)      reflog_count=0;;
-                no-status)      no_status=true;;
+                status)         show_status=true;;
+                no-status)      show_status=false;;
                 no-branches)    no_branches=true;;
                 no-stashes)     no_stashes=true;;
                 show-empty)     show_empty=true;;
@@ -131,7 +131,8 @@ while getopts ":hpcCeLSBRTl:r:-:" opt; do
             show_reflog=true
             ;;
         R)  reflog_count=0;;
-        S)  no_status=true;;
+        s)  show_status=true;;
+        S)  show_status=false;;
         B)  no_branches=true;;
         T)  no_stashes=true;;
         p)  format="pretty";;
@@ -146,6 +147,7 @@ show_log="${show_log:-"$(git settings -d true git-state.log.show)"}"
 log_count="${log_count:-"$(git settings -d 10 git-state.log.count)"}"
 show_reflog="${show_reflog:-"$(git settings -d true git-state.reflog.show)"}"
 reflog_count="${reflog_count:-"$(git settings -d 5 git-state.reflog.count)"}"
+show_status="${show_status:-"$(git settings -d true git-state.status.show)"}"
 
 # determine formatting
 format="${format:-$(git settings -d compact git-state.format)}"
@@ -156,7 +158,7 @@ else
 fi
 
 # status
-if ! $no_status; then
+if $show_status; then
     # make sure status will output ANSI codes
     # this must be done using config since status has no --color option
     status_color=$(git config color.status)
