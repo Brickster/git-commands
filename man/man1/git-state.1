@@ -90,4 +90,8 @@ True or false flag determining whether reflog should show when no other related 
 .TP
 \fBgit\-state\.log\.count\fR \fIint\fR
 The default reflog length\. Can be overridden using the \fB\-r\fR|\fB\-\-reflog\fR \fIcount\fR option\.
+.
+.TP
+\fBgit\-state\.format\fR \fIstring\fR
+The default formatting for git\-state\. Valid options include: \fBpretty\fR and \fBcompact\fR\. If no value is specified or an invalid value is entered, compact is used\. The option \fB\-p|\-\-pretty\fR will override this setting\.
 

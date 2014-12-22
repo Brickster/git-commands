@@ -83,7 +83,6 @@ no_branches=false
 no_stashes=false
 show_empty=false
 color="always"
-pretty=false
 while getopts ":hpcCeLSBRTl:r:-:" opt; do
     case $opt in
         -)
@@ -105,7 +104,7 @@ while getopts ":hpcCeLSBRTl:r:-:" opt; do
                 no-stashes)     no_stashes=true;;
                 show-empty)     show_empty=true;;
                 color)          color="always";;
-                pretty)         pretty=true;;
+                pretty)         format="pretty";;
                 no-color)
                     color="never"
                     green=""
@@ -135,7 +134,7 @@ while getopts ":hpcCeLSBRTl:r:-:" opt; do
         S)  no_status=true;;
         B)  no_branches=true;;
         T)  no_stashes=true;;
-        p)  pretty=true;;
+        p)  format="pretty";;
         h)  help;;
         \?) error "Invalid option: -$OPTARG";;
         *)  error "Unimplemented option: -$OPTARG";;
@@ -147,6 +146,14 @@ show_log="${show_log:-"$(git settings -d true git-state.log.show)"}"
 log_count="${log_count:-"$(git settings -d 10 git-state.log.count)"}"
 show_reflog="${show_reflog:-"$(git settings -d true git-state.reflog.show)"}"
 reflog_count="${reflog_count:-"$(git settings -d 5 git-state.reflog.count)"}"
+
+# determine formatting
+format="${format:-$(git settings -d compact git-state.format)}"
+if [[ "$format" == "pretty" ]]; then
+    pretty=true
+else
+    pretty=false
+fi
 
 # status
 if ! $no_status; then
