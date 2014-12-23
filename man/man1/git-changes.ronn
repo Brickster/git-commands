@@ -18,3 +18,10 @@
 
 * `-h`|`--help`:
 	Display git-changes man page.
+
+## CONFIGURATION
+
+* `git-settings.default-branch` <string>:
+    The default branch to use when finding changes. Option (`-b`|`--branch`) <branch> overrides this setting.
+
+    Default: master
