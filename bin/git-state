@@ -41,21 +41,22 @@ function stash_not_empty
 #
 # Echos a section of the state.
 #
-# Optionally, the output can be echoed in pretty format. Pretty format includes pre- and a- pended newlines
-# as well as tabs starting every line.
+# The output can be echoed in pretty format or compact. Pretty format includes pre- and a- pended newlines
+# as well as tabs starting every line. Compact doesn't include the extra newlines and tabs added during
+# pretty printing.
 #
 # $1: the section title
-# $2: the text to pretty print
-# $3: whether the section should be echoed in pretty format
+# $2: the text to print
+# $3: the format to print the text in (pretty/compact)
 #
 function echo_section
 {
     title="$1"
     text="$2"
-    use_pretty="$3"
+    print_format="$3"
 
     echo -e "# ${green}$title${nocolor}"
-    if $use_pretty && [[ ! -z "$text" ]]; then
+    if [[ $print_format == "pretty" ]] && [[ ! -z "$text" ]]; then
 
         IFS=$'\n' read -rd '' -a text <<< "$text"
         tab="    "
@@ -67,7 +68,7 @@ function echo_section
         done
         echo
 
-    elif $use_pretty; then
+    elif [[ $print_format == "pretty" ]]; then
         # there's no text but we still want some nicer formatting
         echo
     elif [[ ! -z "$text" ]]; then
@@ -104,7 +105,7 @@ while getopts ":hpcCeELsSbBRtTl:r:-:" opt; do
                 show-empty)     show_empty=true;;
                 no-show-empty)  show_empty=false;;
                 color)          color="always";;
-                pretty)         format="pretty";;
+                pretty)         print_format="pretty";;
                 no-color)
                     color="never"
                     green=""
@@ -138,7 +139,7 @@ while getopts ":hpcCeELsSbBRtTl:r:-:" opt; do
         B)  show_branches=false;;
         t)  show_stashes=true;;
         T)  show_stashes=false;;
-        p)  format="pretty";;
+        p)  print_format="pretty";;
         h)  help;;
         \?) error "Invalid option: -$OPTARG";;
         *)  error "Unimplemented option: -$OPTARG";;
@@ -154,14 +155,7 @@ show_status="${show_status:-"$(git settings -d true git-state.status.show)"}"
 show_branches="${show_branches:-"$(git settings -d true git-state.branches.show)"}"
 show_stashes="${show_stashes:-"$(git settings -d true git-state.stashes.show)"}"
 show_empty="${show_empty:-"$(git settings -d false git-state.show-empty)"}"
-
-# determine formatting
-format="${format:-$(git settings -d compact git-state.format)}"
-if [[ "$format" == "pretty" ]]; then
-    pretty=true
-else
-    pretty=false
-fi
+print_format="${print_format:-$(git settings -d compact git-state.format)}"
 
 # status
 if $show_status; then
@@ -179,7 +173,7 @@ if $show_status; then
     status_info=$(git status --short)
 
     # an extra $nocolor used to make color print in its own coloring
-    echo_section "status $nocolor($title)" "$status_info" "$pretty"
+    echo_section "status $nocolor($title)" "$status_info" "$print_format"
 
     # reset color.status to its original setting
     if [[ -z "$status_color" ]]; then
@@ -191,23 +185,23 @@ fi
 
 if $show_log && (( $log_count != 0 )); then
     log_output=$(git log -n "$log_count" --oneline --color="$color")
-    echo_section "log" "$log_output" "$pretty"
+    echo_section "log" "$log_output" "$print_format"
 fi
 
 # reflog
 if $show_reflog && (( $reflog_count != 0 )); then
     reflog_output=$(git reflog -n "$reflog_count" --color="$color")
-    echo_section "reflog" "$reflog_output" "$pretty"
+    echo_section "reflog" "$reflog_output" "$print_format"
 fi
 
 # branches
 if $show_branches; then
     branch_output=$(git branch -v --color="$color")
-    echo_section "branches" "$branch_output" "$pretty"
+    echo_section "branches" "$branch_output" "$print_format"
 fi
 
 # stashes
 if $show_stashes && ( $show_empty || stash_not_empty ); then
     stash_output=$(git stash list --oneline --color="$color")
-    echo_section "stashes" "$stash_output" "$pretty"
+    echo_section "stashes" "$stash_output" "$print_format"
 fi
