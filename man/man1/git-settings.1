@@ -7,21 +7,33 @@
 \fBgit\-settings\fR \- more ways to view and edit config files
 .
 .SH "SYNOPSIS"
-\fBgit settings\fR [(\fB\-d\fR|\fB\-\-default\fR) \fIvalue\fR] \fIkey\fR
+\fBgit settings\fR [\fIfile\-option\fR] [(\fB\-d\fR|\fB\-\-default\fR) \fIvalue\fR] \fIkey\fR
 .
 .br
 \fBgit settings\fR [(\fB\-h\fR|\fB\-\-help\fR)]
 .
 .br
-\fBgit settings destroy\fR [(\fB\-\-local\fR|\fB\-\-global\fR|\fB\-\-system\fR)] \fIsection\fR
+\fBgit settings destroy\fR \fIsection\fR
 .
 .br
-\fBgit settings print\fR [(\fB\-\-local\fR|\fB\-\-global\fR|\fB\-\-system\fR)] \fIsection\fR
+\fBgit settings print\fR [\fIfile\-option\fR] \fIsection\fR
 .
 .SH "DESCRIPTION"
 \fBgit\-settings\fR is a compliment to \fBgit\-config\fR that adds missing functionality\.
 .
 .SH "OPTIONS"
+.
+.TP
+\fB\-l\fR|\fB\-\-local\fR
+Use local config file\.
+.
+.TP
+\fB\-g\fR|\fB\-\-global\fR
+Use global config file\.
+.
+.TP
+\fB\-s\fR|\fB\-\-system\fR
+Use system config file\.
 .
 .TP
 \fB\-d\fR|\fB\-\-default\fR \fIkey\fR

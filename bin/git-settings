@@ -105,8 +105,9 @@ function default
 {
     local default=
     local key_index=1
+    local configuration=
 
-    while getopts ":d:-:" opt; do
+    while getopts ":d:lgs-:" opt; do
         case $opt in
             -)
                 case "${OPTARG}" in
@@ -115,6 +116,18 @@ function default
                         OPTIND=$(( $OPTIND + 1 ))
                         key_index=$((key_index + 2))
                         ;;
+                    local)
+                        configuration="local"
+                        key_index=$((key_index + 1))
+                        ;;
+                    global)
+                        configuration="global"
+                        key_index=$((key_index + 1))
+                        ;;
+                    system)
+                        configuration="system"
+                        key_index=$((key_index + 1))
+                        ;;
                     *)  error "Unimplemented option --${OPTARG}";;
                 esac
                 ;;
@@ -122,11 +135,22 @@ function default
                 default="$OPTARG"
                 key_index=$((key_index + 2))
                 ;;
+            l)
+                configuration="local"
+                key_index=$((key_index + 1))
+                ;;
+            g)
+                configuration="global"
+                key_index=$((key_index + 1))
+                ;;
+            s)
+                configuration="system"
+                key_index=$((key_index + 1))
+                ;;
             \?) error "Invalid option: -$OPTARG";;
             :)  error "Option -$OPTARG requires an argument.";;
             *)  error "Unimplemented option: -$OPTARG";;
         esac
-        # key_index=$((key_index + 1))
     done
 
     if (( $# != 0 )) && (( $key_index == $# )); then
@@ -136,7 +160,12 @@ function default
         error "usage: git section [(-d|--default) <default>] <key>"
     fi
 
-    local value=$(git config $key)
+    local value=
+    if [[ -z "$configuration" ]]; then
+        value=$(git config $key)
+    else
+        value=$(git config --"$configuration" $key)
+    fi
     if [[ -z $value ]]; then
         value="$default"
     fi
