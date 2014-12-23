@@ -13,12 +13,11 @@ function help
 }
 
 get_count=false
-branch="master"
 while getopts ":chb:-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
-                branch) 
+                branch)
                         branch="${!OPTIND}"
                         OPTIND=$(( $OPTIND + 1 ))
                         ;;
@@ -34,6 +33,9 @@ while getopts ":chb:-:" opt; do
         *)  error "Unimplemented option: -$OPTARG";;
     esac
 done
+
+# load settings
+branch="${branch:-$(git settings -d master git-settings.default-branch)}"
 
 merge_base=$(git merge-base $branch HEAD)
 
