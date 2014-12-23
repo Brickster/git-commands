@@ -2,16 +2,25 @@
 
 ## SYNOPSIS
 
-`git settings` [(`-d`|`--default`) <value>] <key><br>
+`git settings` [<file-option>] [(`-d`|`--default`) <value>] <key><br>
 `git settings` [(`-h`|`--help`)]<br>
 `git settings destroy` <section><br>
-`git settings print` [(`--local`|`--global`|`--system`)] <section>
+`git settings print` [<file-option>] <section>
 
 ## DESCRIPTION
 
 `git-settings` is a compliment to `git-config` that adds missing functionality.
 
 ## OPTIONS
+
+* `-l`|`--local`:
+    Use local config file.
+
+* `-g`|`--global`:
+    Use global config file.
+
+* `-s`|`--system`:
+    Use system config file.
 
 * `-d`|`--default` <key>:
     A default value to use when no setting exists for a given <key>.

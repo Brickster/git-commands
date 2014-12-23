@@ -39,7 +39,8 @@ git changes [(-b|--branch) <branch>] [(-c|--count)] [(-h|--help)]
 Used as a compliment to `git-config` by adding missing features.
 
 ```bash
+git settings [<file-option>] [(-d|--default) <value>] <key>
 git-settings [(-h|--help)]  
-git-settings [(--local|--global|--system)] --destroy-section <section>  
-git-settings [(--local|--global|--system)] --print-section <section>
+git-settings [<file-option>] --destroy-section <section>  
+git-settings [<file-option>] --print-section <section>
 ```
