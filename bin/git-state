@@ -87,10 +87,12 @@ while getopts ":hpcCeELsSbBRtTl:r:-:" opt; do
                 log)
                     log_count="${!OPTIND}"
                     OPTIND=$(( $OPTIND + 1 ))
+                    show_log=true
                     ;;
                 reflog)
                     reflog_count="${!OPTIND}"
                     OPTIND=$(( $OPTIND + 1 ))
+                    show_reflog=true
                     ;;
                 full-log)       log_count=-1;;
                 no-log)         log_count=0;;
