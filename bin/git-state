@@ -80,7 +80,7 @@ green='\x1B[0;32m'
 nocolor='\x1B[0m'
 
 color="always"
-while getopts ":hpcCeELsSbBRtTl:r:-:" opt; do
+while getopts ":hpf:cCeELsSbBRtTl:r:-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
@@ -108,6 +108,10 @@ while getopts ":hpcCeELsSbBRtTl:r:-:" opt; do
                 no-show-empty)  show_empty=false;;
                 color)          color="always";;
                 pretty)         print_format="pretty";;
+                format)
+                    print_format="${!OPTIND}"
+                    OPTIND=$(( $OPTIND + 1 ))
+                    ;;
                 no-color)
                     color="never"
                     green=""
@@ -142,6 +146,7 @@ while getopts ":hpcCeELsSbBRtTl:r:-:" opt; do
         t)  show_stashes=true;;
         T)  show_stashes=false;;
         p)  print_format="pretty";;
+        f)  print_format="$OPTARG";;
         h)  help;;
         \?) error "Invalid option: -$OPTARG";;
         *)  error "Unimplemented option: -$OPTARG";;

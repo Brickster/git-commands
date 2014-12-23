@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git state` [(`-l`|`--log`) <count>] [(`-L`|`--no-log`)] [`--full-log`] [(`-r`|`--reflog`) <count>] [(`-R`|`--no-reflog`)] [`--full-reflog`] [(`-s`|`--status`)] [(`-S`|`--no-status`)] [(`-b`|`--branches`)] [(`-B`|`--no-branches`)] [(`-t`|`--stashes`)] [(`-T`|`--no-stashes`)] [(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)] [(`-c`|`--color`)] [(`-C`|`--no-color`)] [(`-p`|`--pretty`)]<br>
+`git state` [(`-l`|`--log`) <count>] [(`-L`|`--no-log`)] [`--full-log`] [(`-r`|`--reflog`) <count>] [(`-R`|`--no-reflog`)] [`--full-reflog`] [(`-s`|`--status`)] [(`-S`|`--no-status`)] [(`-b`|`--branches`)] [(`-B`|`--no-branches`)] [(`-t`|`--stashes`)] [(`-T`|`--no-stashes`)] [(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)] [(`-c`|`--color`)] [(`-C`|`--no-color`)] [(`-p`|`--pretty`)] [(`-f`|`--foramt`) <format>]<br>
 `git state` [(`-h`|`--help`)]
 
 ## DESCRIPTION
@@ -63,7 +63,10 @@ Used to see a more concise and comprehensive view of the working directory. The 
     Never color output.
 
 * `-p`|`--pretty`:
-    Display in pretty format.
+	Display in pretty format.
+
+* `-f`|`--format` <format>:
+	The format used to print each section. Valid values include: compact and pretty.
 
 ## CONFIGURATION
 
@@ -88,9 +91,9 @@ Used to see a more concise and comprehensive view of the working directory. The 
 	Default: 5
 
 * `git-state.format` <string>:
-	The default formatting for git-state. Valid options include: `pretty` and `compact`. If no value is specified or an invalid value is entered, compact is used. The option `-p|--pretty` will override this setting.
+	The default formatting for git-state. Valid options include: `pretty` and `compact`. If no value is specified or an invalid value is entered, compact is used. The options `-f`|`--format` <format> or `-p`|`--pretty` will override this setting.
 
-	Default: true
+	Default: compact
 
 * `git-state.status.show` <bool>:
 	True or false flag determining whether the status section should show when no other related flags are specified. Options (`-s`|`--status`) and (`-S`|`--no-status`) override this value.

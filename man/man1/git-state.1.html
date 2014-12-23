@@ -73,7 +73,7 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>git state</code> [(<code>-l</code>|<code>--log</code>) <var>count</var>] [(<code>-L</code>|<code>--no-log</code>)] [<code>--full-log</code>] [(<code>-r</code>|<code>--reflog</code>) <var>count</var>] [(<code>-R</code>|<code>--no-reflog</code>)] [<code>--full-reflog</code>] [(<code>-s</code>|<code>--status</code>)] [(<code>-S</code>|<code>--no-status</code>)] [(<code>-b</code>|<code>--branches</code>)] [(<code>-B</code>|<code>--no-branches</code>)] [(<code>-t</code>|<code>--stashes</code>)] [(<code>-T</code>|<code>--no-stashes</code>)] [(<code>-e</code>|<code>--show-empty</code>)] [(<code>-E</code>|<code>--no-show-empty</code>)] [(<code>-c</code>|<code>--color</code>)] [(<code>-C</code>|<code>--no-color</code>)] [(<code>-p</code>|<code>--pretty</code>)]<br />
+<p><code>git state</code> [(<code>-l</code>|<code>--log</code>) <var>count</var>] [(<code>-L</code>|<code>--no-log</code>)] [<code>--full-log</code>] [(<code>-r</code>|<code>--reflog</code>) <var>count</var>] [(<code>-R</code>|<code>--no-reflog</code>)] [<code>--full-reflog</code>] [(<code>-s</code>|<code>--status</code>)] [(<code>-S</code>|<code>--no-status</code>)] [(<code>-b</code>|<code>--branches</code>)] [(<code>-B</code>|<code>--no-branches</code>)] [(<code>-t</code>|<code>--stashes</code>)] [(<code>-T</code>|<code>--no-stashes</code>)] [(<code>-e</code>|<code>--show-empty</code>)] [(<code>-E</code>|<code>--no-show-empty</code>)] [(<code>-c</code>|<code>--color</code>)] [(<code>-C</code>|<code>--no-color</code>)] [(<code>-p</code>|<code>--pretty</code>)] [(<code>-f</code>|<code>--foramt</code>) <var>format</var>]<br />
 <code>git state</code> [(<code>-h</code>|<code>--help</code>)]</p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
@@ -101,6 +101,7 @@
 <dt><code>-c</code>|<code>--color</code></dt><dd><p>  Always color output.</p></dd>
 <dt><code>-C</code>|<code>--no-color</code></dt><dd><p>  Never color output.</p></dd>
 <dt><code>-p</code>|<code>--pretty</code></dt><dd><p>  Display in pretty format.</p></dd>
+<dt><code>-f</code>|<code>--format</code> <var>format</var></dt><dd><p>  The format used to print each section. Valid values include: compact and pretty.</p></dd>
 </dl>
 
 
@@ -119,9 +120,9 @@
 <dt><code>git-state.log.count</code> <var>int</var></dt><dd><p>  The default reflog length. Can be overridden using the <code>-r</code>|<code>--reflog</code> <var>count</var> option.</p>
 
 <p>  Default: 5</p></dd>
-<dt><code>git-state.format</code> <var>string</var></dt><dd><p>  The default formatting for git-state. Valid options include: <code>pretty</code> and <code>compact</code>. If no value is specified or an invalid value is entered, compact is used. The option <code>-p|--pretty</code> will override this setting.</p>
+<dt><code>git-state.format</code> <var>string</var></dt><dd><p>  The default formatting for git-state. Valid options include: <code>pretty</code> and <code>compact</code>. If no value is specified or an invalid value is entered, compact is used. The options <code>-f</code>|<code>--format</code> <var>format</var> or <code>-p</code>|<code>--pretty</code> will override this setting.</p>
 
-<p>  Default: true</p></dd>
+<p>  Default: compact</p></dd>
 <dt><code>git-state.status.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether the status section should show when no other related flags are specified. Options (<code>-s</code>|<code>--status</code>) and (<code>-S</code>|<code>--no-status</code>) override this value.</p>
 
 <p>  Default: true</p></dd>
