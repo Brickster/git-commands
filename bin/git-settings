@@ -82,6 +82,7 @@ function print
         esac
         ((section_index++))
     done
+    OPTIND=1
 
     # load configuration, if necessary
     format="${format:-$(git settings -d compact git-settings.print.format)}"
@@ -140,6 +141,11 @@ function print
             echo "$section.${key#map__}=${!key}"
         done
     fi
+
+    # unset each map entry so this method can be called again safely
+    for key in ${!map__*}; do
+        unset "$key"
+    done
 }
 
 function default
