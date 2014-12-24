@@ -99,8 +99,15 @@ function print
             local key="${BASH_REMATCH[1]}"
             local value="${BASH_REMATCH[2]}"
 
-            echo "$section.$key=$value"
+            # generate variables that act as map entries
+            local key="$(echo "$key" | sed 's/-/_/g')" # replace all variable unsafe characters with underscores
+            printf -v "map__$key" %s "$value"
         fi
+
+    done
+
+    for key in ${!map__*}; do
+        echo "$section.${key#map__}=${!key}"
     done
 }
 
