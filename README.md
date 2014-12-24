@@ -40,7 +40,7 @@ Used as a compliment to `git-config` by adding missing features.
 
 ```bash
 git settings [<file-option>] [(-d|--default) <value>] <key>
-git settings [(-h|--help)]  
-git settings [<file-option>] --destroy-section <section>  
-git settings [<file-option>] --print-section <section>
+git settings [(-h|--help)]
+git settings [<file-option>] destroy <section>
+git settings [<file-option>] print <section>
 ```
