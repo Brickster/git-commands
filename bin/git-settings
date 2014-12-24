@@ -266,9 +266,7 @@ function default
 }
 
 if [[ "$1" =~ ^(destroy|print|list)$ ]]; then
-    args=("$@") # so I can split the input
-    args=("${args[@]:1}")
-    "$1" "${args[@]}"
+    "$1" "${@:2}"
     exit 0
 elif (( $# == 0 )); then
     usage_error
