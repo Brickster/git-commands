@@ -18,6 +18,9 @@
 .br
 \fBgit settings print\fR [\fIfile\-option\fR] \fIsection\fR
 .
+.br
+\fBgit settings list\fR
+.
 .SH "DESCRIPTION"
 \fBgit\-settings\fR is a compliment to \fBgit\-config\fR that adds missing functionality\.
 .
@@ -50,6 +53,10 @@ Destroy a section from the local, global, and system config files\.
 .TP
 \fBprint\fR [(\fB\-\-local\fR|\fB\-\-global\fR|\fB\-\-system\fR)] \fIsection\fR
 Print a section from the local, global, and system config files\. Optionally, a specific configuration can be specified and only the section present in that file will be printed\.
+.
+.TP
+\fBlist\fR
+List all configuration settings respecting override precedence\.
 .
 .TP
 \fB\-h\fR|\fB\-\-help\fR

@@ -76,7 +76,8 @@
 <p><code>git settings</code> [<var>file-option</var>] [(<code>-p</code>|<code>--pretty</code>)] [(<code>-d</code>|<code>--default</code>) <var>value</var>] <var>key</var><br />
 <code>git settings</code> [(<code>-h</code>|<code>--help</code>)]<br />
 <code>git settings destroy</code> <var>section</var><br />
-<code>git settings print</code> [<var>file-option</var>] <var>section</var></p>
+<code>git settings print</code> [<var>file-option</var>] <var>section</var><br />
+<code>git settings list</code></p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
@@ -92,6 +93,7 @@
 <dt><code>-p</code>|<code>--pretty</code></dt><dd><p>  When used with <code>print</code>, the section is printed in config file format. This option doesn't apply to any other subcommands.</p></dd>
 <dt><code>destroy</code> <var>section</var></dt><dd><p>  Destroy a section from the local, global, and system config files.</p></dd>
 <dt><code>print</code> [(<code>--local</code>|<code>--global</code>|<code>--system</code>)] <var>section</var></dt><dd><p>  Print a section from the local, global, and system config files. Optionally, a specific configuration can be specified and only the section present in that file will be printed.</p></dd>
+<dt class="flush"><code>list</code></dt><dd><p>  List all configuration settings respecting override precedence.</p></dd>
 <dt><code>-h</code>|<code>--help</code></dt><dd><p>  Display git-settings man page.</p></dd>
 </dl>
 

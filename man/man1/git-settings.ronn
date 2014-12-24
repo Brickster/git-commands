@@ -5,7 +5,8 @@
 `git settings` [<file-option>] [(`-p`|`--pretty`)] [(`-d`|`--default`) <value>] <key><br>
 `git settings` [(`-h`|`--help`)]<br>
 `git settings destroy` <section><br>
-`git settings print` [<file-option>] <section>
+`git settings print` [<file-option>] <section><br>
+`git settings list`
 
 ## DESCRIPTION
 
@@ -33,6 +34,9 @@
 
 * `print` [(`--local`|`--global`|`--system`)] <section>:
     Print a section from the local, global, and system config files. Optionally, a specific configuration can be specified and only the section present in that file will be printed.
+
+* `list`:
+    List all configuration settings respecting override precedence.
 
 * `-h`|`--help`:
     Display git-settings man page.
