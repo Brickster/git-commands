@@ -90,7 +90,7 @@ function print
         args=("$@")
         section=${args[$section_index-1]}
     else
-        error "usage: git section print <section>"
+        error "usage: git settings print <section>"
     fi
 
     # get list of config settings
