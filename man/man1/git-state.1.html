@@ -85,10 +85,10 @@
 <dl>
 <dt><code>-h</code>|<code>--help</code></dt><dd><p>  Display git-state man page.</p></dd>
 <dt><code>-l</code>|<code>--log</code> <var>count</var></dt><dd><p>  Limits commits in the log section. If less than 1, the section is skipped.</p></dd>
-<dt><code>-L</code>|<code>--no-log</code></dt><dd><p>  Don't output the log section. Equivalent to <code>-l</code> 0 or <code>--log</code> 0.</p></dd>
+<dt><code>-L</code>|<code>--no-log</code></dt><dd><p>  Don't output the log section. Equivalent to <code>-l</code> <var>0</var> or <code>--log</code> <var>0</var>.</p></dd>
 <dt><code>--full-log</code></dt><dd><p>  Output the entire log regardless of size.</p></dd>
 <dt><code>-r</code>|<code>--reflog</code> <var>count</var></dt><dd><p>  Limits actions in the reflog section. If less than 1, the section is skipped.</p></dd>
-<dt><code>-R</code>|<code>--no-reflog</code></dt><dd><p>  Don't output the reflog section. Equivalent to <code>-r</code> 0 or <code>--reflog</code> 0.</p></dd>
+<dt><code>-R</code>|<code>--no-reflog</code></dt><dd><p>  Don't output the reflog section. Equivalent to <code>-r</code> <var>0</var> or <code>--reflog</code> <var>0</var>.</p></dd>
 <dt><code>--full-reflog</code></dt><dd><p>  Output the entire reflog regardless of size.</p></dd>
 <dt><code>-s</code>|<code>--status</code></dt><dd><p>  Print the status section.</p></dd>
 <dt><code>-S</code>|<code>--no-status</code></dt><dd><p>  Don't print the status section.</p></dd>
@@ -100,8 +100,8 @@
 <dt><code>-E</code>|<code>--no-show-empty</code></dt><dd><p>  Omit empty sections. This does not apply to the status section.</p></dd>
 <dt><code>-c</code>|<code>--color</code></dt><dd><p>  Always color output.</p></dd>
 <dt><code>-C</code>|<code>--no-color</code></dt><dd><p>  Never color output.</p></dd>
-<dt><code>-p</code>|<code>--pretty</code></dt><dd><p>  Display in pretty format.</p></dd>
-<dt><code>-f</code>|<code>--format</code> <var>format</var></dt><dd><p>  The format used to print each section. Valid values include: compact and pretty.</p></dd>
+<dt><code>-p</code>|<code>--pretty</code></dt><dd><p>  Display in pretty format. This is equivalent to <code>-f</code>|<code>--format</code> <var>pretty</var>.</p></dd>
+<dt><code>-f</code>|<code>--format</code> <var>format</var></dt><dd><p>  The format used to print each section. Valid values include: <var>compact</var> and <var>pretty</var>.</p></dd>
 </dl>
 
 
@@ -110,31 +110,31 @@
 <dl>
 <dt><code>git-state.log.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether the log section should show when no other related flags are specified.</p>
 
-<p>  Default: true</p></dd>
+<p>  Default: <var>true</var></p></dd>
 <dt><code>git-state.log.count</code> <var>int</var></dt><dd><p>  The default log length. Can be overridden using the <code>-d</code>|<code>--log</code> <var>count</var> option.</p>
 
-<p>  Default: 10</p></dd>
+<p>  Default: <var>10</var></p></dd>
 <dt><code>git-state.reflog.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether the reflog section should show when no other related flags are specified.</p>
 
-<p>  Default: true</p></dd>
+<p>  Default: <var>true</var></p></dd>
 <dt><code>git-state.log.count</code> <var>int</var></dt><dd><p>  The default reflog length. Can be overridden using the <code>-r</code>|<code>--reflog</code> <var>count</var> option.</p>
 
-<p>  Default: 5</p></dd>
+<p>  Default: <var>5</var></p></dd>
 <dt><code>git-state.format</code> <var>string</var></dt><dd><p>  The default formatting for git-state. Valid options include: <code>pretty</code> and <code>compact</code>. If no value is specified or an invalid value is entered, compact is used. The options <code>-f</code>|<code>--format</code> <var>format</var> or <code>-p</code>|<code>--pretty</code> will override this setting.</p>
 
-<p>  Default: compact</p></dd>
+<p>  Default: <var>compact</var></p></dd>
 <dt><code>git-state.status.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether the status section should show when no other related flags are specified. Options (<code>-s</code>|<code>--status</code>) and (<code>-S</code>|<code>--no-status</code>) override this value.</p>
 
-<p>  Default: true</p></dd>
+<p>  Default: <var>true</var></p></dd>
 <dt><code>git-state.branches.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether the branches section should show when no other related flags are specified. Options (<code>-b</code>|<code>--branches</code>) and (<code>-B</code>|<code>--no-branches</code>) override this value.</p>
 
-<p>  Default: true</p></dd>
+<p>  Default: <var>true</var></p></dd>
 <dt><code>git-state.stashes.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether the stashes section should show when no other related flags are specified. Options (<code>-t</code>|<code>--stashes</code>) and (<code>-T</code>|<code>--no-stashes</code>) override this value.</p>
 
-<p>  Default: true</p></dd>
+<p>  Default: <var>true</var></p></dd>
 <dt><code>git-state.show-empty</code> <var>bool</var></dt><dd><p>  True or false flag determining whether empty sections should be shown. Options (<code>-e</code>|<code>--show-empty</code>) and (<code>-E</code>|<code>--no-show-empty</code>) override this value.</p>
 
-<p>  Default: false</p></dd>
+<p>  Default: <var>false</var></p></dd>
 </dl>
 
 
