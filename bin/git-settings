@@ -59,26 +59,32 @@ function print
     local configuration=
     local section=
     local section_index=1
+    local format=
 
-    while getopts ":lgs-:" opt; do
+    while getopts ":lgsp-:" opt; do
         case $opt in
             -)
                 case "${OPTARG}" in
                     local)  configuration="local";;
                     global) configuration="global";;
                     system) configuration="system";;
+                    pretty) format="pretty";;
                     *)      error "Unimplemented option --${OPTARG}";;
                 esac
                 ;;
             l)  configuration="local";;
             g)  configuration="global";;
             s)  configuration="system";;
+            p)  format="pretty";;
             \?) error "Invalid option: -$OPTARG";;
             :)  error "Option -$OPTARG requires an argument.";;
             *)  error "Unimplemented option: -$OPTARG";;
         esac
-        section_index=$((section_index + 1))
+        ((section_index++))
     done
+
+    # load configuration, if necessary
+    format="${format:-$(git settings -d compact git-settings.print.format)}"
 
     if (( $# != 0 )) && (( $section_index == $# )); then
         args=("$@")
@@ -92,9 +98,10 @@ function print
     IFS=$'\n' read -rd '' -a configs <<< "$configs"
 
     # parse the listed config for the relevant section
+    section_count=0
     for config in "${configs[@]}"
     do
-        regex="^$section\.([[:alnum:]\-]+)=(.*)$"
+        regex="^$section\.([-[:alnum:]]+)=(.*)$"
         if [[ "$config" =~ $regex ]]; then
             local key="${BASH_REMATCH[1]}"
             local value="${BASH_REMATCH[2]}"
@@ -102,13 +109,37 @@ function print
             # generate variables that act as map entries
             local key="$(echo "$key" | sed 's/-/_/g')" # replace all variable unsafe characters with underscores
             printf -v "map__$key" %s "$value"
+
+            ((section_count++))
         fi
-
     done
 
-    for key in ${!map__*}; do
-        echo "$section.${key#map__}=${!key}"
-    done
+    if [[ "$format" == "pretty" ]]; then
+        if (( $section_count > 0 )); then
+            title=
+            regex="^([-[:alnum:]]+)\.(.*)$"
+            if [[ "$section" =~ $regex ]]; then
+                section="${BASH_REMATCH[1]}"
+                subsection="${BASH_REMATCH[2]}"
+
+                title="[$section \"$subsection\"]"
+            else
+                title="[$section]"
+            fi
+            echo "$title"
+
+            # echo "[$section]"
+            for key in ${!map__*}; do
+                unnormalized_key="${key#map__}"
+                unnormalized_key="$(echo "$unnormalized_key" | sed 's/_/-/g')"
+                echo -e "\t$unnormalized_key=${!key}"
+            done
+        fi
+    else
+        for key in ${!map__*}; do
+            echo "$section.${key#map__}=${!key}"
+        done
+    fi
 }
 
 function default

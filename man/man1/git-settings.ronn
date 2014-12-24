@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git settings` [<file-option>] [(`-d`|`--default`) <value>] <key><br>
+`git settings` [<file-option>] [(`-p`|`--pretty`)] [(`-d`|`--default`) <value>] <key><br>
 `git settings` [(`-h`|`--help`)]<br>
 `git settings destroy` <section><br>
 `git settings print` [<file-option>] <section>
@@ -25,6 +25,9 @@
 * `-d`|`--default` <key>:
     A default value to use when no setting exists for a given <key>.
 
+* `-p`|`--pretty`:
+    When used with `print`, the section is printed in config file format. This option doesn't apply to any other subcommands.
+
 * `destroy` <section>:
     Destroy a section from the local, global, and system config files.
 
@@ -33,3 +36,10 @@
 
 * `-h`|`--help`:
     Display git-settings man page.
+
+## CONFIGURATION
+
+* `git-settings.print.format` <string>:
+    The default formatting for git-setting print. Valid options include: `pretty` and `compact`. If no value is specified or an invalid value is entered, compact is used. The option `-p`|`--pretty` will override this setting.
+
+    Default: <compact>
