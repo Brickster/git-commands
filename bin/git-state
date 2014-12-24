@@ -79,7 +79,6 @@ function echo_section
 green='\x1B[0;32m'
 nocolor='\x1B[0m'
 
-color="always"
 while getopts ":hpf:cCeELsSbBRtTl:r:-:" opt; do
     case $opt in
         -)
@@ -163,6 +162,7 @@ show_branches="${show_branches:-"$(git settings -d true git-state.branches.show)
 show_stashes="${show_stashes:-"$(git settings -d true git-state.stashes.show)"}"
 show_empty="${show_empty:-"$(git settings -d false git-state.show-empty)"}"
 print_format="${print_format:-$(git settings -d compact git-state.format)}"
+color="${color:-$(git settings -d always color.ui)}"
 
 # status
 if $show_status; then
