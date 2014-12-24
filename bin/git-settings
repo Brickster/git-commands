@@ -94,9 +94,12 @@ function print
     # parse the listed config for the relevant section
     for config in "${configs[@]}"
     do
-        regex="^$section.*$"
+        regex="^$section\.([[:alnum:]\-]+)=(.*)$"
         if [[ "$config" =~ $regex ]]; then
-            echo "$config"
+            local key="${BASH_REMATCH[1]}"
+            local value="${BASH_REMATCH[2]}"
+
+            echo "$section.$key=$value"
         fi
     done
 }
