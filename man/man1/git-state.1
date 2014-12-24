@@ -27,7 +27,7 @@ Limits commits in the log section\. If less than 1, the section is skipped\.
 .
 .TP
 \fB\-L\fR|\fB\-\-no\-log\fR
-Don\'t output the log section\. Equivalent to \fB\-l\fR 0 or \fB\-\-log\fR 0\.
+Don\'t output the log section\. Equivalent to \fB\-l\fR \fI0\fR or \fB\-\-log\fR \fI0\fR\.
 .
 .TP
 \fB\-\-full\-log\fR
@@ -39,7 +39,7 @@ Limits actions in the reflog section\. If less than 1, the section is skipped\.
 .
 .TP
 \fB\-R\fR|\fB\-\-no\-reflog\fR
-Don\'t output the reflog section\. Equivalent to \fB\-r\fR 0 or \fB\-\-reflog\fR 0\.
+Don\'t output the reflog section\. Equivalent to \fB\-r\fR \fI0\fR or \fB\-\-reflog\fR \fI0\fR\.
 .
 .TP
 \fB\-\-full\-reflog\fR
@@ -87,11 +87,11 @@ Never color output\.
 .
 .TP
 \fB\-p\fR|\fB\-\-pretty\fR
-Display in pretty format\.
+Display in pretty format\. This is equivalent to \fB\-f\fR|\fB\-\-format\fR \fIpretty\fR\.
 .
 .TP
 \fB\-f\fR|\fB\-\-format\fR \fIformat\fR
-The format used to print each section\. Valid values include: compact and pretty\.
+The format used to print each section\. Valid values include: \fIcompact\fR and \fIpretty\fR\.
 .
 .SH "CONFIGURATION"
 .
@@ -100,61 +100,61 @@ The format used to print each section\. Valid values include: compact and pretty
 True or false flag determining whether the log section should show when no other related flags are specified\.
 .
 .IP
-Default: true
+Default: \fItrue\fR
 .
 .TP
 \fBgit\-state\.log\.count\fR \fIint\fR
 The default log length\. Can be overridden using the \fB\-d\fR|\fB\-\-log\fR \fIcount\fR option\.
 .
 .IP
-Default: 10
+Default: \fI10\fR
 .
 .TP
 \fBgit\-state\.reflog\.show\fR \fIbool\fR
 True or false flag determining whether the reflog section should show when no other related flags are specified\.
 .
 .IP
-Default: true
+Default: \fItrue\fR
 .
 .TP
 \fBgit\-state\.log\.count\fR \fIint\fR
 The default reflog length\. Can be overridden using the \fB\-r\fR|\fB\-\-reflog\fR \fIcount\fR option\.
 .
 .IP
-Default: 5
+Default: \fI5\fR
 .
 .TP
 \fBgit\-state\.format\fR \fIstring\fR
 The default formatting for git\-state\. Valid options include: \fBpretty\fR and \fBcompact\fR\. If no value is specified or an invalid value is entered, compact is used\. The options \fB\-f\fR|\fB\-\-format\fR \fIformat\fR or \fB\-p\fR|\fB\-\-pretty\fR will override this setting\.
 .
 .IP
-Default: compact
+Default: \fIcompact\fR
 .
 .TP
 \fBgit\-state\.status\.show\fR \fIbool\fR
 True or false flag determining whether the status section should show when no other related flags are specified\. Options (\fB\-s\fR|\fB\-\-status\fR) and (\fB\-S\fR|\fB\-\-no\-status\fR) override this value\.
 .
 .IP
-Default: true
+Default: \fItrue\fR
 .
 .TP
 \fBgit\-state\.branches\.show\fR \fIbool\fR
 True or false flag determining whether the branches section should show when no other related flags are specified\. Options (\fB\-b\fR|\fB\-\-branches\fR) and (\fB\-B\fR|\fB\-\-no\-branches\fR) override this value\.
 .
 .IP
-Default: true
+Default: \fItrue\fR
 .
 .TP
 \fBgit\-state\.stashes\.show\fR \fIbool\fR
 True or false flag determining whether the stashes section should show when no other related flags are specified\. Options (\fB\-t\fR|\fB\-\-stashes\fR) and (\fB\-T\fR|\fB\-\-no\-stashes\fR) override this value\.
 .
 .IP
-Default: true
+Default: \fItrue\fR
 .
 .TP
 \fBgit\-state\.show\-empty\fR \fIbool\fR
 True or false flag determining whether empty sections should be shown\. Options (\fB\-e\fR|\fB\-\-show\-empty\fR) and (\fB\-E\fR|\fB\-\-no\-show\-empty\fR) override this value\.
 .
 .IP
-Default: false
+Default: \fIfalse\fR
 

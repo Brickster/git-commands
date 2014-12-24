@@ -18,7 +18,7 @@ Used to see a more concise and comprehensive view of the working directory. The 
     Limits commits in the log section. If less than 1, the section is skipped.
 
 * `-L`|`--no-log`:
-    Don't output the log section. Equivalent to `-l` 0 or `--log` 0.
+    Don't output the log section. Equivalent to `-l` <0> or `--log` <0>.
 
 * `--full-log`:
     Output the entire log regardless of size.
@@ -27,7 +27,7 @@ Used to see a more concise and comprehensive view of the working directory. The 
     Limits actions in the reflog section. If less than 1, the section is skipped.
 
 * `-R`|`--no-reflog`:
-    Don't output the reflog section. Equivalent to `-r` 0 or `--reflog` 0.
+    Don't output the reflog section. Equivalent to `-r` <0> or `--reflog` <0>.
 
 * `--full-reflog`:
     Output the entire reflog regardless of size.
@@ -63,54 +63,54 @@ Used to see a more concise and comprehensive view of the working directory. The 
     Never color output.
 
 * `-p`|`--pretty`:
-	Display in pretty format.
+	Display in pretty format. This is equivalent to `-f`|`--format` <pretty>.
 
 * `-f`|`--format` <format>:
-	The format used to print each section. Valid values include: compact and pretty.
+	The format used to print each section. Valid values include: <compact> and <pretty>.
 
 ## CONFIGURATION
 
 * `git-state.log.show` <bool>:
 	True or false flag determining whether the log section should show when no other related flags are specified.
 
-	Default: true
+	Default: <true>
 
 * `git-state.log.count` <int>:
 	The default log length. Can be overridden using the `-d`|`--log` <count> option.
 
-	Default: 10
+	Default: <10>
 
 * `git-state.reflog.show` <bool>:
 	True or false flag determining whether the reflog section should show when no other related flags are specified.
 
-	Default: true
+	Default: <true>
 
 * `git-state.log.count` <int>:
 	The default reflog length. Can be overridden using the `-r`|`--reflog` <count> option.
 
-	Default: 5
+	Default: <5>
 
 * `git-state.format` <string>:
 	The default formatting for git-state. Valid options include: `pretty` and `compact`. If no value is specified or an invalid value is entered, compact is used. The options `-f`|`--format` <format> or `-p`|`--pretty` will override this setting.
 
-	Default: compact
+	Default: <compact>
 
 * `git-state.status.show` <bool>:
 	True or false flag determining whether the status section should show when no other related flags are specified. Options (`-s`|`--status`) and (`-S`|`--no-status`) override this value.
 
-	Default: true
+	Default: <true>
 
 * `git-state.branches.show` <bool>:
 	True or false flag determining whether the branches section should show when no other related flags are specified. Options (`-b`|`--branches`) and (`-B`|`--no-branches`) override this value.
 
-	Default: true
+	Default: <true>
 
 * `git-state.stashes.show` <bool>:
 	True or false flag determining whether the stashes section should show when no other related flags are specified. Options (`-t`|`--stashes`) and (`-T`|`--no-stashes`) override this value.
 
-	Default: true
+	Default: <true>
 
 * `git-state.show-empty` <bool>:
 	True or false flag determining whether empty sections should be shown. Options (`-e`|`--show-empty`) and (`-E`|`--no-show-empty`) override this value.
 
-	Default: false
+	Default: <false>
