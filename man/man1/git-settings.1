@@ -7,7 +7,7 @@
 \fBgit\-settings\fR \- more ways to view and edit config files
 .
 .SH "SYNOPSIS"
-\fBgit settings\fR [\fIfile\-option\fR] [(\fB\-d\fR|\fB\-\-default\fR) \fIvalue\fR] \fIkey\fR
+\fBgit settings\fR [\fIfile\-option\fR] [(\fB\-p\fR|\fB\-\-pretty\fR)] [(\fB\-d\fR|\fB\-\-default\fR) \fIvalue\fR] \fIkey\fR
 .
 .br
 \fBgit settings\fR [(\fB\-h\fR|\fB\-\-help\fR)]
@@ -40,6 +40,10 @@ Use system config file\.
 A default value to use when no setting exists for a given \fIkey\fR\.
 .
 .TP
+\fB\-p\fR|\fB\-\-pretty\fR
+When used with \fBprint\fR, the section is printed in config file format\. This option doesn\'t apply to any other subcommands\.
+.
+.TP
 \fBdestroy\fR \fIsection\fR
 Destroy a section from the local, global, and system config files\.
 .
@@ -50,4 +54,13 @@ Print a section from the local, global, and system config files\. Optionally, a 
 .TP
 \fB\-h\fR|\fB\-\-help\fR
 Display git\-settings man page\.
+.
+.SH "CONFIGURATION"
+.
+.TP
+\fBgit\-settings\.print\.format\fR \fIstring\fR
+The default formatting for git\-setting print\. Valid options include: \fBpretty\fR and \fBcompact\fR\. If no value is specified or an invalid value is entered, compact is used\. The option \fB\-p\fR|\fB\-\-pretty\fR will override this setting\.
+.
+.IP
+Default: \fIcompact\fR
 
