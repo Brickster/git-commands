@@ -43,4 +43,5 @@ git settings [<file-option>] [(-d|--default) <value>] <key>
 git settings [(-h|--help)]
 git settings [<file-option>] destroy <section>
 git settings [<file-option>] [(-p|--pretty)] print <section>
+git settings list
 ```

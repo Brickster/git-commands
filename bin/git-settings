@@ -47,6 +47,52 @@ function destroy
 }
 
 #
+# Determines if an array contains a given element.
+#
+# $1: the element to find
+# $2: the array to search in
+#
+function array_contains
+{
+    local e
+    for e in "${@:2}"; do
+        if [[ "$e" == "$1" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+#
+# Prints all sections respecting precedence.
+#
+function list
+{
+    # get list of config settings
+    local configs=$(git config --list)
+    IFS=$'\n' read -rd '' -a configs <<< "$configs"
+
+    local unique_sections=()
+    local entry=
+    for entry in "${configs[@]}"; do
+        local regex="^(.*)\.[-[:alnum:]]+=.*$"
+
+        # echo "chcecking: $entry"
+        if [[ "$entry" =~ $regex ]]; then
+            local section="${BASH_REMATCH[1]}"
+        fi
+
+        if ! array_contains "$section" "${unique_sections[@]}"; then
+            unique_sections+=($section)
+        fi
+    done
+
+    for entry in "${unique_sections[@]}"; do
+        print "$entry"
+    done
+}
+
+#
 # Prints a given section.
 #
 # This is a section level version of git config --list.
@@ -219,7 +265,7 @@ function default
     echo "$value"
 }
 
-if [[ "$1" =~ ^(destroy|print)$ ]]; then
+if [[ "$1" =~ ^(destroy|print|list)$ ]]; then
     args=("$@") # so I can split the input
     args=("${args[@]:1}")
     "$1" "${args[@]}"
