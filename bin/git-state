@@ -185,6 +185,13 @@ if $show_status; then
     # reset color.status to its original setting
     if [[ -z "$status_color" ]]; then
         git config --unset color.status
+
+        # unset may leave an empty section, remove it if it is
+        section_count=$(git settings print -c color)
+        if (( $section_count == 0 )); then
+            git config --remove-section color
+        fi
+
     else
         git config color.status "$status_color"
     fi
