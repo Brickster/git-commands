@@ -106,8 +106,9 @@ function print
     local section=
     local section_index=1
     local format=
+    local count=false
 
-    while getopts ":lgsp-:" opt; do
+    while getopts ":lgspc-:" opt; do
         case $opt in
             -)
                 case "${OPTARG}" in
@@ -115,6 +116,7 @@ function print
                     global) configuration="global";;
                     system) configuration="system";;
                     pretty) format="pretty";;
+                    count)  count=true;;
                     *)      error "Unimplemented option --${OPTARG}";;
                 esac
                 ;;
@@ -122,6 +124,7 @@ function print
             g)  configuration="global";;
             s)  configuration="system";;
             p)  format="pretty";;
+            c)  count=true;;
             \?) error "Invalid option: -$OPTARG";;
             :)  error "Option -$OPTARG requires an argument.";;
             *)  error "Unimplemented option: -$OPTARG";;
@@ -156,12 +159,17 @@ function print
             # generate variables that act as map entries
             local key="$(echo "$key" | sed 's/-/_/g')" # replace all variable unsafe characters with underscores
             printf -v "map__$key" %s "$value"
-
-            ((section_count++))
         fi
     done
 
-    if [[ "$format" == "pretty" ]]; then
+    for key in ${!map__*}; do
+        ((section_count++))
+    done
+
+
+    if $count; then
+        echo "$section_count"
+    elif [[ "$format" == "pretty" ]]; then
         if (( $section_count > 0 )); then
             title=
             regex="^([-[:alnum:]]+)\.(.*)$"
