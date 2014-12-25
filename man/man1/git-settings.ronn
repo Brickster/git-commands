@@ -2,10 +2,10 @@
 
 ## SYNOPSIS
 
-`git settings` [<file-option>] [(`-p`|`--pretty`)] [(`-d`|`--default`) <value>] <key><br>
+`git settings` [<file-option>] [(`-d`|`--default`) <value>] <key><br>
 `git settings` [(`-h`|`--help`)]<br>
 `git settings destroy` <section><br>
-`git settings print` [<file-option>] <section><br>
+`git settings print` [<file-option>] [(`-p`|`--pretty`)] <section><br>
 `git settings list`
 
 ## DESCRIPTION
