@@ -41,7 +41,7 @@ Used as a compliment to `git-config` by adding missing features.
 ```bash
 git settings [<file-option>] [(-d|--default) <value>] <key>
 git settings [(-h|--help)]
-git settings [<file-option>] destroy <section>
-git settings [<file-option>] [(-p|--pretty)] print <section>
+git settings destroy [<file-option>] <section>
+git settings print [<file-option>] [(-p|--pretty)] [(-c|--count)] <section>
 git settings list
 ```

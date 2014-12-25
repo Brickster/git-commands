@@ -7,7 +7,7 @@
 \fBgit\-settings\fR \- more ways to view and edit config files
 .
 .SH "SYNOPSIS"
-\fBgit settings\fR [\fIfile\-option\fR] [(\fB\-p\fR|\fB\-\-pretty\fR)] [(\fB\-d\fR|\fB\-\-default\fR) \fIvalue\fR] \fIkey\fR
+\fBgit settings\fR [\fIfile\-option\fR] [(\fB\-d\fR|\fB\-\-default\fR) \fIvalue\fR] \fIkey\fR
 .
 .br
 \fBgit settings\fR [(\fB\-h\fR|\fB\-\-help\fR)]
@@ -16,7 +16,7 @@
 \fBgit settings destroy\fR \fIsection\fR
 .
 .br
-\fBgit settings print\fR [\fIfile\-option\fR] \fIsection\fR
+\fBgit settings print\fR [\fIfile\-option\fR] [(\fB\-p\fR|\fB\-\-pretty\fR)] [(\fB\-c\fR|\fB\-\-count\fR)] \fIsection\fR
 .
 .br
 \fBgit settings list\fR
@@ -45,6 +45,10 @@ A default value to use when no setting exists for a given \fIkey\fR\.
 .TP
 \fB\-p\fR|\fB\-\-pretty\fR
 When used with \fBprint\fR, the section is printed in config file format\. This option doesn\'t apply to any other subcommands\.
+.
+.TP
+\fB\-c\fR|\fB\-\-count\fR
+When used with \fBprint\fR, the count of keys in a given section is printed rather than the section itself\. The options doesn\'t apply to any other subcommands\.
 .
 .TP
 \fBdestroy\fR \fIsection\fR
