@@ -2,7 +2,7 @@
 
 A collection of custom git commands
 
-## state
+## [state](http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-state.1.html)
 
 Used to see a more concise and comprehensive view of the working directory. The output includes results from git status, git log, and git branch.
 
@@ -11,7 +11,7 @@ git state [(-l|--log) <count>] [(-L|--no-log)] [--full-log] [(-r|--reflog) <coun
 git state [(-h|--help)]
 ```
 
-## snapshot
+## [snapshot](http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-snapshot.1.html)
 
 Used to record the current state of the working directory without reverting it. The snapshot is stored using git stash prepended with snapshot@{i} to differentiate it and stashes created normally.
 
@@ -26,7 +26,7 @@ git snapshot pop <snapshot>
 git snapshot show <snapshot>
 ```
 
-## changes
+## [changes](http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-changes.1.html)
 
 Used to list the commits between this branch and another.
 
@@ -34,7 +34,7 @@ Used to list the commits between this branch and another.
 git changes [(-b|--branch) <branch>] [(-c|--count)] [(-h|--help)]
 ```
 
-## settings
+## [settings](http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-settings.1.html)
 
 Used as a compliment to `git-config` by adding missing features.
 
