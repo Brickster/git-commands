@@ -192,7 +192,9 @@ function print
         fi
     else
         for key in ${!map__*}; do
-            echo "$section.${key#map__}=${!key}"
+            unnormalized_key="${key#map__}"
+            unnormalized_key="$(echo "$unnormalized_key" | sed 's/_/-/g')"
+            echo "$section.$unnormalized_key=${!key}"
         done
     fi
 
