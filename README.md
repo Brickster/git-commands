@@ -31,7 +31,8 @@ git snapshot show <snapshot>
 Used to list the commits between this branch and another.
 
 ```bash
-git changes [(-b|--branch) <branch>] [(-c|--count)] [(-h|--help)]
+git changes [(-b|--branch) <branch>] [(-c|--count)]
+git changes [(-h|--help)]
 ```
 
 ## [settings](http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-settings.1.html)

@@ -2,7 +2,8 @@
 
 ## SYNOPSIS
 
-`git changes` [(`-b`|`--branch`) <branch>] [(`-c`|`--count`)] [(`-h`|`--help`)]
+`git changes` [(`-b`|`--branch`) <branch>] [(`-c`|`--count`)]<br>
+`git changes` [(`-h`|`--help`)]
 
 ## DESCRIPTION
 
