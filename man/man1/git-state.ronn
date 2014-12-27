@@ -2,7 +2,14 @@
 
 ## SYNOPSIS
 
-`git state` [(`-l`|`--log`) <count>] [(`-L`|`--no-log`)] [`--full-log`] [(`-r`|`--reflog`) <count>] [(`-R`|`--no-reflog`)] [`--full-reflog`] [(`-s`|`--status`)] [(`-S`|`--no-status`)] [(`-b`|`--branches`)] [(`-B`|`--no-branches`)] [(`-t`|`--stashes`)] [(`-T`|`--no-stashes`)] [(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)] [(`-c`|`--color`)] [(`-C`|`--no-color`)] [(`-p`|`--pretty`)] [(`-f`|`--foramt`) <format>]<br>
+`git state` [(`-l`|`--log`) <count>] [(`-L`|`--no-log`)] [`--full-log`]<br>
+<span style="padding-left:84px"/>[(`-r`|`--reflog`) <count>] [(`-R`|`--no-reflog`)] [`--full-reflog`]<br>
+<span style="padding-left:84px"/>[(`-s`|`--status`)] [(`-S`|`--no-status`)]<br>
+<span style="padding-left:84px"/>[(`-b`|`--branches`)] [(`-B`|`--no-branches`)]<br>
+<span style="padding-left:84px"/>[(`-t`|`--stashes`)] [(`-T`|`--no-stashes`)]<br>
+<span style="padding-left:84px"/>[(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)]<br>
+<span style="padding-left:84px"/>[(`-c`|`--color`)] [(`-C`|`--no-color`)]<br>
+<span style="padding-left:84px"/>[(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
 `git state` [(`-h`|`--help`)]
 
 ## DESCRIPTION
