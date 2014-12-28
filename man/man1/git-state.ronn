@@ -3,13 +3,13 @@
 ## SYNOPSIS
 
 `git state` [(`-l`|`--log`) <count>] [(`-L`|`--no-log`)] [`--full-log`]<br>
-<span style="padding-left:84px"/>[(`-r`|`--reflog`) <count>] [(`-R`|`--no-reflog`)] [`--full-reflog`]<br>
-<span style="padding-left:84px"/>[(`-s`|`--status`)] [(`-S`|`--no-status`)]<br>
-<span style="padding-left:84px"/>[(`-b`|`--branches`)] [(`-B`|`--no-branches`)]<br>
-<span style="padding-left:84px"/>[(`-t`|`--stashes`)] [(`-T`|`--no-stashes`)]<br>
-<span style="padding-left:84px"/>[(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)]<br>
-<span style="padding-left:84px"/>[(`-c`|`--color`)] [(`-C`|`--no-color`)]<br>
-<span style="padding-left:84px"/>[(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-r`|`--reflog`) <count>] [(`-R`|`--no-reflog`)] [`--full-reflog`]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-s`|`--status`)] [(`-S`|`--no-status`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-b`|`--branches`)] [(`-B`|`--no-branches`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-t`|`--stashes`)] [(`-T`|`--no-stashes`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-c`|`--color`)] [(`-C`|`--no-color`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
 `git state` [(`-h`|`--help`)]
 
 ## DESCRIPTION
