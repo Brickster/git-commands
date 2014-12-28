@@ -111,6 +111,7 @@ while getopts ":hpf:cCeELsSbBRtTl:r:-:" opt; do
                     print_format="${!OPTIND}"
                     OPTIND=$(( $OPTIND + 1 ))
                     ;;
+                format=*)       print_format=${OPTARG#*=};;
                 no-color)
                     color="never"
                     green=""
