@@ -57,6 +57,7 @@
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
     <a href="#OPTIONS">OPTIONS</a>
+    <a href="#FILE-OPTIONS">FILE OPTIONS</a>
     <a href="#CONFIGURATION">CONFIGURATION</a>
   </div>
 
@@ -86,17 +87,35 @@
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
+<dt><code>-d</code>|<code>--default</code> <var>key</var></dt><dd><p>  A default value to use when no setting exists for a given <var>key</var>.</p>
+
+<dl>
+<dt><var>file-option</var></dt><dd>  The key will be loaded from a specific file. See "<strong>FILE OPTIONS</strong>" section for more details.</dd>
+</dl>
+</dd>
+<dt><code>destroy</code> <var>section</var></dt><dd><p>  Destroy a section from the local, global, and system config files.</p></dd>
+<dt><code>print</code> <var>section</var></dt><dd><p>  Print all values for a section respecting overrides.</p>
+
+<dl>
+<dt><var>file-option</var></dt><dd><p>  Limits the section values to a specific file. See "<strong>FILE OPTIONS</strong>" section for more details.</p></dd>
+<dt><code>-p</code>|<code>--pretty</code></dt><dd><p>  The section is printed in config file format.</p></dd>
+<dt><code>-f</code>|<code>--format</code> <var>format</var></dt><dd><p>  The section is printed in the specified format. Valid values include: <var>compact</var> and <var>pretty</var>.</p></dd>
+<dt><code>-c</code>|<code>--count</code></dt><dd><p>  The count of keys in a given section is printed rather than the section itself.</p></dd>
+</dl>
+</dd>
+<dt class="flush"><code>list</code></dt><dd><p>  List all configuration settings respecting override precedence.</p></dd>
+<dt><code>-h</code>|<code>--help</code></dt><dd><p>  Display git-settings man page.</p></dd>
+</dl>
+
+
+<h2 id="FILE-OPTIONS">FILE OPTIONS</h2>
+
+<p>Some subcommands can be limited to a specific file. The valid options are:</p>
+
+<dl>
 <dt><code>-l</code>|<code>--local</code></dt><dd><p>  Use local config file.</p></dd>
 <dt><code>-g</code>|<code>--global</code></dt><dd><p>  Use global config file.</p></dd>
 <dt><code>-s</code>|<code>--system</code></dt><dd><p>  Use system config file.</p></dd>
-<dt><code>-d</code>|<code>--default</code> <var>key</var></dt><dd><p>  A default value to use when no setting exists for a given <var>key</var>.</p></dd>
-<dt><code>-p</code>|<code>--pretty</code></dt><dd><p>  When used with <code>print</code>, the section is printed in config file format. This option doesn't apply to any other subcommands.</p></dd>
-<dt><code>-f</code>|<code>--format</code> <var>format</var></dt><dd><p>  When used with <code>print</code>, the section is printed in the specified format. Valid values include: <var>compact</var> and <var>pretty</var>. This option doesn't apply to any other subcommands.</p></dd>
-<dt><code>-c</code>|<code>--count</code></dt><dd><p>  When used with <code>print</code>, the count of keys in a given section is printed rather than the section itself. The options doesn't apply to any other subcommands.</p></dd>
-<dt><code>destroy</code> <var>section</var></dt><dd><p>  Destroy a section from the local, global, and system config files.</p></dd>
-<dt><code>print</code> [(<code>--local</code>|<code>--global</code>|<code>--system</code>)] <var>section</var></dt><dd><p>  Print a section from the local, global, and system config files. Optionally, a specific configuration can be specified and only the section present in that file will be printed.</p></dd>
-<dt class="flush"><code>list</code></dt><dd><p>  List all configuration settings respecting override precedence.</p></dd>
-<dt><code>-h</code>|<code>--help</code></dt><dd><p>  Display git-settings man page.</p></dd>
 </dl>
 
 

@@ -27,6 +27,51 @@
 .SH "OPTIONS"
 .
 .TP
+\fB\-d\fR|\fB\-\-default\fR \fIkey\fR
+A default value to use when no setting exists for a given \fIkey\fR\.
+.
+.TP
+\fIfile\-option\fR
+The key will be loaded from a specific file\. See "\fBFILE OPTIONS\fR" section for more details\.
+
+.
+.TP
+\fBdestroy\fR \fIsection\fR
+Destroy a section from the local, global, and system config files\.
+.
+.TP
+\fBprint\fR \fIsection\fR
+Print all values for a section respecting overrides\.
+.
+.TP
+\fIfile\-option\fR
+Limits the section values to a specific file\. See "\fBFILE OPTIONS\fR" section for more details\.
+.
+.TP
+\fB\-p\fR|\fB\-\-pretty\fR
+The section is printed in config file format\.
+.
+.TP
+\fB\-f\fR|\fB\-\-format\fR \fIformat\fR
+The section is printed in the specified format\. Valid values include: \fIcompact\fR and \fIpretty\fR\.
+.
+.TP
+\fB\-c\fR|\fB\-\-count\fR
+The count of keys in a given section is printed rather than the section itself\.
+
+.
+.TP
+\fBlist\fR
+List all configuration settings respecting override precedence\.
+.
+.TP
+\fB\-h\fR|\fB\-\-help\fR
+Display git\-settings man page\.
+.
+.SH "FILE OPTIONS"
+Some subcommands can be limited to a specific file\. The valid options are:
+.
+.TP
 \fB\-l\fR|\fB\-\-local\fR
 Use local config file\.
 .
@@ -37,38 +82,6 @@ Use global config file\.
 .TP
 \fB\-s\fR|\fB\-\-system\fR
 Use system config file\.
-.
-.TP
-\fB\-d\fR|\fB\-\-default\fR \fIkey\fR
-A default value to use when no setting exists for a given \fIkey\fR\.
-.
-.TP
-\fB\-p\fR|\fB\-\-pretty\fR
-When used with \fBprint\fR, the section is printed in config file format\. This option doesn\'t apply to any other subcommands\.
-.
-.TP
-\fB\-f\fR|\fB\-\-format\fR \fIformat\fR
-When used with \fBprint\fR, the section is printed in the specified format\. Valid values include: \fIcompact\fR and \fIpretty\fR\. This option doesn\'t apply to any other subcommands\.
-.
-.TP
-\fB\-c\fR|\fB\-\-count\fR
-When used with \fBprint\fR, the count of keys in a given section is printed rather than the section itself\. The options doesn\'t apply to any other subcommands\.
-.
-.TP
-\fBdestroy\fR \fIsection\fR
-Destroy a section from the local, global, and system config files\.
-.
-.TP
-\fBprint\fR [(\fB\-\-local\fR|\fB\-\-global\fR|\fB\-\-system\fR)] \fIsection\fR
-Print a section from the local, global, and system config files\. Optionally, a specific configuration can be specified and only the section present in that file will be printed\.
-.
-.TP
-\fBlist\fR
-List all configuration settings respecting override precedence\.
-.
-.TP
-\fB\-h\fR|\fB\-\-help\fR
-Display git\-settings man page\.
 .
 .SH "CONFIGURATION"
 .
