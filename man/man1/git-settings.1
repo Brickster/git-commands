@@ -16,7 +16,7 @@
 \fBgit settings destroy\fR \fIsection\fR
 .
 .br
-\fBgit settings print\fR [\fIfile\-option\fR] [(\fB\-p\fR|\fB\-\-pretty\fR)] [(\fB\-c\fR|\fB\-\-count\fR)] \fIsection\fR
+\fBgit settings print\fR [\fIfile\-option\fR] [(\fB\-p\fR|\fB\-\-pretty\fR)] [(\fB\-f\fR|\fB\-\-format\fR) \fIformat\fR] [(\fB\-c\fR|\fB\-\-count\fR)] \fIsection\fR
 .
 .br
 \fBgit settings list\fR
@@ -45,6 +45,10 @@ A default value to use when no setting exists for a given \fIkey\fR\.
 .TP
 \fB\-p\fR|\fB\-\-pretty\fR
 When used with \fBprint\fR, the section is printed in config file format\. This option doesn\'t apply to any other subcommands\.
+.
+.TP
+\fB\-f\fR|\fB\-\-format\fR \fIformat\fR
+When used with \fBprint\fR, the section is printed in the specified format\. Valid values include: \fIcompact\fR and \fIpretty\fR\. This option doesn\'t apply to any other subcommands\.
 .
 .TP
 \fB\-c\fR|\fB\-\-count\fR
