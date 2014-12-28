@@ -14,6 +14,40 @@
 
 ## OPTIONS
 
+* `-d`|`--default` <key>:
+    A default value to use when no setting exists for a given <key>.
+
+    * <file-option>:
+        The key will be loaded from a specific file. See "**FILE OPTIONS**" section for more details.
+
+* `destroy` <section>:
+    Destroy a section from the local, global, and system config files.
+
+* `print` <section>:
+    Print all values for a section respecting overrides.
+
+    * <file-option>:
+        Limits the section values to a specific file. See "**FILE OPTIONS**" section for more details.
+
+    * `-p`|`--pretty`:
+        The section is printed in config file format.
+
+    * `-f`|`--format` <format>:
+        The section is printed in the specified format. Valid values include: <compact> and <pretty>.
+
+    * `-c`|`--count`:
+        The count of keys in a given section is printed rather than the section itself.
+
+* `list`:
+    List all configuration settings respecting override precedence.
+
+* `-h`|`--help`:
+    Display git-settings man page.
+
+## FILE OPTIONS
+
+Some subcommands can be limited to a specific file. The valid options are:
+
 * `-l`|`--local`:
     Use local config file.
 
@@ -22,30 +56,6 @@
 
 * `-s`|`--system`:
     Use system config file.
-
-* `-d`|`--default` <key>:
-    A default value to use when no setting exists for a given <key>.
-
-* `-p`|`--pretty`:
-    When used with `print`, the section is printed in config file format. This option doesn't apply to any other subcommands.
-
-* `-f`|`--format` <format>:
-    When used with `print`, the section is printed in the specified format. Valid values include: <compact> and <pretty>. This option doesn't apply to any other subcommands.
-
-* `-c`|`--count`:
-    When used with `print`, the count of keys in a given section is printed rather than the section itself. The options doesn't apply to any other subcommands.
-
-* `destroy` <section>:
-    Destroy a section from the local, global, and system config files.
-
-* `print` [(`--local`|`--global`|`--system`)] <section>:
-    Print a section from the local, global, and system config files. Optionally, a specific configuration can be specified and only the section present in that file will be printed.
-
-* `list`:
-    List all configuration settings respecting override precedence.
-
-* `-h`|`--help`:
-    Display git-settings man page.
 
 ## CONFIGURATION
 
