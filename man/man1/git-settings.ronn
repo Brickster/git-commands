@@ -5,7 +5,7 @@
 `git settings` [<file-option>] [(`-d`|`--default`) <value>] <key><br>
 `git settings` [(`-h`|`--help`)]<br>
 `git settings destroy` <section><br>
-`git settings print` [<file-option>] [(`-p`|`--pretty`)] [(`-c`|`--count`)] <section><br>
+`git settings print` [<file-option>] [(`-p`|`--pretty`)] [(`-f`|`--format`) <format>] [(`-c`|`--count`)] <section><br>
 `git settings list`
 
 ## DESCRIPTION
@@ -28,6 +28,9 @@
 
 * `-p`|`--pretty`:
     When used with `print`, the section is printed in config file format. This option doesn't apply to any other subcommands.
+
+* `-f`|`--format` <format>:
+    When used with `print`, the section is printed in the specified format. Valid values include: <compact> and <pretty>. This option doesn't apply to any other subcommands.
 
 * `-c`|`--count`:
     When used with `print`, the count of keys in a given section is printed rather than the section itself. The options doesn't apply to any other subcommands.

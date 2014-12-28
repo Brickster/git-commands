@@ -108,7 +108,7 @@ function print
     local format=
     local count=false
 
-    while getopts ":lgspc-:" opt; do
+    while getopts ":lgspf:c-:" opt; do
         case $opt in
             -)
                 case "${OPTARG}" in
@@ -116,6 +116,11 @@ function print
                     global) configuration="global";;
                     system) configuration="system";;
                     pretty) format="pretty";;
+                    format)
+                        format="${!OPTIND}"
+                        ((OPTIND++))
+                        ((section_index++))
+                        ;;
                     count)  count=true;;
                     *)      error "Unimplemented option --${OPTARG}";;
                 esac
@@ -124,6 +129,7 @@ function print
             g)  configuration="global";;
             s)  configuration="system";;
             p)  format="pretty";;
+            f)  format="$OPTARG"; ((section_index++));;
             c)  count=true;;
             \?) error "Invalid option: -$OPTARG";;
             :)  error "Option -$OPTARG requires an argument.";;
