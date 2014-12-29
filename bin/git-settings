@@ -77,7 +77,6 @@ function list
     for entry in "${configs[@]}"; do
         local regex="^(.*)\.[-[:alnum:]]+=.*$"
 
-        # echo "chcecking: $entry"
         if [[ "$entry" =~ $regex ]]; then
             local section="${BASH_REMATCH[1]}"
         fi
@@ -189,7 +188,6 @@ function print
             fi
             echo "$title"
 
-            # echo "[$section]"
             for key in ${!map__*}; do
                 unnormalized_key="${key#map__}"
                 unnormalized_key="$(echo "$unnormalized_key" | sed 's/_/-/g')"
