@@ -92,7 +92,7 @@ Used to see a more concise and comprehensive view of the working directory. The 
 
 	Default: <true>
 
-* `git-state.log.count` <int>:
+* `git-state.reflog.count` <int>:
 	The default reflog length. Can be overridden using the `-r`|`--reflog` <count> option.
 
 	Default: <5>
