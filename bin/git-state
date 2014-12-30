@@ -7,20 +7,6 @@
 . git-commands-utils
 
 #
-# Determines whether there are stashes or not
-#
-function stash_not_empty
-{
-    stashes=$(git stash list 2>&1)
-    IFS=$'\n' read -rd '' -a stashes <<< "$stashes"
-
-    if (( ${#stashes[@]} == 0 )); then
-        return 1
-    fi
-    return 0
-}
-
-#
 # Echos a section of the state.
 #
 # The output can be echoed in pretty format or compact. Pretty format includes pre- and a- pended newlines
@@ -199,7 +185,7 @@ if $show_branches; then
 fi
 
 # stashes
-if $show_stashes && ( $show_empty || stash_not_empty ); then
+if $show_stashes && ( $show_empty || [[ ! -z $(git stash list) ]] ); then
     stash_output=$(git stash list --oneline --color="$color")
     echo_section "stashes" "$stash_output" "$print_format"
 fi
