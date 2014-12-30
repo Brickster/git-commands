@@ -1,5 +1,7 @@
 #! /bin/bash
 
+. git-commands-utils
+
 STASH_ID_REGEX="^stash@\{([[:digit:]]+)\}.*$"
 DROP_HASH_REGEX="^.*\(([[:xdigit:]]+)\)$"
 
@@ -114,17 +116,6 @@ function drop
     exit 1
 }
 
-#
-# Echos text to strerr.
-#
-# $1: the text to echo
-#
-function error
-{
-    echo "$1" >&2
-    exit 1
-}
-
 function usage_error
 {
     error "usage: git snapshot [(-h|--help)]
@@ -134,15 +125,6 @@ function usage_error
    or: git snapshot drop <snapshot>
    or: git snapshot apply <snapshot>
    or: git snapshot pop <snapshot>"
-}
-
-#
-# Shows git-snapshot man page.
-#
-function help
-{
-    man git-snapshot
-    exit 0
 }
 
 #

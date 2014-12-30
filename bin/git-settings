@@ -1,24 +1,6 @@
 #! /bin/bash
 
-#
-# Echos text to strerr.
-#
-# $1: the text to echo
-#
-function error
-{
-    echo "$1" >&2
-    exit 1
-}
-
-#
-# Shows git-settings man page.
-#
-function help
-{
-    man git-settings
-    exit 0
-}
+. git-commands-utils
 
 #
 # Shows usage error

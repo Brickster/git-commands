@@ -1,16 +1,6 @@
 #! /bin/bash
 
-function error
-{
-    echo "$1" >&2
-    exit 1
-}
-
-function help
-{
-    man git-changes
-    exit 0
-}
+. git-commands-utils
 
 get_count=false
 while getopts ":chb:-:" opt; do

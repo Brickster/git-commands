@@ -4,25 +4,7 @@
 # A more concise and comprehensive version of `git status` and `git log` in one command.
 #
 
-#
-# Echos text to strerr.
-#
-# $1: the text to echo
-#
-function error
-{
-    echo "$1" >&2
-    exit 1
-}
-
-#
-# Shows git-state man page.
-#
-function help
-{
-    man git-state
-    exit 0
-}
+. git-commands-utils
 
 #
 # Determines whether there are stashes or not
