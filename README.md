@@ -53,3 +53,11 @@ git settings destroy [<file-option>] <section>
 git settings print [<file-option>] [(-p|--pretty)] [(-f|--format) <format>] [(-c|--count)] <section>
 git settings list
 ```
+
+## [upstream](http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-upstream.1.html)
+
+Used to get the current upstream branch.
+
+```bash
+git upstream [(-h|--help)]
+```

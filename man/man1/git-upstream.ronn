@@ -1,0 +1,14 @@
+# git-upstream(1) -- get the current upstream branch
+
+## SYNOPSIS
+
+`git upstream` [(`-h`|`--help`)]
+
+## DESCRIPTION
+
+`git-upstream` gets the current upstream branch.
+
+## OPTIONS
+
+* `-h`|`--help`:
+    Display git-upstream man page.
