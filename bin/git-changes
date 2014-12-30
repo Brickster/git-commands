@@ -30,6 +30,7 @@ while getopts ":chb:-:" opt; do
         c)  get_count=true;;
         h)  help;;
         \?) error "Invalid option: -$OPTARG";;
+        :)  error "Option -$OPTARG requires an argument.";;
         *)  error "Unimplemented option: -$OPTARG";;
     esac
 done
