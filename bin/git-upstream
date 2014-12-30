@@ -1,0 +1,37 @@
+#! /bin/bash
+
+. git-commands-utils
+
+function main
+{
+    # get status with branch info
+    local status_output=$(git status --porcelain --branch)
+    IFS=$'\n' read -rd '' -a status_output <<< "$status_output"
+
+    # if the branch has a remote, it'll be in the first line
+    local branch_info="${status_output[0]}"
+
+    local regex="^## [-[:alnum:]]+\.{3}[-[:alnum:]]+/([-[:alnum:]]+)([:space:]\[.*\])?"
+    if [[ "$branch_info" =~ $regex ]]; then
+        echo "${BASH_REMATCH[1]}"
+    fi
+}
+
+while getopts ":h-:" opt; do
+    case $opt in
+        -)
+        case "${OPTARG}" in
+            help)   help;;
+            *)      error "Unimplemented option --${OPTARG}";;
+        esac
+        ;;
+        h)  help;;
+        \?) error "Invalid option: -$OPTARG";;
+        :)  error "Option -$OPTARG requires an argument.";;
+        *)  error "Unimplemented option: -$OPTARG";;
+    esac
+done
+OPTIND=1
+
+main
+exit 0
