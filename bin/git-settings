@@ -279,6 +279,20 @@ function default
     echo "$value"
 }
 
+while getopts ":h-:" opt; do
+    case $opt in
+        -)
+            case "${OPTARG}" in
+                help)   help;;
+            esac
+            ;;
+        h)  help;;
+        :)  error "Option -$OPTARG requires an argument.";;
+    esac
+    ((section_index++))
+done
+OPTIND=1
+
 if [[ "$1" =~ ^(destroy|print|list)$ ]]; then
     "$1" "${@:2}"
     exit 0
