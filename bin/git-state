@@ -149,6 +149,7 @@ while getopts ":hpf:cCeELsSbBRtTl:r:-:" opt; do
         f)  print_format="$OPTARG";;
         h)  help;;
         \?) error "Invalid option: -$OPTARG";;
+        :)  error "Option -$OPTARG requires an argument.";;
         *)  error "Unimplemented option: -$OPTARG";;
     esac
 done
