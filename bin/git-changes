@@ -26,7 +26,7 @@ while getopts ":chb:-:" opt; do
 done
 
 # load settings
-branch="${branch:-$(git settings -d master git-settings.default-branch)}"
+branch="${branch:-$(git settings -d master git-changes.default-branch)}"
 
 merge_base=$(git merge-base $branch HEAD)
 
