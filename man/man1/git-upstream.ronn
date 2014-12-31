@@ -2,6 +2,7 @@
 
 ## SYNOPSIS
 
+`git upstream` [(`-r`|`--include-remote`)] [(`-R`|`--no-include-remote`)]<br>
 `git upstream` [(`-h`|`--help`)]
 
 ## DESCRIPTION
@@ -10,5 +11,18 @@
 
 ## OPTIONS
 
+* `-r`|`--include-remote`:
+    Print the remote name, as well.
+
+* `-R`|`--no-include-remote`:
+    Don't print the remote name.
+
 * `-h`|`--help`:
     Display git-upstream man page.
+
+## CONFIGURATION
+
+* `git-upstream.include-remote` <bool>:
+    True or false flag determining whether the remote name should be printed by default. Options (`-r`|`--include-remote`) and (`-R`|`--no-include-remote`) override this value.
+
+    Default: <false>

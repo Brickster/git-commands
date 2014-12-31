@@ -59,5 +59,6 @@ git settings list
 Used to get the current upstream branch.
 
 ```bash
+git upstream [(-r|--include-remote)] [(-R|--no-include-remote)]
 git upstream [(-h|--help)]
 ```
