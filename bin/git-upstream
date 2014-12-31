@@ -4,6 +4,29 @@
 
 function main
 {
+    local include_remote=
+
+    while getopts ":rR-:" opt; do
+        case $opt in
+            -)
+                case "${OPTARG}" in
+                    include-remote)     include_remote=true;;
+                    no-include-remote)  include_remote=false;;
+                    *)                  error "Unimplemented option --${OPTARG}";;
+                esac
+                ;;
+            r)  include_remote=true;;
+            R)  include_remote=false;;
+            \?) error "Invalid option: -$OPTARG";;
+            :)  error "Option -$OPTARG requires an argument.";;
+            *)  error "Unimplemented option: -$OPTARG";;
+        esac
+    done
+    OPTIND=1
+
+    # load defaults
+    include_remote=${include_remote:-$(git settings -d false git-upstream.include-remote)}
+
     # get status with branch info
     local status_output=$(git status --porcelain --branch)
     IFS=$'\n' read -rd '' -a status_output <<< "$status_output"
@@ -11,27 +34,27 @@ function main
     # if the branch has a remote, it'll be in the first line
     local branch_info="${status_output[0]}"
 
-    local regex="^## [-[:alnum:]]+\.{3}[-[:alnum:]]+/([-[:alnum:]]+)([:space:]\[.*\])?"
+    local regex="^## [-[:alnum:]]+\.{3}([-[:alnum:]]+/([-[:alnum:]]+))([:space:]\[.*\])?"
     if [[ "$branch_info" =~ $regex ]]; then
-        echo "${BASH_REMATCH[1]}"
+        if $include_remote; then
+            echo "${BASH_REMATCH[1]}"
+        else
+            echo "${BASH_REMATCH[2]}"
+        fi
     fi
 }
 
 while getopts ":h-:" opt; do
     case $opt in
         -)
-        case "${OPTARG}" in
-            help)   help;;
-            *)      error "Unimplemented option --${OPTARG}";;
-        esac
-        ;;
+            case "${OPTARG}" in
+                help)   help;;
+            esac
+            ;;
         h)  help;;
-        \?) error "Invalid option: -$OPTARG";;
-        :)  error "Option -$OPTARG requires an argument.";;
-        *)  error "Unimplemented option: -$OPTARG";;
     esac
 done
 OPTIND=1
 
-main
+main "$@"
 exit 0

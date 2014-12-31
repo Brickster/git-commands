@@ -7,6 +7,9 @@
 \fBgit\-upstream\fR \- get the current upstream branch
 .
 .SH "SYNOPSIS"
+\fBgit upstream\fR [(\fB\-r\fR|\fB\-\-include\-remote\fR)] [(\fB\-R\fR|\fB\-\-no\-include\-remote\fR)]
+.
+.br
 \fBgit upstream\fR [(\fB\-h\fR|\fB\-\-help\fR)]
 .
 .SH "DESCRIPTION"
@@ -15,6 +18,23 @@
 .SH "OPTIONS"
 .
 .TP
+\fB\-r\fR|\fB\-\-include\-remote\fR
+Print the remote name, as well\.
+.
+.TP
+\fB\-R\fR|\fB\-\-no\-include\-remote\fR
+Don\'t print the remote name\.
+.
+.TP
 \fB\-h\fR|\fB\-\-help\fR
 Display git\-upstream man page\.
+.
+.SH "CONFIGURATION"
+.
+.TP
+\fBgit\-upstream\.include\-remote\fR \fIbool\fR
+True or false flag determining whether the remote name should be printed by default\. Options (\fB\-r\fR|\fB\-\-include\-remote\fR) and (\fB\-R\fR|\fB\-\-no\-include\-remote\fR) override this value\.
+.
+.IP
+Default: \fIfalse\fR
 
