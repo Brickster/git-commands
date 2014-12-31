@@ -22,7 +22,7 @@
 
 ## CONFIGURATION
 
-* `git-settings.default-branch` <string>:
+* `git-changes.default-branch` <string>:
     The default branch to use when finding changes. Option (`-b`|`--branch`) <branch> overrides this setting.
 
     Default: master
