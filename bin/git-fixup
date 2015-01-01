@@ -1,0 +1,46 @@
+#! /bin/bash
+#
+# git-fixup is a shortcut for committing staged changes as a fixup. The commit message starts with "fixup!" and ends
+# with the last commit's message. This way it can be autosquashed during a rebase.
+#
+# While git-commit does include a --fixup=<commit> option, using it consecutively without getting commit messages with
+# multiple "fixup!" entries is more tedious than it should to be.
+#
+
+. git-commands-utils
+
+#
+# Commits all staged changes as an autosquashable fixup.
+#
+function fixup
+{
+    # get the last log message
+    local last_commit_message=$(git log -1 --format="%s")
+
+    # if the last commit was a fixup, use that; else, prepend with fixup!
+    local commit_message=
+    if [[ "$last_commit_message" =~ ^fixup!.*$ ]]; then
+        commit_message="$last_commit_message"
+    else
+        commit_message="fixup! $last_commit_message"
+    fi
+
+    git commit --quiet -m "$commit_message"
+}
+
+while getopts ":h-:" opt; do
+    case $opt in
+        -)
+            case "${OPTARG}" in
+                help)   help;;
+                *)      error "Unimplemented option --${OPTARG}";;
+            esac
+            ;;
+        h)  help;;
+        \?) error "Invalid option: -$OPTARG";;
+        :)  error "Option -$OPTARG requires an argument.";;
+        *)  error "Unimplemented option: -$OPTARG";;
+    esac
+done
+
+fixup

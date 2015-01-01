@@ -1,0 +1,23 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "GIT\-FIXUP" "1" "January 2015" "" ""
+.
+.SH "NAME"
+\fBgit\-fixup\fR \- commits staged changes as an autosquashable fixup
+.
+.SH "SYNOPSIS"
+\fBgit fixup\fR [(\fB\-h\fR|\fB\-\-help\fR)]
+.
+.SH "CHANGES"
+\fBgit\-fixup\fR is a shortcut for committing staged changes as an autosquashable fixup\. The commit message starts with "fixup!" and ends with the last commit\'s message\. The changes can then be autosquashed using an interactive rebase\.
+.
+.P
+While \fBgit\-commit\fR does include a \fB\-\-fixup=<commit>\fR option, using it consecutively without getting commit messages with multiple "fixup!" entries is more tedious than it should to be\.
+.
+.SH "OPTIONS"
+.
+.TP
+\fB\-h\fR|\fB\-\-help\fR
+Display git\-fixup man page\.
+

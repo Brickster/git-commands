@@ -53,3 +53,11 @@ git settings destroy [<file-option>] <section>
 git settings print [<file-option>] [(-p|--pretty)] [(-f|--format) <format>] [(-c|--count)] <section>
 git settings list
 ```
+
+## [fixup](http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-fixup.1.html)
+
+Used as a shortcut for committing the currently staged files as an autosquashable fixup.
+
+```bash
+git fixup [(-h|--help)]
+```
