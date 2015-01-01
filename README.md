@@ -2,7 +2,7 @@
 
 A collection of custom git commands
 
-## [state](http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-state.1.html)
+## [state][]
 
 Used to see a more concise and comprehensive view of the working directory. The output includes results from git status, git log, and git branch.
 
@@ -18,7 +18,7 @@ git state [(-l|--log) <count>] [(-L|--no-log)] [--full-log]
 git state [(-h|--help)]
 ```
 
-## [snapshot](http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-snapshot.1.html)
+## [snapshot][]
 
 Used to record the current state of the working directory without reverting it. The snapshot is stored using git stash prepended with snapshot@{i} to differentiate it and stashes created normally.
 
@@ -33,7 +33,7 @@ git snapshot pop <snapshot>
 git snapshot show <snapshot>
 ```
 
-## [changes](http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-changes.1.html)
+## [changes][]
 
 Used to list the commits between this branch and another.
 
@@ -42,7 +42,7 @@ git changes [(-b|--branch) <branch>] [(-c|--count)]
 git changes [(-h|--help)]
 ```
 
-## [settings](http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-settings.1.html)
+## [settings][]
 
 Used as a compliment to `git-config` by adding missing features.
 
@@ -54,10 +54,16 @@ git settings print [<file-option>] [(-p|--pretty)] [(-f|--format) <format>] [(-c
 git settings list
 ```
 
-## [fixup](http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-fixup.1.html)
+## [fixup][]
 
 Used as a shortcut for committing the currently staged files as an autosquashable fixup.
 
 ```bash
 git fixup [(-h|--help)]
 ```
+
+[state]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-state.1.html
+[snapshot]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-snapshot.1.html
+[changes]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-changes.1.html
+[settings]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-settings.1.html
+[fixup]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-fixup.1.html
