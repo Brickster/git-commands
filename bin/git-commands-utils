@@ -19,3 +19,22 @@ function help
     man "${0##*/}"
     exit 0
 }
+
+#
+# Prints a usage error.
+#
+# $@: a list of usage strings
+#
+function usage_error
+{
+    if (( $# == 0 )); then
+        error "usage_error requires at least one argument"
+    fi
+
+    echo "usage: $1"
+    local arg=
+    for arg in "${@:2}"; do
+        echo "   or: $arg"
+    done
+    exit 1
+}
