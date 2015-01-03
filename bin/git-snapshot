@@ -116,17 +116,6 @@ function drop
     exit 1
 }
 
-function usage_error
-{
-    error "usage: git snapshot [(-h|--help)]
-   or: git snapshot save <message>
-   or: git snapshot list
-   or: git snapshot clear
-   or: git snapshot drop <snapshot>
-   or: git snapshot apply <snapshot>
-   or: git snapshot pop <snapshot>"
-}
-
 #
 # Clears all snapshots.
 #
@@ -177,7 +166,14 @@ elif [[ "$1" =~ ^(save)$ ]]; then
     save "${@:2}"
     exit 0
 elif [[ ! -z "$1" ]] && [[ ! "$1" =~ ^-.*$ ]]; then
-    usage_error
+    uses=("git snapshot [(-h|--help)]"
+            "git snapshot save <message>"
+            "git snapshot list"
+            "git snapshot clear"
+            "git snapshot drop <snapshot>"
+            "git snapshot apply <snapshot>"
+            "git snapshot pop <snapshot>")
+    usage_error "${uses[@]}"
 fi
 
 while getopts ":h-:" opt; do

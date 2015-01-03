@@ -3,17 +3,6 @@
 . git-commands-utils
 
 #
-# Shows usage error
-#
-function usage_error
-{
-    error "usage: git settings [(-d|--default) <value>] <key>
-   or: git settings [(-h|--help)]
-   or: git settings destroy <section>
-   or: git settings print [(--local|--global|--system)] <section>"
-}
-
-#
 # Removes a section from local, global, and system config files.
 #
 # $1: the section to destroy
@@ -279,7 +268,11 @@ if [[ "$1" =~ ^(destroy|print|list)$ ]]; then
     "$1" "${@:2}"
     exit 0
 elif (( $# == 0 )); then
-    usage_error
+    uses=("git settings [(-d|--default) <value>] <key>"
+            "git settings [(-h|--help)]"
+            "git settings destroy <section>"
+            "git settings print [(--local|--global|--system)] <section>")
+    usage_error "${uses[@]}"
 fi
 
 default "$@"
