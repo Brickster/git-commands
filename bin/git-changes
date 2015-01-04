@@ -11,14 +11,14 @@ while getopts ":chb:-:" opt; do
                         branch="${!OPTIND}"
                         OPTIND=$(( $OPTIND + 1 ))
                         ;;
-                help)   help;;
+                help)   show_help;;
                 count)  get_count=true;;
                 *)      error "Unimplemented option --${OPTARG}";;
             esac
             ;;
         b)  branch="$OPTARG";;
         c)  get_count=true;;
-        h)  help;;
+        h)  show_help;;
         \?) error "Invalid option: -$OPTARG";;
         :)  error "Option -$OPTARG requires an argument.";;
         *)  error "Unimplemented option: -$OPTARG";;
