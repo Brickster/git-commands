@@ -48,10 +48,10 @@ while getopts ":h-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
-                help)   help;;
+                help)   show_help;;
             esac
             ;;
-        h)  help;;
+        h)  show_help;;
     esac
 done
 OPTIND=1

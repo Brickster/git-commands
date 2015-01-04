@@ -254,10 +254,10 @@ while getopts ":h-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
-                help)   help;;
+                help)   show_help;;
             esac
             ;;
-        h)  help;;
+        h)  show_help;;
         :)  error "Option -$OPTARG requires an argument.";;
     esac
     ((section_index++))

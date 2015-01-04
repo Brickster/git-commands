@@ -32,11 +32,11 @@ while getopts ":h-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
-                help)   help;;
+                help)   show_help;;
                 *)      error "Unimplemented option --${OPTARG}";;
             esac
             ;;
-        h)  help;;
+        h)  show_help;;
         \?) error "Invalid option: -$OPTARG";;
         :)  error "Option -$OPTARG requires an argument.";;
         *)  error "Unimplemented option: -$OPTARG";;
