@@ -112,6 +112,16 @@ Used to see a more concise and comprehensive view of the working directory. The 
 
 	Default: <true>
 
+* `git-state.branches.show-when-default` <bool>:
+	True or false flag determining whether the branches section should show when only the default branch is present. The default branch is determined using the `git-state.branches.default` configuration.
+
+	Default: <true>
+
+* `git-state.branches.default` <string>:
+	The default branch for determining if the branches section should be shown.
+
+	Default: <master>
+
 * `git-state.stashes.show` <bool>:
 	True or false flag determining whether the stashes section should show when no other related flags are specified. Options (`-t`|`--stashes`) and (`-T`|`--no-stashes`) override this value.
 
