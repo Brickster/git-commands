@@ -44,6 +44,15 @@ function echo_section
     fi
 }
 
+function is_new_repository
+{
+    if [[ "$(git log --oneline -1 2>&1)" == "fatal: bad default revision 'HEAD'" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 green='\x1B[0;32m'
 nocolor='\x1B[0m'
 
@@ -133,6 +142,37 @@ show_stashes="${show_stashes:-"$(git settings -d true git-state.stashes.show)"}"
 show_empty="${show_empty:-"$(git settings -d false git-state.show-empty)"}"
 print_format="${print_format:-$(git settings -d compact git-state.format)}"
 color="${color:-$(git settings -d always color.ui)}"
+
+if is_new_repository; then
+
+    # make sure status will output ANSI codes
+    # this must be done using config since status has no --color option
+    status_color=$(git config color.status)
+    git config color.status "$color"
+
+    status_info=$(git status --short)
+    if [[ -z "$status_info" ]]; then
+        status_info="Initial commit"
+    fi
+
+    echo_section "status $nocolor(${green}master$nocolor)" "$status_info" "$print_format"
+
+    # reset color.status to its original setting
+    if [[ -z "$status_color" ]]; then
+        git config --unset color.status
+
+        # unset may leave an empty section, remove it if it is
+        section_count=$(git settings print -c color)
+        if (( $section_count == 0 )); then
+            git config --remove-section color
+        fi
+
+    else
+        git config color.status "$status_color"
+    fi
+
+    exit 0
+fi
 
 # status
 if $show_status; then
