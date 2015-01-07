@@ -112,7 +112,7 @@ Used to see a more concise and comprehensive view of the working directory. The 
 
 	Default: <true>
 
-* `git-state.branches.show-when-default` <bool>:
+* `git-state.branches.show-only-default` <bool>:
 	True or false flag determining whether the branches section should show when only the default branch is present. The default branch is determined using the `git-state.branches.default` configuration.
 
 	Default: <true>
