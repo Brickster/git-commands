@@ -55,7 +55,7 @@ function is_new_repository
 
 function only_default_branch
 {
-    branches=$(git branch)
+    branches=$(git branch --no-color)
     IFS=$'\n' read -rd '' -a branches <<< "$branches"
 
     if (( ${#branches[@]} > 1 )); then
