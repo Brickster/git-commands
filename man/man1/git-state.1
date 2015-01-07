@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-STATE" "1" "December 2014" "" ""
+.TH "GIT\-STATE" "1" "January 2015" "" ""
 .
 .SH "NAME"
 \fBgit\-state\fR \- View the state of the working tree
@@ -164,6 +164,20 @@ True or false flag determining whether the branches section should show when no 
 .
 .IP
 Default: \fItrue\fR
+.
+.TP
+\fBgit\-state\.branches\.show\-when\-default\fR \fIbool\fR
+True or false flag determining whether the branches section should show when only the default branch is present\. The default branch is determined using the \fBgit\-state\.branches\.default\fR configuration\.
+.
+.IP
+Default: \fItrue\fR
+.
+.TP
+\fBgit\-state\.branches\.default\fR \fIstring\fR
+The default branch for determining if the branches section should be shown\.
+.
+.IP
+Default: \fImaster\fR
 .
 .TP
 \fBgit\-state\.stashes\.show\fR \fIbool\fR

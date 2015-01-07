@@ -53,6 +53,23 @@ function is_new_repository
     fi
 }
 
+function only_default_branch
+{
+    branches=$(git branch)
+    IFS=$'\n' read -rd '' -a branches <<< "$branches"
+
+    if (( ${#branches[@]} > 1 )); then
+        return 1
+    fi
+
+    default_branch=$(git settings -d "master" "git-state.branches.default")
+    if [[ "${branches[0]}" == "* $default_branch" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 green='\x1B[0;32m'
 nocolor='\x1B[0m'
 
@@ -142,6 +159,7 @@ show_stashes="${show_stashes:-"$(git settings -d true git-state.stashes.show)"}"
 show_empty="${show_empty:-"$(git settings -d false git-state.show-empty)"}"
 print_format="${print_format:-$(git settings -d compact git-state.format)}"
 color="${color:-$(git settings -d always color.ui)}"
+show_only_default_branch="${show_only_default_branch:-$(git settings -d true git-state.branches.show-only-default)}"
 
 if is_new_repository; then
 
@@ -219,7 +237,7 @@ if $show_reflog && (( $reflog_count != 0 )); then
 fi
 
 # branches
-if $show_branches; then
+if $show_branches && ( $show_only_default_branch || ! only_default_branch ); then
     branch_output=$(git branch -v --color="$color")
     echo_section "branches" "$branch_output" "$print_format"
 fi
