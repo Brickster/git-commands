@@ -6,6 +6,8 @@
 
 . git-commands-utils
 
+TEMP_FILE=$(mktemp "/tmp/git-state.XXXXXXXXXX")
+
 #
 # Echos a section of the state.
 #
@@ -23,24 +25,24 @@ function echo_section
     text="$2"
     print_format="$3"
 
-    echo -e "# ${green}$title${nocolor}"
+    echo -e "# ${green}$title${nocolor}" >> "$TEMP_FILE"
     if [[ $print_format == "pretty" ]] && [[ ! -z "$text" ]]; then
 
         IFS=$'\n' read -rd '' -a text <<< "$text"
         tab="    "
 
-        echo
+        echo >> "$TEMP_FILE"
         count=${#text[@]}
         for ((i=0;i<count;i++)); do
-            echo "$tab${text[i]}"
+            echo "$tab${text[i]}" >> "$TEMP_FILE"
         done
-        echo
+        echo >> "$TEMP_FILE"
 
     elif [[ $print_format == "pretty" ]]; then
         # there's no text but we still want some nicer formatting
-        echo
+        echo >> "$TEMP_FILE"
     elif [[ ! -z "$text" ]]; then
-        echo -e "$text"
+        echo -e "$text" >> "$TEMP_FILE"
     fi
 }
 
@@ -247,3 +249,14 @@ if $show_stashes && ( $show_empty || [[ ! -z $(git stash list) ]] ); then
     stash_output=$(git stash list --oneline --color="$color")
     echo_section "stashes" "$stash_output" "$print_format"
 fi
+
+terminal_lines=$(tput lines)
+state_lines=$(wc -l < "$TEMP_FILE" | awk '{print $1}')
+
+# if git-state is too long for the window, less it instead
+if (( $terminal_lines >= ((state_lines + 1)) )); then
+    cat "$TEMP_FILE"
+else
+    cat "$TEMP_FILE" | less -r
+fi
+rm "$TEMP_FILE"
