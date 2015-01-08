@@ -190,64 +190,62 @@ if is_new_repository; then
     else
         git config color.status "$status_color"
     fi
+else
+    # status
+    if $show_status; then
+        # make sure status will output ANSI codes
+        # this must be done using config since status has no --color option
+        status_color=$(git config color.status)
+        git config color.status "$color"
 
-    exit 0
-fi
+        # get the --branch part of 'git status --short --branch'
+        status_info=$(git status --short --branch)
+        IFS=$'\n' read -rd '' -a status_info <<< "$status_info"
+        title="${status_info[0]}"
+        title="${title##"## "}"
 
-# status
-if $show_status; then
-    # make sure status will output ANSI codes
-    # this must be done using config since status has no --color option
-    status_color=$(git config color.status)
-    git config color.status "$color"
+        status_info=$(git status --short)
 
-    # get the --branch part of 'git status --short --branch'
-    status_info=$(git status --short --branch)
-    IFS=$'\n' read -rd '' -a status_info <<< "$status_info"
-    title="${status_info[0]}"
-    title="${title##"## "}"
+        # an extra $nocolor used to make color print in its own coloring
+        echo_section "status $nocolor($title)" "$status_info" "$print_format"
 
-    status_info=$(git status --short)
+        # reset color.status to its original setting
+        if [[ -z "$status_color" ]]; then
+            git config --unset color.status
 
-    # an extra $nocolor used to make color print in its own coloring
-    echo_section "status $nocolor($title)" "$status_info" "$print_format"
+            # unset may leave an empty section, remove it if it is
+            section_count=$(git settings print -c color)
+            if (( $section_count == 0 )); then
+                git config --remove-section color
+            fi
 
-    # reset color.status to its original setting
-    if [[ -z "$status_color" ]]; then
-        git config --unset color.status
-
-        # unset may leave an empty section, remove it if it is
-        section_count=$(git settings print -c color)
-        if (( $section_count == 0 )); then
-            git config --remove-section color
+        else
+            git config color.status "$status_color"
         fi
-
-    else
-        git config color.status "$status_color"
     fi
-fi
 
-if $show_log && (( $log_count != 0 )); then
-    log_output=$(git log -n "$log_count" --oneline --color="$color")
-    echo_section "log" "$log_output" "$print_format"
-fi
+    if $show_log && (( $log_count != 0 )); then
+        log_output=$(git log -n "$log_count" --oneline --color="$color")
+        echo_section "log" "$log_output" "$print_format"
+    fi
 
-# reflog
-if $show_reflog && (( $reflog_count != 0 )); then
-    reflog_output=$(git reflog -n "$reflog_count" --color="$color")
-    echo_section "reflog" "$reflog_output" "$print_format"
-fi
+    # reflog
+    if $show_reflog && (( $reflog_count != 0 )); then
+        reflog_output=$(git reflog -n "$reflog_count" --color="$color")
+        echo_section "reflog" "$reflog_output" "$print_format"
+    fi
 
-# branches
-if $show_branches && ( $show_only_default_branch || ! only_default_branch ); then
-    branch_output=$(git branch -v --color="$color")
-    echo_section "branches" "$branch_output" "$print_format"
-fi
+    # branches
+    if $show_branches && ( $show_only_default_branch || ! only_default_branch ); then
+        branch_output=$(git branch -v --color="$color")
+        echo_section "branches" "$branch_output" "$print_format"
+    fi
 
-# stashes
-if $show_stashes && ( $show_empty || [[ ! -z $(git stash list) ]] ); then
-    stash_output=$(git stash list --oneline --color="$color")
-    echo_section "stashes" "$stash_output" "$print_format"
+    # stashes
+    if $show_stashes && ( $show_empty || [[ ! -z $(git stash list) ]] ); then
+        stash_output=$(git stash list --oneline --color="$color")
+        echo_section "stashes" "$stash_output" "$print_format"
+    fi
 fi
 
 terminal_lines=$(tput lines)
