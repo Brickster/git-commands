@@ -4,7 +4,7 @@
 
 `git settings` [<file-option>] [(`-d`|`--default`) <value>] <key><br>
 `git settings` [(`-h`|`--help`)]<br>
-`git settings destroy` <section><br>
+`git settings destroy` [(`-d`|`--dry-run`)] <section><br>
 `git settings print` [<file-option>] [(`-p`|`--pretty`)] [(`-f`|`--format`) <format>] [(`-c`|`--count`)] <section><br>
 `git settings list`
 
@@ -22,6 +22,9 @@
 
 * `destroy` <section>:
     Destroy a section from the local, global, and system config files.
+
+    * `-d`|`--dry-run`:
+        Don't destroy anything but show which configurations would be removed.
 
 * `print` <section>:
     Print all values for a section respecting overrides.

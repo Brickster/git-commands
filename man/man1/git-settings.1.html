@@ -76,7 +76,7 @@
 
 <p><code>git settings</code> [<var>file-option</var>] [(<code>-d</code>|<code>--default</code>) <var>value</var>] <var>key</var><br />
 <code>git settings</code> [(<code>-h</code>|<code>--help</code>)]<br />
-<code>git settings destroy</code> <var>section</var><br />
+<code>git settings destroy</code> [(<code>-d</code>|<code>--dry-run</code>)] <var>section</var><br />
 <code>git settings print</code> [<var>file-option</var>] [(<code>-p</code>|<code>--pretty</code>)] [(<code>-f</code>|<code>--format</code>) <var>format</var>] [(<code>-c</code>|<code>--count</code>)] <var>section</var><br />
 <code>git settings list</code></p>
 
@@ -93,7 +93,12 @@
 <dt><var>file-option</var></dt><dd>  The key will be loaded from a specific file. See "<strong>FILE OPTIONS</strong>" section for more details.</dd>
 </dl>
 </dd>
-<dt><code>destroy</code> <var>section</var></dt><dd><p>  Destroy a section from the local, global, and system config files.</p></dd>
+<dt><code>destroy</code> <var>section</var></dt><dd><p>  Destroy a section from the local, global, and system config files.</p>
+
+<dl>
+<dt><code>-d</code>|<code>--dry-run</code></dt><dd>  Don't destroy anything but show which configurations would be removed.</dd>
+</dl>
+</dd>
 <dt><code>print</code> <var>section</var></dt><dd><p>  Print all values for a section respecting overrides.</p>
 
 <dl>
@@ -131,7 +136,7 @@
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>December 2014</li>
+    <li class='tc'>January 2015</li>
     <li class='tr'>git-settings(1)</li>
   </ol>
 
