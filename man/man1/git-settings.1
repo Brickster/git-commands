@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-SETTINGS" "1" "December 2014" "" ""
+.TH "GIT\-SETTINGS" "1" "January 2015" "" ""
 .
 .SH "NAME"
 \fBgit\-settings\fR \- more ways to view and edit config files
@@ -13,7 +13,7 @@
 \fBgit settings\fR [(\fB\-h\fR|\fB\-\-help\fR)]
 .
 .br
-\fBgit settings destroy\fR \fIsection\fR
+\fBgit settings destroy\fR [(\fB\-d\fR|\fB\-\-dry\-run\fR)] \fIsection\fR
 .
 .br
 \fBgit settings print\fR [\fIfile\-option\fR] [(\fB\-p\fR|\fB\-\-pretty\fR)] [(\fB\-f\fR|\fB\-\-format\fR) \fIformat\fR] [(\fB\-c\fR|\fB\-\-count\fR)] \fIsection\fR
@@ -38,6 +38,11 @@ The key will be loaded from a specific file\. See "\fBFILE OPTIONS\fR" section f
 .TP
 \fBdestroy\fR \fIsection\fR
 Destroy a section from the local, global, and system config files\.
+.
+.TP
+\fB\-d\fR|\fB\-\-dry\-run\fR
+Don\'t destroy anything but show which configurations would be removed\.
+
 .
 .TP
 \fBprint\fR \fIsection\fR

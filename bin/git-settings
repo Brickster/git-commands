@@ -2,6 +2,19 @@
 
 . git-commands-utils
 
+function dry_destroy
+{
+    local config="$1"
+    local section="$2"
+    local section_list=$(git settings print --"$config" "$section" 2>&1)
+
+    local fatal_regex="^fatal: unable to read config file '.*': No such file or directory$"
+    if [[ ! -z $section_list ]] && ! [[ "$section_list" =~ $fatal_regex ]]; then
+        echo "would delete from $config:"
+        echo "$section_list"
+    fi
+}
+
 #
 # Removes a section from local, global, and system config files.
 #
@@ -9,12 +22,36 @@
 #
 function destroy
 {
-    local section="$1"
+    local section="${!#}"
+    local dry_run=false
 
-    # destory from each section and silence output
-    git config --local --remove-section "$section" &>/dev/null
-    git config --global --remove-section "$section" &>/dev/null
-    git config --system --remove-section "$section" &>/dev/null
+    while getopts ":d-:" opt; do
+        case $opt in
+            -)
+                case "${OPTARG}" in
+                    dry-run)    dry_run=true;;
+                    *)          error "Unimplemented option --${OPTARG}";;
+                esac
+                ;;
+            d)  dry_run=true;;
+            \?) error "Invalid option: -$OPTARG";;
+            :)  error "Option -$OPTARG requires an argument.";;
+            *)  error "Unimplemented option: -$OPTARG";;
+        esac
+        ((section_index++))
+    done
+    OPTIND=1
+
+    if $dry_run; then
+        dry_destroy "local" "$section"
+        dry_destroy "global" "$section"
+        dry_destroy "system" "$section"
+    else
+        # destory from each section and silence output
+        git config --local --remove-section "$section" &>/dev/null
+        git config --global --remove-section "$section" &>/dev/null
+        git config --system --remove-section "$section" &>/dev/null
+    fi
 }
 
 #
