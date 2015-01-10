@@ -10,8 +10,10 @@ function dry_destroy
 
     local fatal_regex="^fatal: unable to read config file '.*': No such file or directory$"
     if [[ ! -z $section_list ]] && ! [[ "$section_list" =~ $fatal_regex ]]; then
-        echo "would delete from $config:"
-        echo "$section_list"
+        IFS=$'\n' read -rd '' -a section_list <<< "$section_list"
+        for cur_section in "${section_list[@]}"; do
+            echo "Would be deleted from $config: $cur_section"
+        done
     fi
 }
 
