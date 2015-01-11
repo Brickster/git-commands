@@ -2,41 +2,22 @@
 
 ## SYNOPSIS
 
-`git snapshot` [(`-h`|`--help`)]  
-`git snapshot save` <message>  
-`git snapshot list`  
-`git snapshot clear`  
-`git snapshot drop` <snapshot>  
-`git snapshot apply` <snapshot>  
-`git snapshot pop` <snapshot>  
-`git snapshot show` <snapshot>
+`git snapshot` <message><br>
+`git snapshot` [(`-h`|`--help`)]
 
 ## DESCRIPTION
 
-Used to record the current state of the working directory without reverting it. The snapshot is stored using git stash prepended with snapshot@{i} to differentiate it and stashes created normally.
+Used to record the current state of the working directory without reverting it. This is effectively a shortcut to:
+
+```bash
+$ git stash save -u "optional message"
+$ git stash apply
+```
 
 ## OPTIONS
 
 * `-h`|`--help`:
 	Display git-snapshot man page.
 
-* `save` <message>:
-    Save a snapshot with a given message. If no message is supplied, the last commit is used. Optionally, `save` can be omitted but you cannot supply a message to avoid accidental snapshots due to mistyped subcommands.
-
-* `list`:
-	List all snapshots.
-
-* `clear`:
-	Remove all snapshots.
-
-* `drop` <snapshot>:
-    Drop an individual snapshot in the form snapshot@{<id>}.
-
-* `apply` <snapshot>:
-    Apply a snapshot in the form snapshot@{<id>}.
-
-* `pop` <snapshot>:
-	Apply then drop a snapshot in the form snapshot@{<id>}.
-
-* `show` <snapshot>:
-    Show the details of a snapshot in the form snapshot@{<id>}.
+* <message> :
+    The message to use when creating the underly stash. If no message is supplied, the default `git-stash` message is used.

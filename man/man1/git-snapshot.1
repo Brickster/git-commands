@@ -1,37 +1,30 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-SNAPSHOT" "1" "December 2014" "" ""
+.TH "GIT\-SNAPSHOT" "1" "January 2015" "" ""
 .
 .SH "NAME"
 \fBgit\-snapshot\fR \- create a snapshot of the changes in a dirty working directory
 .
 .SH "SYNOPSIS"
+\fBgit snapshot\fR \fImessage\fR
+.
+.br
 \fBgit snapshot\fR [(\fB\-h\fR|\fB\-\-help\fR)]
 .
-.br
-\fBgit snapshot save\fR \fImessage\fR
-.
-.br
-\fBgit snapshot list\fR
-.
-.br
-\fBgit snapshot clear\fR
-.
-.br
-\fBgit snapshot drop\fR \fIsnapshot\fR
-.
-.br
-\fBgit snapshot apply\fR \fIsnapshot\fR
-.
-.br
-\fBgit snapshot pop\fR \fIsnapshot\fR
-.
-.br
-\fBgit snapshot show\fR \fIsnapshot\fR
-.
 .SH "DESCRIPTION"
-Used to record the current state of the working directory without reverting it\. The snapshot is stored using git stash prepended with snapshot@{i} to differentiate it and stashes created normally\.
+Used to record the current state of the working directory without reverting it\. This is effectively a shortcut to:
+.
+.IP "" 4
+.
+.nf
+
+$ git stash save \-u "optional message"
+$ git stash apply
+.
+.fi
+.
+.IP "" 0
 .
 .SH "OPTIONS"
 .
@@ -40,30 +33,6 @@ Used to record the current state of the working directory without reverting it\.
 Display git\-snapshot man page\.
 .
 .TP
-\fBsave\fR \fImessage\fR
-Save a snapshot with a given message\. If no message is supplied, the last commit is used\. Optionally, \fBsave\fR can be omitted but you cannot supply a message to avoid accidental snapshots due to mistyped subcommands\.
-.
-.TP
-\fBlist\fR
-List all snapshots\.
-.
-.TP
-\fBclear\fR
-Remove all snapshots\.
-.
-.TP
-\fBdrop\fR \fIsnapshot\fR
-Drop an individual snapshot in the form snapshot@{\fIid\fR}\.
-.
-.TP
-\fBapply\fR \fIsnapshot\fR
-Apply a snapshot in the form snapshot@{\fIid\fR}\.
-.
-.TP
-\fBpop\fR \fIsnapshot\fR
-Apply then drop a snapshot in the form snapshot@{\fIid\fR}\.
-.
-.TP
-\fBshow\fR \fIsnapshot\fR
-Show the details of a snapshot in the form snapshot@{\fIid\fR}\.
+\fImessage\fR
+The message to use when creating the underly stash\. If no message is supplied, the default \fBgit\-stash\fR message is used\.
 

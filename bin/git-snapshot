@@ -1,180 +1,22 @@
 #! /bin/bash
+#
+# Used to record the current state of the working directory without reverting it. This is effectively a shortcut to
+# `git stash save` <message> followed by `git stash apply`.
+#
 
 . git-commands-utils
 
-STASH_ID_REGEX="^stash@\{([[:digit:]]+)\}.*$"
-DROP_HASH_REGEX="^.*\(([[:xdigit:]]+)\)$"
-
-function save
+function create_snapshot
 {
-    message="$1"
-
-    # get the last snapshot ID
-    stashs=$(git stash list 2>&1)
-    IFS=$'\n' read -rd '' -a stashs <<< "$stashs"
-    max_stash_id=-1
-    for stash in "${stashs[@]}"
-    do
-        regex="^.*snapshot\@\{([[:digit:]]+)\}.*$"
-        if [[ $stash =~ $regex ]]; then
-            if (( "$max_stash_id" < "${BASH_REMATCH[1]}" )); then
-                max_stash_id="${BASH_REMATCH[1]}"
-            fi
-        fi
-    done
+    local message="$1"
 
     if [[ -z "$message" ]]; then
-        # no message, use the last commit
-        message=$(git log -1 --oneline)
+        git stash save -u
+    else
+        git stash save -u "$message"
     fi
-
-    ((max_stash_id++))
-    git stash save -u --quiet "snapshot@{$max_stash_id} $message"
     git stash apply --quiet > /dev/null 2>&1 # apply won't shut up so swallow the output
 }
-
-function pop
-{
-    snapshot="$1"
-
-    if [[ -z "$snapshot" ]]; then
-        error "A snapshot must be specified using \"git snapshot pop <snapshot>\""
-    fi
-
-    stash_redirect "apply" "$snapshot"
-    drop "$snapshot"
-}
-
-#
-# Redirects a snapshot subcommand to its stash counterpart
-#
-# $1: the subcommand to redirect to
-# $2: the snapshot to show
-#
-function stash_redirect
-{
-    subcommand="$1"
-    snapshot="$2"
-
-    if [[ -z "$snapshot" ]]; then
-        error "A snapshot must be specified using \"git snapshot $subcommand <snapshot>\""
-    fi
-
-    snapshots=$(git snapshot list 2>&1)
-    IFS=$'\n' read -rd '' -a snapshots <<< "$snapshots"
-
-    for stash in "${snapshots[@]}"; do
-        if [[ $stash =~ ^.*"$snapshot".*$ ]]; then
-
-            # get the snapshot's stash ID
-            [[ $stash =~ $STASH_ID_REGEX ]]
-            stash_count=${BASH_REMATCH[1]}
-
-            git stash "$subcommand" stash@{$stash_count}
-            return
-        fi
-    done
-
-    error "fatal: Log for 'snapshot' has no entry $snapshot."
-    exit 1
-}
-
-#
-# Drops a snapshot.
-#
-# $1: the snapshot to drop
-#
-function drop
-{
-    snapshot="$1"
-
-    if [[ -z "$snapshot" ]]; then
-        error 'A snapshot must be specified using "git snapshot drop <snapshot>"'
-    fi
-
-    snapshots=$(git snapshot list 2>&1)
-    IFS=$'\n' read -rd '' -a snapshots <<< "$snapshots"
-
-    for stash in "${snapshots[@]}"; do
-        if [[ $stash =~ ^.*"$snapshot".*$ ]]; then
-
-            # get the snapshot's stash ID
-            [[ $stash =~ $STASH_ID_REGEX ]]
-            stash_count=${BASH_REMATCH[1]}
-
-            # drop the corresponding stash and get its hash
-            drop_output=$(git stash drop stash@{$stash_count})
-            [[ $drop_output =~ $DROP_HASH_REGEX ]]
-            stash_hash=${BASH_REMATCH[1]}
-
-            echo "Dropped $snapshot ($stash_hash)"
-            return
-        fi
-    done
-
-    error "fatal: Log for 'snapshot' has no entry $snapshot."
-    exit 1
-}
-
-#
-# Clears all snapshots.
-#
-function clear
-{
-    stashs=$(git stash list 2>&1)
-    IFS=$'\n' read -rd '' -a stashs <<< "$stashs"
-
-    count=0
-    total=${#stashs[@]}
-    for stash in "${stashs[@]}"
-    do
-        if [[ $stash =~ ^.*snapshot\@\{[[:digit:]]+\}.*$ ]]; then
-            git stash drop stash@{$count} --quiet
-            clear # recurse
-        fi
-        ((count++))
-    done
-}
-
-#
-# Lists all snapshots.
-#
-function list
-{
-    stashs=$(git stash list 2>&1)
-    IFS=$'\n' read -rd '' -a stashs <<< "$stashs"
-
-    count=0
-    for stash in "${stashs[@]}"
-    do
-        if [[ $stash =~ ^.*snapshot\@\{[[:digit:]]+\}.*$ ]]; then
-            echo "$stash"
-        fi
-    done
-}
-
-if [[ "$1" =~ ^(clear|list)$ ]]; then
-    "$1"
-    exit 0
-elif [[ "$1" =~ ^(drop|pop)$ ]]; then
-    "$1" "$2"
-    exit 0
-elif [[ "$1" =~ ^(apply|show)$ ]]; then
-    stash_redirect "$1" "$2"
-    exit 0
-elif [[ "$1" =~ ^(save)$ ]]; then
-    save "${@:2}"
-    exit 0
-elif [[ ! -z "$1" ]] && [[ ! "$1" =~ ^-.*$ ]]; then
-    uses=("git snapshot [(-h|--help)]"
-            "git snapshot save <message>"
-            "git snapshot list"
-            "git snapshot clear"
-            "git snapshot drop <snapshot>"
-            "git snapshot apply <snapshot>"
-            "git snapshot pop <snapshot>")
-    usage_error "${uses[@]}"
-fi
 
 while getopts ":h-:" opt; do
     case $opt in
@@ -191,4 +33,4 @@ while getopts ":h-:" opt; do
     esac
 done
 
-save
+create_snapshot "$@"
