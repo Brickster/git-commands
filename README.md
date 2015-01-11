@@ -20,17 +20,11 @@ git state [(-h|--help)]
 
 ## [snapshot][]
 
-Used to record the current state of the working directory without reverting it. The snapshot is stored using git stash prepended with snapshot@{i} to differentiate it and stashes created normally.
+Used to record the current state of the working directory without reverting it.
 
 ```bash
+git snapshot <message>
 git snapshot [(-h|--help)]
-git snapshot save <message>
-git snapshot list
-git snapshot clear
-git snapshot drop <snapshot>
-git snapshot apply <snapshot>
-git snapshot pop <snapshot>
-git snapshot show <snapshot>
 ```
 
 ## [changes][]

@@ -72,37 +72,29 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>git snapshot</code> [(<code>-h</code>|<code>--help</code>)]<br />
-<code>git snapshot save</code> <var>message</var><br />
-<code>git snapshot list</code><br />
-<code>git snapshot clear</code><br />
-<code>git snapshot drop</code> <var>snapshot</var><br />
-<code>git snapshot apply</code> <var>snapshot</var><br />
-<code>git snapshot pop</code> <var>snapshot</var><br />
-<code>git snapshot show</code> <var>snapshot</var></p>
+<p><code>git snapshot</code> <var>message</var><br />
+<code>git snapshot</code> [(<code>-h</code>|<code>--help</code>)]</p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
-<p>Used to record the current state of the working directory without reverting it. The snapshot is stored using git stash prepended with snapshot@{i} to differentiate it and stashes created normally.</p>
+<p>Used to record the current state of the working directory without reverting it. This is effectively a shortcut to:</p>
+
+<pre><code class="bash">$ git stash save -u "optional message"
+$ git stash apply
+</code></pre>
 
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
 <dt><code>-h</code>|<code>--help</code></dt><dd><p>  Display git-snapshot man page.</p></dd>
-<dt><code>save</code> <var>message</var></dt><dd><p>  Save a snapshot with a given message. If no message is supplied, the last commit is used. Optionally, <code>save</code> can be omitted but you cannot supply a message to avoid accidental snapshots due to mistyped subcommands.</p></dd>
-<dt class="flush"><code>list</code></dt><dd><p>  List all snapshots.</p></dd>
-<dt class="flush"><code>clear</code></dt><dd><p>  Remove all snapshots.</p></dd>
-<dt><code>drop</code> <var>snapshot</var></dt><dd><p>  Drop an individual snapshot in the form snapshot@{<var>id</var>}.</p></dd>
-<dt><code>apply</code> <var>snapshot</var></dt><dd><p>  Apply a snapshot in the form snapshot@{<var>id</var>}.</p></dd>
-<dt><code>pop</code> <var>snapshot</var></dt><dd><p>  Apply then drop a snapshot in the form snapshot@{<var>id</var>}.</p></dd>
-<dt><code>show</code> <var>snapshot</var></dt><dd><p>  Show the details of a snapshot in the form snapshot@{<var>id</var>}.</p></dd>
+<dt><var>message</var> </dt><dd><p>  The message to use when creating the underly stash. If no message is supplied, the default <code>git-stash</code> message is used.</p></dd>
 </dl>
 
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>December 2014</li>
+    <li class='tc'>January 2015</li>
     <li class='tr'>git-snapshot(1)</li>
   </ol>
 
