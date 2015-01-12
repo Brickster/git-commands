@@ -85,14 +85,6 @@ function list_all
 }
 
 #
-# For backwards compatibility.
-#
-function print
-{
-    list "$@"
-}
-
-#
 # Prints a given section.
 #
 # This is a section level version of git config --list.
@@ -298,7 +290,7 @@ while getopts ":h-:" opt; do
 done
 OPTIND=1
 
-if [[ "$1" =~ ^(destroy|print|list)$ ]]; then
+if [[ "$1" =~ ^(destroy|list)$ ]]; then
     "$1" "${@:2}"
     exit 0
 elif (( $# == 0 )); then
