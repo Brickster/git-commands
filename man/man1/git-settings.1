@@ -16,10 +16,10 @@
 \fBgit settings destroy\fR [(\fB\-d\fR|\fB\-\-dry\-run\fR)] \fIsection\fR
 .
 .br
-\fBgit settings print\fR [\fIfile\-option\fR] [(\fB\-p\fR|\fB\-\-pretty\fR)] [(\fB\-f\fR|\fB\-\-format\fR) \fIformat\fR] [(\fB\-c\fR|\fB\-\-count\fR)] \fIsection\fR
+\fBgit settings list\fR
 .
 .br
-\fBgit settings list\fR
+\fBgit settings list\fR [\fIfile\-option\fR] [(\fB\-p\fR|\fB\-\-pretty\fR)] [(\fB\-f\fR|\fB\-\-format\fR) \fIformat\fR] [(\fB\-c\fR|\fB\-\-count\fR)] \fIsection\fR
 .
 .SH "DESCRIPTION"
 \fBgit\-settings\fR is a compliment to \fBgit\-config\fR that adds missing functionality\.
@@ -45,8 +45,12 @@ Don\'t destroy anything but show which configurations would be removed\.
 
 .
 .TP
-\fBprint\fR \fIsection\fR
-Print all values for a section respecting overrides\.
+\fBlist\fR
+List all configuration settings respecting override precedence\. If any options are specified, \fBlist\fR switches to section mode\.
+.
+.TP
+\fIsection\fR
+Limit the output to a given section\.
 .
 .TP
 \fIfile\-option\fR
@@ -64,10 +68,6 @@ The section is printed in the specified format\. Valid values include: \fIcompac
 \fB\-c\fR|\fB\-\-count\fR
 The count of keys in a given section is printed rather than the section itself\.
 
-.
-.TP
-\fBlist\fR
-List all configuration settings respecting override precedence\.
 .
 .TP
 \fB\-h\fR|\fB\-\-help\fR
@@ -91,8 +91,8 @@ Use system config file\.
 .SH "CONFIGURATION"
 .
 .TP
-\fBgit\-settings\.print\.format\fR \fIstring\fR
-The default formatting for git\-setting print\. Valid options include: \fBpretty\fR and \fBcompact\fR\. If no value is specified or an invalid value is entered, compact is used\. The option \fB\-p\fR|\fB\-\-pretty\fR will override this setting\.
+\fBgit\-settings\.list\.format\fR \fIstring\fR
+The default formatting for git\-setting list\. Valid options include: \fBpretty\fR and \fBcompact\fR\. If no value is specified or an invalid value is entered, compact is used\. The option \fB\-p\fR|\fB\-\-pretty\fR will override this setting\.
 .
 .IP
 Default: \fIcompact\fR

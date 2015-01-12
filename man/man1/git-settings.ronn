@@ -5,8 +5,8 @@
 `git settings` [<file-option>] [(`-d`|`--default`) <value>] <key><br>
 `git settings` [(`-h`|`--help`)]<br>
 `git settings destroy` [(`-d`|`--dry-run`)] <section><br>
-`git settings print` [<file-option>] [(`-p`|`--pretty`)] [(`-f`|`--format`) <format>] [(`-c`|`--count`)] <section><br>
-`git settings list`
+`git settings list`<br>
+`git settings list` [<file-option>] [(`-p`|`--pretty`)] [(`-f`|`--format`) <format>] [(`-c`|`--count`)] <section>
 
 ## DESCRIPTION
 
@@ -26,8 +26,11 @@
     * `-d`|`--dry-run`:
         Don't destroy anything but show which configurations would be removed.
 
-* `print` <section>:
-    Print all values for a section respecting overrides.
+* `list`:
+    List all configuration settings respecting override precedence. If any options are specified, `list` switches to section mode.
+
+    * <section> :
+        Limit the output to a given section.
 
     * <file-option>:
         Limits the section values to a specific file. See "**FILE OPTIONS**" section for more details.
@@ -40,9 +43,6 @@
 
     * `-c`|`--count`:
         The count of keys in a given section is printed rather than the section itself.
-
-* `list`:
-    List all configuration settings respecting override precedence.
 
 * `-h`|`--help`:
     Display git-settings man page.
@@ -62,7 +62,7 @@ Some subcommands can be limited to a specific file. The valid options are:
 
 ## CONFIGURATION
 
-* `git-settings.print.format` <string>:
-    The default formatting for git-setting print. Valid options include: `pretty` and `compact`. If no value is specified or an invalid value is entered, compact is used. The option `-p`|`--pretty` will override this setting.
+* `git-settings.list.format` <string>:
+    The default formatting for git-setting list. Valid options include: `pretty` and `compact`. If no value is specified or an invalid value is entered, compact is used. The option `-p`|`--pretty` will override this setting.
 
     Default: <compact>

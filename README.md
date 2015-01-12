@@ -44,8 +44,8 @@ Used as a compliment to `git-config` by adding missing features.
 git settings [<file-option>] [(-d|--default) <value>] <key>
 git settings [(-h|--help)]
 git settings destroy [(-d|--dry-run)] <section>
-git settings print [<file-option>] [(-p|--pretty)] [(-f|--format) <format>] [(-c|--count)] <section>
 git settings list
+git settings list [<file-option>] [(-p|--pretty)] [(-f|--format) <format>] [(-c|--count)] <section>
 ```
 
 ## [upstream][]

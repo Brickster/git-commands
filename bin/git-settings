@@ -6,7 +6,7 @@ function dry_destroy
 {
     local config="$1"
     local section="$2"
-    local section_list=$(git settings print --format "compact" --"$config" "$section" 2>&1)
+    local section_list=$(git settings list --format "compact" --"$config" "$section" 2>&1)
 
     local fatal_regex="^fatal: unable to read config file '.*': No such file or directory$"
     if [[ ! -z $section_list ]] && ! [[ "$section_list" =~ $fatal_regex ]]; then
@@ -59,7 +59,7 @@ function destroy
 #
 # Prints all sections respecting precedence.
 #
-function list
+function list_all
 {
     # get list of config settings
     local configs=$(git config --list)
@@ -80,8 +80,16 @@ function list
     done
 
     for entry in "${unique_sections[@]}"; do
-        print "$entry"
+        list "$entry"
     done
+}
+
+#
+# For backwards compatibility.
+#
+function print
+{
+    list "$@"
 }
 
 #
@@ -92,14 +100,18 @@ function list
 # $1: the section to print
 # $2: the configuration to use
 #
-function print
+function list
 {
+    if (( $# == 0 )); then
+        list_all
+        return 0
+    fi
+
     local configuration=
     local section=
     local section_index=1
     local format=
     local count=false
-
     while getopts ":lgspf:c-:" opt; do
         case $opt in
             -)
@@ -132,13 +144,13 @@ function print
     OPTIND=1
 
     # load configuration, if necessary
-    format="${format:-$(git settings -d compact git-settings.print.format)}"
+    format="${format:-$(git settings -d compact git-settings.list.format)}"
 
     if (( $# != 0 )) && (( $section_index == $# )); then
         args=("$@")
         section=${args[$section_index-1]}
     else
-        error "usage: git settings print <section>"
+        error "usage: git settings list [[options] <section>]"
     fi
 
     # get list of config settings
@@ -293,7 +305,7 @@ elif (( $# == 0 )); then
     uses=("git settings [(-d|--default) <value>] <key>"
             "git settings [(-h|--help)]"
             "git settings destroy <section>"
-            "git settings print [(--local|--global|--system)] <section>")
+            "git settings list [[options] <section>]")
     usage_error "${uses[@]}"
 fi
 

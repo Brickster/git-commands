@@ -77,8 +77,8 @@
 <p><code>git settings</code> [<var>file-option</var>] [(<code>-d</code>|<code>--default</code>) <var>value</var>] <var>key</var><br />
 <code>git settings</code> [(<code>-h</code>|<code>--help</code>)]<br />
 <code>git settings destroy</code> [(<code>-d</code>|<code>--dry-run</code>)] <var>section</var><br />
-<code>git settings print</code> [<var>file-option</var>] [(<code>-p</code>|<code>--pretty</code>)] [(<code>-f</code>|<code>--format</code>) <var>format</var>] [(<code>-c</code>|<code>--count</code>)] <var>section</var><br />
-<code>git settings list</code></p>
+<code>git settings list</code><br />
+<code>git settings list</code> [<var>file-option</var>] [(<code>-p</code>|<code>--pretty</code>)] [(<code>-f</code>|<code>--format</code>) <var>format</var>] [(<code>-c</code>|<code>--count</code>)] <var>section</var></p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
@@ -99,16 +99,16 @@
 <dt><code>-d</code>|<code>--dry-run</code></dt><dd>  Don't destroy anything but show which configurations would be removed.</dd>
 </dl>
 </dd>
-<dt><code>print</code> <var>section</var></dt><dd><p>  Print all values for a section respecting overrides.</p>
+<dt class="flush"><code>list</code></dt><dd><p>  List all configuration settings respecting override precedence. If any options are specified, <code>list</code> switches to section mode.</p>
 
 <dl>
+<dt><var>section</var> </dt><dd><p>  Limit the output to a given section.</p></dd>
 <dt><var>file-option</var></dt><dd><p>  Limits the section values to a specific file. See "<strong>FILE OPTIONS</strong>" section for more details.</p></dd>
 <dt><code>-p</code>|<code>--pretty</code></dt><dd><p>  The section is printed in config file format.</p></dd>
 <dt><code>-f</code>|<code>--format</code> <var>format</var></dt><dd><p>  The section is printed in the specified format. Valid values include: <var>compact</var> and <var>pretty</var>.</p></dd>
 <dt><code>-c</code>|<code>--count</code></dt><dd><p>  The count of keys in a given section is printed rather than the section itself.</p></dd>
 </dl>
 </dd>
-<dt class="flush"><code>list</code></dt><dd><p>  List all configuration settings respecting override precedence.</p></dd>
 <dt><code>-h</code>|<code>--help</code></dt><dd><p>  Display git-settings man page.</p></dd>
 </dl>
 
@@ -127,7 +127,7 @@
 <h2 id="CONFIGURATION">CONFIGURATION</h2>
 
 <dl>
-<dt><code>git-settings.print.format</code> <var>string</var></dt><dd><p>  The default formatting for git-setting print. Valid options include: <code>pretty</code> and <code>compact</code>. If no value is specified or an invalid value is entered, compact is used. The option <code>-p</code>|<code>--pretty</code> will override this setting.</p>
+<dt><code>git-settings.list.format</code> <var>string</var></dt><dd><p>  The default formatting for git-setting list. Valid options include: <code>pretty</code> and <code>compact</code>. If no value is specified or an invalid value is entered, compact is used. The option <code>-p</code>|<code>--pretty</code> will override this setting.</p>
 
 <p>  Default: <var>compact</var></p></dd>
 </dl>
