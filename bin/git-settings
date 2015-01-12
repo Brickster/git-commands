@@ -80,7 +80,7 @@ function list_all
     done
 
     for entry in "${unique_sections[@]}"; do
-        list "$entry"
+        list --format "compact" "$entry"
     done
 }
 
