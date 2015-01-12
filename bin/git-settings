@@ -6,7 +6,7 @@ function dry_destroy
 {
     local config="$1"
     local section="$2"
-    local section_list=$(git settings print --"$config" "$section" 2>&1)
+    local section_list=$(git settings print --format "compact" --"$config" "$section" 2>&1)
 
     local fatal_regex="^fatal: unable to read config file '.*': No such file or directory$"
     if [[ ! -z $section_list ]] && ! [[ "$section_list" =~ $fatal_regex ]]; then
