@@ -57,23 +57,6 @@ function destroy
 }
 
 #
-# Determines if an array contains a given element.
-#
-# $1: the element to find
-# $2: the array to search in
-#
-function array_contains
-{
-    local e
-    for e in "${@:2}"; do
-        if [[ "$e" == "$1" ]]; then
-            return 0
-        fi
-    done
-    return 1
-}
-
-#
 # Prints all sections respecting precedence.
 #
 function list
