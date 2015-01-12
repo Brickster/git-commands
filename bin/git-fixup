@@ -15,7 +15,7 @@
 function fixup
 {
     # get the last log message
-    local last_commit_message=$(git log -1 --format="%s")
+    local last_commit_message=$(git show --no-patch --format="%s" HEAD)
 
     # if the last commit was a fixup, use that; else, prepend with fixup!
     local commit_message=
