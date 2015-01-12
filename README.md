@@ -62,6 +62,7 @@ git upstream [(-h|--help)]
 Used as a shortcut for committing the currently staged files as an autosquashable fixup.
 
 ```bash
+git fixup [<commit>]
 git fixup [(-h|--help)]
 ```
 
