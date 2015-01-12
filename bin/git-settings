@@ -142,7 +142,7 @@ function list
         args=("$@")
         section=${args[$section_index-1]}
     else
-        error "usage: git settings list [[options] <section>]"
+        usage_error "git settings list [<file-option>] [(-p|--pretty)] [(-f|--format) <format>] [(-c|--count)] <section>"
     fi
 
     # get list of config settings
@@ -261,7 +261,7 @@ function default
         args=("$@")
         key=${args[$key_index-1]}
     else
-        error "usage: git section [(-d|--default) <default>] <key>"
+        usage_error "git section [(-d|--default) <default>] <key>"
     fi
 
     local value=
@@ -294,10 +294,11 @@ if [[ "$1" =~ ^(destroy|list)$ ]]; then
     "$1" "${@:2}"
     exit 0
 elif (( $# == 0 )); then
-    uses=("git settings [(-d|--default) <value>] <key>"
+    uses=("git settings [<file-option>] [(-d|--default) <value>] <key>"
             "git settings [(-h|--help)]"
-            "git settings destroy <section>"
-            "git settings list [[options] <section>]")
+            "git settings destroy (-d|--dry-run) <section>"
+            "git settings list"
+            "git settings list [<file-option>] [(-p|--pretty)] [(-f|--format) <format>] [(-c|--count)] <section>")
     usage_error "${uses[@]}"
 fi
 
