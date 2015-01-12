@@ -182,7 +182,7 @@ if is_new_repository; then
         git config --unset color.status
 
         # unset may leave an empty section, remove it if it is
-        section_count=$(git settings print -c color)
+        section_count=$(git settings list -c color)
         if (( $section_count == 0 )); then
             git config --remove-section color
         fi
@@ -214,7 +214,7 @@ else
             git config --unset color.status
 
             # unset may leave an empty section, remove it if it is
-            section_count=$(git settings print -c color)
+            section_count=$(git settings list -c color)
             if (( $section_count == 0 )); then
                 git config --remove-section color
             fi
