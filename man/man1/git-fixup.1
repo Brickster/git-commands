@@ -7,6 +7,9 @@
 \fBgit\-fixup\fR \- commits staged changes as an autosquashable fixup
 .
 .SH "SYNOPSIS"
+\fBgit fixup\fR [\fIcommit\fR]
+.
+.br
 \fBgit fixup\fR [(\fB\-h\fR|\fB\-\-help\fR)]
 .
 .SH "CHANGES"
@@ -16,6 +19,10 @@
 While \fBgit\-commit\fR does include a \fB\-\-fixup=<commit>\fR option, using it consecutively without getting commit messages with multiple "fixup!" entries is more tedious than it should to be\.
 .
 .SH "OPTIONS"
+.
+.TP
+\fIcommit\fR
+Use \fIcommit\fR\'s subject for the fixup message\.
 .
 .TP
 \fB\-h\fR|\fB\-\-help\fR

@@ -14,8 +14,10 @@
 #
 function fixup
 {
+    local use_commit="${1:-HEAD}"
+
     # get the last log message
-    local last_commit_message=$(git show --no-patch --format="%s" HEAD)
+    local last_commit_message=$(git show --no-patch --format="%s" "$use_commit")
 
     # if the last commit was a fixup, use that; else, prepend with fixup!
     local commit_message=
@@ -43,4 +45,4 @@ while getopts ":h-:" opt; do
     esac
 done
 
-fixup
+fixup "$@"

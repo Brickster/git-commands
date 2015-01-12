@@ -2,6 +2,7 @@
 
 ## SYNOPSIS
 
+`git fixup` [<commit>]<br>
 `git fixup` [(`-h`|`--help`)]
 
 ## CHANGES
@@ -11,6 +12,9 @@
 While `git-commit` does include a `--fixup=<commit>` option, using it consecutively without getting commit messages with multiple "fixup!" entries is more tedious than it should to be.
 
 ## OPTIONS
+
+* <commit>:
+    Use <commit>'s subject for the fixup message.
 
 * `-h`|`--help`:
     Display git-fixup man page.
