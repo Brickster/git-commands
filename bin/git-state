@@ -167,7 +167,7 @@ if is_new_repository; then
 
     # make sure status will output ANSI codes
     # this must be done using config since status has no --color option
-    status_color=$(git config color.status)
+    status_color=$(git config --local color.status)
     git config color.status "$color"
 
     status_info=$(git status --short)
@@ -195,7 +195,7 @@ else
     if $show_status; then
         # make sure status will output ANSI codes
         # this must be done using config since status has no --color option
-        status_color=$(git config color.status)
+        status_color=$(git config --local color.status)
         git config color.status "$color"
 
         # get the --branch part of 'git status --short --branch'
