@@ -72,7 +72,7 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>git fixup</code> [<var>commit</var>]<br />
+<p><code>git fixup</code> [(<code>-b</code>|<code>--message-body</code>) <var>message-body</var>] [<var>commit</var>]<br />
 <code>git fixup</code> [(<code>-h</code>|<code>--help</code>)]</p>
 
 <h2 id="CHANGES">CHANGES</h2>
@@ -85,6 +85,7 @@
 
 <dl>
 <dt class="flush"><var>commit</var></dt><dd><p>  Use <var>commit</var>'s subject for the fixup message.</p></dd>
+<dt><code>-b</code>|<code>--message-body</code> <var>message-body</var></dt><dd><p>  The message body to use in the fixup commit. It will go away when the fixup occurs but can be useful for traceability until that point.</p></dd>
 <dt><code>-h</code>|<code>--help</code></dt><dd><p>  Display git-fixup man page.</p></dd>
 </dl>
 

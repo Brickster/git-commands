@@ -15,6 +15,7 @@
 function fixup
 {
     local use_commit="${1:-HEAD}"
+    local message_body="$2"
 
     # get the last log message
     local last_commit_message=$(git show --no-patch --format="%s" "$use_commit")
@@ -27,17 +28,27 @@ function fixup
         commit_message="fixup! $last_commit_message"
     fi
 
-    git commit --quiet -m "$commit_message"
+    if [[ -z "$message_body" ]]; then
+        git commit --quiet -m "$commit_message"
+    else
+        git commit --quiet -m "$commit_message" -m "$message_body"
+    fi
 }
 
-while getopts ":h-:" opt; do
+message_body=
+while getopts ":hb:-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
+                message_body)
+                        message_body="${!OPTIND}"
+                        OPTIND=$(( $OPTIND + 1 ))
+                        ;;
                 help)   show_help;;
                 *)      error "Unimplemented option --${OPTARG}";;
             esac
             ;;
+        b)  message_body="$OPTARG";;
         h)  show_help;;
         \?) error "Invalid option: -$OPTARG";;
         :)  error "Option -$OPTARG requires an argument.";;
@@ -45,4 +56,4 @@ while getopts ":h-:" opt; do
     esac
 done
 
-fixup "$@"
+fixup "${!OPTIND}" "$message_body"
