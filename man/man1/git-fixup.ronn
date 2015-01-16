@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git fixup` [<commit>]<br>
+`git fixup` [(`-b`|`--message-body`) <message-body>] [<commit>]<br>
 `git fixup` [(`-h`|`--help`)]
 
 ## CHANGES
@@ -15,6 +15,9 @@ While `git-commit` does include a `--fixup=<commit>` option, using it consecutiv
 
 * <commit>:
     Use <commit>'s subject for the fixup message.
+
+* `-b`|`--message-body` <message-body>:
+    The message body to use in the fixup commit. It will go away when the fixup occurs but can be useful for traceability until that point.
 
 * `-h`|`--help`:
     Display git-fixup man page.
