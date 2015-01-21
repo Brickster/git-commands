@@ -237,7 +237,7 @@ else
 
     # branches
     if $show_branches && ( $show_only_default_branch || ! only_default_branch ); then
-        branch_output=$(git branch -v --color="$color")
+        branch_output=$(git branch -vv --color="$color")
         echo_section "branches" "$branch_output" "$print_format"
     fi
 
