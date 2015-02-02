@@ -7,6 +7,7 @@ A collection of custom git commands
 ```bash
 make [install]
 ```
+or
 ```bash
 export PATH="$PATH:/path/to/git-commands/repository/bin"
 ```
@@ -16,6 +17,7 @@ export PATH="$PATH:/path/to/git-commands/repository/bin"
 ```bash
 make uninstall
 ```
+or
 ```bash
 # remote the preveously added line
 ```
