@@ -2,7 +2,26 @@
 
 A collection of custom git commands
 
-## [state][]
+## Install
+
+```bash
+make [install]
+```
+```bash
+export PATH="$PATH:/path/to/git-commands/repository/bin"
+```
+
+## Uninstall
+
+```bash
+make uninstall
+```
+```bash
+# remote the preveously added line
+```
+
+## Commands
+### [state][]
 
 Used to see a more concise and comprehensive view of the working directory. The output includes results from git status, git log, and git branch.
 
@@ -18,7 +37,7 @@ git state [(-l|--log) <count>] [(-L|--no-log)] [--full-log]
 git state [(-h|--help)]
 ```
 
-## [snapshot][]
+### [snapshot][]
 
 Used to record the current state of the working directory without reverting it.
 
@@ -27,7 +46,7 @@ git snapshot <message>
 git snapshot [(-h|--help)]
 ```
 
-## [changes][]
+### [changes][]
 
 Used to list the commits between this branch and another.
 
@@ -36,7 +55,7 @@ git changes [(-b|--branch) <branch>] [(-c|--count)]
 git changes [(-h|--help)]
 ```
 
-## [settings][]
+### [settings][]
 
 Used as a compliment to `git-config` by adding missing features.
 
@@ -48,7 +67,7 @@ git settings list
 git settings list [<file-option>] [(-p|--pretty)] [(-f|--format) <format>] [(-c|--count)] <section>
 ```
 
-## [upstream][]
+### [upstream][]
 
 Used to get the current upstream branch.
 
@@ -57,7 +76,7 @@ git upstream [(-r|--include-remote)] [(-R|--no-include-remote)]
 git upstream [(-h|--help)]
 ```
 
-## [fixup][]
+### [fixup][]
 
 Used as a shortcut for committing the currently staged files as an autosquashable fixup.
 
