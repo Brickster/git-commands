@@ -79,3 +79,4 @@ while getopts ":v-:" opt; do
         v)  show_version "$_VERSION";;
     esac
 done
+OPTIND=1
