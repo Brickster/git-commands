@@ -1,5 +1,7 @@
 #! /bin/bash
 
+readonly VERSION="0.1.0"
+
 . git-commands-utils
 
 function main
@@ -44,14 +46,16 @@ function main
     fi
 }
 
-while getopts ":h-:" opt; do
+while getopts ":hv-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
-                help)   show_help;;
+                help)       show_help;;
+                version)    show_version "$VERSION";;
             esac
             ;;
         h)  show_help;;
+        v)  show_version "$VERSION";;
     esac
 done
 OPTIND=1

@@ -4,6 +4,8 @@
 # A more concise and comprehensive version of `git status` and `git log` in one command.
 #
 
+readonly VERSION="0.1.0"
+
 . git-commands-utils
 
 TEMP_FILE=$(mktemp "/tmp/git-state.XXXXXXXXXX")
@@ -75,7 +77,7 @@ function only_default_branch
 green='\x1B[0;32m'
 nocolor='\x1B[0m'
 
-while getopts ":hpf:cCeELsSbBRtTl:r:-:" opt; do
+while getopts ":hvpf:cCeELsSbBRtTl:r:-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
@@ -114,6 +116,7 @@ while getopts ":hpf:cCeELsSbBRtTl:r:-:" opt; do
                     nocolor=""
                     ;;
                 help)           show_help;;
+                version)        show_version "$VERSION";;
                 *)              error "Unimplemented option --${OPTARG}";;
             esac
             ;;
@@ -144,6 +147,7 @@ while getopts ":hpf:cCeELsSbBRtTl:r:-:" opt; do
         p)  print_format="pretty";;
         f)  print_format="$OPTARG";;
         h)  show_help;;
+        v)  show_version "$VERSION";;
         \?) error "Invalid option: -$OPTARG";;
         :)  error "Option -$OPTARG requires an argument.";;
         *)  error "Unimplemented option: -$OPTARG";;

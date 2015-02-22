@@ -6,7 +6,8 @@
 `git settings` [(`-h`|`--help`)]<br>
 `git settings destroy` [(`-d`|`--dry-run`)] <section><br>
 `git settings list`<br>
-`git settings list` [<file-option>] [(`-p`|`--pretty`)] [(`-f`|`--format`) <format>] [(`-c`|`--count`)] <section>
+`git settings list` [<file-option>] [(`-p`|`--pretty`)] [(`-f`|`--format`) <format>] [(`-c`|`--count`)] <section><br>
+`git settings` (`-v`|`--version`)
 
 ## DESCRIPTION
 
@@ -46,6 +47,9 @@
 
 * `-h`|`--help`:
     Display git-settings man page.
+
+* `-v`|`--version`:
+    Print version.
 
 ## FILE OPTIONS
 

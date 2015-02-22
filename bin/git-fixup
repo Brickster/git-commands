@@ -7,6 +7,8 @@
 # multiple "fixup!" entries is more tedious than it should to be.
 #
 
+readonly VERSION="0.1.0"
+
 . git-commands-utils
 
 #
@@ -36,20 +38,22 @@ function fixup
 }
 
 message_body=
-while getopts ":hb:-:" opt; do
+while getopts ":hvb:-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
                 message_body)
-                        message_body="${!OPTIND}"
-                        OPTIND=$(( $OPTIND + 1 ))
-                        ;;
-                help)   show_help;;
+                            message_body="${!OPTIND}"
+                            OPTIND=$(( $OPTIND + 1 ))
+                            ;;
+                help)       show_help;;
+                version)    show_version "$VERSION";;
                 *)      error "Unimplemented option --${OPTARG}";;
             esac
             ;;
         b)  message_body="$OPTARG";;
         h)  show_help;;
+        v)  show_version "$VERSION";;
         \?) error "Invalid option: -$OPTARG";;
         :)  error "Option -$OPTARG requires an argument.";;
         *)  error "Unimplemented option: -$OPTARG";;

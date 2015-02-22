@@ -3,7 +3,8 @@
 ## SYNOPSIS
 
 `git fixup` [(`-b`|`--message-body`) <message-body>] [<commit>]<br>
-`git fixup` [(`-h`|`--help`)]
+`git fixup` [(`-h`|`--help`)]<br>
+`git fixup` (`-v`|`--version`)
 
 ## CHANGES
 
@@ -21,3 +22,6 @@ While `git-commit` does include a `--fixup=<commit>` option, using it consecutiv
 
 * `-h`|`--help`:
     Display git-fixup man page.
+
+* `-v`|`--version`:
+    Print version.

@@ -3,7 +3,8 @@
 ## SYNOPSIS
 
 `git changes` [(`-b`|`--branch`) <branch>] [(`-c`|`--count`)]<br>
-`git changes` [(`-h`|`--help`)]
+`git changes` [(`-h`|`--help`)]<br>
+`git changes` (`-v`|`--version`)
 
 ## DESCRIPTION
 
@@ -19,6 +20,9 @@
 
 * `-h`|`--help`:
 	Display git-changes man page.
+
+* `-v`|`--version`:
+    Print version.
 
 ## CONFIGURATION
 

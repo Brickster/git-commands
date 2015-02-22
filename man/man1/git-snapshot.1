@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-SNAPSHOT" "1" "January 2015" "" ""
+.TH "GIT\-SNAPSHOT" "1" "February 2015" "" ""
 .
 .SH "NAME"
 \fBgit\-snapshot\fR \- create a snapshot of the changes in a dirty working directory
@@ -11,6 +11,9 @@
 .
 .br
 \fBgit snapshot\fR [(\fB\-h\fR|\fB\-\-help\fR)]
+.
+.br
+\fBgit snapshot\fR (\fB\-v\fR|\fB\-\-version\fR)
 .
 .SH "DESCRIPTION"
 Used to record the current state of the working directory without reverting it\. This is effectively a shortcut to:
@@ -29,10 +32,14 @@ $ git stash apply
 .SH "OPTIONS"
 .
 .TP
+\fImessage\fR
+The message to use when creating the underly stash\. If no message is supplied, the default \fBgit\-stash\fR message is used\.
+.
+.TP
 \fB\-h\fR|\fB\-\-help\fR
 Display git\-snapshot man page\.
 .
 .TP
-\fImessage\fR
-The message to use when creating the underly stash\. If no message is supplied, the default \fBgit\-stash\fR message is used\.
+\fB\-v\fR|\fB\-\-version\fR
+Print version\.
 
