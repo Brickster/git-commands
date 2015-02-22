@@ -21,6 +21,17 @@ function show_help
 }
 
 #
+# Print version information
+#
+# $1: the version
+#
+function show_version
+{
+    echo "$1"
+    exit 0
+}
+
+#
 # Prints a usage error.
 #
 # $@: a list of usage strings
