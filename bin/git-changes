@@ -1,24 +1,28 @@
 #! /bin/bash
 
+readonly VERSION="0.1.0"
+
 . git-commands-utils
 
 get_count=false
-while getopts ":chb:-:" opt; do
+while getopts ":chvb:-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
                 branch)
-                        branch="${!OPTIND}"
-                        OPTIND=$(( $OPTIND + 1 ))
-                        ;;
-                help)   show_help;;
-                count)  get_count=true;;
-                *)      error "Unimplemented option --${OPTARG}";;
+                            branch="${!OPTIND}"
+                            OPTIND=$(( $OPTIND + 1 ))
+                            ;;
+                help)       show_help;;
+                version)    show_version "$VERSION";;
+                count)      get_count=true;;
+                *)          error "Unimplemented option --${OPTARG}";;
             esac
             ;;
         b)  branch="$OPTARG";;
         c)  get_count=true;;
         h)  show_help;;
+        v)  show_version "$VERSION";;
         \?) error "Invalid option: -$OPTARG";;
         :)  error "Option -$OPTARG requires an argument.";;
         *)  error "Unimplemented option: -$OPTARG";;

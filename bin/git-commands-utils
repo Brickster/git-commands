@@ -1,5 +1,7 @@
 #! /bin/bash
 
+readonly _VERSION="0.1.0"
+
 #
 # Echos text to strerr.
 #
@@ -66,3 +68,14 @@ function array_contains
     done
     return 1
 }
+
+while getopts ":v-:" opt; do
+    case $opt in
+        -)
+            case "${OPTARG}" in
+                version)    show_version "$_VERSION";;
+            esac
+            ;;
+        v)  show_version "$_VERSION";;
+    esac
+done

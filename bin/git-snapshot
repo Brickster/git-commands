@@ -4,6 +4,8 @@
 # `git stash save` <message> followed by `git stash apply`.
 #
 
+readonly VERSION="0.1.0"
+
 . git-commands-utils
 
 function create_snapshot
@@ -18,15 +20,17 @@ function create_snapshot
     git stash apply --quiet > /dev/null 2>&1 # apply won't shut up so swallow the output
 }
 
-while getopts ":h-:" opt; do
+while getopts ":hv-:" opt; do
     case $opt in
         -)
             case "${OPTARG}" in
-                help)   show_help;;
+                help)       show_help;;
+                version)    show_version "$VERSION";;
                 *)      error "Unimplemented option --${OPTARG}";;
             esac
             ;;
         h)  show_help;;
+        v)  show_version "$VERSION";;
         \?) error "Invalid option: -$OPTARG";;
         :)  error "Option -$OPTARG requires an argument.";;
         *)  error "Unimplemented option: -$OPTARG";;

@@ -3,7 +3,8 @@
 ## SYNOPSIS
 
 `git snapshot` <message><br>
-`git snapshot` [(`-h`|`--help`)]
+`git snapshot` [(`-h`|`--help`)]<br>
+`git snapshot` (`-v`|`--version`)
 
 ## DESCRIPTION
 
@@ -16,8 +17,11 @@ $ git stash apply
 
 ## OPTIONS
 
+* <message> :
+    The message to use when creating the underly stash. If no message is supplied, the default `git-stash` message is used.
+
 * `-h`|`--help`:
 	Display git-snapshot man page.
 
-* <message> :
-    The message to use when creating the underly stash. If no message is supplied, the default `git-stash` message is used.
+* `-v`|`--version`:
+	Print version.

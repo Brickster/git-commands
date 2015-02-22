@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-CHANGES" "1" "December 2014" "" ""
+.TH "GIT\-CHANGES" "1" "February 2015" "" ""
 .
 .SH "NAME"
 \fBgit\-changes\fR \- lists the commits between this branch and another
@@ -11,6 +11,9 @@
 .
 .br
 \fBgit changes\fR [(\fB\-h\fR|\fB\-\-help\fR)]
+.
+.br
+\fBgit changes\fR (\fB\-v\fR|\fB\-\-version\fR)
 .
 .SH "DESCRIPTION"
 \fBgit\-changes\fR lists the commits between the current branch and another\. Changes are defined as the commits between HEAD and the merge base calculated using the current and a user specified branch\.
@@ -28,6 +31,10 @@ Prints the total changes instead of listing them\.
 .TP
 \fB\-h\fR|\fB\-\-help\fR
 Display git\-changes man page\.
+.
+.TP
+\fB\-v\fR|\fB\-\-version\fR
+Print version\.
 .
 .SH "CONFIGURATION"
 .

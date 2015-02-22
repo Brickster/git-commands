@@ -10,7 +10,8 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-c`|`--color`)] [(`-C`|`--no-color`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
-`git state` [(`-h`|`--help`)]
+`git state` [(`-h`|`--help`)]<br>
+`git state` (`-v`|`--version`)
 
 ## DESCRIPTION
 
@@ -20,6 +21,9 @@ Used to see a more concise and comprehensive view of the working directory. The 
 
 * `-h`|`--help`:
 	Display git-state man page.
+
+* `-v`|`--version`:
+	Print version.
 
 * `-l`|`--log` <count>:
     Limits commits in the log section. If less than 1, the section is skipped.
