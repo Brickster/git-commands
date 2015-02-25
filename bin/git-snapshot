@@ -13,11 +13,11 @@ function create_snapshot
     local message="$1"
 
     if [[ -z "$message" ]]; then
-        git stash save -u
+        git stash save -u --quiet
     else
-        git stash save -u "$message"
+        git stash save -u --quiet "$message"
     fi
-    git stash apply --quiet > /dev/null 2>&1 # apply won't shut up so swallow the output
+    git stash apply --quiet
 }
 
 while getopts ":hv-:" opt; do
