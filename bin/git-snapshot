@@ -1,40 +1,48 @@
-#! /bin/bash
+#! /usr/bin/env python
 #
 # Used to record the current state of the working directory without reverting it. This is effectively a shortcut to
 # `git stash save` <message> followed by `git stash apply`.
 #
 
-readonly VERSION="0.1.0"
+import getopt
+import sys
 
-. git-commands-utils
+from subprocess import check_output, call
+from utils.help import man
+from utils.messages import version, error, usage, info
 
-function create_snapshot
-{
-    local message="$1"
 
-    if [[ -z "$message" ]]; then
-        git stash save -u --quiet
-    else
-        git stash save -u --quiet "$message"
-    fi
-    git stash apply --quiet
-}
+def create_snapshot(message):
+    '''Create a snapshot of the working directory and index.'''
 
-while getopts ":hv-:" opt; do
-    case $opt in
-        -)
-            case "${OPTARG}" in
-                help)       show_help;;
-                version)    show_version "$VERSION";;
-                *)      error "Unimplemented option --${OPTARG}";;
-            esac
-            ;;
-        h)  show_help;;
-        v)  show_version "$VERSION";;
-        \?) error "Invalid option: -$OPTARG";;
-        :)  error "Option -$OPTARG requires an argument.";;
-        *)  error "Unimplemented option: -$OPTARG";;
-    esac
-done
+    status_command = ['git', 'status', '--porcelain']
+    status_output = check_output(status_command).splitlines()
 
-create_snapshot "$@"
+    if len(status_output) > 0:
+        stash_command = ['git', 'stash', 'save', '-u', '--quiet']
+        stash_command = stash_command if message is None else stash_command + [message]
+
+        call(stash_command)
+        call(['git', 'stash', 'apply', '--quiet'])
+    else:
+        info("No local changes to save. No snapshot created.")
+
+
+def main(argv):
+    try:
+        opts, left_args = getopt.getopt(argv, "hv", ["help", "version"])
+    except getopt.GetoptError as e:
+        error(e.msg, exit=False)
+        usage(["git snapshot <message>", "git snapshot (-h|--help)", "git snapshot (-v|--version)"])
+
+    for opt, arg in opts:
+        if opt in ('-h', '--help'):
+            man()
+        elif opt in ('-v', '--version'):
+            version('0.1.0')
+
+    message = left_args[0] if len(left_args) > 0 else None
+    create_snapshot(message)
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
