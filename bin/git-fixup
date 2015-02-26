@@ -1,63 +1,44 @@
-#! /bin/bash
-#
-# git-fixup is a shortcut for committing staged changes as a fixup. The commit message starts with "fixup!" and ends
-# with the last commit's message. This way it can be autosquashed during a rebase.
-#
-# While git-commit does include a --fixup=<commit> option, using it consecutively without getting commit messages with
-# multiple "fixup!" entries is more tedious than it should to be.
-#
+#! /usr/bin/env python
 
-readonly VERSION="0.1.0"
+import getopt
+import re
+import sys
 
-. git-commands-utils
+from subprocess import call, check_output
+from utils.help import man
+from utils.messages import version, error, usage
 
-#
-# Commits all staged changes as an autosquashable fixup.
-#
-function fixup
-{
-    local use_commit="${1:-HEAD}"
-    local message_body="$2"
 
-    # get the last log message
-    local last_commit_message=$(git show --no-patch --format="%s" "$use_commit")
+def fixup(commit, body):
+    '''Create a fixup commit using a given commit's subject and optional body'''
 
-    # if the last commit was a fixup, use that; else, prepend with fixup!
-    local commit_message=
-    if [[ "$last_commit_message" =~ ^fixup!.*$ ]]; then
-        commit_message="$last_commit_message"
-    else
-        commit_message="fixup! $last_commit_message"
-    fi
+    last_commit_message = check_output(['git', 'show', '--no-patch', '--format=%s', commit]).splitlines()[0]
+    commit_message = last_commit_message if re.match('^fixup!.*$', last_commit_message) is not None else 'fixup! ' + last_commit_message
 
-    if [[ -z "$message_body" ]]; then
-        git commit --quiet -m "$commit_message"
-    else
-        git commit --quiet -m "$commit_message" -m "$message_body"
-    fi
-}
+    commit_command = ['git', 'commit', '--quiet', '-m', commit_message]
+    if body is not None:
+        commit_command += ['-m', body]
+    call(commit_command)
 
-message_body=
-while getopts ":hvb:-:" opt; do
-    case $opt in
-        -)
-            case "${OPTARG}" in
-                message_body)
-                            message_body="${!OPTIND}"
-                            OPTIND=$(( $OPTIND + 1 ))
-                            ;;
-                help)       show_help;;
-                version)    show_version "$VERSION";;
-                *)      error "Unimplemented option --${OPTARG}";;
-            esac
-            ;;
-        b)  message_body="$OPTARG";;
-        h)  show_help;;
-        v)  show_version "$VERSION";;
-        \?) error "Invalid option: -$OPTARG";;
-        :)  error "Option -$OPTARG requires an argument.";;
-        *)  error "Unimplemented option: -$OPTARG";;
-    esac
-done
 
-fixup "${!OPTIND}" "$message_body"
+def main(argv):
+    try:
+        opts, left_args = getopt.getopt(argv, 'hvb:', ['help', 'version', 'body='])
+    except getopt.GetoptError as e:
+        error(e.msg, exit=False)
+        usage(['git fixup (-b |--body=)<message>', 'git fixup (-h|--help)', 'git fixup (-v|--version)'])
+
+    body = None
+    for opt, arg in opts:
+        if opt in ('-h', '--help'):
+            man()
+        elif opt in ('-v', '--version'):
+            version('0.1.0')
+        elif opt in ('-b', '--body'):
+            body = arg
+
+    commit = left_args[0] if len(left_args) > 0 else 'HEAD'
+    fixup(commit, body)
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
