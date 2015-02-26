@@ -1,46 +1,45 @@
-#! /bin/bash
+#! /usr/bin/env python
 
-readonly VERSION="0.1.0"
+import getopt
+import sys
 
-. git-commands-utils
+from subprocess import call, check_output
+from utils.help import man
+from utils.messages import version, error, usage, info
 
-get_count=false
-while getopts ":chvb:-:" opt; do
-    case $opt in
-        -)
-            case "${OPTARG}" in
-                branch)
-                            branch="${!OPTIND}"
-                            OPTIND=$(( $OPTIND + 1 ))
-                            ;;
-                help)       show_help;;
-                version)    show_version "$VERSION";;
-                count)      get_count=true;;
-                *)          error "Unimplemented option --${OPTARG}";;
-            esac
-            ;;
-        b)  branch="$OPTARG";;
-        c)  get_count=true;;
-        h)  show_help;;
-        v)  show_version "$VERSION";;
-        \?) error "Invalid option: -$OPTARG";;
-        :)  error "Option -$OPTARG requires an argument.";;
-        *)  error "Unimplemented option: -$OPTARG";;
-    esac
-done
 
-# load settings
-branch="${branch:-$(git settings -d master git-changes.default-branch)}"
+def get_changes(count, branch):
+    '''Print the changes between a given branch and HEAD'''
 
-merge_base=$(git merge-base $branch HEAD)
+    command = ['git', 'log', '--oneline', '{}..HEAD'.format(branch)]
+    if count:
+        log = check_output(command)
+        log = log.splitlines()
+        info(len(log))
+    else:
+        call(command)
 
-if [ $get_count = true ]; then
 
-    # only print the changes count
-    logs=$(git log --oneline "$merge_base"..HEAD)
-    IFS=$'\n' read -rd '' -a logs <<< "$logs"
-    echo "${#logs[@]}"
+def main(argv):
+    try:
+        opts, left_args = getopt.getopt(argv, "hvcb:", ["help", "version", "count", "branch="])
+    except getopt.GetoptError as e:
+        error(e.msg, exit=False)
+        usage(["git changes [(-b |--branch=)<branch>] [(-c|--count)]", "git changes (-h|--help)", "git changes (-v|--version)"])
 
-else
-    git log --oneline "$merge_base"..HEAD
-fi
+    branch = check_output(['git', 'settings', '-d', 'master', 'git-changes.default-branch']).splitlines()[0]
+    count = False
+    for opt, arg in opts:
+        if opt in ('-h', '--help'):
+            man()
+        elif opt in ('-v', '--version'):
+            version('0.1.0')
+        elif opt in ('-c', '--count'):
+            count = True
+        elif opt in ('-b', '--branch'):
+            branch = arg
+
+    get_changes(count, branch)
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
