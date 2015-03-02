@@ -36,7 +36,8 @@ git state [(-l|--log) <count>] [(-L|--no-log)] [--full-log]
           [(-e|--show-empty)] [(-E|--no-show-empty)]
           [(-c|--color)] [(-C|--no-color)]
           [(-p|--pretty)] [(-f|--format) <format>]
-git state [(-h|--help)]
+git state (-h|--help)
+git state (-v|--version)
 ```
 
 ### [snapshot][]
@@ -45,7 +46,8 @@ Used to record the current state of the working directory without reverting it.
 
 ```bash
 git snapshot <message>
-git snapshot [(-h|--help)]
+git snapshot (-h|--help)
+git snapshot (-v|--version)
 ```
 
 ### [changes][]
@@ -54,7 +56,8 @@ Used to list the commits between this branch and another.
 
 ```bash
 git changes [(-b|--branch) <branch>] [(-c|--count)]
-git changes [(-h|--help)]
+git changes (-h|--help)
+git changes (-v|--version)
 ```
 
 ### [settings][]
@@ -63,10 +66,11 @@ Used as a compliment to `git-config` by adding missing features.
 
 ```bash
 git settings [<file-option>] [(-d|--default) <value>] <key>
-git settings [(-h|--help)]
 git settings destroy [(-d|--dry-run)] <section>
 git settings list
 git settings list [<file-option>] [(-p|--pretty)] [(-f|--format) <format>] [(-c|--count)] <section>
+git settings (-h|--help)
+git settings (-v|--version)
 ```
 
 ### [upstream][]
@@ -75,7 +79,8 @@ Used to get the current upstream branch.
 
 ```bash
 git upstream [(-r|--include-remote)] [(-R|--no-include-remote)]
-git upstream [(-h|--help)]
+git upstream (-h|--help)
+git upstream (-v|--version)
 ```
 
 ### [fixup][]
@@ -84,7 +89,8 @@ Used as a shortcut for committing the currently staged files as an autosquashabl
 
 ```bash
 git fixup [(-b|--message-body) <message-body>] [<commit>]
-git fixup [(-h|--help)]
+git fixup (-h|--help)
+git fixup (-v|--version)
 ```
 
 ### [abandon][]
