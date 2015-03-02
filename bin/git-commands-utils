@@ -3,13 +3,23 @@
 readonly _VERSION="0.1.0"
 
 #
+# Echos text to stderr but does not exit.
+#
+# $1: the text to echo
+#
+function error_and_continue
+{
+    echo "error: $1" >&2
+}
+
+#
 # Echos text to strerr.
 #
 # $1: the text to echo
 #
 function error
 {
-    echo "$1" >&2
+    error_and_continue "$1"
     exit 1
 }
 
