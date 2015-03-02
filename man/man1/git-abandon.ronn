@@ -1,0 +1,30 @@
+# git-abandon(1) -- drops a count or range of stashes
+
+## SYNOPSIS
+
+`git abandon` <count><br>
+`git abandon` <start>..<end><br>
+`git abandon` (-h|--help)<br>
+`git abandon` (-v|--version)
+
+## DESCRIPTION
+
+`git-abandon` is a shortcut for when you need to drop some, but not all, stashes. Stashes can be dropped using a count or a range. If you want to drop all your stashes, just use `git stash clear`.
+
+## OPTIONS
+
+* <count>:
+    A count of stashes to drop starting at 0. This is equivalent to `git abandon 0..$((<count>-1))`
+
+* <start>..<end>:
+    Drop a range of stashes. Both <start> and <end> are inclusive.
+
+* `-h`|`--help`:
+    Display git-abandon man page.
+
+* `-v`|`--version`:
+    Print version.
+
+## SEE ALSO
+
+[git-stash(1)](http://git-scm.com/docs/git-stash)

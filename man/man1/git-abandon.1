@@ -1,0 +1,43 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "GIT\-ABANDON" "1" "March 2015" "" ""
+.
+.SH "NAME"
+\fBgit\-abandon\fR \- drops a count or range of stashes
+.
+.SH "SYNOPSIS"
+\fBgit abandon\fR \fIcount\fR
+.
+.br
+\fBgit abandon\fR \fIstart\fR\.\.\fIend\fR
+.
+.br
+\fBgit abandon\fR (\-h|\-\-help)
+.
+.br
+\fBgit abandon\fR (\-v|\-\-version)
+.
+.SH "DESCRIPTION"
+\fBgit\-abandon\fR is a shortcut for when you need to drop some, but not all, stashes\. Stashes can be dropped using a count or a range\. If you want to drop all your stashes, just use \fBgit stash clear\fR\.
+.
+.SH "OPTIONS"
+.
+.TP
+\fIcount\fR
+A count of stashes to drop starting at 0\. This is equivalent to \fBgit abandon 0\.\.$((<count>\-1))\fR
+.
+.TP
+\fIstart\fR\.\.\fIend\fR
+Drop a range of stashes\. Both \fIstart\fR and \fIend\fR are inclusive\.
+.
+.TP
+\fB\-h\fR|\fB\-\-help\fR
+Display git\-abandon man page\.
+.
+.TP
+\fB\-v\fR|\fB\-\-version\fR
+Print version\.
+.
+.SH "SEE ALSO"
+git\-stash(1) \fIhttp://git\-scm\.com/docs/git\-stash\fR

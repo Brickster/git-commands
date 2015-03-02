@@ -1,0 +1,61 @@
+#! /bin/bash
+
+VERSION="0.1.0"
+
+. git-commands-utils
+
+while getopts ":hv-:" opt; do
+    case $opt in
+        -)
+            case "${OPTARG}" in
+                help)           show_help;;
+                version)        show_version "$VERSION";;
+                *)              error "Unimplemented option --${OPTARG}";;
+            esac
+            ;;
+        h)  show_help;;
+        v)  show_version "$VERSION";;
+        \?) error "Invalid option: -$OPTARG";;
+        :)  error "Option -$OPTARG requires an argument.";;
+        *)  error "Unimplemented option: -$OPTARG";;
+    esac
+done
+
+start_count=0
+end_count=0
+
+input=${!OPTIND}
+range_regex="^([[:digit:]]+)\.\.([[:digit:]])+$"
+digits_regex="^[[:digit:]]+$"
+if [[ -z "$input" ]]; then
+    error_and_continue "a number of stashes to drop must be specified"
+    usage_error "git abandon <count>" "git abandon <start>..<end>"
+elif [[ "$input" =~ $range_regex ]]; then
+    start_count="${BASH_REMATCH[1]}"
+    end_count="${BASH_REMATCH[2]}"
+elif [[ "$input" =~ $digits_regex ]]; then
+    start_count=0
+    end_count=$((input-1))
+else
+    error_and_continue "a number of stashes to drop must be specified"
+    error_and_continue "used '$input'"
+    usage_error "git abandon <count>" "git abandon <start>..<end>"
+fi
+
+# adjust for current stash count
+stash_list=$(git stash list)
+IFS=$'\n' read -rd '' -a stash_list <<< "$stash_list"
+stash_list_count="${#stash_list[@]}"
+
+if (( "$start_count" >= "$stash_list_count" )); then
+    error_and_continue "start too high"
+    error "only $stash_list_count stashes exist"
+elif (( "$end_count" >= "$stash_list_count" )); then
+    end_count=$(($stash_list_count-1))
+fi
+
+drop_count=$((end_count-start_count))
+
+for ((i=0;i<=$drop_count;i++)); do
+    git stash drop stash@{"$start_count"}
+done
