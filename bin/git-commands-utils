@@ -3,7 +3,7 @@
 readonly _VERSION="0.1.0"
 
 #
-# Echos text to stderr but does not exit.
+# Echo text to stderr but do not exit.
 #
 # $1: the text to echo
 #
@@ -13,7 +13,7 @@ function error_and_continue
 }
 
 #
-# Echos text to strerr.
+# Echo text to stderr and exit.
 #
 # $1: the text to echo
 #
