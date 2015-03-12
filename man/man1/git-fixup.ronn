@@ -3,7 +3,7 @@
 ## SYNOPSIS
 
 `git fixup` [(`-b`|`--message-body`) <message-body>] [<commit>]<br>
-`git fixup` [(`-h`|`--help`)]<br>
+`git fixup` (`-h`|`--help`)<br>
 `git fixup` (`-v`|`--version`)
 
 ## CHANGES

@@ -3,10 +3,10 @@
 ## SYNOPSIS
 
 `git settings` [<file-option>] [(`-d`|`--default`) <value>] <key><br>
-`git settings` [(`-h`|`--help`)]<br>
 `git settings destroy` [(`-d`|`--dry-run`)] <section><br>
 `git settings list`<br>
 `git settings list` [<file-option>] [(`-p`|`--pretty`)] [(`-f`|`--format`) <format>] [(`-c`|`--count`)] <section><br>
+`git settings` (`-h`|`--help`)<br>
 `git settings` (`-v`|`--version`)
 
 ## DESCRIPTION

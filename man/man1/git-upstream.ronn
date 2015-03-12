@@ -3,7 +3,7 @@
 ## SYNOPSIS
 
 `git upstream` [(`-r`|`--include-remote`)] [(`-R`|`--no-include-remote`)]<br>
-`git upstream` [(`-h`|`--help`)]<br>
+`git upstream` (`-h`|`--help`)<br>
 `git upstream` (`-v`|`--version`)
 
 ## DESCRIPTION
@@ -27,6 +27,6 @@
 ## CONFIGURATION
 
 * `git-upstream.include-remote` <bool>:
-    True or false flag determining whether the remote name should be printed by default. Options (`-r`|`--include-remote`) and (`-R`|`--no-include-remote`) override this value.
+    <true> or <false> flag determining whether the remote name should be printed by default. Options (`-r`|`--include-remote`) and (`-R`|`--no-include-remote`) override this value.
 
     Default: <false>
