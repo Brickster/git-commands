@@ -1,64 +1,56 @@
-#! /bin/bash
+#! /usr/bin/env python
 
-readonly VERSION="0.1.0"
+import ast
+import getopt
+import re
+import sys
 
-. git-commands-utils
+from subprocess import call, check_output
+from utils.help import man
+from utils.messages import version, error, usage
 
-function main
-{
-    local include_remote=
 
-    while getopts ":rR-:" opt; do
-        case $opt in
-            -)
-                case "${OPTARG}" in
-                    include-remote)     include_remote=true;;
-                    no-include-remote)  include_remote=false;;
-                    *)                  error "Unimplemented option --${OPTARG}";;
-                esac
-                ;;
-            r)  include_remote=true;;
-            R)  include_remote=false;;
-            \?) error "Invalid option: -$OPTARG";;
-            :)  error "Option -$OPTARG requires an argument.";;
-            *)  error "Unimplemented option: -$OPTARG";;
-        esac
-    done
-    OPTIND=1
+def get_upstream(include_remote=False):
+    """Get the upstream branch of the current branch."""
 
-    # load defaults
-    include_remote=${include_remote:-$(git settings -d false git-upstream.include-remote)}
+    branch_info = check_output(['git', 'status', '--porcelain', '--branch']).splitlines()[0]
+    regex = "^##\s[-_a-zA-Z0-9]+\.{3}([-_a-zA-Z0-9]+/([-_a-zA-Z0-9]+))(?:\s\[.*\])?$"
+    match = re.match(regex, branch_info)
 
-    # get status with branch info
-    local status_output=$(git status --porcelain --branch)
-    IFS=$'\n' read -rd '' -a status_output <<< "$status_output"
+    upstream_info = ''
+    if match is not None:
+        upstream_info = match.group(1) if include_remote else match.group(2)
 
-    # if the branch has a remote, it'll be in the first line
-    local branch_info="${status_output[0]}"
+    return upstream_info
 
-    local regex="^## [-[:alnum:]]+\.{3}([-[:alnum:]]+/([-[:alnum:]]+))([:space:]\[.*\])?"
-    if [[ "$branch_info" =~ $regex ]]; then
-        if $include_remote; then
-            echo "${BASH_REMATCH[1]}"
-        else
-            echo "${BASH_REMATCH[2]}"
-        fi
-    fi
-}
 
-while getopts ":hv-:" opt; do
-    case $opt in
-        -)
-            case "${OPTARG}" in
-                help)       show_help;;
-                version)    show_version "$VERSION";;
-            esac
-            ;;
-        h)  show_help;;
-        v)  show_version "$VERSION";;
-    esac
-done
-OPTIND=1
+def get_include_remote_default():
+    """Get the default value for including remote info."""
 
-main "$@"
-exit 0
+    default = check_output(['git', 'settings', '-d', 'false', 'git-upstream.include-remote']).splitlines()[0]
+    default = str(default).lower() == 'true'
+    return default
+
+
+def main(argv):
+    try:
+        opts, left_args = getopt.getopt(argv, 'hvrR', ['help', 'version', 'include-remote', 'no-include-remote'])
+    except getopt.GetoptError as e:
+        error(e.msg, exit=False)
+        usage(['git upstream [(-r|--include-remote)] [(-R|--no-include-remote)]', 'git upstream (-h|--help)', 'git upstream (-v|--version)'])
+
+    include_remote = get_include_remote_default()
+    for opt, arg in opts:
+        if opt in ('-h', '--help'):
+            man()
+        elif opt in ('-v', '--version'):
+            version('0.1.0')
+        elif opt in ('-r', '--include-remote'):
+            include_remote = True
+        elif opt in ('-R', '--no-include-remote'):
+            include_remote = False
+
+    print get_upstream(include_remote)
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
