@@ -3,7 +3,7 @@
 ## SYNOPSIS
 
 `git snapshot` <message><br>
-`git snapshot` [(`-h`|`--help`)]<br>
+`git snapshot` (`-h`|`--help`)<br>
 `git snapshot` (`-v`|`--version`)
 
 ## DESCRIPTION
