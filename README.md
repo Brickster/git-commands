@@ -19,7 +19,7 @@ make uninstall
 ```
 or
 ```bash
-# remote the preveously added line
+# remove the previously added line
 ```
 
 ## Commands
