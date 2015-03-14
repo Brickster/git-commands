@@ -73,10 +73,9 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>git abandon</code> <var>count</var><br />
-<code>git abandon</code> <var>start</var>..<var>end</var><br />
-<code>git abandon</code> (-h|--help)<br />
-<code>git abandon</code> (-v|--version)</p>
+<p><code>git abandon</code> [(<code>-d</code>|<code>--dry-run</code>)] [<var>start</var>..]<var>end</var><br />
+<code>git abandon</code> (<code>-h</code>|<code>--help</code>)<br />
+<code>git abandon</code> (<code>-v</code>|<code>--version</code>)</p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
@@ -85,8 +84,8 @@
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
-<dt class="flush"><var>count</var></dt><dd><p>  A count of stashes to drop starting at 0. This is equivalent to <code>git abandon 0..$((&lt;count>-1))</code></p></dd>
-<dt><var>start</var>..<var>end</var></dt><dd><p>  Drop a range of stashes. Both <var>start</var> and <var>end</var> are inclusive.</p></dd>
+<dt><var>start</var>..<var>end</var></dt><dd><p>  Drop a range of stashes from <var>start</var> (inclusive) to <var>end</var> (exclusive). <var>start</var> is optional and if not specified then zero (0) will be used.</p></dd>
+<dt><code>-d</code>|<code>--dry-run</code></dt><dd><p>  Print the stashes that would be dropped but don't drop them.</p></dd>
 <dt><code>-h</code>|<code>--help</code></dt><dd><p>  Display git-abandon man page.</p></dd>
 <dt><code>-v</code>|<code>--version</code></dt><dd><p>  Print version.</p></dd>
 </dl>

@@ -7,16 +7,13 @@
 \fBgit\-abandon\fR \- drops a count or range of stashes
 .
 .SH "SYNOPSIS"
-\fBgit abandon\fR \fIcount\fR
+\fBgit abandon\fR [(\fB\-d\fR|\fB\-\-dry\-run\fR)] [\fIstart\fR\.\.]\fIend\fR
 .
 .br
-\fBgit abandon\fR \fIstart\fR\.\.\fIend\fR
+\fBgit abandon\fR (\fB\-h\fR|\fB\-\-help\fR)
 .
 .br
-\fBgit abandon\fR (\-h|\-\-help)
-.
-.br
-\fBgit abandon\fR (\-v|\-\-version)
+\fBgit abandon\fR (\fB\-v\fR|\fB\-\-version\fR)
 .
 .SH "DESCRIPTION"
 \fBgit\-abandon\fR is a shortcut for when you need to drop some, but not all, stashes\. Stashes can be dropped using a count or a range\. If you want to drop all your stashes, just use \fBgit stash clear\fR\.
@@ -24,12 +21,12 @@
 .SH "OPTIONS"
 .
 .TP
-\fIcount\fR
-A count of stashes to drop starting at 0\. This is equivalent to \fBgit abandon 0\.\.$((<count>\-1))\fR
+\fIstart\fR\.\.\fIend\fR
+Drop a range of stashes from \fIstart\fR (inclusive) to \fIend\fR (exclusive)\. \fIstart\fR is optional and if not specified then zero (0) will be used\.
 .
 .TP
-\fIstart\fR\.\.\fIend\fR
-Drop a range of stashes\. Both \fIstart\fR and \fIend\fR are inclusive\.
+\fB\-d\fR|\fB\-\-dry\-run\fR
+Print the stashes that would be dropped but don\'t drop them\.
 .
 .TP
 \fB\-h\fR|\fB\-\-help\fR

@@ -2,10 +2,9 @@
 
 ## SYNOPSIS
 
-`git abandon` <count><br>
-`git abandon` <start>..<end><br>
-`git abandon` (-h|--help)<br>
-`git abandon` (-v|--version)
+`git abandon` [(`-d`|`--dry-run`)] [<start>..]<end><br>
+`git abandon` (`-h`|`--help`)<br>
+`git abandon` (`-v`|`--version`)
 
 ## DESCRIPTION
 
@@ -13,11 +12,11 @@
 
 ## OPTIONS
 
-* <count>:
-    A count of stashes to drop starting at 0. This is equivalent to `git abandon 0..$((<count>-1))`
-
 * <start>..<end>:
-    Drop a range of stashes. Both <start> and <end> are inclusive.
+    Drop a range of stashes from <start> (inclusive) to <end> (exclusive). <start> is optional and if not specified then zero (0) will be used.
+
+* `-d`|`--dry-run`:
+    Print the stashes that would be dropped but don't drop them.
 
 * `-h`|`--help`:
     Display git-abandon man page.
