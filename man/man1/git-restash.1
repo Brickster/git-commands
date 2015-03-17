@@ -1,0 +1,46 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "GIT\-RESTASH" "1" "March 2015" "" ""
+.
+.SH "NAME"
+\fBgit\-restash\fR \- Restash changes
+.
+.SH "SYNOPSIS"
+\fBgit restash\fR [\fIstash\fR]
+.
+.br
+\fBgit restash\fR (\fB\-h\fR|\fB\-\-help\fR)
+.
+.br
+\fBgit restash\fR (\fB\-v\fR|\fB\-\-version\fR)
+.
+.SH "DESCRIPTION"
+Removes the changes applied by a stash\. This is effectively a shortcut to reverse apply a stash patch:
+.
+.IP "" 4
+.
+.nf
+
+git stash show \-\-patch | git apply \-\-reverse
+.
+.fi
+.
+.IP "" 0
+.
+.SH "OPTIONS"
+.
+.TP
+\fIstash\fR
+The stash whose patch should be reverse applied\. If not supplied, the latest stash will be used\.
+.
+.TP
+\fB\-h\fR|\fB\-\-help\fR
+Display the man page\.
+.
+.TP
+\fB\-v\fR|\fB\-\-version\fR
+Print the current version\.
+.
+.SH "SEE ALSO"
+git\-stash(1) \fIhttp://git\-scm\.com/docs/git\-stash\fR, git\-apply(1) \fIhttp://git\-scm\.com/docs/git\-apply\fR

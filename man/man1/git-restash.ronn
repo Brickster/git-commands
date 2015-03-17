@@ -1,0 +1,30 @@
+# git-restash(1) -- Restash changes
+
+## SYNOPSIS
+
+`git restash` [<stash>]<br>
+`git restash` (`-h`|`--help`)<br>
+`git restash` (`-v`|`--version`)
+
+## DESCRIPTION
+
+Removes the changes applied by a stash. This is effectively a shortcut to reverse apply a stash patch:
+
+```bash
+git stash show --patch | git apply --reverse
+```
+
+## OPTIONS
+
+* <stash>:
+	The stash whose patch should be reverse applied. If not supplied, the latest stash will be used.
+
+* `-h`|`--help`:
+	Display the man page.
+
+* `-v`|`--version`:
+	Print the current version.
+
+## SEE ALSO
+
+[git-stash(1)](http://git-scm.com/docs/git-stash), [git-apply(1)](http://git-scm.com/docs/git-apply)
