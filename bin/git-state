@@ -1,264 +1,271 @@
-#! /bin/bash
+#! /usr/bin/env python
 
-#
-# A more concise and comprehensive version of `git status` and `git log` in one command.
-#
+import getopt
+import re
+import sys
 
-readonly VERSION="0.1.0"
+from ast import literal_eval
+from subprocess import call, check_output, PIPE, Popen
+from utils.help import man
+from utils.messages import version, error, usage, info
 
-. git-commands-utils
+class colors:
+    green = "\x1B[0;32m"
+    no_color = "\x1B[0m"
 
-TEMP_FILE=$(mktemp "/tmp/git-state.XXXXXXXXXX")
 
-#
-# Echos a section of the state.
-#
-# The output can be echoed in pretty format or compact. Pretty format includes pre- and a- pended newlines
-# as well as tabs starting every line. Compact doesn't include the extra newlines and tabs added during
-# pretty printing.
-#
-# $1: the section title
-# $2: the text to print
-# $3: the format to print the text in (pretty/compact)
-#
-function echo_section
-{
-    title="$1"
-    text="$2"
-    print_format="$3"
+def print_section(title, text=None, format="compact"):
+    """Print a section."""
 
-    echo -e "# ${green}$title${nocolor}" >> "$TEMP_FILE"
-    if [[ $print_format == "pretty" ]] && [[ ! -z "$text" ]]; then
+    section = "# {}{}{}".format(colors.green, title, colors.no_color) + '\n'
 
-        IFS=$'\n' read -rd '' -a text <<< "$text"
-        tab="    "
-
-        echo >> "$TEMP_FILE"
-        count=${#text[@]}
-        for ((i=0;i<count;i++)); do
-            echo "$tab${text[i]}" >> "$TEMP_FILE"
-        done
-        echo >> "$TEMP_FILE"
-
-    elif [[ $print_format == "pretty" ]]; then
+    if format == "pretty" and text is not None and len(text) > 0:
+        # pretty print
+        section += '\n'
+        text = text.splitlines()
+        for line in text:
+            section += "    " + line + '\n'
+        section += '\n'
+    elif format == 'pretty':
         # there's no text but we still want some nicer formatting
-        echo >> "$TEMP_FILE"
-    elif [[ ! -z "$text" ]]; then
-        echo -e "$text" >> "$TEMP_FILE"
-    fi
-}
+        section += '\n'
+    elif format == 'compact':
+        section += text
+    else:
+        error("unknown format '{}'".format(format))
 
-function is_new_repository
-{
-    if [[ "$(git log --oneline -1 2>&1)" == "fatal: bad default revision 'HEAD'" ]]; then
-        return 0
-    else
-        return 1
-    fi
-}
+    return section
 
-function only_default_branch
-{
-    branches=$(git branch --no-color)
-    IFS=$'\n' read -rd '' -a branches <<< "$branches"
 
-    if (( ${#branches[@]} > 1 )); then
-        return 1
-    fi
+def get_options():
+    """Return all options and long options."""
 
-    default_branch=$(git settings -d "master" "git-state.branches.default")
-    if [[ "${branches[0]}" == "* $default_branch" ]]; then
-        return 0
-    else
-        return 1
-    fi
-}
+    # help options
+    options = ["h", "v"]
+    long_options = ["help", "version"]
 
-green='\x1B[0;32m'
-nocolor='\x1B[0m'
+    # status options
+    options += ['s', 'S']
+    long_options += ['status', 'no-status']
 
-while getopts ":hvpf:cCeELsSbBRtTl:r:-:" opt; do
-    case $opt in
-        -)
-            case "${OPTARG}" in
-                log)
-                    log_count="${!OPTIND}"
-                    OPTIND=$(( $OPTIND + 1 ))
-                    show_log=true
-                    ;;
-                reflog)
-                    reflog_count="${!OPTIND}"
-                    OPTIND=$(( $OPTIND + 1 ))
-                    show_reflog=true
-                    ;;
-                full-log)       log_count=-1;;
-                no-log)         log_count=0;;
-                full-reflog)    reflog_count=-1;;
-                no-reflog)      reflog_count=0;;
-                status)         show_status=true;;
-                no-status)      show_status=false;;
-                branches)       show_branches=true;;
-                no-branches)    show_branches=false;;
-                stashes)        show_stashes=true;;
-                no-stashes)     show_stashes=false;;
-                show-empty)     show_empty=true;;
-                no-show-empty)  show_empty=false;;
-                color)          color="always";;
-                pretty)         print_format="pretty";;
-                format)
-                    print_format="${!OPTIND}"
-                    OPTIND=$(( $OPTIND + 1 ))
-                    ;;
-                format=*)       print_format=${OPTARG#*=};;
-                no-color)
-                    color="never"
-                    green=""
-                    nocolor=""
-                    ;;
-                help)           show_help;;
-                version)        show_version "$VERSION";;
-                *)              error "Unimplemented option --${OPTARG}";;
-            esac
-            ;;
-        c)  color="always";;
-        C)
-            color="never"
-            green=""
-            nocolor=""
-            ;;
-        e)  show_empty=true;;
-        E)  show_empty=false;;
-        l)
-            log_count="$OPTARG"
-            show_log=true
-            ;;
-        L)  show_log=false;;
-        r)
-            reflog_count="$OPTARG"
-            show_reflog=true
-            ;;
-        R)  reflog_count=0;;
-        s)  show_status=true;;
-        S)  show_status=false;;
-        b)  show_branches=true;;
-        B)  show_branches=false;;
-        t)  show_stashes=true;;
-        T)  show_stashes=false;;
-        p)  print_format="pretty";;
-        f)  print_format="$OPTARG";;
-        h)  show_help;;
-        v)  show_version "$VERSION";;
-        \?) error "Invalid option: -$OPTARG";;
-        :)  error "Option -$OPTARG requires an argument.";;
-        *)  error "Unimplemented option: -$OPTARG";;
-    esac
-done
+    # log options
+    options += ["l:", "L"]
+    long_options += ["log=", "no-log", "full-log"]
 
-# load unset values from config
-show_log="${show_log:-"$(git settings -d true git-state.log.show)"}"
-log_count="${log_count:-"$(git settings -d 10 git-state.log.count)"}"
-show_reflog="${show_reflog:-"$(git settings -d true git-state.reflog.show)"}"
-reflog_count="${reflog_count:-"$(git settings -d 5 git-state.reflog.count)"}"
-show_status="${show_status:-"$(git settings -d true git-state.status.show)"}"
-show_branches="${show_branches:-"$(git settings -d true git-state.branches.show)"}"
-show_stashes="${show_stashes:-"$(git settings -d true git-state.stashes.show)"}"
-show_empty="${show_empty:-"$(git settings -d false git-state.show-empty)"}"
-print_format="${print_format:-$(git settings -d compact git-state.format)}"
-color="${color:-$(git settings -d always color.ui)}"
-show_only_default_branch="${show_only_default_branch:-$(git settings -d true git-state.branches.show-only-default)}"
+    # reflog options
+    options += ['r:', 'R']
+    long_options += ['reflog=', 'no-reflog', 'full-reflog']
 
-if is_new_repository; then
+    # branches options
+    options += ['b', 'B']
+    long_options += ['branches', 'no-branches']
 
-    # make sure status will output ANSI codes
-    # this must be done using config since status has no --color option
-    status_color=$(git config --local color.status)
-    git config color.status "$color"
+    # stashes options
+    options += ['t', 'T']
+    long_options += ['stashes', 'no-stashes']
 
-    status_info=$(git status --short)
-    if [[ -z "$status_info" ]]; then
-        status_info="Initial commit"
-    fi
+    # universal long options
+    options += ["c", "C", "p", "f:", '-e', '-E']
+    long_options += ["color", "no-color", "pretty", "format=", 'show-empty', 'no-show-empty']
 
-    echo_section "status $nocolor(${green}master$nocolor)" "$status_info" "$print_format"
+    return ("".join(options), long_options)
 
-    # reset color.status to its original setting
-    if [[ -z "$status_color" ]]; then
-        git config --unset color.status
 
-        # unset may leave an empty section, remove it if it is
-        section_count=$(git settings list --local --count color)
-        if (( $section_count == 0 )); then
-            git config --remove-section color
-        fi
+def only_default_branch():
+    """Determine whether the branches section only contains the default branch."""
 
-    else
-        git config color.status "$status_color"
-    fi
-else
-    # status
-    if $show_status; then
+    branches = check_output(['git', 'branch', '--no-color']).splitlines()
+
+    if len(branches) > 1:
+        return False
+
+    default_branch = check_output(['git', 'settings', '-d', 'master', 'git-state.branches.default']).splitlines()[0]
+    if re.match('\* {}'.format(default_branch), branches[0]) is not None:
+        return True
+    else:
+        return False
+
+
+def is_new_repository():
+    """Determines whether a repository is empty."""
+
+    log = Popen(['git', 'log', '--oneline', '-1'], stdout=PIPE, stderr=PIPE)
+    log_out, log_err = log.communicate()
+
+    return log_err != '' and log_err.splitlines()[0] == "fatal: bad default revision 'HEAD'"
+
+
+def main(argv):
+
+    # status defaults
+    show_status = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.status.show']))
+
+    # log defaults
+    show_log = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.log.show']))
+    log_count = literal_eval(check_output(['git', 'settings', '-d', '10', 'git-state.log.count']))
+
+    # reflog defaults
+    show_reflog = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.reflog.show']))
+    reflog_count = literal_eval(check_output(['git', 'settings', '-d', '5', 'git-state.reflog.count']))
+
+    # branches defaults
+    show_branches = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.branches.show']))
+
+    # stashes defaults
+    show_stashes = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.stashes.show']))
+
+    # general defaults
+    show_only_default_branch = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.branches.show-only-default']))
+    show_empty = literal_eval(check_output(['git', 'settings', '-d', 'False', 'git-state.show-empty']))
+    print_format = check_output(['git', 'settings', '-d', 'compact', 'git-state.format']).splitlines()[0]
+    color = check_output(['git', 'settings', '-d', 'always', 'color.ui']).splitlines()[0]
+
+    try:
+        opts, left_args = getopt.getopt(argv, *get_options())
+    except getopt.GetoptError as e:
+        error(e.msg, exit=False)
+        usage(['git state [(-s|--status)] [(-S|--no-status)]',
+            '          [(-l|--log) <count>] [(-L|--no-log)] [--full-log]',
+            '          [(-c|--color)] [(-C|--no-color)]',
+            '          [(-p|--pretty)] [(-f|--format) <format>]',
+            '          [(-r|--reflog) <count>] [(-R|--no-reflog)] [--full-reflog]',
+            '          [(-b|--branches)] [(-B|--no-branches)]',
+            '          [(-t|--stashes)] [(-T|--no-stashes)]',
+            '          [(-e|--show-empty)] [(-E|--no-show-empty)]',
+            'git state (-h|--help)',
+            'git state (-v|--version)'
+        ])
+
+    for opt, arg in opts:
+        if opt in ('-h', '--help'):
+            man()
+        elif opt in ('-v', '--version'):
+            version('0.1.0')
+        elif opt in ('-s', '--status'):
+            show_status = True
+        elif opt in ('-S', '--no-status'):
+            show_status = False
+        elif opt in ('-l', '--log'):
+            show_log = True
+            log_count = arg
+        elif opt in ('-L', '--no-log'):
+            show_log = False
+            log_count = 0
+        elif opt == '--full-log':
+            show_log = True
+            log_count = -1
+        elif opt in ('-r', '--reflog'):
+            show_reflog = True
+            reflog_count = arg
+        elif opt in ('-R', '--no-reflog'):
+            show_reflog = False
+            reflog_count = 0
+        elif opt == '--full-reflog':
+            show_reflog = True
+            reflog_count = -1
+        elif opt in ('-b', 'branches'):
+            show_branches = True
+        elif opt in ('-B', '--no-branches'):
+            show_branches = False
+        elif opt in ('-t', '--stashes'):
+            show_stashes = True
+        elif opt in ('-T', '--no-stashes'):
+            show_stashes = False
+        elif opt in ('-e', '--show-empty'):
+            show_empty = True
+        elif opt in ('-E', '--no-show-empty'):
+            show_empty = False
+        elif opt in ('-c', '--color'):
+            color = "always"
+        elif opt in ('-C', '--no-color'):
+            color = "never"
+            colors.green = colors.no_color
+        elif opt in ('-f', '--format'):
+            print_format = arg
+        elif opt in ('-p', '--pretty'):
+            print_format = "pretty"
+
+    state = ''
+    if is_new_repository():
+
         # make sure status will output ANSI codes
         # this must be done using config since status has no --color option
-        status_color=$(git config --local color.status)
-        git config color.status "$color"
+        status_color = Popen(['git', 'config', '--local', 'color.status'], stdout=PIPE, stderr=PIPE)
+        status_color_out, status_color_err = status_color.communicate()
+        call(['git', 'config', 'color.status', color])
 
-        # get the --branch part of 'git status --short --branch'
-        status_info=$(git status --short --branch)
-        IFS=$'\n' read -rd '' -a status_info <<< "$status_info"
-        title="${status_info[0]}"
-        title="${title##"## "}"
+        # check if status is empty
+        status = check_output(['git', 'status', '--short'])
+        if status == "":
+            status = "Initial commit"
 
-        status_info=$(git status --short)
-
-        # an extra $nocolor used to make color print in its own coloring
-        echo_section "status $nocolor($title)" "$status_info" "$print_format"
+        title = 'status {}({}master{})'.format(colors.no_color, colors.green, colors.no_color)
+        state += print_section(title, status, print_format)
 
         # reset color.status to its original setting
-        if [[ -z "$status_color" ]]; then
-            git config --unset color.status
+        if status_color_err == '':
+            call(['git', 'config', '--unset', 'color.status'])
 
             # unset may leave an empty section, remove it if it is
-            section_count=$(git settings list --local --count color)
-            if (( $section_count == 0 )); then
-                git config --remove-section color
-            fi
+            section_count = literal_eval(check_output(['git', 'settings', 'list', '--local', '--count', color]))
+            if section_count == 0:
+                call(['git', 'config', '--remove-section', 'color'])
+        else:
+            call(['git', 'config', 'color.status', color_status_out])
 
-        else
-            git config color.status "$status_color"
-        fi
-    fi
+    else:
+        # with open('/Users/z0018n6/Desktop/tmp.txt', 'w') as file:
+        if show_status:
 
-    if $show_log && (( $log_count != 0 )); then
-        log_output=$(git log -n "$log_count" --oneline --color="$color")
-        echo_section "log" "$log_output" "$print_format"
-    fi
+            # make sure status will output ANSI codes
+            # this must be done using config since status has no --color option
+            status_color = Popen(['git', 'config', '--local', 'color.status'], stdout=PIPE, stderr=PIPE)
+            status_color_out, status_color_err = status_color.communicate()
+            call(['git', 'config', 'color.status', color])
 
-    # reflog
-    if $show_reflog && (( $reflog_count != 0 )); then
-        reflog_output=$(git reflog -n "$reflog_count" --color="$color")
-        echo_section "reflog" "$reflog_output" "$print_format"
-    fi
+            status = check_output(['git', 'status', '--short', '--branch']).splitlines()
+            status_title = 'status {}({})'.format(colors.no_color ,status.pop(0).lstrip('# '))
+            status = '\n'.join(status)
+            state += print_section(status_title, status, print_format)
 
-    # branches
-    if $show_branches && ( $show_only_default_branch || ! only_default_branch ); then
-        branch_output=$(git branch -vv --color="$color")
-        echo_section "branches" "$branch_output" "$print_format"
-    fi
+            # reset color.status to its original setting
+            if status_color_err == '':
+                call(['git', 'config', '--unset', 'color.status'])
 
-    # stashes
-    if $show_stashes && ( $show_empty || [[ ! -z $(git stash list) ]] ); then
-        stash_output=$(git stash list --oneline --color="$color")
-        echo_section "stashes" "$stash_output" "$print_format"
-    fi
-fi
+                # unset may leave an empty section, remove it if it is
+                section_count = literal_eval(check_output(['git', 'settings', 'list', '--local', '--count', color]))
+                if section_count == 0:
+                    call(['git', 'config', '--remove-section', 'color'])
+            else:
+                call(['git', 'config', 'color.status', color_status_out])
 
-terminal_lines=$(tput lines)
-state_lines=$(wc -l < "$TEMP_FILE" | awk '{print $1}')
 
-# if git-state is too long for the window, less it instead
-if (( $terminal_lines >= ((state_lines + 1)) )); then
-    cat "$TEMP_FILE"
-else
-    cat "$TEMP_FILE" | less -r
-fi
-rm "$TEMP_FILE"
+        if show_log and log_count != 0:
+            log = check_output(['git', 'log', '-n', str(log_count), '--oneline', '--color={}'.format(color)])
+            state += print_section("log", log, print_format)
+
+        if show_reflog and reflog_count != 0:
+            reflog = check_output(['git', 'reflog', '-n', str(reflog_count), '--color={}'.format(color)])
+            state += print_section('reflog', reflog, print_format)
+
+        if show_branches and (show_only_default_branch or not only_default_branch()):
+            branches = check_output(['git', 'branch', '-vv', '--color={}'.format(color)])
+            state += print_section('branches', branches, print_format)
+
+        stashes = stashes = check_output(['git', 'stash', 'list', '--oneline', '--color={}'.format(color)])
+        if show_stashes and (show_empty or len(stashes) > 0):
+            state += print_section('stashes', stashes, print_format)
+
+    state = state[:-1] # strip the extra trailing newline
+    state_lines = len(state.splitlines())
+    terminal_lines = literal_eval(check_output(['tput', 'lines']))
+    if terminal_lines >= state_lines + 2: # one for the newline and one for the prompt
+        print state
+    else:
+        echo = Popen(['echo', state], stdout=PIPE)
+        call(['less', '-r'], stdin=echo.stdout)
+        echo.wait()
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
