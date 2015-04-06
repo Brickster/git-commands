@@ -1,11 +1,10 @@
 #! /usr/bin/env python
 
-import getopt
+import argparse
 import sys
 
 from subprocess import call, check_output
-from utils.help import man
-from utils.messages import version, error, usage, info
+from utils.messages import info
 
 
 def get_changes(count, branch):
@@ -21,25 +20,19 @@ def get_changes(count, branch):
 
 
 def main(argv):
-    try:
-        opts, left_args = getopt.getopt(argv, "hvcb:", ["help", "version", "count", "branch="])
-    except getopt.GetoptError as e:
-        error(e.msg, exit=False)
-        usage(["git changes [(-b |--branch=)<branch>] [(-c|--count)]", "git changes (-h|--help)", "git changes (-v|--version)"])
 
-    branch = check_output(['git', 'settings', '-d', 'master', 'git-changes.default-branch']).splitlines()[0]
-    count = False
-    for opt, arg in opts:
-        if opt in ('-h', '--help'):
-            man()
-        elif opt in ('-v', '--version'):
-            version('0.1.0')
-        elif opt in ('-c', '--count'):
-            count = True
-        elif opt in ('-b', '--branch'):
-            branch = arg
+    parser = argparse.ArgumentParser(
+        prog="git changes",
+        version="git-changes 0.1.0",
+        description="list the commits between this branch and another"
+    )
 
-    get_changes(count, branch)
+    default_branch = check_output(['git', 'settings', '-d', 'master', 'git-changes.default-branch']).splitlines()[0]
+    parser.add_argument("-b", "--branch", help="show the commits between HEAD and <branch>", metavar="<branch>", default=default_branch)
+    parser.add_argument("-c", "--count", help="print the total changes instead of listing them", action="store_true")
+    args = parser.parse_args()
+
+    get_changes(args.count, args.branch)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
