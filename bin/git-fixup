@@ -1,12 +1,10 @@
 #! /usr/bin/env python
 
-import getopt
+import argparse
 import re
 import sys
 
 from subprocess import call, check_output
-from utils.help import man
-from utils.messages import version, error, usage
 
 
 def fixup(commit, body):
@@ -22,23 +20,17 @@ def fixup(commit, body):
 
 
 def main(argv):
-    try:
-        opts, left_args = getopt.getopt(argv, 'hvb:', ['help', 'version', 'body='])
-    except getopt.GetoptError as e:
-        error(e.msg, exit=False)
-        usage(['git fixup (-b |--body=)<message>', 'git fixup (-h|--help)', 'git fixup (-v|--version)'])
 
-    body = None
-    for opt, arg in opts:
-        if opt in ('-h', '--help'):
-            man()
-        elif opt in ('-v', '--version'):
-            version('0.1.0')
-        elif opt in ('-b', '--body'):
-            body = arg
+    parser = argparse.ArgumentParser(
+        prog="git fixup",
+        version="git-fixup 0.1.0",
+        description="commits staged changes as an autosquashable fixup"
+    )
+    parser.add_argument("commit", help="the commit to fixup into (default: HEAD)", nargs="?", default="HEAD", metavar="<commit>")
+    parser.add_argument("-b", "--body", help="the message body to use in the fixup commit", metavar="<message>")
+    args = parser.parse_args()
 
-    commit = left_args[0] if len(left_args) > 0 else 'HEAD'
-    fixup(commit, body)
+    fixup(args.commit, args.body)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
