@@ -18,7 +18,7 @@ $ git stash apply
 ## OPTIONS
 
 * <message> :
-    The message to use when creating the underly stash. If no message is supplied, the default `git-stash` message is used.
+    The message to use when creating the underlying stash. If no message is supplied, the default `git-stash` message is used.
 
 * `-h`|`--help`:
 	Display git-snapshot man page.
