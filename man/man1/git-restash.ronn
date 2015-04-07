@@ -1,4 +1,4 @@
-# git-restash(1) -- Restash changes
+# git-restash(1) -- restash changes
 
 ## SYNOPSIS
 
