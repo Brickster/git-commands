@@ -1,19 +1,17 @@
 #! /usr/bin/env python
 
-import getopt
+import argparse
 import re
-import subprocess
 import sys
 
-from subprocess import call, check_output
-from utils.help import man
-from utils.messages import version, error, usage
+from subprocess import call, check_output, PIPE, Popen
+from utils.messages import error
 
 
 def restash(stash="stash@{0}"):
     """Restashes a stash reference."""
 
-    patch = subprocess.Popen(['git', 'stash', 'show', '--patch', '--no-color', stash], stdout=subprocess.PIPE)
+    patch = Popen(['git', 'stash', 'show', '--patch', '--no-color', stash], stdout=PIPE)
     call(['git', 'apply', '--reverse'], stdin=patch.stdout)
     patch.wait()
 
@@ -21,24 +19,20 @@ def restash(stash="stash@{0}"):
     print 'Restashed {} ({})'.format(stash, stash_sha)
 
 def main(argv):
-    try:
-        opts, left_args = getopt.getopt(argv, "hv", ["help", "version"])
-    except getopt.GetoptError as e:
-        error(e.msg, exit=False)
-        usage(["git restash <stash>", "git restash (-h|--help)", "git restash (-v|--version)"])
-    for opt, arg in opts:
-        if opt in ('-h', '--help'):
-            man()
-        elif opt in ('-v', '--version'):
-            version('0.1.0')
 
-    if len(left_args) > 0:
-        stash = left_args[0]
-        if re.match("^stash@{.*}$", stash) is None:
-            error('{} is not a valid stash reference'.format(stash))
-        restash(stash)
-    else:
-        restash()
+    parser = argparse.ArgumentParser(
+        prog="git restash",
+        version="git-restash 0.1.0",
+        description="restash changes"
+    )
+    parser.add_argument("stash", help="stash whose patch should be reverse applied (default: stash@{0})", metavar="<stash>", nargs="?", default="stash@{0}")
+
+    args = parser.parse_args()
+    stash = args.stash
+
+    if re.match("^stash@{.*}$", stash) is None:
+        error('{} is not a valid stash reference'.format(stash))
+    restash(stash)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
