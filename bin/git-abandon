@@ -3,13 +3,11 @@
 # Drop a count or range of stashes.
 #
 
-import getopt
-import re
+import argparse
 import sys
 
 from subprocess import call, check_output
-from utils.help import man
-from utils.messages import version, error, usage, info
+from utils.messages import error
 
 
 def drop_stashes(start, end, dry_run=False):
@@ -19,7 +17,7 @@ def drop_stashes(start, end, dry_run=False):
     if end < start:
         error("end of range cannot come before the start")
     elif start > stash_count:
-        error("start to high", exit=False)
+        error("start too high", exit=False)
         error("only {} stashes exist".format(stash_count))
     elif end > stash_count:
         end = stash_count
@@ -37,46 +35,21 @@ def drop_stashes(start, end, dry_run=False):
             print 'Dropped refs/stash@{{{}}} ({})'.format(i, stash_sha)
 
 
-def parse_range(string):
-    """Parse a range from a string."""
-
-    if re.match('^(?:\d+\.\.)?\d+$', string) is not None:
-        numbers = string.split('..')
-        numbers = [int(i) for i in numbers]
-        numbers = numbers if len(numbers) == 2 else [0, numbers[0]]
-    else:
-        error('a number or range of stashes to drop must be specified', exit=False)
-        usage("git abandon [<start>..]<end>")
-
-    return numbers
-
-
 def main(argv):
-    try:
-        opts, left_args = getopt.getopt(argv, "hvd", ["help", "version", "dry-run"])
-    except getopt.GetoptError as e:
-        # first check that the user didn't specify a negative value that looked like an option
-        if e.opt in [str(i) for i in range(10)]:
-            error("start/count cannot be negative")
-        else:
-            error(e.msg, exit=False)
-            usage(["git abandon [(-d|--dry-run)] [<start>..]<end>", "git abandon (-h|--help)", "git abandon (-v|--version)"])
 
-    dry_run = False
-    for opt, arg in opts:
-        if opt in ('-h', '--help'):
-            man()
-        elif opt in ('-v', '--version'):
-            version('0.1.0')
-        elif opt in ('-d', '--dry-run'):
-            dry_run = True
+    parser = argparse.ArgumentParser(
+        prog="git abandon",
+        version="git-abandon 0.1.0",
+        description="drop a count or range of stashes"
+    )
 
-    if len(left_args) == 0:
-        error('a number or range of stashes to drop must be specified', exit=False)
-        usage("git abandon [<start>..]<end>")
+    parser.add_argument("start", help="the range start (inclusive) (default: 0)", nargs="?", default="0", metavar="<start>", type=int)
+    parser.add_argument("end", help="the range end (exclusive)", metavar="<end>", type=int)
+    parser.add_argument("-d", "--dry-run", help="print the stashes that would be dropped but don't drop them", action="store_true")
 
-    start, end = parse_range(left_args[0])
-    drop_stashes(start, end, dry_run)
+    args = parser.parse_args()
+
+    drop_stashes(args.start, args.end, args.dry_run)
 
 if __name__ == "__main__":
     main(sys.argv[1:])

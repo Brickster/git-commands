@@ -1,13 +1,13 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-ABANDON" "1" "March 2015" "" ""
+.TH "GIT\-ABANDON" "1" "April 2015" "" ""
 .
 .SH "NAME"
-\fBgit\-abandon\fR \- drops a count or range of stashes
+\fBgit\-abandon\fR \- drop a count or range of stashes
 .
 .SH "SYNOPSIS"
-\fBgit abandon\fR [(\fB\-d\fR|\fB\-\-dry\-run\fR)] [\fIstart\fR\.\.]\fIend\fR
+\fBgit abandon\fR [(\fB\-d\fR|\fB\-\-dry\-run\fR)] [\fIstart\fR] \fIend\fR
 .
 .br
 \fBgit abandon\fR (\fB\-h\fR|\fB\-\-help\fR)
@@ -21,8 +21,12 @@
 .SH "OPTIONS"
 .
 .TP
-\fIstart\fR\.\.\fIend\fR
-Drop a range of stashes from \fIstart\fR (inclusive) to \fIend\fR (exclusive)\. \fIstart\fR is optional and if not specified then zero (0) will be used\.
+\fIstart\fR
+An optional start (inclusive) of the range of stashes to drop\. If not specified, zero (0) will be used\.
+.
+.TP
+\fIend\fR
+The end (exclusive) of the range of stashes to drop\.
 .
 .TP
 \fB\-d\fR|\fB\-\-dry\-run\fR
