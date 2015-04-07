@@ -1,8 +1,8 @@
-# git-abandon(1) -- drops a count or range of stashes
+# git-abandon(1) -- drop a count or range of stashes
 
 ## SYNOPSIS
 
-`git abandon` [(`-d`|`--dry-run`)] [<start>..]<end><br>
+`git abandon` [(`-d`|`--dry-run`)] [<start>] <end><br>
 `git abandon` (`-h`|`--help`)<br>
 `git abandon` (`-v`|`--version`)
 
@@ -12,8 +12,11 @@
 
 ## OPTIONS
 
-* <start>..<end>:
-    Drop a range of stashes from <start> (inclusive) to <end> (exclusive). <start> is optional and if not specified then zero (0) will be used.
+* <start>:
+    An optional start (inclusive) of the range of stashes to drop. If not specified, zero (0) will be used.
+
+* <end>:
+    The end (exclusive) of the range of stashes to drop.
 
 * `-d`|`--dry-run`:
     Print the stashes that would be dropped but don't drop them.

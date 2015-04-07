@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv='content-type' value='text/html;charset=utf8'>
   <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
-  <title>git-abandon(1) - drops a count or range of stashes</title>
+  <title>git-abandon(1) - drop a count or range of stashes</title>
   <style type='text/css' media='all'>
   /* style: man */
   body#manpage {margin:0}
@@ -68,12 +68,12 @@
 
   <h2 id="NAME">NAME</h2>
 <p class="man-name">
-  <code>git-abandon</code> - <span class="man-whatis">drops a count or range of stashes</span>
+  <code>git-abandon</code> - <span class="man-whatis">drop a count or range of stashes</span>
 </p>
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>git abandon</code> [(<code>-d</code>|<code>--dry-run</code>)] [<var>start</var>..]<var>end</var><br />
+<p><code>git abandon</code> [(<code>-d</code>|<code>--dry-run</code>)] [<var>start</var>] <var>end</var><br />
 <code>git abandon</code> (<code>-h</code>|<code>--help</code>)<br />
 <code>git abandon</code> (<code>-v</code>|<code>--version</code>)</p>
 
@@ -84,7 +84,8 @@
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
-<dt><var>start</var>..<var>end</var></dt><dd><p>  Drop a range of stashes from <var>start</var> (inclusive) to <var>end</var> (exclusive). <var>start</var> is optional and if not specified then zero (0) will be used.</p></dd>
+<dt class="flush"><var>start</var></dt><dd><p>  An optional start (inclusive) of the range of stashes to drop. If not specified, zero (0) will be used.</p></dd>
+<dt class="flush"><var>end</var></dt><dd><p>  The end (exclusive) of the range of stashes to drop.</p></dd>
 <dt><code>-d</code>|<code>--dry-run</code></dt><dd><p>  Print the stashes that would be dropped but don't drop them.</p></dd>
 <dt><code>-h</code>|<code>--help</code></dt><dd><p>  Display git-abandon man page.</p></dd>
 <dt><code>-v</code>|<code>--version</code></dt><dd><p>  Print version.</p></dd>
@@ -98,7 +99,7 @@
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>March 2015</li>
+    <li class='tc'>April 2015</li>
     <li class='tr'>git-abandon(1)</li>
   </ol>
 
