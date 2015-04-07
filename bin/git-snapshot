@@ -4,12 +4,11 @@
 # `git stash save` <message> followed by `git stash apply`.
 #
 
-import getopt
+import argparse
 import sys
 
 from subprocess import check_output, call
-from utils.help import man
-from utils.messages import version, error, usage, info
+from utils.messages import info
 
 
 def create_snapshot(message):
@@ -29,20 +28,17 @@ def create_snapshot(message):
 
 
 def main(argv):
-    try:
-        opts, left_args = getopt.getopt(argv, "hv", ["help", "version"])
-    except getopt.GetoptError as e:
-        error(e.msg, exit=False)
-        usage(["git snapshot <message>", "git snapshot (-h|--help)", "git snapshot (-v|--version)"])
 
-    for opt, arg in opts:
-        if opt in ('-h', '--help'):
-            man()
-        elif opt in ('-v', '--version'):
-            version('0.1.0')
+    parser = argparse.ArgumentParser(
+        prog="git snapshot",
+        version="git-snapshot 0.1.0",
+        description="create a snapshot of the changes in a dirty working directory"
+    )
+    parser.add_argument("message", help="the message to use when creating the underlying stash", metavar="<message>", default=None, nargs="?")
 
-    message = left_args[0] if len(left_args) > 0 else None
-    create_snapshot(message)
+    args = parser.parse_args()
+
+    create_snapshot(args.message)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
