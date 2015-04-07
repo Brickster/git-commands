@@ -1,13 +1,10 @@
 #! /usr/bin/env python
 
-import ast
-import getopt
+import argparse
 import re
 import sys
 
 from subprocess import call, check_output
-from utils.help import man
-from utils.messages import version, error, usage
 
 
 def get_upstream(include_remote=False):
@@ -33,24 +30,20 @@ def get_include_remote_default():
 
 
 def main(argv):
-    try:
-        opts, left_args = getopt.getopt(argv, 'hvrR', ['help', 'version', 'include-remote', 'no-include-remote'])
-    except getopt.GetoptError as e:
-        error(e.msg, exit=False)
-        usage(['git upstream [(-r|--include-remote)] [(-R|--no-include-remote)]', 'git upstream (-h|--help)', 'git upstream (-v|--version)'])
 
-    include_remote = get_include_remote_default()
-    for opt, arg in opts:
-        if opt in ('-h', '--help'):
-            man()
-        elif opt in ('-v', '--version'):
-            version('0.1.0')
-        elif opt in ('-r', '--include-remote'):
-            include_remote = True
-        elif opt in ('-R', '--no-include-remote'):
-            include_remote = False
+    parser = argparse.ArgumentParser(
+        prog="git upstream",
+        version="git-upstream 0.1.0",
+        description="get the current upstream branch"
+    )
 
-    print get_upstream(include_remote)
+    include_remote_group = parser.add_mutually_exclusive_group()
+    include_remote_group.add_argument("-r", "--include-remote", help="include the remote name", action="store_true", dest="include_remote", default=get_include_remote_default())
+    include_remote_group.add_argument("-R", "--no-include-remote", help="don't include the remote name", action="store_false", dest="include_remote")
+
+    args = parser.parse_args()
+
+    print get_upstream(args.include_remote)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
