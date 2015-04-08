@@ -1,4 +1,4 @@
-# git-state(1) -- View the state of the working tree
+# git-state(1) -- view the state of the working tree
 
 ## SYNOPSIS
 
