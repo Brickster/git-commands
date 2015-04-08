@@ -1,17 +1,22 @@
 #! /usr/bin/env python
 
-import getopt
+import argparse
 import re
-import sys
 
 from ast import literal_eval
 from subprocess import call, check_output, PIPE, Popen
-from utils.help import man
-from utils.messages import version, error, usage, info
+from utils.messages import error
 
 class colors:
     green = "\x1B[0;32m"
     no_color = "\x1B[0m"
+
+
+def flag_as_value(value):
+    class FlagAsInt(argparse.Action):
+        def __call__(self, parser, namespace, values, option_string=None):
+            setattr(namespace, self.dest, value)
+    return FlagAsInt
 
 
 def print_section(title, text=None, format="compact"):
@@ -35,40 +40,6 @@ def print_section(title, text=None, format="compact"):
         error("unknown format '{}'".format(format))
 
     return section
-
-
-def get_options():
-    """Return all options and long options."""
-
-    # help options
-    options = ["h", "v"]
-    long_options = ["help", "version"]
-
-    # status options
-    options += ['s', 'S']
-    long_options += ['status', 'no-status']
-
-    # log options
-    options += ["l:", "L"]
-    long_options += ["log=", "no-log", "full-log"]
-
-    # reflog options
-    options += ['r:', 'R']
-    long_options += ['reflog=', 'no-reflog', 'full-reflog']
-
-    # branches options
-    options += ['b', 'B']
-    long_options += ['branches', 'no-branches']
-
-    # stashes options
-    options += ['t', 'T']
-    long_options += ['stashes', 'no-stashes']
-
-    # universal long options
-    options += ["c", "C", "p", "f:", '-e', '-E']
-    long_options += ["color", "no-color", "pretty", "format=", 'show-empty', 'no-show-empty']
-
-    return ("".join(options), long_options)
 
 
 def only_default_branch():
@@ -95,95 +66,91 @@ def is_new_repository():
     return log_err != '' and log_err.splitlines()[0] == "fatal: bad default revision 'HEAD'"
 
 
-def main(argv):
+def main():
 
     # status defaults
-    show_status = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.status.show']))
+    default_show_status = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.status.show']))
 
     # log defaults
     show_log = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.log.show']))
-    log_count = literal_eval(check_output(['git', 'settings', '-d', '10', 'git-state.log.count']))
+    if show_log:
+        default_log_count = literal_eval(check_output(['git', 'settings', '-d', '10', 'git-state.log.count']))
+    else:
+        default_log_count = 0
 
     # reflog defaults
     show_reflog = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.reflog.show']))
-    reflog_count = literal_eval(check_output(['git', 'settings', '-d', '5', 'git-state.reflog.count']))
+    if show_reflog:
+        default_reflog_count = literal_eval(check_output(['git', 'settings', '-d', '5', 'git-state.reflog.count']))
+    else:
+        default_reflog_count = 0
 
     # branches defaults
-    show_branches = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.branches.show']))
+    default_show_branches = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.branches.show']))
 
     # stashes defaults
-    show_stashes = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.stashes.show']))
+    default_show_stashes = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.stashes.show']))
 
     # general defaults
     show_only_default_branch = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.branches.show-only-default']))
-    show_empty = literal_eval(check_output(['git', 'settings', '-d', 'False', 'git-state.show-empty']))
-    print_format = check_output(['git', 'settings', '-d', 'compact', 'git-state.format']).splitlines()[0]
-    color = check_output(['git', 'settings', '-d', 'always', 'color.ui']).splitlines()[0]
+    default_show_empty = literal_eval(check_output(['git', 'settings', '-d', 'False', 'git-state.show-empty']))
+    default_format = check_output(['git', 'settings', '-d', 'compact', 'git-state.format']).splitlines()[0]
+    default_show_color = check_output(['git', 'settings', '-d', 'always', 'color.ui']).splitlines()[0]
 
-    try:
-        opts, left_args = getopt.getopt(argv, *get_options())
-    except getopt.GetoptError as e:
-        error(e.msg, exit=False)
-        usage(['git state [(-s|--status)] [(-S|--no-status)]',
-            '          [(-l|--log) <count>] [(-L|--no-log)] [--full-log]',
-            '          [(-c|--color)] [(-C|--no-color)]',
-            '          [(-p|--pretty)] [(-f|--format) <format>]',
-            '          [(-r|--reflog) <count>] [(-R|--no-reflog)] [--full-reflog]',
-            '          [(-b|--branches)] [(-B|--no-branches)]',
-            '          [(-t|--stashes)] [(-T|--no-stashes)]',
-            '          [(-e|--show-empty)] [(-E|--no-show-empty)]',
-            'git state (-h|--help)',
-            'git state (-v|--version)'
-        ])
+    parser = argparse.ArgumentParser(
+        prog="git state",
+        version="git-state 0.1.0",
+        description="view the state of the working tree"
+    )
 
-    for opt, arg in opts:
-        if opt in ('-h', '--help'):
-            man()
-        elif opt in ('-v', '--version'):
-            version('0.1.0')
-        elif opt in ('-s', '--status'):
-            show_status = True
-        elif opt in ('-S', '--no-status'):
-            show_status = False
-        elif opt in ('-l', '--log'):
-            show_log = True
-            log_count = arg
-        elif opt in ('-L', '--no-log'):
-            show_log = False
-            log_count = 0
-        elif opt == '--full-log':
-            show_log = True
-            log_count = -1
-        elif opt in ('-r', '--reflog'):
-            show_reflog = True
-            reflog_count = arg
-        elif opt in ('-R', '--no-reflog'):
-            show_reflog = False
-            reflog_count = 0
-        elif opt == '--full-reflog':
-            show_reflog = True
-            reflog_count = -1
-        elif opt in ('-b', 'branches'):
-            show_branches = True
-        elif opt in ('-B', '--no-branches'):
-            show_branches = False
-        elif opt in ('-t', '--stashes'):
-            show_stashes = True
-        elif opt in ('-T', '--no-stashes'):
-            show_stashes = False
-        elif opt in ('-e', '--show-empty'):
-            show_empty = True
-        elif opt in ('-E', '--no-show-empty'):
-            show_empty = False
-        elif opt in ('-c', '--color'):
-            color = "always"
-        elif opt in ('-C', '--no-color'):
-            color = "never"
-            colors.green = colors.no_color
-        elif opt in ('-f', '--format'):
-            print_format = arg
-        elif opt in ('-p', '--pretty'):
-            print_format = "pretty"
+    # status
+    status_group = parser.add_mutually_exclusive_group()
+    status_group.add_argument("-s", "--status", help="", action="store_true", dest="show_status", default=default_show_status)
+    status_group.add_argument("-S", "--no-status", help="", action="store_false", dest="show_status")
+
+    # log
+    log_group = parser.add_mutually_exclusive_group()
+    log_group.add_argument("-l", "--log", help="", type=int, dest="log_count", metavar="<count>", default=default_log_count)
+    log_group.add_argument("-L", "--no-log", help="", action=flag_as_value(0), dest="log_count", nargs=0)
+    log_group.add_argument("--full-log", help="", action=flag_as_value(-1), dest="log_count", nargs=0)
+
+    # reflog
+    reflog_group = parser.add_mutually_exclusive_group()
+    reflog_group.add_argument("-r", "--reflog", help="", type=int, dest="reflog_count", metavar="<count>", default=default_reflog_count)
+    reflog_group.add_argument("-R", "--no-reflog", help="", action=flag_as_value(0), dest="reflog_count", nargs=0)
+    reflog_group.add_argument("--full-reflog", help="", action=flag_as_value(-1), dest="reflog_count", nargs=0)
+
+    # branches
+    branches_group = parser.add_mutually_exclusive_group()
+    branches_group.add_argument("-b", "--branches", help="", action="store_true", dest="show_branches", default=default_show_branches)
+    branches_group.add_argument("-B", "--no-branches", help="", action="store_false", dest="show_branches")
+
+    # stashes
+    stashes_group = parser.add_mutually_exclusive_group()
+    stashes_group.add_argument("-t", "--stashes", help="", action="store_true", dest="show_stashes", default=default_show_stashes)
+    stashes_group.add_argument("-T", "--no-stashes", help="", action="store_false", dest="show_stashes")
+
+    # general
+    ## color
+    color_group = parser.add_mutually_exclusive_group()
+    color_group.add_argument("-c", "--color", help="always color output", action="store_true", dest="show_color", default=default_show_color)
+    color_group.add_argument("-C", "--no-color", help="never color output", action="store_false", dest="show_color")
+    ## format
+    format_group = parser.add_mutually_exclusive_group()
+    format_group.add_argument("-f", "--format", help="", choices=("pretty", "compact"), metavar="<format>", dest="format", default=default_format)
+    format_group.add_argument("-p", "--pretty", help="", action=flag_as_value("pretty"), dest="format", nargs=0)
+    ## show empty
+    show_empty_group = parser.add_mutually_exclusive_group()
+    show_empty_group.add_argument("-e", "--show-empty", help="", action="store_true", dest="show_empty", default=default_show_empty)
+    show_empty_group.add_argument("-E", "--no-show-empty", help="", action="store_false", dest="show_empty")
+
+    args = parser.parse_args()
+
+    if args.show_color:
+        color = "always"
+    else:
+        color = "never"
+        colors.green = colors.no_color
 
     state = ''
     if is_new_repository():
@@ -200,7 +167,7 @@ def main(argv):
             status = "Initial commit"
 
         title = 'status {}({}master{})'.format(colors.no_color, colors.green, colors.no_color)
-        state += print_section(title, status, print_format)
+        state += print_section(title, status, args.format)
 
         # reset color.status to its original setting
         if status_color_err == '':
@@ -214,8 +181,7 @@ def main(argv):
             call(['git', 'config', 'color.status', color_status_out])
 
     else:
-        # with open('/Users/z0018n6/Desktop/tmp.txt', 'w') as file:
-        if show_status:
+        if args.show_status:
 
             # make sure status will output ANSI codes
             # this must be done using config since status has no --color option
@@ -226,7 +192,7 @@ def main(argv):
             status = check_output(['git', 'status', '--short', '--branch']).splitlines()
             status_title = 'status {}({})'.format(colors.no_color ,status.pop(0).lstrip('# '))
             status = '\n'.join(status)
-            state += print_section(status_title, status, print_format)
+            state += print_section(status_title, status, args.format)
 
             # reset color.status to its original setting
             if status_color_err == '':
@@ -239,22 +205,21 @@ def main(argv):
             else:
                 call(['git', 'config', 'color.status', color_status_out])
 
+        if args.log_count != 0:
+            log = check_output(['git', 'log', '-n', str(args.log_count), '--oneline', '--color={}'.format(color)])
+            state += print_section("log", log, args.format)
 
-        if show_log and log_count != 0:
-            log = check_output(['git', 'log', '-n', str(log_count), '--oneline', '--color={}'.format(color)])
-            state += print_section("log", log, print_format)
+        if args.reflog_count != 0:
+            reflog = check_output(['git', 'reflog', '-n', str(args.reflog_count), '--color={}'.format(color)])
+            state += print_section('reflog', reflog, args.format)
 
-        if show_reflog and reflog_count != 0:
-            reflog = check_output(['git', 'reflog', '-n', str(reflog_count), '--color={}'.format(color)])
-            state += print_section('reflog', reflog, print_format)
-
-        if show_branches and (show_only_default_branch or not only_default_branch()):
+        if args.show_branches and (show_only_default_branch or not only_default_branch()):
             branches = check_output(['git', 'branch', '-vv', '--color={}'.format(color)])
-            state += print_section('branches', branches, print_format)
+            state += print_section('branches', branches, args.format)
 
         stashes = stashes = check_output(['git', 'stash', 'list', '--oneline', '--color={}'.format(color)])
-        if show_stashes and (show_empty or len(stashes) > 0):
-            state += print_section('stashes', stashes, print_format)
+        if args.show_stashes and (args.show_empty or len(stashes) > 0):
+            state += print_section('stashes', stashes, args.format)
 
     state = state[:-1] # strip the extra trailing newline
     state_lines = len(state.splitlines())
@@ -268,4 +233,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()
