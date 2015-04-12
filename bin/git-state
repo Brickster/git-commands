@@ -6,17 +6,11 @@ import re
 from ast import literal_eval
 from subprocess import call, check_output, PIPE, Popen
 from utils.messages import error
+from utils.parse_actions import flag_as_value
 
 class colors:
     green = "\x1B[0;32m"
     no_color = "\x1B[0m"
-
-
-def flag_as_value(value):
-    class FlagAsInt(argparse.Action):
-        def __call__(self, parser, namespace, values, option_string=None):
-            setattr(namespace, self.dest, value)
-    return FlagAsInt
 
 
 def print_section(title, text=None, format="compact"):
