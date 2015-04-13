@@ -23,7 +23,7 @@ def main(argv):
 
     parser = argparse.ArgumentParser(
         prog="git changes",
-        version="git-changes 0.1.0",
+        version="git-changes 0.2.0",
         description="list the commits between this branch and another"
     )
 

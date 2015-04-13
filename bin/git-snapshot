@@ -31,7 +31,7 @@ def main(argv):
 
     parser = argparse.ArgumentParser(
         prog="git snapshot",
-        version="git-snapshot 0.1.0",
+        version="git-snapshot 0.2.0",
         description="create a snapshot of the changes in a dirty working directory"
     )
     parser.add_argument("message", help="the message to use when creating the underlying stash", metavar="<message>", default=None, nargs="?")

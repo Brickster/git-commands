@@ -33,7 +33,7 @@ def main(argv):
 
     parser = argparse.ArgumentParser(
         prog="git upstream",
-        version="git-upstream 0.1.0",
+        version="git-upstream 0.2.0",
         description="get the current upstream branch"
     )
 

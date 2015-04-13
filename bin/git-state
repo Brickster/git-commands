@@ -93,7 +93,7 @@ def main():
 
     parser = argparse.ArgumentParser(
         prog="git state",
-        version="git-state 0.1.0",
+        version="git-state 0.2.0",
         description="view the state of the working tree"
     )
 

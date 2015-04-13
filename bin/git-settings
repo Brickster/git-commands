@@ -127,7 +127,7 @@ def main(argv):
         prog="git settings",
         description="more ways to view and edit config files"
     )
-    parser.add_argument("-v", "--version", action="version", help="show version and exit", version="git-settings 0.1.0")
+    parser.add_argument("-v", "--version", action="version", help="show version and exit", version="git-settings 0.2.0")
     subparsers = parser.add_subparsers(help="sub-command help")
 
     # get command
