@@ -23,7 +23,7 @@ def main(argv):
 
     parser = argparse.ArgumentParser(
         prog="git fixup",
-        version="git-fixup 0.1.0",
+        version="git-fixup 0.2.0",
         description="commits staged changes as an autosquashable fixup"
     )
     parser.add_argument("commit", help="the commit to fixup into (default: HEAD)", nargs="?", default="HEAD", metavar="<commit>")
