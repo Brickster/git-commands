@@ -22,7 +22,7 @@ def main(argv):
 
     parser = argparse.ArgumentParser(
         prog="git restash",
-        version="git-restash 0.1.0",
+        version="git-restash 0.2.0",
         description="restash changes"
     )
     parser.add_argument("stash", help="stash whose patch should be reverse applied (default: stash@{0})", metavar="<stash>", nargs="?", default="stash@{0}")
