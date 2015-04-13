@@ -24,7 +24,7 @@ def get_upstream(include_remote=False):
 def get_include_remote_default():
     """Get the default value for including remote info."""
 
-    default = check_output(['git', 'settings', '-d', 'false', 'git-upstream.include-remote']).splitlines()[0]
+    default = check_output(['git', 'settings', 'get', '-d', 'false', 'git-upstream.include-remote']).splitlines()[0]
     default = str(default).lower() == 'true'
     return default
 

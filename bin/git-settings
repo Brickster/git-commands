@@ -1,309 +1,160 @@
-#! /bin/bash
+#! /usr/bin/env python
 
-readonly VERSION="0.1.0"
+import argparse
+import re
+import sys
 
-. git-commands-utils
-
-function dry_destroy
-{
-    local config="$1"
-    local section="$2"
-    local section_list=$(git settings list --format "compact" --"$config" "$section" 2>&1)
-
-    local fatal_regex="^fatal: unable to read config file '.*': No such file or directory$"
-    if [[ ! -z $section_list ]] && ! [[ "$section_list" =~ $fatal_regex ]]; then
-        IFS=$'\n' read -rd '' -a section_list <<< "$section_list"
-        for cur_section in "${section_list[@]}"; do
-            echo "Would be deleted from $config: $cur_section"
-        done
-    fi
-}
-
-#
-# Removes a section from local, global, and system config files.
-#
-# $1: the section to destroy
-#
-function destroy
-{
-    local section="${!#}"
-    local dry_run=false
-
-    while getopts ":d-:" opt; do
-        case $opt in
-            -)
-                case "${OPTARG}" in
-                    dry-run)    dry_run=true;;
-                    *)          error "Unimplemented option --${OPTARG}";;
-                esac
-                ;;
-            d)  dry_run=true;;
-            \?) error "Invalid option: -$OPTARG";;
-            :)  error "Option -$OPTARG requires an argument.";;
-            *)  error "Unimplemented option: -$OPTARG";;
-        esac
-        ((section_index++))
-    done
-    OPTIND=1
-
-    if $dry_run; then
-        dry_destroy "local" "$section"
-        dry_destroy "global" "$section"
-        dry_destroy "system" "$section"
-    else
-        # destory from each section and silence output
-        git config --local --remove-section "$section" &>/dev/null
-        git config --global --remove-section "$section" &>/dev/null
-        git config --system --remove-section "$section" &>/dev/null
-    fi
-}
-
-#
-# Prints all sections respecting precedence.
-#
-function list_all
-{
-    # get list of config settings
-    local configs=$(git config --list)
-    IFS=$'\n' read -rd '' -a configs <<< "$configs"
-
-    local unique_sections=()
-    local entry=
-    for entry in "${configs[@]}"; do
-        local regex="^(.*)\.[-[:alnum:]]+=.*$"
-
-        if [[ "$entry" =~ $regex ]]; then
-            local section="${BASH_REMATCH[1]}"
-        fi
-
-        if ! array_contains "$section" "${unique_sections[@]}"; then
-            unique_sections+=($section)
-        fi
-    done
-
-    for entry in "${unique_sections[@]}"; do
-        list --format "compact" "$entry"
-    done
-}
-
-#
-# Prints a given section.
-#
-# This is a section level version of git config --list.
-#
-# $1: the section to print
-# $2: the configuration to use
-#
-function list
-{
-    if (( $# == 0 )); then
-        list_all
-        return 0
-    fi
-
-    local configuration=
-    local section=
-    local section_index=1
-    local format=
-    local count=false
-    while getopts ":lgspf:c-:" opt; do
-        case $opt in
-            -)
-                case "${OPTARG}" in
-                    local)  configuration="local";;
-                    global) configuration="global";;
-                    system) configuration="system";;
-                    pretty) format="pretty";;
-                    format)
-                        format="${!OPTIND}"
-                        ((OPTIND++))
-                        ((section_index++))
-                        ;;
-                    count)  count=true;;
-                    *)      error "Unimplemented option --${OPTARG}";;
-                esac
-                ;;
-            l)  configuration="local";;
-            g)  configuration="global";;
-            s)  configuration="system";;
-            p)  format="pretty";;
-            f)  format="$OPTARG"; ((section_index++));;
-            c)  count=true;;
-            \?) error "Invalid option: -$OPTARG";;
-            :)  error "Option -$OPTARG requires an argument.";;
-            *)  error "Unimplemented option: -$OPTARG";;
-        esac
-        ((section_index++))
-    done
-    OPTIND=1
-
-    # load configuration, if necessary
-    format="${format:-$(git settings -d compact git-settings.list.format)}"
-
-    if (( $# != 0 )) && (( $section_index == $# )); then
-        args=("$@")
-        section=${args[$section_index-1]}
-    else
-        usage_error "git settings list [<file-option>] [(-p|--pretty)] [(-f|--format) <format>] [(-c|--count)] <section>"
-    fi
-
-    # get list of config settings
-    configs=$(git config --list --"$configuration")
-    IFS=$'\n' read -rd '' -a configs <<< "$configs"
-
-    # parse the listed config for the relevant section
-    section_count=0
-    for config in "${configs[@]}"
-    do
-        regex="^$section\.([-[:alnum:]]+)=(.*)$"
-        if [[ "$config" =~ $regex ]]; then
-            local key="${BASH_REMATCH[1]}"
-            local value="${BASH_REMATCH[2]}"
-
-            # generate variables that act as map entries
-            local key="$(echo "$key" | sed 's/-/_/g')" # replace all variable unsafe characters with underscores
-            printf -v "map__$key" %s "$value"
-        fi
-    done
-
-    for key in ${!map__*}; do
-        ((section_count++))
-    done
+from subprocess import call, check_output, STDOUT, Popen, PIPE
+from utils.parse_actions import flag_as_value, multi_set
 
 
-    if $count; then
-        echo "$section_count"
-    elif [[ "$format" == "pretty" ]]; then
-        if (( $section_count > 0 )); then
-            title=
-            regex="^([-[:alnum:]]+)\.(.*)$"
-            if [[ "$section" =~ $regex ]]; then
-                section="${BASH_REMATCH[1]}"
-                subsection="${BASH_REMATCH[2]}"
+class Args:
+    pass
 
-                title="[$section \"$subsection\"]"
-            else
-                title="[$section]"
-            fi
-            echo "$title"
 
-            for key in ${!map__*}; do
-                unnormalized_key="${key#map__}"
-                unnormalized_key="$(echo "$unnormalized_key" | sed 's/_/-/g')"
-                echo -e "\t$unnormalized_key=${!key}"
-            done
-        fi
-    else
-        for key in ${!map__*}; do
-            unnormalized_key="${key#map__}"
-            unnormalized_key="$(echo "$unnormalized_key" | sed 's/_/-/g')"
-            echo "$section.$unnormalized_key=${!key}"
-        done
-    fi
+def list_section(section, config, count, format, file=None):
 
-    # unset each map entry so this method can be called again safely
-    for key in ${!map__*}; do
-        unset "$key"
-    done
-}
+    result = []
+    if config is None:
+        all_configs = check_output(['git', 'config', '--list']).splitlines()
+    elif file is not None:
+        all_configs = check_output(['git', 'config', '--list', '--file', file]).splitlines()
+    else:
+        all_configs = check_output(['git', 'config', '--list', '--{}'.format(config)]).splitlines()
 
-function default
-{
-    local default=
-    local key_index=1
-    local configuration=
+    if section is not None:
+        config_section = []
+        for config in all_configs:
+            match = re.match('^({})\.[-a-zA-Z0-9]+=.*$'.format(section), config)
+            if match is not None:
+                config_section += [config]
+        all_configs = config_section
 
-    while getopts ":d:lgs-:" opt; do
-        case $opt in
-            -)
-                case "${OPTARG}" in
-                    default)
-                        default="${!OPTIND}"
-                        OPTIND=$(( $OPTIND + 1 ))
-                        key_index=$((key_index + 2))
-                        ;;
-                    local)
-                        configuration="local"
-                        key_index=$((key_index + 1))
-                        ;;
-                    global)
-                        configuration="global"
-                        key_index=$((key_index + 1))
-                        ;;
-                    system)
-                        configuration="system"
-                        key_index=$((key_index + 1))
-                        ;;
-                    *)  error "Unimplemented option --${OPTARG}";;
-                esac
-                ;;
-            d)
-                default="$OPTARG"
-                key_index=$((key_index + 2))
-                ;;
-            l)
-                configuration="local"
-                key_index=$((key_index + 1))
-                ;;
-            g)
-                configuration="global"
-                key_index=$((key_index + 1))
-                ;;
-            s)
-                configuration="system"
-                key_index=$((key_index + 1))
-                ;;
-            \?) error "Invalid option: -$OPTARG";;
-            :)  error "Option -$OPTARG requires an argument.";;
-            *)  error "Unimplemented option: -$OPTARG";;
-        esac
-    done
+    config_map = {}
+    for config in all_configs:
+        key, value = config.split('=')
+        config_map[key] = value
 
-    if (( $# != 0 )) && (( $key_index == $# )); then
-        args=("$@")
-        key=${args[$key_index-1]}
-    else
-        usage_error "git section [(-d|--default) <default>] <key>"
-    fi
+    if count:
+        result += [str(len(config_map))]
+    elif format == 'pretty':
 
-    local value=
-    if [[ -z "$configuration" ]]; then
-        value=$(git config $key)
-    else
-        value=$(git config --"$configuration" $key)
-    fi
-    if [[ -z $value ]]; then
-        value="$default"
-    fi
-    echo "$value"
-}
+        all_sections_map = {}
+        for key, value in config_map.iteritems():
+            match = re.match('^(.*)\.([-a-zA-Z0-9]+)', key)
+            subkey = match.group(1)
+            key = match.group(2)
 
-while getopts ":hv-:" opt; do
-    case $opt in
-        -)
-            case "${OPTARG}" in
-                help)       show_help;;
-                version)    show_version "$VERSION";;
-            esac
-            ;;
-        h)  show_help;;
-        v)  show_version "$VERSION";;
-        :)  error "Option -$OPTARG requires an argument.";;
-    esac
-    ((section_index++))
-done
-OPTIND=1
+            if subkey in all_sections_map:
+                section_map = all_sections_map[subkey]
+            else:
+                section_map = {}
 
-if [[ "$1" =~ ^(destroy|list)$ ]]; then
-    "$1" "${@:2}"
-    exit 0
-elif (( $# == 0 )); then
-    uses=("git settings [<file-option>] [(-d|--default) <value>] <key>"
-            "git settings [(-h|--help)]"
-            "git settings destroy (-d|--dry-run) <section>"
-            "git settings list"
-            "git settings list [<file-option>] [(-p|--pretty)] [(-f|--format) <format>] [(-c|--count)] <section>")
-    usage_error "${uses[@]}"
-fi
+            section_map[key] = value
+            all_sections_map[subkey] = section_map
 
-default "$@"
+        for section, section_map in all_sections_map.iteritems():
+            match = re.match('^([-a-zA-Z0-9]+)\.(.*)$', section)
+            if match is None:
+                result += ["[{}]".format(section)]
+            else:
+                result += ['[{} "{}"]'.format(match.group(1), match.group(2))]
+            for key, value in section_map.iteritems():
+                result += ['\t{} = {}'.format(key, value)]
+
+    else:
+        for key, value in config_map.iteritems():
+            result += ['{}={}'.format(key, value)]
+    return '\n'.join(result)
+
+
+def _list_section(**kwargs):
+    print list_section(**kwargs)
+
+
+def dry_destroy_section(config, section):
+
+    command = ('git', 'settings', 'list', '--format', 'compact', '--{}'.format(config), section)
+    p = Popen(command, stdout=PIPE, stderr=PIPE)
+    list_output = p.communicate()[0] # just ignore stderr
+
+    for line in list_output.splitlines():
+        print "Would be deleted from {}: {}".format(config, line)
+
+def destroy_section(section, dry_run):
+    if dry_run:
+        dry_destroy_section('local', section)
+        dry_destroy_section('global', section)
+        dry_destroy_section('system', section)
+    else:
+        Popen(('git', 'config', '--local', '--remove-section', section), stdout=PIPE, strerr=STDOUT).communicate()
+        Popen(('git', 'config', '--global', '--remove-section', section), stdout=PIPE, strerr=STDOUT).communicate()
+        Popen(('git', 'config', '--system', '--remove-section', section), stdout=PIPE, strerr=STDOUT).communicate()
+
+
+def get(key, default=None, config=None, file=None):
+    if config is None:
+        command = ('git', 'config', key)
+    elif config is not None:
+        command = ('git', 'config', '--file', file, key)
+    else:
+        command = ('git', 'config', '--{}'.format(config), key)
+
+    p = Popen(command, stdout=PIPE, stderr=STDOUT)
+    value = p.communicate()[0]
+
+    value = default if len(value) == 0 else value.splitlines()[0]
+    return value
+
+
+def _get(**kwargs):
+    print get(**kwargs)
+
+
+def main(argv):
+
+    # default_format = check_output(['git', 'settings', 'get', '-d', 'compact', 'git-settings.list.format']).splitlines()[0]
+    default_format = get('git-settings.list.format', default='compact')
+
+    file_parser = argparse.ArgumentParser(add_help=False)
+    file_group = file_parser.add_mutually_exclusive_group()
+    file_group.add_argument("--local", help="limit to the local config file", action=flag_as_value("local"), dest="config", nargs=0)
+    file_group.add_argument("--global", help="limit to the global config file", action=flag_as_value("global"), dest="config", nargs=0)
+    file_group.add_argument("--system", help="limit to the system config file", action=flag_as_value("system"), dest="config", nargs=0)
+    file_group.add_argument("--file", help="limit to a specific config file", action=multi_set("config", "file"), metavar="<file>")
+
+    parser = argparse.ArgumentParser(
+        prog="git settings",
+        description="more ways to view and edit config files"
+    )
+    parser.add_argument("-v", "--version", action="version", help="show version and exit", version="git-settings 0.1.0")
+    subparsers = parser.add_subparsers(help="sub-command help")
+
+    # get command
+    get_parser = subparsers.add_parser("get", help="retrieve a configuration value", description="retrieve a configuration value", parents=[file_parser])
+    get_parser.add_argument("key", help="a configuration key", metavar="<key>")
+    get_parser.add_argument("-d", "--default", help="a default value to return when no setting exists for <key>", metavar="<default>")
+    get_parser.set_defaults(func=_get)
+
+    # list command
+    list_parser = subparsers.add_parser("list", help="list configuration settings respecting override precedence", description="list configuration settings respecting override precedence", parents=[file_parser])
+    list_parser.add_argument("section", help="optionally, limit to a specific section", metavar="<section>", nargs="?")
+    list_group = list_parser.add_mutually_exclusive_group()
+    list_group.add_argument("-f", "--format", help="print using a specific format (choices: compact, pretty)", metavar="<format>", choices=("compact", "pretty"), default=default_format, dest="format")
+    list_group.add_argument("-p", "--pretty", help="use pretty format", action=flag_as_value("pretty"), dest="format", nargs=0)
+    list_group.add_argument("-c", "--count", help="print the count of configurations", action="store_true")
+    list_parser.set_defaults(func=_list_section)
+
+    # destroy command
+    destroy_parser = subparsers.add_parser("destroy", help="destroy a section from the local, global, and system config files", description="destroy a section from the local, global, and system config files")
+    destroy_parser.add_argument("section", help="a section", metavar="<section>")
+    destroy_parser.add_argument("-d", "--dry-run", help="print which configurations would be destroyed rather than removing them", action="store_true")
+    destroy_parser.set_defaults(func=destroy_section)
+
+    args = vars(parser.parse_args())
+    func = args.pop('func')
+    func(**args)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
