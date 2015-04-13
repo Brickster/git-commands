@@ -27,7 +27,7 @@ def main(argv):
         description="list the commits between this branch and another"
     )
 
-    default_branch = check_output(['git', 'settings', '-d', 'master', 'git-changes.default-branch']).splitlines()[0]
+    default_branch = check_output(['git', 'settings', 'get', '-d', 'master', 'git-changes.default-branch']).splitlines()[0]
     parser.add_argument("-b", "--branch", help="show the commits between HEAD and <branch>", metavar="<branch>", default=default_branch)
     parser.add_argument("-c", "--count", help="print the total changes instead of listing them", action="store_true")
     args = parser.parse_args()

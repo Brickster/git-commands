@@ -44,7 +44,7 @@ def only_default_branch():
     if len(branches) > 1:
         return False
 
-    default_branch = check_output(['git', 'settings', '-d', 'master', 'git-state.branches.default']).splitlines()[0]
+    default_branch = check_output(['git', 'settings', 'get', '-d', 'master', 'git-state.branches.default']).splitlines()[0]
     if re.match('\* {}'.format(default_branch), branches[0]) is not None:
         return True
     else:
@@ -63,33 +63,33 @@ def is_new_repository():
 def main():
 
     # status defaults
-    default_show_status = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.status.show']))
+    default_show_status = literal_eval(check_output(['git', 'settings', 'get', '-d', 'True', 'git-state.status.show']))
 
     # log defaults
-    show_log = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.log.show']))
+    show_log = literal_eval(check_output(['git', 'settings', 'get', '-d', 'True', 'git-state.log.show']))
     if show_log:
-        default_log_count = literal_eval(check_output(['git', 'settings', '-d', '10', 'git-state.log.count']))
+        default_log_count = literal_eval(check_output(['git', 'settings', 'get', '-d', '10', 'git-state.log.count']))
     else:
         default_log_count = 0
 
     # reflog defaults
-    show_reflog = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.reflog.show']))
+    show_reflog = literal_eval(check_output(['git', 'settings', 'get', '-d', 'True', 'git-state.reflog.show']))
     if show_reflog:
-        default_reflog_count = literal_eval(check_output(['git', 'settings', '-d', '5', 'git-state.reflog.count']))
+        default_reflog_count = literal_eval(check_output(['git', 'settings', 'get', '-d', '5', 'git-state.reflog.count']))
     else:
         default_reflog_count = 0
 
     # branches defaults
-    default_show_branches = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.branches.show']))
+    default_show_branches = literal_eval(check_output(['git', 'settings', 'get', '-d', 'True', 'git-state.branches.show']))
 
     # stashes defaults
-    default_show_stashes = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.stashes.show']))
+    default_show_stashes = literal_eval(check_output(['git', 'settings', 'get', '-d', 'True', 'git-state.stashes.show']))
 
     # general defaults
-    show_only_default_branch = literal_eval(check_output(['git', 'settings', '-d', 'True', 'git-state.branches.show-only-default']))
-    default_show_empty = literal_eval(check_output(['git', 'settings', '-d', 'False', 'git-state.show-empty']))
-    default_format = check_output(['git', 'settings', '-d', 'compact', 'git-state.format']).splitlines()[0]
-    default_show_color = check_output(['git', 'settings', '-d', 'always', 'color.ui']).splitlines()[0]
+    show_only_default_branch = literal_eval(check_output(['git', 'settings', 'get', '-d', 'True', 'git-state.branches.show-only-default']))
+    default_show_empty = literal_eval(check_output(['git', 'settings', 'get', '-d', 'False', 'git-state.show-empty']))
+    default_format = check_output(['git', 'settings', 'get', '-d', 'compact', 'git-state.format']).splitlines()[0]
+    default_show_color = check_output(['git', 'settings', 'get', '-d', 'always', 'color.ui']).splitlines()[0]
 
     parser = argparse.ArgumentParser(
         prog="git state",
