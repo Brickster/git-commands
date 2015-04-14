@@ -1,38 +1,27 @@
 #! /usr/bin/env python
 
 import argparse
-import re
-import sys
 
-from subprocess import call, check_output, PIPE, Popen
-from utils.messages import error
+from commands import restash
 
-
-def restash(stash="stash@{0}"):
-    """Restashes a stash reference."""
-
-    patch = Popen(['git', 'stash', 'show', '--patch', '--no-color', stash], stdout=PIPE)
-    call(['git', 'apply', '--reverse'], stdin=patch.stdout)
-    patch.wait()
-
-    stash_sha = check_output(['git', 'rev-parse', stash]).splitlines()[0]
-    print 'Restashed {} ({})'.format(stash, stash_sha)
-
-def main(argv):
+def main():
 
     parser = argparse.ArgumentParser(
         prog="git restash",
         version="git-restash 0.2.0",
         description="restash changes"
     )
-    parser.add_argument("stash", help="stash whose patch should be reverse applied (default: stash@{0})", metavar="<stash>", nargs="?", default="stash@{0}")
 
-    args = parser.parse_args()
-    stash = args.stash
+    # <stash>
+    parser.add_argument(
+        "stash",
+        help="stash whose patch should be reverse applied (default: stash@{0})",
+        metavar="<stash>",
+        nargs="?",
+        default="stash@{0}"
+    )
 
-    if re.match("^stash@{.*}$", stash) is None:
-        error('{} is not a valid stash reference'.format(stash))
-    restash(stash)
+    restash.restash(**vars(parser.parse_args()))
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()
