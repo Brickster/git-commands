@@ -1,25 +1,12 @@
 #! /usr/bin/env python
 
 import argparse
-import sys
 
-from subprocess import call, check_output
-from utils.messages import info
-
-
-def get_changes(count, branch):
-    '''Print the changes between a given branch and HEAD'''
-
-    command = ['git', 'log', '--oneline', '{}..HEAD'.format(branch)]
-    if count:
-        log = check_output(command)
-        log = log.splitlines()
-        info(len(log))
-    else:
-        call(command)
+from commands import changes
+from subprocess import check_output
 
 
-def main(argv):
+def main():
 
     parser = argparse.ArgumentParser(
         prog="git changes",
@@ -27,12 +14,25 @@ def main(argv):
         description="list the commits between this branch and another"
     )
 
+    # -b|--branch
     default_branch = check_output(['git', 'settings', 'get', '-d', 'master', 'git-changes.default-branch']).splitlines()[0]
-    parser.add_argument("-b", "--branch", help="show the commits between HEAD and <branch>", metavar="<branch>", default=default_branch)
-    parser.add_argument("-c", "--count", help="print the total changes instead of listing them", action="store_true")
-    args = parser.parse_args()
+    parser.add_argument(
+        "-b",
+        "--branch",
+        help="show the commits between HEAD and <branch>",
+        metavar="<branch>",
+        default=default_branch
+    )
 
-    get_changes(args.count, args.branch)
+    # -c|--count
+    parser.add_argument(
+        "-c",
+        "--count",
+        help="print the total changes instead of listing them",
+        action="store_true"
+    )
+
+    changes.changes(**vars(parser.parse_args()))
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()
