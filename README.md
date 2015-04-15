@@ -65,10 +65,9 @@ git changes (-v|--version)
 Used as a compliment to `git-config` by adding missing features.
 
 ```bash
-git settings [<file-option>] [(-d|--default) <value>] <key>
+git settings get [<file-option>] [(-d|--default) <value>] <key>
 git settings destroy [(-d|--dry-run)] <section>
-git settings list
-git settings list [<file-option>] [(-p|--pretty)] [(-f|--format) <format>] [(-c|--count)] <section>
+git settings list [<file-option>] [(-p|--pretty)] [(-f|--format) <format>] [(-c|--count)] [<section>]
 git settings (-h|--help)
 git settings (-v|--version)
 ```

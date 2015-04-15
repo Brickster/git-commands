@@ -74,10 +74,9 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>git settings</code> [<var>file-option</var>] [(<code>-d</code>|<code>--default</code>) <var>value</var>] <var>key</var><br />
+<p><code>git settings get</code> [<var>file-option</var>] [(<code>-d</code>|<code>--default</code>) <var>value</var>] <var>key</var><br />
 <code>git settings destroy</code> [(<code>-d</code>|<code>--dry-run</code>)] <var>section</var><br />
-<code>git settings list</code><br />
-<code>git settings list</code> [<var>file-option</var>] [(<code>-p</code>|<code>--pretty</code>)] [(<code>-f</code>|<code>--format</code>) <var>format</var>] [(<code>-c</code>|<code>--count</code>)] <var>section</var><br />
+<code>git settings list</code> [<var>file-option</var>] [(<code>-p</code>|<code>--pretty</code>)] [(<code>-f</code>|<code>--format</code>) <var>format</var>] [(<code>-c</code>|<code>--count</code>)] [<var>section</var>]<br />
 <code>git settings</code> (<code>-h</code>|<code>--help</code>)<br />
 <code>git settings</code> (<code>-v</code>|<code>--version</code>)</p>
 
@@ -88,10 +87,11 @@
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
-<dt><code>-d</code>|<code>--default</code> <var>key</var></dt><dd><p>  A default value to use when no setting exists for a given <var>key</var>.</p>
+<dt><code>get</code> <var>key</var> </dt><dd><p>  Retrieve a configuration by key.</p>
 
 <dl>
-<dt><var>file-option</var></dt><dd>  The key will be loaded from a specific file. See "<strong>FILE OPTIONS</strong>" section for more details.</dd>
+<dt><code>-d</code>|<code>--default</code></dt><dd><p>  A default value to use when no configuration exists.</p></dd>
+<dt><var>file-option</var></dt><dd><p>  The key will be loaded from a specific file. See "<strong>FILE OPTIONS</strong>" section for more details.</p></dd>
 </dl>
 </dd>
 <dt><code>destroy</code> <var>section</var></dt><dd><p>  Destroy a section from the local, global, and system config files.</p>
@@ -120,9 +120,10 @@
 <p>Some subcommands can be limited to a specific file. The valid options are:</p>
 
 <dl>
-<dt><code>-l</code>|<code>--local</code></dt><dd><p>  Use local config file.</p></dd>
-<dt><code>-g</code>|<code>--global</code></dt><dd><p>  Use global config file.</p></dd>
-<dt><code>-s</code>|<code>--system</code></dt><dd><p>  Use system config file.</p></dd>
+<dt class="flush"><code>--local</code></dt><dd><p>  Use local config file.</p></dd>
+<dt><code>--global</code></dt><dd><p>  Use global config file.</p></dd>
+<dt><code>--system</code></dt><dd><p>  Use system config file.</p></dd>
+<dt><code>--file</code> <var>file</var></dt><dd><p>  Use a specific config file.</p></dd>
 </dl>
 
 
@@ -138,7 +139,7 @@
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>March 2015</li>
+    <li class='tc'>April 2015</li>
     <li class='tr'>git-settings(1)</li>
   </ol>
 
