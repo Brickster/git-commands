@@ -98,8 +98,7 @@ git fixup (-v|--version)
 Used to drop a count or range of stashes.
 
 ```bash
-git abandon <count>
-git abandon <start>..<end>
+git abandon [(-d|--dry-run)] [<start>] <end>
 git abandon (-h|--help)
 git abandon (-v|--version)
 ```
