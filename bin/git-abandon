@@ -4,38 +4,11 @@
 #
 
 import argparse
-import sys
 
-from subprocess import call, check_output
-from utils.messages import error
+from commands import abandon
 
 
-def drop_stashes(start, end, dry_run=False):
-    """Drop a range of stashes from start (inclusive) to end (exclusive)."""
-
-    stash_count = len(check_output(['git', 'stash', 'list']).splitlines())
-    if end < start:
-        error("end of range cannot come before the start")
-    elif start > stash_count:
-        error("start too high", exit=False)
-        error("only {} stashes exist".format(stash_count))
-    elif end > stash_count:
-        end = stash_count
-
-    if dry_run:
-        for i in range(start, end):
-            stash = 'stash@{{{}}}'.format(i)
-            stash_sha = check_output(['git', 'rev-parse', stash]).splitlines()[0]
-            print "Would drop refs/{} ({})".format(stash, stash_sha)
-    else:
-        start_stash = 'stash@{{{}}}'.format(start)
-        for i in range(start, end):
-            stash_sha = check_output(['git', 'rev-parse', start_stash]).splitlines()[0]
-            call(['git', 'stash', 'drop', '--quiet', start_stash])
-            print 'Dropped refs/stash@{{{}}} ({})'.format(i, stash_sha)
-
-
-def main(argv):
+def main():
 
     parser = argparse.ArgumentParser(
         prog="git abandon",
@@ -43,13 +16,33 @@ def main(argv):
         description="drop a count or range of stashes"
     )
 
-    parser.add_argument("start", help="the range start (inclusive) (default: 0)", nargs="?", default="0", metavar="<start>", type=int)
-    parser.add_argument("end", help="the range end (exclusive)", metavar="<end>", type=int)
-    parser.add_argument("-d", "--dry-run", help="print the stashes that would be dropped but don't drop them", action="store_true")
+    # <start>
+    parser.add_argument(
+        "start",
+        help="the range start (inclusive) (default: 0)",
+        nargs="?",
+        default="0",
+        metavar="<start>",
+        type=int
+    )
 
-    args = parser.parse_args()
+    # <end>
+    parser.add_argument(
+        "end",
+        help="the range end (exclusive)",
+        metavar="<end>",
+        type=int
+    )
 
-    drop_stashes(args.start, args.end, args.dry_run)
+    # -d|--dry-run
+    parser.add_argument(
+        "-d",
+        "--dry-run",
+        help="print the stashes that would be dropped but don't drop them",
+        action="store_true"
+    )
+
+    abandon.abandon(**vars(parser.parse_args()))
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()
