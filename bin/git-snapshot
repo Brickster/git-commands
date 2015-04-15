@@ -5,40 +5,28 @@
 #
 
 import argparse
-import sys
 
-from subprocess import check_output, call
-from utils.messages import info
+from commands import snapshot
 
 
-def create_snapshot(message):
-    '''Create a snapshot of the working directory and index.'''
-
-    status_command = ['git', 'status', '--porcelain']
-    status_output = check_output(status_command).splitlines()
-
-    if len(status_output) > 0:
-        stash_command = ['git', 'stash', 'save', '-u', '--quiet']
-        stash_command = stash_command if message is None else stash_command + [message]
-
-        call(stash_command)
-        call(['git', 'stash', 'apply', '--quiet'])
-    else:
-        info("No local changes to save. No snapshot created.")
-
-
-def main(argv):
+def main():
 
     parser = argparse.ArgumentParser(
         prog="git snapshot",
         version="git-snapshot 0.2.0",
         description="create a snapshot of the changes in a dirty working directory"
     )
-    parser.add_argument("message", help="the message to use when creating the underlying stash", metavar="<message>", default=None, nargs="?")
 
-    args = parser.parse_args()
+    # <message>
+    parser.add_argument(
+        "message",
+        help="the message to use when creating the underlying stash",
+        metavar="<message>",
+        default=None,
+        nargs="?"
+    )
 
-    create_snapshot(args.message)
+    snapshot.snapshot(**vars(parser.parse_args()))
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()
