@@ -3,7 +3,7 @@ import re
 from subprocess import call, check_output
 
 
-def fixup(commit, body):
+def fixup(commit, body, all=False):
     '''Create a fixup commit using a given commit's subject and optional body'''
 
     last_commit_message = check_output(['git', 'show', '--no-patch', '--format=%s', commit]).splitlines()[0]
@@ -12,4 +12,6 @@ def fixup(commit, body):
     commit_command = ['git', 'commit', '--quiet', '-m', commit_message]
     if body is not None:
         commit_command += ['-m', body]
+
+    if all: call(['git', 'add', '-A'])
     call(commit_command)

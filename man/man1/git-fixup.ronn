@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git fixup` [(`-b`|`--message-body`) <message-body>] [<commit>]<br>
+`git fixup` [(`-a`|`--all`)] [(`-b`|`--message-body`) <message-body>] [<commit>]<br>
 `git fixup` (`-h`|`--help`)<br>
 `git fixup` (`-v`|`--version`)
 
@@ -19,6 +19,9 @@ While `git-commit` does include a `--fixup=<commit>` option, using it consecutiv
 
 * `-b`|`--message-body` <message-body>:
     The message body to use in the fixup commit. It will go away when the fixup occurs but can be useful for traceability until that point.
+
+* `-a`|`--all`:
+    Stage all files before making the fixup commit.
 
 * `-h`|`--help`:
     Display git-fixup man page.

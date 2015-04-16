@@ -22,6 +22,14 @@ def main():
         metavar="<commit>"
     )
 
+    # -a|--all
+    parser.add_argument(
+        "-a",
+        "--all",
+        help="stage all files",
+        action="store_true"
+    )
+
     # -b|--body
     parser.add_argument(
         "-b",
