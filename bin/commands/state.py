@@ -64,7 +64,8 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
         color = "always"
     else:
         color = "never"
-        colors.green = colors.no_color
+        colors.green = ""
+        colors.no_color = ""
 
     state = ''
     if _is_new_repository():
