@@ -2,10 +2,9 @@
 
 ## SYNOPSIS
 
-`git settings` [<file-option>] [(`-d`|`--default`) <value>] <key><br>
+`git settings get` [<file-option>] [(`-d`|`--default`) <value>] <key><br>
 `git settings destroy` [(`-d`|`--dry-run`)] <section><br>
-`git settings list`<br>
-`git settings list` [<file-option>] [(`-p`|`--pretty`)] [(`-f`|`--format`) <format>] [(`-c`|`--count`)] <section><br>
+`git settings list` [<file-option>] [(`-p`|`--pretty`)] [(`-f`|`--format`) <format>] [(`-c`|`--count`)] [<section>]<br>
 `git settings` (`-h`|`--help`)<br>
 `git settings` (`-v`|`--version`)
 
@@ -15,8 +14,11 @@
 
 ## OPTIONS
 
-* `-d`|`--default` <key>:
-    A default value to use when no setting exists for a given <key>.
+* `get` <key> :
+    Retrieve a configuration by key.
+
+    * `-d`|`--default`:
+        A default value to use when no configuration exists.
 
     * <file-option>:
         The key will be loaded from a specific file. See "**FILE OPTIONS**" section for more details.
@@ -55,14 +57,17 @@
 
 Some subcommands can be limited to a specific file. The valid options are:
 
-* `-l`|`--local`:
+* `--local`:
     Use local config file.
 
-* `-g`|`--global`:
+* `--global`:
     Use global config file.
 
-* `-s`|`--system`:
+* `--system`:
     Use system config file.
+
+* `--file` <file>:
+    Use a specific config file.
 
 ## CONFIGURATION
 

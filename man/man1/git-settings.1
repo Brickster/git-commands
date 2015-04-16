@@ -1,22 +1,19 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-SETTINGS" "1" "March 2015" "" ""
+.TH "GIT\-SETTINGS" "1" "April 2015" "" ""
 .
 .SH "NAME"
 \fBgit\-settings\fR \- more ways to view and edit config files
 .
 .SH "SYNOPSIS"
-\fBgit settings\fR [\fIfile\-option\fR] [(\fB\-d\fR|\fB\-\-default\fR) \fIvalue\fR] \fIkey\fR
+\fBgit settings get\fR [\fIfile\-option\fR] [(\fB\-d\fR|\fB\-\-default\fR) \fIvalue\fR] \fIkey\fR
 .
 .br
 \fBgit settings destroy\fR [(\fB\-d\fR|\fB\-\-dry\-run\fR)] \fIsection\fR
 .
 .br
-\fBgit settings list\fR
-.
-.br
-\fBgit settings list\fR [\fIfile\-option\fR] [(\fB\-p\fR|\fB\-\-pretty\fR)] [(\fB\-f\fR|\fB\-\-format\fR) \fIformat\fR] [(\fB\-c\fR|\fB\-\-count\fR)] \fIsection\fR
+\fBgit settings list\fR [\fIfile\-option\fR] [(\fB\-p\fR|\fB\-\-pretty\fR)] [(\fB\-f\fR|\fB\-\-format\fR) \fIformat\fR] [(\fB\-c\fR|\fB\-\-count\fR)] [\fIsection\fR]
 .
 .br
 \fBgit settings\fR (\fB\-h\fR|\fB\-\-help\fR)
@@ -30,8 +27,12 @@
 .SH "OPTIONS"
 .
 .TP
-\fB\-d\fR|\fB\-\-default\fR \fIkey\fR
-A default value to use when no setting exists for a given \fIkey\fR\.
+\fBget\fR \fIkey\fR
+Retrieve a configuration by key\.
+.
+.TP
+\fB\-d\fR|\fB\-\-default\fR
+A default value to use when no configuration exists\.
 .
 .TP
 \fIfile\-option\fR
@@ -84,16 +85,20 @@ Print version\.
 Some subcommands can be limited to a specific file\. The valid options are:
 .
 .TP
-\fB\-l\fR|\fB\-\-local\fR
+\fB\-\-local\fR
 Use local config file\.
 .
 .TP
-\fB\-g\fR|\fB\-\-global\fR
+\fB\-\-global\fR
 Use global config file\.
 .
 .TP
-\fB\-s\fR|\fB\-\-system\fR
+\fB\-\-system\fR
 Use system config file\.
+.
+.TP
+\fB\-\-file\fR \fIfile\fR
+Use a specific config file\.
 .
 .SH "CONFIGURATION"
 .
