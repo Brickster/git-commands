@@ -3,40 +3,39 @@
 import argparse
 
 from ast import literal_eval
-from commands import state
-from subprocess import check_output
+from commands import state, settings
 from utils.parse_actions import flag_as_value
 
 
 def main():
 
     # status defaults
-    default_show_status = literal_eval(check_output(['git', 'settings', 'get', '-d', 'True', 'git-state.status.show']))
+    default_show_status = literal_eval(settings.get('git-state.status.show', default='True'))
 
     # log defaults
-    show_log = literal_eval(check_output(['git', 'settings', 'get', '-d', 'True', 'git-state.log.show']))
+    show_log = literal_eval(settings.get('git-state.log.show', default='True'))
     if show_log:
-        default_log_count = literal_eval(check_output(['git', 'settings', 'get', '-d', '10', 'git-state.log.count']))
+        default_log_count = literal_eval(settings.get('git-state.log.count', default='10'))
     else:
         default_log_count = 0
 
     # reflog defaults
-    show_reflog = literal_eval(check_output(['git', 'settings', 'get', '-d', 'True', 'git-state.reflog.show']))
+    show_reflog = literal_eval(settings.get('git-state.reflog.show', default='True'))
     if show_reflog:
-        default_reflog_count = literal_eval(check_output(['git', 'settings', 'get', '-d', '5', 'git-state.reflog.count']))
+        default_reflog_count = literal_eval(settings.get('git-state.reflog.count', default='5'))
     else:
         default_reflog_count = 0
 
     # branches defaults
-    default_show_branches = literal_eval(check_output(['git', 'settings', 'get', '-d', 'True', 'git-state.branches.show']))
+    default_show_branches = literal_eval(settings.get('git-state.branches.show', default='True'))
 
     # stashes defaults
-    default_show_stashes = literal_eval(check_output(['git', 'settings', 'get', '-d', 'True', 'git-state.stashes.show']))
+    default_show_stashes = literal_eval(settings.get('git-state.stashes.show', default='True'))
 
     # general defaults
-    default_show_empty = literal_eval(check_output(['git', 'settings', 'get', '-d', 'False', 'git-state.show-empty']))
-    default_format = check_output(['git', 'settings', 'get', '-d', 'compact', 'git-state.format']).splitlines()[0]
-    default_show_color = check_output(['git', 'settings', 'get', '-d', 'always', 'color.ui']).splitlines()[0]
+    default_show_empty = literal_eval(settings.get('git-state.show-empty', default='False'))
+    default_format = settings.get('git-state.format', default='compact')
+    default_show_color = settings.get('color.ui', default="always")
 
     parser = argparse.ArgumentParser(
         prog="git state",
