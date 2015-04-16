@@ -67,7 +67,7 @@ def _dry_destroy_section(config, section):
 
     command = ('git', 'settings', 'list', '--format', 'compact', '--{}'.format(config), section)
     p = Popen(command, stdout=PIPE, stderr=PIPE)
-    list_output = p.communicate()[0] # just ignore stderr
+    list_output = p.communicate()[0][:-1] # just ignore stderr and removing trailing newline
 
     for line in list_output.splitlines():
         print "Would be deleted from {}: {}".format(config, line)
