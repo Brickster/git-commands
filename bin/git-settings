@@ -1,127 +1,53 @@
 #! /usr/bin/env python
 
 import argparse
-import re
-import sys
 
-from subprocess import call, check_output, STDOUT, Popen, PIPE
+from commands import settings
 from utils.parse_actions import flag_as_value, multi_set
 
 
-class Args:
-    pass
+def main():
 
-
-def list_section(section, config, count, format, file=None):
-
-    result = []
-    if config is None:
-        all_configs = check_output(['git', 'config', '--list']).splitlines()
-    elif file is not None:
-        all_configs = check_output(['git', 'config', '--list', '--file', file]).splitlines()
-    else:
-        all_configs = check_output(['git', 'config', '--list', '--{}'.format(config)]).splitlines()
-
-    if section is not None:
-        config_section = []
-        for config in all_configs:
-            match = re.match('^({})\.[-a-zA-Z0-9]+=.*$'.format(section), config)
-            if match is not None:
-                config_section += [config]
-        all_configs = config_section
-
-    config_map = {}
-    for config in all_configs:
-        key, value = config.split('=')
-        config_map[key] = value
-
-    if count:
-        result += [str(len(config_map))]
-    elif format == 'pretty':
-
-        all_sections_map = {}
-        for key, value in config_map.iteritems():
-            match = re.match('^(.*)\.([-a-zA-Z0-9]+)', key)
-            subkey = match.group(1)
-            key = match.group(2)
-
-            if subkey in all_sections_map:
-                section_map = all_sections_map[subkey]
-            else:
-                section_map = {}
-
-            section_map[key] = value
-            all_sections_map[subkey] = section_map
-
-        for section, section_map in all_sections_map.iteritems():
-            match = re.match('^([-a-zA-Z0-9]+)\.(.*)$', section)
-            if match is None:
-                result += ["[{}]".format(section)]
-            else:
-                result += ['[{} "{}"]'.format(match.group(1), match.group(2))]
-            for key, value in section_map.iteritems():
-                result += ['\t{} = {}'.format(key, value)]
-
-    else:
-        for key, value in config_map.iteritems():
-            result += ['{}={}'.format(key, value)]
-    return '\n'.join(result)
-
-
-def _list_section(**kwargs):
-    print list_section(**kwargs)
-
-
-def dry_destroy_section(config, section):
-
-    command = ('git', 'settings', 'list', '--format', 'compact', '--{}'.format(config), section)
-    p = Popen(command, stdout=PIPE, stderr=PIPE)
-    list_output = p.communicate()[0] # just ignore stderr
-
-    for line in list_output.splitlines():
-        print "Would be deleted from {}: {}".format(config, line)
-
-def destroy_section(section, dry_run):
-    if dry_run:
-        dry_destroy_section('local', section)
-        dry_destroy_section('global', section)
-        dry_destroy_section('system', section)
-    else:
-        Popen(('git', 'config', '--local', '--remove-section', section), stdout=PIPE, strerr=STDOUT).communicate()
-        Popen(('git', 'config', '--global', '--remove-section', section), stdout=PIPE, strerr=STDOUT).communicate()
-        Popen(('git', 'config', '--system', '--remove-section', section), stdout=PIPE, strerr=STDOUT).communicate()
-
-
-def get(key, default=None, config=None, file=None):
-    if config is None:
-        command = ('git', 'config', key)
-    elif config is not None:
-        command = ('git', 'config', '--file', file, key)
-    else:
-        command = ('git', 'config', '--{}'.format(config), key)
-
-    p = Popen(command, stdout=PIPE, stderr=STDOUT)
-    value = p.communicate()[0]
-
-    value = default if len(value) == 0 else value.splitlines()[0]
-    return value
-
-
-def _get(**kwargs):
-    print get(**kwargs)
-
-
-def main(argv):
-
-    # default_format = check_output(['git', 'settings', 'get', '-d', 'compact', 'git-settings.list.format']).splitlines()[0]
-    default_format = get('git-settings.list.format', default='compact')
+    default_format = settings.get('git-settings.list.format', default='compact')
 
     file_parser = argparse.ArgumentParser(add_help=False)
     file_group = file_parser.add_mutually_exclusive_group()
-    file_group.add_argument("--local", help="limit to the local config file", action=flag_as_value("local"), dest="config", nargs=0)
-    file_group.add_argument("--global", help="limit to the global config file", action=flag_as_value("global"), dest="config", nargs=0)
-    file_group.add_argument("--system", help="limit to the system config file", action=flag_as_value("system"), dest="config", nargs=0)
-    file_group.add_argument("--file", help="limit to a specific config file", action=multi_set("config", "file"), metavar="<file>")
+
+    # --local
+    file_group.add_argument(
+        "--local",
+        help="limit to the local config file",
+        action=flag_as_value("local"),
+        dest="config",
+        nargs=0
+    )
+
+    # --global
+    file_group.add_argument(
+        "--global",
+        help="limit to the global config file",
+        action=flag_as_value("global"),
+        dest="config",
+        nargs=0
+    )
+
+    # --system
+    file_group.add_argument(
+        "--system",
+        help="limit to the system config file",
+        action=flag_as_value("system"),
+        dest="config",
+        nargs=0
+    )
+
+    # --file <file>
+    file_group.add_argument(
+        "--file",
+        help="limit to a specific config file",
+        action=multi_set("config",
+        "file"),
+        metavar="<file>"
+    )
 
     parser = argparse.ArgumentParser(
         prog="git settings",
@@ -134,7 +60,7 @@ def main(argv):
     get_parser = subparsers.add_parser("get", help="retrieve a configuration value", description="retrieve a configuration value", parents=[file_parser])
     get_parser.add_argument("key", help="a configuration key", metavar="<key>")
     get_parser.add_argument("-d", "--default", help="a default value to return when no setting exists for <key>", metavar="<default>")
-    get_parser.set_defaults(func=_get)
+    get_parser.set_defaults(func=settings._get)
 
     # list command
     list_parser = subparsers.add_parser("list", help="list configuration settings respecting override precedence", description="list configuration settings respecting override precedence", parents=[file_parser])
@@ -143,13 +69,13 @@ def main(argv):
     list_group.add_argument("-f", "--format", help="print using a specific format (choices: compact, pretty)", metavar="<format>", choices=("compact", "pretty"), default=default_format, dest="format")
     list_group.add_argument("-p", "--pretty", help="use pretty format", action=flag_as_value("pretty"), dest="format", nargs=0)
     list_group.add_argument("-c", "--count", help="print the count of configurations", action="store_true")
-    list_parser.set_defaults(func=_list_section)
+    list_parser.set_defaults(func=settings._list)
 
     # destroy command
     destroy_parser = subparsers.add_parser("destroy", help="destroy a section from the local, global, and system config files", description="destroy a section from the local, global, and system config files")
     destroy_parser.add_argument("section", help="a section", metavar="<section>")
     destroy_parser.add_argument("-d", "--dry-run", help="print which configurations would be destroyed rather than removing them", action="store_true")
-    destroy_parser.set_defaults(func=destroy_section)
+    destroy_parser.set_defaults(func=settings.destroy)
 
     args = vars(parser.parse_args())
     func = args.pop('func')
@@ -157,4 +83,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()
