@@ -99,4 +99,5 @@ def get(key, default=None, config=None, file=None):
 
 
 def _get(**kwargs):
-    print get(**kwargs)
+    value = get(**kwargs)
+    if value is not None: print value
