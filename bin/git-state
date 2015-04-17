@@ -48,7 +48,7 @@ def main():
     status_group.add_argument(
         "-s",
         "--status",
-        help="",
+        help="show the status section",
         action="store_true",
         dest="show_status",
         default=default_show_status
@@ -56,7 +56,7 @@ def main():
     status_group.add_argument(
         "-S",
         "--no-status",
-        help="",
+        help="don't show the status section",
         action="store_false",
         dest="show_status"
     )
@@ -66,7 +66,7 @@ def main():
     log_group.add_argument(
         "-l",
         "--log",
-        help="",
+        help="limit the commits in the log section",
         type=int,
         dest="log_count",
         metavar="<count>",
@@ -75,14 +75,14 @@ def main():
     log_group.add_argument(
         "-L",
         "--no-log",
-        help="",
+        help="don't show the log section",
         action=flag_as_value(0),
         dest="log_count",
         nargs=0
     )
     log_group.add_argument(
         "--full-log",
-        help="",
+        help="show the full log",
         action=flag_as_value(-1),
         dest="log_count",
         nargs=0
@@ -93,7 +93,7 @@ def main():
     reflog_group.add_argument(
         "-r",
         "--reflog",
-        help="",
+        help="limit the reflog section",
         type=int,
         dest="reflog_count",
         metavar="<count>",
@@ -102,14 +102,14 @@ def main():
     reflog_group.add_argument(
         "-R",
         "--no-reflog",
-        help="",
+        help="don't show the reflog section",
         action=flag_as_value(0),
         dest="reflog_count",
         nargs=0
     )
     reflog_group.add_argument(
         "--full-reflog",
-        help="",
+        help="show the full reflog",
         action=flag_as_value(-1),
         dest="reflog_count",
         nargs=0
@@ -120,7 +120,7 @@ def main():
     branches_group.add_argument(
         "-b",
         "--branches",
-        help="",
+        help="show the branches section",
         action="store_true",
         dest="show_branches",
         default=default_show_branches
@@ -128,7 +128,7 @@ def main():
     branches_group.add_argument(
         "-B",
         "--no-branches",
-        help="",
+        help="don't show the branches section",
         action="store_false",
         dest="show_branches"
     )
@@ -138,7 +138,7 @@ def main():
     stashes_group.add_argument(
         "-t",
         "--stashes",
-        help="",
+        help="show the stashes section",
         action="store_true",
         dest="show_stashes",
         default=default_show_stashes
@@ -146,7 +146,7 @@ def main():
     stashes_group.add_argument(
         "-T",
         "--no-stashes",
-        help="",
+        help="don't show the stashes section",
         action="store_false",
         dest="show_stashes"
     )
@@ -174,7 +174,7 @@ def main():
     format_group.add_argument(
         "-f",
         "--format",
-        help="",
+        help="format the each section (choices: compact, pretty)",
         choices=("pretty", "compact"),
         metavar="<format>",
         dest="format",
@@ -183,7 +183,7 @@ def main():
     format_group.add_argument(
         "-p",
         "--pretty",
-        help="",
+        help="show in pretty format",
         action=flag_as_value("pretty"),
         dest="format",
         nargs=0
@@ -194,7 +194,7 @@ def main():
     show_empty_group.add_argument(
         "-e",
         "--show-empty",
-        help="",
+        help="show empty sections",
         action="store_true",
         dest="show_empty",
         default=default_show_empty
@@ -202,7 +202,7 @@ def main():
     show_empty_group.add_argument(
         "-E",
         "--no-show-empty",
-        help="",
+        help="don't show empty sections (does not apply to status)",
         action="store_false",
         dest="show_empty"
     )
