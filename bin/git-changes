@@ -24,11 +24,20 @@ def main():
         default=default_branch
     )
 
+    details_group = parser.add_mutually_exclusive_group()
+
     # -c|--count
-    parser.add_argument(
+    details_group.add_argument(
         "-c",
         "--count",
         help="print the total changes instead of listing them",
+        action="store_true"
+    )
+
+    # --stat
+    details_group.add_argument(
+        "--stat",
+        help="include a diffstat for each commit",
         action="store_true"
     )
 
