@@ -74,6 +74,7 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
         # this must be done using config since status has no --color option
         status_color = Popen(['git', 'config', '--local', 'color.status'], stdout=PIPE, stderr=PIPE)
         status_color_out, status_color_err = status_color.communicate()
+        status_color_out = status_color_out.rstrip()  # strip the newline
         call(['git', 'config', 'color.status', color])
 
         # check if status is empty
@@ -85,7 +86,7 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
         state += _print_section(title, status, format)
 
         # reset color.status to its original setting
-        if status_color_err == '':
+        if status_color_out == '':
             call(['git', 'config', '--unset', 'color.status'])
 
             # unset may leave an empty section, remove it if it is
@@ -93,7 +94,7 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
             if section_count == 0:
                 call(['git', 'config', '--remove-section', 'color'])
         else:
-            call(['git', 'config', 'color.status', color_status_out])
+            call(['git', 'config', 'color.status', status_color_out])
 
     else:
         if show_status:
@@ -102,6 +103,7 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
             # this must be done using config since status has no --color option
             status_color = Popen(['git', 'config', '--local', 'color.status'], stdout=PIPE, stderr=PIPE)
             status_color_out, status_color_err = status_color.communicate()
+            status_color_out = status_color_out.rstrip()  # strip the newline
             call(['git', 'config', 'color.status', color])
 
             status = check_output(['git', 'status', '--short', '--untracked-files=all', '--branch']).splitlines()
@@ -110,7 +112,7 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
             state += _print_section(status_title, status, format)
 
             # reset color.status to its original setting
-            if status_color_err == '':
+            if status_color_out == '':
                 call(['git', 'config', '--unset', 'color.status'])
 
                 # unset may leave an empty section, remove it if it is
@@ -118,7 +120,7 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
                 if section_count == 0:
                     call(['git', 'config', '--remove-section', 'color'])
             else:
-                call(['git', 'config', 'color.status', color_status_out])
+                call(['git', 'config', 'color.status', status_color_out])
 
         if log_count != 0:
             log = check_output(['git', 'log', '-n', str(log_count), '--oneline', '--color={}'.format(color)])
