@@ -148,6 +148,3 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
         call(['less', '-r'], stdin=echo.stdout)
         echo.wait()
 
-
-if __name__ == "__main__":
-    main()
