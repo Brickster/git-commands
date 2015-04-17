@@ -55,7 +55,7 @@ git snapshot (-v|--version)
 Used to list the commits between this branch and another.
 
 ```bash
-git changes [(-b|--branch) <branch>] [(-c|--count)]
+git changes [(-b|--branch) <branch>] [(-c|--count)] [--stat]
 git changes (-h|--help)
 git changes (-v|--version)
 ```

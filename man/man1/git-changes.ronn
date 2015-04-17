@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git changes` [(`-b`|`--branch`) <branch>] [(`-c`|`--count`)]<br>
+`git changes` [(`-b`|`--branch`) <branch>] [(`-c`|`--count`)] [`--stat`]<br>
 `git changes` (`-h`|`--help`)<br>
 `git changes` (`-v`|`--version`)
 
@@ -17,6 +17,9 @@
 
 * `-c`|`--count`:
 	Prints the total changes instead of listing them.
+
+* `--stat`:
+    Include a diffstat for each commit.
 
 * `-h`|`--help`:
 	Display git-changes man page.

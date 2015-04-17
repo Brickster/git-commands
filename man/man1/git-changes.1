@@ -1,13 +1,13 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-CHANGES" "1" "March 2015" "" ""
+.TH "GIT\-CHANGES" "1" "April 2015" "" ""
 .
 .SH "NAME"
 \fBgit\-changes\fR \- lists the commits between this branch and another
 .
 .SH "SYNOPSIS"
-\fBgit changes\fR [(\fB\-b\fR|\fB\-\-branch\fR) \fIbranch\fR] [(\fB\-c\fR|\fB\-\-count\fR)]
+\fBgit changes\fR [(\fB\-b\fR|\fB\-\-branch\fR) \fIbranch\fR] [(\fB\-c\fR|\fB\-\-count\fR)] [\fB\-\-stat\fR]
 .
 .br
 \fBgit changes\fR (\fB\-h\fR|\fB\-\-help\fR)
@@ -27,6 +27,10 @@ Show the commits between HEAD and \fIbranch\fR\. When not specified, master is u
 .TP
 \fB\-c\fR|\fB\-\-count\fR
 Prints the total changes instead of listing them\.
+.
+.TP
+\fB\-\-stat\fR
+Include a diffstat for each commit\.
 .
 .TP
 \fB\-h\fR|\fB\-\-help\fR
