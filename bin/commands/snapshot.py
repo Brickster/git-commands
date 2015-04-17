@@ -3,7 +3,7 @@ from utils.messages import info
 
 
 def snapshot(message):
-    '''Create a snapshot of the working directory and index.'''
+    """Create a snapshot of the working directory and index."""
 
     status_command = ['git', 'status', '--porcelain']
     status_output = check_output(status_command).splitlines()

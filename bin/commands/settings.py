@@ -72,6 +72,7 @@ def _dry_destroy_section(config, section):
     for line in list_output.splitlines():
         print "Would be deleted from {}: {}".format(config, line)
 
+
 def destroy(section, dry_run):
     if dry_run:
         _dry_destroy_section('local', section)
