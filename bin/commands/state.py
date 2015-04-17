@@ -4,7 +4,8 @@ from ast import literal_eval
 from subprocess import call, check_output, PIPE, Popen
 from utils.messages import error
 
-class colors:
+
+class Colors:
     green = "\x1B[0;32m"
     no_color = "\x1B[0m"
 
@@ -12,7 +13,7 @@ class colors:
 def _print_section(title, text=None, format="compact"):
     """Print a section."""
 
-    section = "# {}{}{}".format(colors.green, title, colors.no_color) + '\n'
+    section = "# {}{}{}".format(Colors.green, title, Colors.no_color) + '\n'
 
     if format == "pretty" and text is not None and len(text) > 0:
         # pretty print
@@ -64,8 +65,8 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
         color = "always"
     else:
         color = "never"
-        colors.green = ""
-        colors.no_color = ""
+        Colors.green = ""
+        Colors.no_color = ""
 
     state = ''
     if _is_new_repository():
@@ -82,7 +83,7 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
         if status == "":
             status = "Initial commit"
 
-        title = 'status {}({}master{})'.format(colors.no_color, colors.green, colors.no_color)
+        title = 'status {}({}master{})'.format(Colors.no_color, Colors.green, Colors.no_color)
         state += _print_section(title, status, format)
 
         # reset color.status to its original setting
@@ -98,7 +99,6 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
 
     else:
         if show_status:
-
             # make sure status will output ANSI codes
             # this must be done using config since status has no --color option
             status_color = Popen(['git', 'config', '--local', 'color.status'], stdout=PIPE, stderr=PIPE)
@@ -107,7 +107,7 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
             call(['git', 'config', 'color.status', color])
 
             status = check_output(['git', 'status', '--short', '--untracked-files=all', '--branch']).splitlines()
-            status_title = 'status {}({})'.format(colors.no_color ,status.pop(0).lstrip('# '))
+            status_title = 'status {}({})'.format(Colors.no_color, status.pop(0).lstrip('# '))
             status = '\n'.join(status)
             state += _print_section(status_title, status, format)
 

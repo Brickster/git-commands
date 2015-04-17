@@ -3,7 +3,7 @@ from utils.messages import info
 
 
 def changes(branch, count=False):
-    '''Print the changes between a given branch and HEAD'''
+    """Print the changes between a given branch and HEAD"""
 
     command = ['git', 'log', '--oneline', '{}..HEAD'.format(branch)]
     if count:
