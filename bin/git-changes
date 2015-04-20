@@ -4,6 +4,7 @@ import argparse
 
 from commands import changes
 from subprocess import check_output
+from utils.parse_actions import flag_as_value
 
 
 def main():
@@ -30,15 +31,20 @@ def main():
     details_group.add_argument(
         "-c",
         "--count",
-        help="print the total changes instead of listing them",
-        action="store_true"
+        help="show as a count of changes",
+        action=flag_as_value("count"),
+        dest="details",
+        nargs=0
     )
 
-    # --stat
+    # -s|--stat
     details_group.add_argument(
+        "-s",
         "--stat",
-        help="include a diffstat for each commit",
-        action="store_true"
+        help="show as a diffstat",
+        action=flag_as_value("stat"),
+        dest="details",
+        nargs=0
     )
 
     changes.changes(**vars(parser.parse_args()))
