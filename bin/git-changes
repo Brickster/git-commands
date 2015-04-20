@@ -47,6 +47,16 @@ def main():
         nargs=0
     )
 
+    # -d|--diff
+    details_group.add_argument(
+        "-d",
+        "--diff",
+        help="show as a full diff",
+        action=flag_as_value("diff"),
+        dest="details",
+        nargs=0
+    )
+
     changes.changes(**vars(parser.parse_args()))
 
 if __name__ == "__main__":

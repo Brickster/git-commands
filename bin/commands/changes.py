@@ -5,7 +5,9 @@ from utils.messages import info
 def changes(branch, details=None):
     """Print the changes between a given branch and HEAD"""
 
-    if details == "stat":
+    if details == "diff":
+        call(['git', 'diff', branch, 'HEAD'])
+    elif details == "stat":
         call(['git', 'diff', '--stat', branch, 'HEAD'])
     else:
         command = ['git', 'log', '--oneline', '{}..HEAD'.format(branch)]
