@@ -2,15 +2,16 @@ from subprocess import call, check_output
 from utils.messages import info
 
 
-def changes(branch, count=False, stat=False):
+def changes(branch, details=None):
     """Print the changes between a given branch and HEAD"""
 
-    command = ['git', 'log', '--oneline']
-    command = command if not stat or count else command + ['--stat']
-    command += ['{}..HEAD'.format(branch)]
-    if count:
-        log = check_output(command)
-        log = log.splitlines()
-        info(len(log))
+    if details == "stat":
+        call(['git', 'diff', '--stat', branch, 'HEAD'])
     else:
-        call(command)
+        command = ['git', 'log', '--oneline', '{}..HEAD'.format(branch)]
+        if details == "count":
+            log = check_output(command)
+            log = log.splitlines()
+            info(len(log))
+        else:
+            call(command)

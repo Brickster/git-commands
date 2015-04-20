@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git changes` [(`-b`|`--branch`) <branch>] [(`-c`|`--count`)] [`--stat`]<br>
+`git changes` [(`-b`|`--branch`) <branch>] [(`-c`|`--count`)] [(`-s`|`--stat`)]<br>
 `git changes` (`-h`|`--help`)<br>
 `git changes` (`-v`|`--version`)
 
@@ -16,10 +16,10 @@
     Show the commits between HEAD and <branch>. When not specified, master is used.
 
 * `-c`|`--count`:
-	Prints the total changes instead of listing them.
+	Show as a count of changes.
 
-* `--stat`:
-    Include a diffstat for each commit.
+* `-s`|`--stat`:
+    Show as a diffstat.
 
 * `-h`|`--help`:
 	Display git-changes man page.

@@ -7,7 +7,7 @@
 \fBgit\-changes\fR \- lists the commits between this branch and another
 .
 .SH "SYNOPSIS"
-\fBgit changes\fR [(\fB\-b\fR|\fB\-\-branch\fR) \fIbranch\fR] [(\fB\-c\fR|\fB\-\-count\fR)] [\fB\-\-stat\fR]
+\fBgit changes\fR [(\fB\-b\fR|\fB\-\-branch\fR) \fIbranch\fR] [(\fB\-c\fR|\fB\-\-count\fR)] [(\fB\-s\fR|\fB\-\-stat\fR)]
 .
 .br
 \fBgit changes\fR (\fB\-h\fR|\fB\-\-help\fR)
@@ -26,11 +26,11 @@ Show the commits between HEAD and \fIbranch\fR\. When not specified, master is u
 .
 .TP
 \fB\-c\fR|\fB\-\-count\fR
-Prints the total changes instead of listing them\.
+Show as a count of changes\.
 .
 .TP
-\fB\-\-stat\fR
-Include a diffstat for each commit\.
+\fB\-s\fR|\fB\-\-stat\fR
+Show as a diffstat\.
 .
 .TP
 \fB\-h\fR|\fB\-\-help\fR
