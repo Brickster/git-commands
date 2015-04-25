@@ -9,7 +9,8 @@ def main():
     parser = argparse.ArgumentParser(
         prog="git restash",
         version="git-restash 0.2.0",
-        description="restash changes"
+        description="restash changes",
+        epilog="for more detail, use: git help restash"
     )
 
     # <stash>
