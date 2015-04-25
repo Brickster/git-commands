@@ -19,7 +19,8 @@ def main():
     parser = argparse.ArgumentParser(
         prog="git upstream",
         version="git-upstream 0.2.0",
-        description="get the current upstream branch"
+        description="get the current upstream branch",
+        epilog="for more detail, use: git help upstream"
     )
 
     include_remote_group = parser.add_mutually_exclusive_group()
