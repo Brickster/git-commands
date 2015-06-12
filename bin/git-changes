@@ -2,7 +2,7 @@
 
 import argparse
 
-from commands import changes
+from commands import changes, upstream
 from subprocess import check_output
 from utils.parse_actions import flag_as_value
 
@@ -18,12 +18,23 @@ def main():
 
     # -b|--branch
     default_branch = check_output(['git', 'settings', 'get', '-d', 'master', 'git-changes.default-branch']).splitlines()[0]
-    parser.add_argument(
+    branch_group = parser.add_mutually_exclusive_group()
+    branch_group.add_argument(
         "-b",
         "--branch",
         help="show the commits between HEAD and <branch>",
         metavar="<branch>",
         default=default_branch
+    )
+
+    # -r|--remote
+    branch_group.add_argument(
+        '-r',
+        '--remote',
+        help='show the commits between the local and remote head',
+        action=flag_as_value(upstream.upstream(True)),
+        nargs=0,
+        dest='branch'
     )
 
     details_group = parser.add_mutually_exclusive_group()
