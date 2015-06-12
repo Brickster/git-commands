@@ -26,7 +26,7 @@
     Show as a full diff.
 
 * `-h`|`--help`:
-	Display git-changes man page.
+    Print a simple help message.
 
 * `-v`|`--version`:
     Print version.

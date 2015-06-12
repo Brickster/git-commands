@@ -22,7 +22,7 @@
     Print the stashes that would be dropped but don't drop them.
 
 * `-h`|`--help`:
-    Display git-abandon man page.
+    Print a simple help message.
 
 * `-v`|`--version`:
     Print version.

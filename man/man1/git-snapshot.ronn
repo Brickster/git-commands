@@ -21,7 +21,7 @@ $ git stash apply
     The message to use when creating the underlying stash. If no message is supplied, the default `git-stash` message is used.
 
 * `-h`|`--help`:
-	Display git-snapshot man page.
+    Print a simple help message.
 
 * `-v`|`--version`:
 	Print version.

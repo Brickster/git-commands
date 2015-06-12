@@ -20,7 +20,7 @@ Used to see a more concise and comprehensive view of the working directory. The 
 ## OPTIONS
 
 * `-h`|`--help`:
-	Display git-state man page.
+	Print a simple help message.
 
 * `-v`|`--version`:
 	Print version.
