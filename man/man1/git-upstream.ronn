@@ -19,7 +19,7 @@
     Don't print the remote name.
 
 * `-h`|`--help`:
-    Display git-upstream man page.
+    Print a simple help message.
 
 * `-v`|`--version`:
     Print version.

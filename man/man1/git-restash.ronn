@@ -20,7 +20,7 @@ git stash show --patch | git apply --reverse
 	The stash whose patch should be reverse applied. If not supplied, the latest stash will be used.
 
 * `-h`|`--help`:
-	Display the man page.
+	Print a simple help message.
 
 * `-v`|`--version`:
 	Print the current version.

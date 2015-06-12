@@ -24,7 +24,7 @@ While `git-commit` does include a `--fixup=<commit>` option, using it consecutiv
     Stage all files before making the fixup commit.
 
 * `-h`|`--help`:
-    Display git-fixup man page.
+    Print a simple help message.
 
 * `-v`|`--version`:
     Print version.

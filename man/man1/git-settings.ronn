@@ -48,7 +48,7 @@
         The count of keys in a given section is printed rather than the section itself.
 
 * `-h`|`--help`:
-    Display git-settings man page.
+    Print a simple help message.
 
 * `-v`|`--version`:
     Print version.
