@@ -3,7 +3,7 @@
 import argparse
 
 from commands import settings
-from utils.parse_actions import flag_as_value, multi_set
+from utils.parse_actions import multi_set
 
 
 def main():
@@ -17,27 +17,27 @@ def main():
     file_group.add_argument(
         "--local",
         help="limit to the local config file",
-        action=flag_as_value("local"),
-        dest="config",
-        nargs=0
+        action='store_const',
+        const='local',
+        dest='config'
     )
 
     # --global
     file_group.add_argument(
         "--global",
         help="limit to the global config file",
-        action=flag_as_value("global"),
-        dest="config",
-        nargs=0
+        action='store_const',
+        const='global',
+        dest='config'
     )
 
     # --system
     file_group.add_argument(
         "--system",
         help="limit to the system config file",
-        action=flag_as_value("system"),
-        dest="config",
-        nargs=0
+        action='store_const',
+        const='system',
+        dest='config'
     )
 
     # --file <file>
@@ -67,7 +67,14 @@ def main():
     list_parser.add_argument("section", help="optionally, limit to a specific section", metavar="<section>", nargs="?")
     list_group = list_parser.add_mutually_exclusive_group()
     list_group.add_argument("-f", "--format", help="print using a specific format (choices: compact, pretty)", metavar="<format>", choices=("compact", "pretty"), default=default_format, dest="format")
-    list_group.add_argument("-p", "--pretty", help="use pretty format", action=flag_as_value("pretty"), dest="format", nargs=0)
+    list_group.add_argument(
+        "-p",
+        "--pretty",
+        help="use pretty format",
+        action='store_const',
+        const='pretty',
+        dest="format"
+    )
     list_group.add_argument("-c", "--count", help="print the count of configurations", action="store_true")
     list_parser.set_defaults(func=settings._list)
 
