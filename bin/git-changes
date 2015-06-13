@@ -4,7 +4,6 @@ import argparse
 
 from commands import changes, upstream
 from subprocess import check_output
-from utils.parse_actions import flag_as_value
 
 
 def main():
@@ -32,8 +31,8 @@ def main():
         '-r',
         '--remote',
         help='show the commits between the local and remote head',
-        action=flag_as_value(upstream.upstream(True)),
-        nargs=0,
+        action='store_const',
+        const=upstream.upstream(True),
         dest='branch'
     )
 
@@ -41,32 +40,32 @@ def main():
 
     # -c|--count
     details_group.add_argument(
-        "-c",
-        "--count",
-        help="show as a count of changes",
-        action=flag_as_value("count"),
-        dest="details",
-        nargs=0
+        '-c',
+        '--count',
+        help='show as a count of changes',
+        action='store_const',
+        const='count',
+        dest='details'
     )
 
     # -s|--stat
     details_group.add_argument(
-        "-s",
-        "--stat",
-        help="show as a diffstat",
-        action=flag_as_value("stat"),
-        dest="details",
-        nargs=0
+        '-s',
+        '--stat',
+        help='show as a diffstat',
+        action='store_const',
+        const='stat',
+        dest='details'
     )
 
     # -d|--diff
     details_group.add_argument(
-        "-d",
-        "--diff",
-        help="show as a full diff",
-        action=flag_as_value("diff"),
-        dest="details",
-        nargs=0
+        '-d',
+        '--diff',
+        help='show as a full diff',
+        action='store_const',
+        const='diff',
+        dest='details'
     )
 
     changes.changes(**vars(parser.parse_args()))

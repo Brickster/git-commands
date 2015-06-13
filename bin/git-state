@@ -4,7 +4,6 @@ import argparse
 
 from ast import literal_eval
 from commands import state, settings
-from utils.parse_actions import flag_as_value
 
 
 def main():
@@ -74,19 +73,19 @@ def main():
         default=default_log_count
     )
     log_group.add_argument(
-        "-L",
-        "--no-log",
+        '-L',
+        '--no-log',
         help="don't show the log section",
-        action=flag_as_value(0),
-        dest="log_count",
-        nargs=0
+        action='store_const',
+        const=0,
+        dest='log_count'
     )
     log_group.add_argument(
-        "--full-log",
-        help="show the full log",
-        action=flag_as_value(-1),
-        dest="log_count",
-        nargs=0
+        '--full-log',
+        help='show the full log',
+        action='store_const',
+        const=-1,
+        dest='log_count'
     )
 
     # reflog
@@ -101,19 +100,19 @@ def main():
         default=default_reflog_count
     )
     reflog_group.add_argument(
-        "-R",
-        "--no-reflog",
+        '-R',
+        '--no-reflog',
         help="don't show the reflog section",
-        action=flag_as_value(0),
-        dest="reflog_count",
-        nargs=0
+        action='store_const',
+        const=0,
+        dest='reflog_count'
     )
     reflog_group.add_argument(
-        "--full-reflog",
-        help="show the full reflog",
-        action=flag_as_value(-1),
-        dest="reflog_count",
-        nargs=0
+        '--full-reflog',
+        help='show the full reflog',
+        action='store_const',
+        const=-1,
+        dest='reflog_count'
     )
 
     # branches
@@ -182,12 +181,12 @@ def main():
         default=default_format
     )
     format_group.add_argument(
-        "-p",
-        "--pretty",
-        help="show in pretty format",
-        action=flag_as_value("pretty"),
-        dest="format",
-        nargs=0
+        '-p',
+        '--pretty',
+        help='show in pretty format',
+        action='store_const',
+        const='pretty',
+        dest='format'
     )
 
     # show empty
