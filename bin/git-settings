@@ -44,7 +44,7 @@ def main():
     file_group.add_argument(
         "--file",
         help="limit to a specific config file",
-        action=multi_set("config", "file"),
+        action=multi_set(config='file'),
         metavar="<file>"
     )
 
