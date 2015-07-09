@@ -23,6 +23,9 @@ While `git-commit` does include a `--fixup=<commit>` option, using it consecutiv
 * `-a`|`--all`:
     Stage all files before making the fixup commit.
 
+* `-u`|`--update`:
+    Stage tracked files before making the fixup commit.
+
 * `-h`|`--help`:
     Print a simple help message.
 
