@@ -2,14 +2,14 @@
 
 import argparse
 
-from commands import upstream
+from commands import upstream, settings
 from subprocess import check_output
 
 
 def get_include_remote_default():
     """Get the default value for including remote info."""
 
-    default = check_output(['git', 'settings', 'get', '-d', 'false', 'git-upstream.include-remote']).splitlines()[0]
+    default = settings.get('git-upstream.include-remote', default='false')
     default = str(default).lower() == 'true'
     return default
 

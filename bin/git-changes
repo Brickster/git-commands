@@ -2,7 +2,7 @@
 
 import argparse
 
-from commands import changes, upstream
+from commands import changes, upstream, settings
 from subprocess import check_output
 
 
@@ -16,7 +16,7 @@ def main():
     )
 
     # -b|--branch
-    default_branch = check_output(['git', 'settings', 'get', '-d', 'master', 'git-changes.default-branch']).splitlines()[0]
+    default_branch = settings.get('git-changes.default-branch', default='master')
     branch_group = parser.add_mutually_exclusive_group()
     branch_group.add_argument(
         "-b",
