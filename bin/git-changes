@@ -11,7 +11,7 @@ def main():
     parser = argparse.ArgumentParser(
         prog="git changes",
         version="git-changes 0.2.0",
-        description="list the commits between this branch and another",
+        description=changes.__doc__,
         epilog="for more detail, use: git help changes"
     )
 

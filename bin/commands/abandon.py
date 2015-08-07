@@ -1,3 +1,5 @@
+"""Drop a count or range of stashes."""
+
 from subprocess import call, check_output
 from utils.messages import error
 

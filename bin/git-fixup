@@ -10,7 +10,7 @@ def main():
     parser = argparse.ArgumentParser(
         prog="git fixup",
         version="git-fixup 0.2.0",
-        description="commits staged changes as an autosquashable fixup",
+        description=fixup.__doc__,
         epilog="for more detail, use: git help fixup"
     )
 

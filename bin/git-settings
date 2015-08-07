@@ -50,7 +50,7 @@ def main():
 
     parser = argparse.ArgumentParser(
         prog="git settings",
-        description="more ways to view and edit config files",
+        description=settings.__doc__,
         epilog="for more detail, use: git help settings"
     )
     parser.add_argument("-v", "--version", action="version", help="show version and exit", version="git-settings 0.2.0")

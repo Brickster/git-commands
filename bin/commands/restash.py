@@ -1,3 +1,5 @@
+"""Restash changes."""
+
 import re
 
 from subprocess import call, check_output, PIPE, Popen

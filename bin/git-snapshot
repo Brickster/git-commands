@@ -14,7 +14,7 @@ def main():
     parser = argparse.ArgumentParser(
         prog="git snapshot",
         version="git-snapshot 0.2.0",
-        description="create a snapshot of the changes in a dirty working directory",
+        description=snapshot.__doc__,
         epilog="for more detail, use: git help snapshot"
     )
 
