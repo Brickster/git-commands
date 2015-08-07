@@ -144,6 +144,6 @@ Used to see a more concise and comprehensive view of the working directory. The 
 	Default: <false>
 
 * `git-state.clear` <bool>:
-	True or false flag determining whether to clear to clear the screen before printing. Options `--clear` and `--no-clear` override this value.
+	True or false flag determining whether to clear the screen before printing. Options `--clear` and `--no-clear` override this value.
 
 	Default: <true>
