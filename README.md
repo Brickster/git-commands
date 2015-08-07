@@ -88,7 +88,7 @@ git upstream (-v|--version)
 Used as a shortcut for committing the currently staged files as an autosquashable fixup.
 
 ```bash
-git fixup [(-a|--all)] [(-b|--message-body) <message-body>] [<commit>]
+git fixup [(-a|--all)] [(-u|--update)] [(-b|--message-body) <message-body>] [<commit>]
 git fixup (-h|--help)
 git fixup (-v|--version)
 ```
