@@ -10,6 +10,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-c`|`--color`)] [(`-C`|`--no-color`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`--clear`|`--no-clear`)]<br>
 `git state` (`-h`|`--help`)<br>
 `git state` (`-v`|`--version`)
 
@@ -79,6 +80,12 @@ Used to see a more concise and comprehensive view of the working directory. The 
 * `-f`|`--format` <format>:
 	The format used to print each section. Valid values include: <compact> and <pretty>.
 
+* `--clear` :
+	Clear the screen before printing.
+
+* `--no-clear`:
+	Do not clear the screen before printing.
+
 ## CONFIGURATION
 
 * `git-state.log.show` <bool>:
@@ -135,3 +142,8 @@ Used to see a more concise and comprehensive view of the working directory. The 
 	True or false flag determining whether empty sections should be shown. Options (`-e`|`--show-empty`) and (`-E`|`--no-show-empty`) override this value.
 
 	Default: <false>
+
+* `git-state.clear` <bool>:
+	True or false flag determining whether to clear to clear the screen before printing. Options `--clear` and `--no-clear` override this value.
+
+	Default: <true>

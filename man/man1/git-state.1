@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-STATE" "1" "June 2015" "" ""
+.TH "GIT\-STATE" "1" "August 2015" "" ""
 .
 .SH "NAME"
 \fBgit\-state\fR \- view the state of the working tree
@@ -29,6 +29,9 @@
 .
 .br
 \~\~\~\~\~\~\~\~\~\~[(\fB\-p\fR|\fB\-\-pretty\fR)] [(\fB\-f\fR|\fB\-\-format\fR) \fIformat\fR]
+.
+.br
+\~\~\~\~\~\~\~\~\~\~[(\fB\-\-clear\fR|\fB\-\-no\-clear\fR)]
 .
 .br
 \fBgit state\fR (\fB\-h\fR|\fB\-\-help\fR)
@@ -121,6 +124,14 @@ Display in pretty format\. This is equivalent to \fB\-f\fR|\fB\-\-format\fR \fIp
 \fB\-f\fR|\fB\-\-format\fR \fIformat\fR
 The format used to print each section\. Valid values include: \fIcompact\fR and \fIpretty\fR\.
 .
+.TP
+\fB\-\-clear\fR
+Clear the screen before printing\.
+.
+.TP
+\fB\-\-no\-clear\fR
+Do not clear the screen before printing\.
+.
 .SH "CONFIGURATION"
 .
 .TP
@@ -199,4 +210,11 @@ True or false flag determining whether empty sections should be shown\. Options 
 .
 .IP
 Default: \fIfalse\fR
+.
+.TP
+\fBgit\-state\.clear\fR \fIbool\fR
+True or false flag determining whether to clear to clear the screen before printing\. Options \fB\-\-clear\fR and \fB\-\-no\-clear\fR override this value\.
+.
+.IP
+Default: \fItrue\fR
 

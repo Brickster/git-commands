@@ -81,6 +81,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-e</code>|<code>--show-empty</code>)] [(<code>-E</code>|<code>--no-show-empty</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-c</code>|<code>--color</code>)] [(<code>-C</code>|<code>--no-color</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-p</code>|<code>--pretty</code>)] [(<code>-f</code>|<code>--format</code>) <var>format</var>]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>--clear</code>|<code>--no-clear</code>)]<br />
 <code>git state</code> (<code>-h</code>|<code>--help</code>)<br />
 <code>git state</code> (<code>-v</code>|<code>--version</code>)</p>
 
@@ -111,6 +112,8 @@
 <dt><code>-C</code>|<code>--no-color</code></dt><dd><p>  Never color output.</p></dd>
 <dt><code>-p</code>|<code>--pretty</code></dt><dd><p>  Display in pretty format. This is equivalent to <code>-f</code>|<code>--format</code> <var>pretty</var>.</p></dd>
 <dt><code>-f</code>|<code>--format</code> <var>format</var></dt><dd><p>  The format used to print each section. Valid values include: <var>compact</var> and <var>pretty</var>.</p></dd>
+<dt><code>--clear</code> </dt><dd><p>  Clear the screen before printing.</p></dd>
+<dt><code>--no-clear</code></dt><dd><p>  Do not clear the screen before printing.</p></dd>
 </dl>
 
 
@@ -150,13 +153,16 @@
 <dt><code>git-state.show-empty</code> <var>bool</var></dt><dd><p>  True or false flag determining whether empty sections should be shown. Options (<code>-e</code>|<code>--show-empty</code>) and (<code>-E</code>|<code>--no-show-empty</code>) override this value.</p>
 
 <p>  Default: <var>false</var></p></dd>
+<dt><code>git-state.clear</code> <var>bool</var></dt><dd><p>  True or false flag determining whether to clear to clear the screen before printing. Options <code>--clear</code> and <code>--no-clear</code> override this value.</p>
+
+<p>  Default: <var>true</var></p></dd>
 </dl>
 
 
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>June 2015</li>
+    <li class='tc'>August 2015</li>
     <li class='tr'>git-state(1)</li>
   </ol>
 

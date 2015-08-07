@@ -59,7 +59,7 @@ def _is_new_repository():
     return log_err != '' and log_err.splitlines()[0] == "fatal: bad default revision 'HEAD'"
 
 
-def state(show_color, format, show_status, log_count, reflog_count, show_branches, show_stashes, show_empty):
+def state(show_color, format, show_status, log_count, reflog_count, show_branches, show_stashes, show_empty, clear):
 
     show_only_default_branch = literal_eval(check_output(['git', 'settings', 'get', '-d', 'True', 'git-state.branches.show-only-default']))
 
@@ -144,7 +144,8 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
     state_lines = len(state.splitlines())
     terminal_lines = literal_eval(check_output(['tput', 'lines']))
     if terminal_lines >= state_lines + 2: # one for the newline and one for the prompt
-        call('clear')
+        if clear:
+            call('clear')
         print state
     else:
         echo = Popen(['echo', state], stdout=PIPE)

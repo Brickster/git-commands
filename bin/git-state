@@ -35,6 +35,7 @@ def main():
     default_show_empty = literal_eval(settings.get('git-state.show-empty', default='False'))
     default_format = settings.get('git-state.format', default='compact')
     default_show_color = settings.get('color.ui', default="always")
+    default_clear = literal_eval(settings.get('git-state.clear', default='True'))
 
     parser = argparse.ArgumentParser(
         prog="git state",
@@ -205,6 +206,22 @@ def main():
         help="don't show empty sections (does not apply to status)",
         action="store_false",
         dest="show_empty"
+    )
+
+    # screen clearing
+    clear_group = parser.add_mutually_exclusive_group()
+    clear_group.add_argument(
+        '--clear',
+        help='clear the screen before printing',
+        action='store_true',
+        dest='clear',
+        default=default_clear
+    )
+    clear_group.add_argument(
+        '--no-clear',
+        help='do not clear the screen before printing',
+        action='store_false',
+        dest='clear'
     )
 
     state.state(**vars(parser.parse_args()))
