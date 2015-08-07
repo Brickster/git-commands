@@ -13,7 +13,7 @@ def main():
     parser = argparse.ArgumentParser(
         prog="git abandon",
         version="git-abandon 0.2.0",
-        description="drop a count or range of stashes",
+        description=abandon.__doc__,
         epilog="for more detail, use: git help abandon"
     )
 

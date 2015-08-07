@@ -1,3 +1,5 @@
+"""Commits staged changes as an autosquashable fixup."""
+
 import re
 
 from subprocess import call, check_output

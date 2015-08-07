@@ -1,3 +1,5 @@
+"""Get the current upstream branch."""
+
 import re
 
 from subprocess import check_output

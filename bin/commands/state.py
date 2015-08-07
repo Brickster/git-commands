@@ -1,3 +1,5 @@
+"""View the state of the working tree."""
+
 import re
 
 from ast import literal_eval
@@ -147,4 +149,3 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
         echo = Popen(['echo', state], stdout=PIPE)
         call(['less', '-r'], stdin=echo.stdout)
         echo.wait()
-

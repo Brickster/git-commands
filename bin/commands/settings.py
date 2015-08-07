@@ -1,3 +1,5 @@
+"""More ways to view and edit config files."""
+
 import re
 
 from subprocess import check_output, STDOUT, Popen, PIPE
