@@ -144,6 +144,7 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
     state_lines = len(state.splitlines())
     terminal_lines = literal_eval(check_output(['tput', 'lines']))
     if terminal_lines >= state_lines + 2: # one for the newline and one for the prompt
+        call('clear')
         print state
     else:
         echo = Popen(['echo', state], stdout=PIPE)
