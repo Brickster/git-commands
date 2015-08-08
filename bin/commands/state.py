@@ -1,6 +1,7 @@
 """View the state of the working tree."""
 
 import re
+import sys
 
 from ast import literal_eval
 from subprocess import call, check_output, PIPE, Popen
@@ -63,12 +64,13 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
 
     show_only_default_branch = literal_eval(check_output(['git', 'settings', 'get', '-d', 'True', 'git-state.branches.show-only-default']))
 
-    if show_color:
-        color = "always"
-    else:
-        color = "never"
+    show_color = show_color.lower()
+    if show_color == 'never' or (show_color == 'auto' and not sys.stdout.isatty()):
+        show_color = "never"
         Colors.green = ""
         Colors.no_color = ""
+    elif show_color == 'auto' and sys.stdout.isatty():
+        show_color = 'always'
 
     state = ''
     if _is_new_repository():
@@ -78,7 +80,7 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
         status_color = Popen(['git', 'config', '--local', 'color.status'], stdout=PIPE, stderr=PIPE)
         status_color_out, status_color_err = status_color.communicate()
         status_color_out = status_color_out.rstrip()  # strip the newline
-        call(['git', 'config', 'color.status', color])
+        call(['git', 'config', 'color.status', show_color])
 
         # check if status is empty
         status = check_output(['git', 'status', '--short'])
@@ -93,7 +95,7 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
             call(['git', 'config', '--unset', 'color.status'])
 
             # unset may leave an empty section, remove it if it is
-            section_count = literal_eval(check_output(['git', 'settings', 'list', '--local', '--count', color]))
+            section_count = literal_eval(check_output(['git', 'settings', 'list', '--local', '--count', 'color']))
             if section_count == 0:
                 call(['git', 'config', '--remove-section', 'color'])
         else:
@@ -106,7 +108,7 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
             status_color = Popen(['git', 'config', '--local', 'color.status'], stdout=PIPE, stderr=PIPE)
             status_color_out, status_color_err = status_color.communicate()
             status_color_out = status_color_out.rstrip()  # strip the newline
-            call(['git', 'config', 'color.status', color])
+            call(['git', 'config', 'color.status', show_color])
 
             status = check_output(['git', 'status', '--short', '--untracked-files=all', '--branch']).splitlines()
             status_title = 'status {}({})'.format(Colors.no_color, status.pop(0).lstrip('# '))
@@ -118,25 +120,25 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
                 call(['git', 'config', '--unset', 'color.status'])
 
                 # unset may leave an empty section, remove it if it is
-                section_count = literal_eval(check_output(['git', 'settings', 'list', '--local', '--count', color]))
+                section_count = literal_eval(check_output(['git', 'settings', 'list', '--local', '--count', 'color']))
                 if section_count == 0:
                     call(['git', 'config', '--remove-section', 'color'])
             else:
                 call(['git', 'config', 'color.status', status_color_out])
 
         if log_count != 0:
-            log = check_output(['git', 'log', '-n', str(log_count), '--oneline', '--color={}'.format(color)])
+            log = check_output(['git', 'log', '-n', str(log_count), '--oneline', '--color={}'.format(show_color)])
             state += _print_section("log", log, format)
 
         if reflog_count != 0:
-            reflog = check_output(['git', 'reflog', '-n', str(reflog_count), '--color={}'.format(color)])
+            reflog = check_output(['git', 'reflog', '-n', str(reflog_count), '--color={}'.format(show_color)])
             state += _print_section('reflog', reflog, format)
 
         if show_branches and (show_only_default_branch or not _only_default_branch()):
-            branches = check_output(['git', 'branch', '-vv', '--color={}'.format(color)])
+            branches = check_output(['git', 'branch', '-vv', '--color={}'.format(show_color)])
             state += _print_section('branches', branches, format)
 
-        stashes = stashes = check_output(['git', 'stash', 'list', '--oneline', '--color={}'.format(color)])
+        stashes = stashes = check_output(['git', 'stash', 'list', '--oneline', '--color={}'.format(show_color)])
         if show_stashes and (show_empty or len(stashes) > 0):
             state += _print_section('stashes', stashes, format)
 
@@ -144,7 +146,7 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
     state_lines = len(state.splitlines())
     terminal_lines = literal_eval(check_output(['tput', 'lines']))
     if terminal_lines >= state_lines + 2: # one for the newline and one for the prompt
-        if clear:
+        if clear and sys.stdout.isatty():
             call('clear')
         print state
     else:
