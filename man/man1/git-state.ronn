@@ -147,3 +147,8 @@ Used to see a more concise and comprehensive view of the working directory. The 
 	True or false flag determining whether to clear the screen before printing. Options `--clear` and `--no-clear` override this value.
 
 	Default: <true>
+
+* `color.ui` <string>:
+	Determines whether or not colors are printed in the output. Options `--color` and `--no-color` override this value.
+
+	Default: <auto>
