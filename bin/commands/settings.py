@@ -5,6 +5,7 @@ from subprocess import check_output, PIPE, Popen, STDOUT
 
 
 def list(section, config, count, format, file=None):
+    """List configuration settings respecting override precedence."""
 
     result = []
     if config is None:
@@ -75,6 +76,8 @@ def _dry_destroy_section(config, section):
 
 
 def destroy(section, dry_run):
+    """Destroy a section from the local, global, and system config files."""
+
     if dry_run:
         _dry_destroy_section('local', section)
         _dry_destroy_section('global', section)
@@ -86,6 +89,8 @@ def destroy(section, dry_run):
 
 
 def get(key, default=None, config=None, file=None):
+    """Retrieve a configuration value."""
+
     if config is None:
         command = ('git', 'config', key)
     elif config is not None:
