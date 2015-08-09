@@ -2,7 +2,7 @@
 
 import argparse
 
-from commands import changes, upstream, settings
+from commands import changes, settings, upstream
 
 
 def main():

@@ -2,7 +2,7 @@
 
 import argparse
 
-from commands import upstream, settings
+from commands import settings, upstream
 
 
 def get_include_remote_default():

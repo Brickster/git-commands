@@ -1,6 +1,7 @@
 """Create a snapshot of the changes in a dirty working directory."""
 
-from subprocess import check_output, call
+from subprocess import call, check_output
+
 from utils.messages import info
 
 

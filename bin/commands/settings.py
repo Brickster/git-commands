@@ -1,8 +1,7 @@
 """More ways to view and edit config files."""
 
 import re
-
-from subprocess import check_output, STDOUT, Popen, PIPE
+from subprocess import check_output, PIPE, Popen, STDOUT
 
 
 def list(section, config, count, format, file=None):

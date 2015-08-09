@@ -1,8 +1,8 @@
 """List the commits between this branch and another."""
 
 import sys
-
 from subprocess import call, check_output
+
 from utils.messages import info
 
 
