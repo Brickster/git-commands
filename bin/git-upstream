@@ -3,7 +3,6 @@
 import argparse
 
 from commands import upstream, settings
-from subprocess import check_output
 
 
 def get_include_remote_default():
