@@ -38,39 +38,39 @@ def main():
     default_clear = literal_eval(settings.get('git-state.clear', default='True'))
 
     parser = argparse.ArgumentParser(
-        prog="git state",
-        version="git-state 0.2.0",
+        prog='git state',
+        version='git-state 0.2.0',
         description=state.__doc__,
-        epilog="for more detail, use: git help state"
+        epilog='for more detail, use: git help state'
     )
 
     # status
     status_group = parser.add_mutually_exclusive_group()
     status_group.add_argument(
-        "-s",
-        "--status",
-        help="show the status section",
-        action="store_true",
-        dest="show_status",
+        '-s',
+        '--status',
+        help='show the status section',
+        action='store_true',
+        dest='show_status',
         default=default_show_status
     )
     status_group.add_argument(
-        "-S",
-        "--no-status",
+        '-S',
+        '--no-status',
         help="don't show the status section",
-        action="store_false",
-        dest="show_status"
+        action='store_false',
+        dest='show_status'
     )
 
     # log
     log_group = parser.add_mutually_exclusive_group()
     log_group.add_argument(
-        "-l",
-        "--log",
-        help="limit the commits in the log section",
+        '-l',
+        '--log',
+        help='limit the commits in the log section',
         type=int,
-        dest="log_count",
-        metavar="<count>",
+        dest='log_count',
+        metavar='<count>',
         default=default_log_count
     )
     log_group.add_argument(
@@ -92,12 +92,12 @@ def main():
     # reflog
     reflog_group = parser.add_mutually_exclusive_group()
     reflog_group.add_argument(
-        "-r",
-        "--reflog",
-        help="limit the reflog section",
+        '-r',
+        '--reflog',
+        help='limit the reflog section',
         type=int,
-        dest="reflog_count",
-        metavar="<count>",
+        dest='reflog_count',
+        metavar='<count>',
         default=default_reflog_count
     )
     reflog_group.add_argument(
@@ -119,69 +119,69 @@ def main():
     # branches
     branches_group = parser.add_mutually_exclusive_group()
     branches_group.add_argument(
-        "-b",
-        "--branches",
-        help="show the branches section",
-        action="store_true",
-        dest="show_branches",
+        '-b',
+        '--branches',
+        help='show the branches section',
+        action='store_true',
+        dest='show_branches',
         default=default_show_branches
     )
     branches_group.add_argument(
-        "-B",
-        "--no-branches",
+        '-B',
+        '--no-branches',
         help="don't show the branches section",
-        action="store_false",
-        dest="show_branches"
+        action='store_false',
+        dest='show_branches'
     )
 
     # stashes
     stashes_group = parser.add_mutually_exclusive_group()
     stashes_group.add_argument(
-        "-t",
-        "--stashes",
-        help="show the stashes section",
-        action="store_true",
-        dest="show_stashes",
+        '-t',
+        '--stashes',
+        help='show the stashes section',
+        action='store_true',
+        dest='show_stashes',
         default=default_show_stashes
     )
     stashes_group.add_argument(
-        "-T",
-        "--no-stashes",
+        '-T',
+        '--no-stashes',
         help="don't show the stashes section",
-        action="store_false",
-        dest="show_stashes"
+        action='store_false',
+        dest='show_stashes'
     )
 
     # color
     color_group = parser.add_mutually_exclusive_group()
     color_group.add_argument(
-        "-c",
-        "--color",
-        help="always color output",
+        '-c',
+        '--color',
+        help='always color output',
         const='always',
-        dest="show_color",
+        dest='show_color',
         nargs='?',
         choices=('always', 'never', 'auto'),
         default=default_show_color
     )
     color_group.add_argument(
-        "-C",
-        "--no-color",
-        help="never color output",
+        '-C',
+        '--no-color',
+        help='never color output',
         action='store_const',
         const='never',
-        dest="show_color"
+        dest='show_color'
     )
 
     # format
     format_group = parser.add_mutually_exclusive_group()
     format_group.add_argument(
-        "-f",
-        "--format",
-        help="format the each section (choices: compact, pretty)",
-        choices=("pretty", "compact"),
-        metavar="<format>",
-        dest="format",
+        '-f',
+        '--format',
+        help='format the each section (choices: compact, pretty)',
+        choices=('pretty', 'compact'),
+        metavar='<format>',
+        dest='format',
         default=default_format
     )
     format_group.add_argument(
@@ -196,19 +196,19 @@ def main():
     # show empty
     show_empty_group = parser.add_mutually_exclusive_group()
     show_empty_group.add_argument(
-        "-e",
-        "--show-empty",
-        help="show empty sections",
-        action="store_true",
-        dest="show_empty",
+        '-e',
+        '--show-empty',
+        help='show empty sections',
+        action='store_true',
+        dest='show_empty',
         default=default_show_empty
     )
     show_empty_group.add_argument(
-        "-E",
-        "--no-show-empty",
+        '-E',
+        '--no-show-empty',
         help="don't show empty sections (does not apply to status)",
-        action="store_false",
-        dest="show_empty"
+        action='store_false',
+        dest='show_empty'
     )
 
     # screen clearing
@@ -229,5 +229,5 @@ def main():
 
     state.state(**vars(parser.parse_args()))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

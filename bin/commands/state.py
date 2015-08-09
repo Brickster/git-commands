@@ -9,21 +9,21 @@ from utils.messages import error
 
 
 class Colors:
-    green = "\x1B[0;32m"
-    no_color = "\x1B[0m"
+    green = '\x1B[0;32m'
+    no_color = '\x1B[0m'
 
 
-def _print_section(title, text=None, format="compact"):
+def _print_section(title, text=None, format='compact'):
     """Print a section."""
 
-    section = "# {}{}{}".format(Colors.green, title, Colors.no_color) + '\n'
+    section = '# {}{}{}'.format(Colors.green, title, Colors.no_color) + '\n'
 
-    if format == "pretty" and text is not None and len(text) > 0:
+    if format == 'pretty' and text is not None and len(text) > 0:
         # pretty print
         section += '\n'
         text = text.splitlines()
         for line in text:
-            section += "    " + line + '\n'
+            section += '    ' + line + '\n'
         section += '\n'
     elif format == 'pretty':
         # there's no text but we still want some nicer formatting
@@ -66,9 +66,9 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
 
     show_color = show_color.lower()
     if show_color == 'never' or (show_color == 'auto' and not sys.stdout.isatty()):
-        show_color = "never"
-        Colors.green = ""
-        Colors.no_color = ""
+        show_color = 'never'
+        Colors.green = ''
+        Colors.no_color = ''
     elif show_color == 'auto' and sys.stdout.isatty():
         show_color = 'always'
 
@@ -84,8 +84,8 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
 
         # check if status is empty
         status = check_output(['git', 'status', '--short'])
-        if status == "":
-            status = "Initial commit"
+        if status == '':
+            status = 'Initial commit'
 
         title = 'status {}({}master{})'.format(Colors.no_color, Colors.green, Colors.no_color)
         state += _print_section(title, status, format)
@@ -128,7 +128,7 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
 
         if log_count != 0:
             log = check_output(['git', 'log', '-n', str(log_count), '--oneline', '--color={}'.format(show_color)])
-            state += _print_section("log", log, format)
+            state += _print_section('log', log, format)
 
         if reflog_count != 0:
             reflog = check_output(['git', 'reflog', '-n', str(reflog_count), '--color={}'.format(show_color)])
