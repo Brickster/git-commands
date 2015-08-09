@@ -3,7 +3,7 @@
 ## SYNOPSIS
 
 `git changes` [(`-b`|`--branch`) <branch>] [(`-c`|`--count`)] [(`-s`|`--stat`)]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-d`|`--diff`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-d`|`--diff`)] [`--color` [<when>]] [`--no-color`]<br>
 `git changes` (`-h`|`--help`)<br>
 `git changes` (`-v`|`--version`)
 
@@ -24,6 +24,12 @@
 
 * `-d`|`--diff`:
     Show as a full diff.
+
+* `--color` [<when>]:
+    Show colored output. <when> must be one of `always`, `never`, or `auto`. Not including <when> is equivalent to `--color=always`.
+
+* `--no-color`:
+    Never color output. Same as `--color=never`.
 
 * `-h`|`--help`:
     Print a simple help message.
