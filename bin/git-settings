@@ -57,16 +57,48 @@ def main():
     subparsers = parser.add_subparsers(help='sub-command help')
 
     # get command
-    get_parser = subparsers.add_parser('get', help='retrieve a configuration value', description='retrieve a configuration value', parents=[file_parser])
-    get_parser.add_argument('key', help='a configuration key', metavar='<key>')
-    get_parser.add_argument('-d', '--default', help='a default value to return when no setting exists for <key>', metavar='<default>')
+    get_parser = subparsers.add_parser(
+        'get',
+        help='retrieve a configuration value',
+        description='retrieve a configuration value',
+        parents=[file_parser]
+    )
+    get_parser.add_argument(
+        'key',
+        help='a configuration key',
+        metavar='<key>'
+    )
+    get_parser.add_argument(
+        '-d',
+        '--default',
+        help='a default value to return when no setting exists for <key>',
+        metavar='<default>'
+    )
     get_parser.set_defaults(func=settings._get)
 
     # list command
-    list_parser = subparsers.add_parser('list', help='list configuration settings respecting override precedence', description='list configuration settings respecting override precedence', parents=[file_parser])
-    list_parser.add_argument('section', help='optionally, limit to a specific section', metavar='<section>', nargs='?')
+    list_parser = subparsers.add_parser(
+        'list',
+        help='list configuration settings respecting override precedence',
+        description='list configuration settings respecting override precedence',
+        parents=[file_parser]
+    )
+    list_parser.add_argument(
+        'section',
+        help='optionally, limit to a specific section',
+        metavar='<section>',
+        nargs='?'
+    )
     list_group = list_parser.add_mutually_exclusive_group()
-    list_group.add_argument('-f', '--format', help='print using a specific format (choices: compact, pretty)', metavar='<format>', choices=('compact', 'pretty'), default=default_format, dest='format')
+    list_group.add_argument(
+        '-f',
+        '--format',
+        help='print using a specific format (choices: compact, pretty)',
+        metavar='<format>',
+        choices=('compact', 'pretty'),
+        default=default_format,
+        dest='format'
+    )
     list_group.add_argument(
         '-p',
         '--pretty',
@@ -79,9 +111,18 @@ def main():
     list_parser.set_defaults(func=settings._list)
 
     # destroy command
-    destroy_parser = subparsers.add_parser('destroy', help='destroy a section from the local, global, and system config files', description='destroy a section from the local, global, and system config files')
+    destroy_parser = subparsers.add_parser(
+        'destroy',
+        help='destroy a section from the local, global, and system config files',
+        description='destroy a section from the local, global, and system config files'
+    )
     destroy_parser.add_argument('section', help='a section', metavar='<section>')
-    destroy_parser.add_argument('-d', '--dry-run', help='print which configurations would be destroyed rather than removing them', action='store_true')
+    destroy_parser.add_argument(
+        '-d',
+        '--dry-run',
+        help='print which configurations would be destroyed rather than removing them',
+        action='store_true'
+    )
     destroy_parser.set_defaults(func=settings.destroy)
 
     args = vars(parser.parse_args())

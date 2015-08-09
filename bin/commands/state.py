@@ -44,7 +44,7 @@ def _only_default_branch():
     if len(branches) > 1:
         return False
 
-    default_branch = check_output(['git', 'settings', 'get', '-d', 'master', 'git-state.branches.default']).splitlines()[0]
+    default_branch = check_output('git settings get -d master git-state.branches.default'.split()).splitlines()[0]
     if re.match('\* {}'.format(default_branch), branches[0]) is not None:
         return True
     else:
@@ -62,7 +62,8 @@ def _is_new_repository():
 
 def state(show_color, format, show_status, log_count, reflog_count, show_branches, show_stashes, show_empty, clear):
 
-    show_only_default_branch = literal_eval(check_output(['git', 'settings', 'get', '-d', 'True', 'git-state.branches.show-only-default']))
+    settings_command = ['git', 'settings', 'get', '-d', 'True', 'git-state.branches.show-only-default']
+    show_only_default_branch = literal_eval(check_output(settings_command))
 
     show_color = show_color.lower()
     if show_color == 'never' or (show_color == 'auto' and not sys.stdout.isatty()):
