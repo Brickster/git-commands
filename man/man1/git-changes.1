@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-CHANGES" "1" "June 2015" "" ""
+.TH "GIT\-CHANGES" "1" "August 2015" "" ""
 .
 .SH "NAME"
 \fBgit\-changes\fR \- lists the commits between this branch and another
@@ -10,7 +10,7 @@
 \fBgit changes\fR [(\fB\-b\fR|\fB\-\-branch\fR) \fIbranch\fR] [(\fB\-c\fR|\fB\-\-count\fR)] [(\fB\-s\fR|\fB\-\-stat\fR)]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-d\fR|\fB\-\-diff\fR)]
+\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-d\fR|\fB\-\-diff\fR)] [\fB\-\-color\fR [\fIwhen\fR]] [\fB\-\-no\-color\fR]
 .
 .br
 \fBgit changes\fR (\fB\-h\fR|\fB\-\-help\fR)
@@ -38,6 +38,14 @@ Show as a diffstat\.
 .TP
 \fB\-d\fR|\fB\-\-diff\fR
 Show as a full diff\.
+.
+.TP
+\fB\-\-color\fR [\fIwhen\fR]
+Show colored output\. \fIwhen\fR must be one of \fBalways\fR, \fBnever\fR, or \fBauto\fR\. Not including \fIwhen\fR is equivalent to \fB\-\-color=always\fR\.
+.
+.TP
+\fB\-\-no\-color\fR
+Never color output\. Same as \fB\-\-color=never\fR\.
 .
 .TP
 \fB\-h\fR|\fB\-\-help\fR

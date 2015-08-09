@@ -3,7 +3,6 @@
 import argparse
 
 from commands import changes, upstream, settings
-from subprocess import check_output
 
 
 def main():
@@ -36,9 +35,8 @@ def main():
         dest='branch'
     )
 
+    # details
     details_group = parser.add_mutually_exclusive_group()
-
-    # -c|--count
     details_group.add_argument(
         '-c',
         '--count',
@@ -47,8 +45,6 @@ def main():
         const='count',
         dest='details'
     )
-
-    # -s|--stat
     details_group.add_argument(
         '-s',
         '--stat',
@@ -57,8 +53,6 @@ def main():
         const='stat',
         dest='details'
     )
-
-    # -d|--diff
     details_group.add_argument(
         '-d',
         '--diff',
@@ -66,6 +60,25 @@ def main():
         action='store_const',
         const='diff',
         dest='details'
+    )
+
+    # color
+    color_group = parser.add_mutually_exclusive_group()
+    color_group.add_argument(
+        '--color',
+        help='always color output',
+        const='always',
+        dest='color_when',
+        nargs='?',
+        choices=('always', 'never', 'auto'),
+        default=settings.get('color.ui', default='auto')
+    )
+    color_group.add_argument(
+        '--no-color',
+        help='never color output',
+        action='store_const',
+        const='never',
+        dest='color_when'
     )
 
     changes.changes(**vars(parser.parse_args()))
