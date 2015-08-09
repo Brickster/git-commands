@@ -61,6 +61,7 @@ def _is_new_repository():
 
 
 def state(show_color, format, show_status, log_count, reflog_count, show_branches, show_stashes, show_empty, clear):
+    """Print the state of the working tree."""
 
     settings_command = ['git', 'settings', 'get', '-d', 'True', 'git-state.branches.show-only-default']
     show_only_default_branch = literal_eval(check_output(settings_command))
