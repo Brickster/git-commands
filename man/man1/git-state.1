@@ -25,7 +25,7 @@
 \~\~\~\~\~\~\~\~\~\~[(\fB\-e\fR|\fB\-\-show\-empty\fR)] [(\fB\-E\fR|\fB\-\-no\-show\-empty\fR)]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~[(\fB\-c\fR|\fB\-\-color\fR)] [(\fB\-C\fR|\fB\-\-no\-color\fR)]
+\~\~\~\~\~\~\~\~\~\~[(\fB\-c\fR|\fB\-\-color\fR) [\fIwhen\fR]] [(\fB\-C\fR|\fB\-\-no\-color\fR)]
 .
 .br
 \~\~\~\~\~\~\~\~\~\~[(\fB\-p\fR|\fB\-\-pretty\fR)] [(\fB\-f\fR|\fB\-\-format\fR) \fIformat\fR]
@@ -109,12 +109,12 @@ Show empty sections rather than omitting them\.
 Omit empty sections\. This does not apply to the status section\.
 .
 .TP
-\fB\-c\fR|\fB\-\-color\fR
-Always color output\.
+\fB\-c\fR|\fB\-\-color\fR [\fIwhen\fR]
+Show colored output\. \fIwhen\fR must be one of \fBalways\fR, \fBnever\fR, or \fBauto\fR\. Not including \fIwhen\fR is equivalent to \fB\-\-color=always\fR\.
 .
 .TP
 \fB\-C\fR|\fB\-\-no\-color\fR
-Never color output\.
+Never color output\. Same as \fB\-\-color=never\fR\.
 .
 .TP
 \fB\-p\fR|\fB\-\-pretty\fR

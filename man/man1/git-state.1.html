@@ -79,7 +79,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-b</code>|<code>--branches</code>)] [(<code>-B</code>|<code>--no-branches</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-t</code>|<code>--stashes</code>)] [(<code>-T</code>|<code>--no-stashes</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-e</code>|<code>--show-empty</code>)] [(<code>-E</code>|<code>--no-show-empty</code>)]<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-c</code>|<code>--color</code>)] [(<code>-C</code>|<code>--no-color</code>)]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-c</code>|<code>--color</code>) [<var>when</var>]] [(<code>-C</code>|<code>--no-color</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-p</code>|<code>--pretty</code>)] [(<code>-f</code>|<code>--format</code>) <var>format</var>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>--clear</code>|<code>--no-clear</code>)]<br />
 <code>git state</code> (<code>-h</code>|<code>--help</code>)<br />
@@ -108,8 +108,8 @@
 <dt><code>-T</code>|<code>--no-stashes</code></dt><dd><p>  Don't print the stashes section.</p></dd>
 <dt><code>-e</code>|<code>--show-empty</code></dt><dd><p>  Show empty sections rather than omitting them.</p></dd>
 <dt><code>-E</code>|<code>--no-show-empty</code></dt><dd><p>  Omit empty sections. This does not apply to the status section.</p></dd>
-<dt><code>-c</code>|<code>--color</code></dt><dd><p>  Always color output.</p></dd>
-<dt><code>-C</code>|<code>--no-color</code></dt><dd><p>  Never color output.</p></dd>
+<dt><code>-c</code>|<code>--color</code> [<var>when</var>]</dt><dd><p>  Show colored output. <var>when</var> must be one of <code>always</code>, <code>never</code>, or <code>auto</code>. Not including <var>when</var> is equivalent to <code>--color=always</code>.</p></dd>
+<dt><code>-C</code>|<code>--no-color</code></dt><dd><p>  Never color output. Same as <code>--color=never</code>.</p></dd>
 <dt><code>-p</code>|<code>--pretty</code></dt><dd><p>  Display in pretty format. This is equivalent to <code>-f</code>|<code>--format</code> <var>pretty</var>.</p></dd>
 <dt><code>-f</code>|<code>--format</code> <var>format</var></dt><dd><p>  The format used to print each section. Valid values include: <var>compact</var> and <var>pretty</var>.</p></dd>
 <dt><code>--clear</code> </dt><dd><p>  Clear the screen before printing.</p></dd>

@@ -158,9 +158,10 @@ def main():
         "-c",
         "--color",
         help="always color output",
-        action='store_const',
         const='always',
         dest="show_color",
+        nargs='?',
+        choices=('always', 'never', 'auto'),
         default=default_show_color
     )
     color_group.add_argument(
