@@ -8,7 +8,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-b`|`--branches`)] [(`-B`|`--no-branches`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-t`|`--stashes`)] [(`-T`|`--no-stashes`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-c`|`--color`)] [(`-C`|`--no-color`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-c`|`--color`) [<when>]] [(`-C`|`--no-color`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`--clear`|`--no-clear`)]<br>
 `git state` (`-h`|`--help`)<br>
@@ -68,11 +68,11 @@ Used to see a more concise and comprehensive view of the working directory. The 
 * `-E`|`--no-show-empty`:
 	Omit empty sections. This does not apply to the status section.
 
-* `-c`|`--color`:
-    Always color output.
+* `-c`|`--color` [<when>]:
+    Show colored output. <when> must be one of `always`, `never`, or `auto`. Not including <when> is equivalent to `--color=always`.
 
 * `-C`|`--no-color`:
-    Never color output.
+    Never color output. Same as `--color=never`.
 
 * `-p`|`--pretty`:
 	Display in pretty format. This is equivalent to `-f`|`--format` <pretty>.
