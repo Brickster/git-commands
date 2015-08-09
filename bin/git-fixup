@@ -8,26 +8,26 @@ from commands import fixup
 def main():
 
     parser = argparse.ArgumentParser(
-        prog="git fixup",
-        version="git-fixup 0.2.0",
+        prog='git fixup',
+        version='git-fixup 0.2.0',
         description=fixup.__doc__,
-        epilog="for more detail, use: git help fixup"
+        epilog='for more detail, use: git help fixup'
     )
 
     # <commit>
     parser.add_argument(
-        "commit",
-        help="the commit to fixup into (default: HEAD)",
-        nargs="?",
-        default="HEAD",
-        metavar="<commit>"
+        'commit',
+        help='the commit to fixup into (default: HEAD)',
+        nargs='?',
+        default='HEAD',
+        metavar='<commit>'
     )
 
     # -a|--all
     parser.add_argument(
-        "-a",
-        "--all",
-        help="stage all files",
+        '-a',
+        '--all',
+        help='stage all files',
         action='store_const',
         const=fixup.ALL,
         dest='add_mode'
@@ -45,13 +45,13 @@ def main():
 
     # -b|--body
     parser.add_argument(
-        "-b",
-        "--body",
-        help="the message body to use in the fixup commit",
-        metavar="<message>"
+        '-b',
+        '--body',
+        help='the message body to use in the fixup commit',
+        metavar='<message>'
     )
 
     fixup.fixup(**vars(parser.parse_args()))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

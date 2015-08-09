@@ -12,22 +12,22 @@ from commands import snapshot
 def main():
 
     parser = argparse.ArgumentParser(
-        prog="git snapshot",
-        version="git-snapshot 0.2.0",
+        prog='git snapshot',
+        version='git-snapshot 0.2.0',
         description=snapshot.__doc__,
-        epilog="for more detail, use: git help snapshot"
+        epilog='for more detail, use: git help snapshot'
     )
 
     # <message>
     parser.add_argument(
-        "message",
-        help="the message to use when creating the underlying stash",
-        metavar="<message>",
+        'message',
+        help='the message to use when creating the underlying stash',
+        metavar='<message>',
         default=None,
-        nargs="?"
+        nargs='?'
     )
 
     snapshot.snapshot(**vars(parser.parse_args()))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

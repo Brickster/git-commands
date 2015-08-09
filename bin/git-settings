@@ -15,8 +15,8 @@ def main():
 
     # --local
     file_group.add_argument(
-        "--local",
-        help="limit to the local config file",
+        '--local',
+        help='limit to the local config file',
         action='store_const',
         const='local',
         dest='config'
@@ -24,8 +24,8 @@ def main():
 
     # --global
     file_group.add_argument(
-        "--global",
-        help="limit to the global config file",
+        '--global',
+        help='limit to the global config file',
         action='store_const',
         const='global',
         dest='config'
@@ -33,8 +33,8 @@ def main():
 
     # --system
     file_group.add_argument(
-        "--system",
-        help="limit to the system config file",
+        '--system',
+        help='limit to the system config file',
         action='store_const',
         const='system',
         dest='config'
@@ -42,46 +42,46 @@ def main():
 
     # --file <file>
     file_group.add_argument(
-        "--file",
-        help="limit to a specific config file",
+        '--file',
+        help='limit to a specific config file',
         action=multi_set(config='file'),
-        metavar="<file>"
+        metavar='<file>'
     )
 
     parser = argparse.ArgumentParser(
-        prog="git settings",
+        prog='git settings',
         description=settings.__doc__,
-        epilog="for more detail, use: git help settings"
+        epilog='for more detail, use: git help settings'
     )
-    parser.add_argument("-v", "--version", action="version", help="show version and exit", version="git-settings 0.2.0")
-    subparsers = parser.add_subparsers(help="sub-command help")
+    parser.add_argument('-v', '--version', action='version', help='show version and exit', version='git-settings 0.2.0')
+    subparsers = parser.add_subparsers(help='sub-command help')
 
     # get command
-    get_parser = subparsers.add_parser("get", help="retrieve a configuration value", description="retrieve a configuration value", parents=[file_parser])
-    get_parser.add_argument("key", help="a configuration key", metavar="<key>")
-    get_parser.add_argument("-d", "--default", help="a default value to return when no setting exists for <key>", metavar="<default>")
+    get_parser = subparsers.add_parser('get', help='retrieve a configuration value', description='retrieve a configuration value', parents=[file_parser])
+    get_parser.add_argument('key', help='a configuration key', metavar='<key>')
+    get_parser.add_argument('-d', '--default', help='a default value to return when no setting exists for <key>', metavar='<default>')
     get_parser.set_defaults(func=settings._get)
 
     # list command
-    list_parser = subparsers.add_parser("list", help="list configuration settings respecting override precedence", description="list configuration settings respecting override precedence", parents=[file_parser])
-    list_parser.add_argument("section", help="optionally, limit to a specific section", metavar="<section>", nargs="?")
+    list_parser = subparsers.add_parser('list', help='list configuration settings respecting override precedence', description='list configuration settings respecting override precedence', parents=[file_parser])
+    list_parser.add_argument('section', help='optionally, limit to a specific section', metavar='<section>', nargs='?')
     list_group = list_parser.add_mutually_exclusive_group()
-    list_group.add_argument("-f", "--format", help="print using a specific format (choices: compact, pretty)", metavar="<format>", choices=("compact", "pretty"), default=default_format, dest="format")
+    list_group.add_argument('-f', '--format', help='print using a specific format (choices: compact, pretty)', metavar='<format>', choices=('compact', 'pretty'), default=default_format, dest='format')
     list_group.add_argument(
-        "-p",
-        "--pretty",
-        help="use pretty format",
+        '-p',
+        '--pretty',
+        help='use pretty format',
         action='store_const',
         const='pretty',
-        dest="format"
+        dest='format'
     )
-    list_group.add_argument("-c", "--count", help="print the count of configurations", action="store_true")
+    list_group.add_argument('-c', '--count', help='print the count of configurations', action='store_true')
     list_parser.set_defaults(func=settings._list)
 
     # destroy command
-    destroy_parser = subparsers.add_parser("destroy", help="destroy a section from the local, global, and system config files", description="destroy a section from the local, global, and system config files")
-    destroy_parser.add_argument("section", help="a section", metavar="<section>")
-    destroy_parser.add_argument("-d", "--dry-run", help="print which configurations would be destroyed rather than removing them", action="store_true")
+    destroy_parser = subparsers.add_parser('destroy', help='destroy a section from the local, global, and system config files', description='destroy a section from the local, global, and system config files')
+    destroy_parser.add_argument('section', help='a section', metavar='<section>')
+    destroy_parser.add_argument('-d', '--dry-run', help='print which configurations would be destroyed rather than removing them', action='store_true')
     destroy_parser.set_defaults(func=settings.destroy)
 
     args = vars(parser.parse_args())
@@ -89,5 +89,5 @@ def main():
     func(**args)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

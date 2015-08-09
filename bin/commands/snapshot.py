@@ -17,4 +17,4 @@ def snapshot(message):
         call(stash_command)
         call(['git', 'stash', 'apply', '--quiet'])
     else:
-        info("No local changes to save. No snapshot created.")
+        info('No local changes to save. No snapshot created.')

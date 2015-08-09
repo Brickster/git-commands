@@ -49,7 +49,7 @@ def list(section, config, count, format, file=None):
         for section, section_map in all_sections_map.iteritems():
             match = re.match('^([-a-zA-Z0-9]+)\.(.*)$', section)
             if match is None:
-                result += ["[{}]".format(section)]
+                result += ['[{}]'.format(section)]
             else:
                 result += ['[{} "{}"]'.format(match.group(1), match.group(2))]
             for key, value in section_map.iteritems():
@@ -72,7 +72,7 @@ def _dry_destroy_section(config, section):
     list_output = p.communicate()[0][:-1] # just ignore stderr and removing trailing newline
 
     for line in list_output.splitlines():
-        print "Would be deleted from {}: {}".format(config, line)
+        print 'Would be deleted from {}: {}'.format(config, line)
 
 
 def destroy(section, dry_run):

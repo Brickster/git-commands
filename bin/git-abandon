@@ -11,39 +11,39 @@ from commands import abandon
 def main():
 
     parser = argparse.ArgumentParser(
-        prog="git abandon",
-        version="git-abandon 0.2.0",
+        prog='git abandon',
+        version='git-abandon 0.2.0',
         description=abandon.__doc__,
-        epilog="for more detail, use: git help abandon"
+        epilog='for more detail, use: git help abandon'
     )
 
     # <start>
     parser.add_argument(
-        "start",
-        help="the range start (inclusive) (default: 0)",
-        nargs="?",
-        default="0",
-        metavar="<start>",
+        'start',
+        help='the range start (inclusive) (default: 0)',
+        nargs='?',
+        default='0',
+        metavar='<start>',
         type=int
     )
 
     # <end>
     parser.add_argument(
-        "end",
-        help="the range end (exclusive)",
-        metavar="<end>",
+        'end',
+        help='the range end (exclusive)',
+        metavar='<end>',
         type=int
     )
 
     # -d|--dry-run
     parser.add_argument(
-        "-d",
-        "--dry-run",
+        '-d',
+        '--dry-run',
         help="print the stashes that would be dropped but don't drop them",
-        action="store_true"
+        action='store_true'
     )
 
     abandon.abandon(**vars(parser.parse_args()))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
