@@ -2,9 +2,9 @@
 
 import re
 import sys
-
 from ast import literal_eval
 from subprocess import call, check_output, PIPE, Popen
+
 from utils.messages import error
 
 

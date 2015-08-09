@@ -1,8 +1,8 @@
 """Restash changes."""
 
 import re
-
 from subprocess import call, check_output, PIPE, Popen
+
 from utils.messages import error
 
 

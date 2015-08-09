@@ -1,9 +1,9 @@
 #! /usr/bin/env python
 
 import argparse
-
 from ast import literal_eval
-from commands import state, settings
+
+from commands import settings, state
 
 
 def main():
