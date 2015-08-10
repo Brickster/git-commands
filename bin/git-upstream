@@ -5,14 +5,6 @@ import argparse
 from commands import settings, upstream
 
 
-def get_include_remote_default():
-    """Get the default value for including remote info."""
-
-    default = settings.get('git-upstream.include-remote', default='false')
-    default = str(default).lower() == 'true'
-    return default
-
-
 def main():
 
     parser = argparse.ArgumentParser(
@@ -31,7 +23,7 @@ def main():
         help='include the remote name',
         action='store_true',
         dest='include_remote',
-        default=get_include_remote_default()
+        default=settings.get('git-upstream.include-remote', default=False, as_type=settings.as_bool)
     )
 
     # -R|--no-include-remote
