@@ -1,6 +1,7 @@
 """Create a snapshot of the changes in a dirty working directory."""
 
-from subprocess import check_output, call
+from subprocess import call, check_output
+
 from utils.messages import info
 
 
@@ -17,4 +18,4 @@ def snapshot(message):
         call(stash_command)
         call(['git', 'stash', 'apply', '--quiet'])
     else:
-        info("No local changes to save. No snapshot created.")
+        info('No local changes to save. No snapshot created.')
