@@ -88,8 +88,19 @@ def destroy(section, dry_run):
         Popen(('git', 'config', '--system', '--remove-section', section), stdout=PIPE, stderr=STDOUT).communicate()
 
 
-def get(key, default=None, config=None, file=None):
-    """Retrieve a configuration value."""
+def get(key, default=None, config=None, file=None, as_type=str):
+    """Retrieve a configuration value.
+
+    Arguments:
+        - key: the value key
+        - default: a default to return if no value is found
+        - config: the config to retrieve from
+        - file: a config file to retrieve from
+        - as_type: a callable, built-in type, or class object used to convert the result
+    """
+
+    if not hasattr(as_type, '__call__') and not hasattr(as_type, '__bases__'):
+        raise Exception('{} is not callable'.format(as_type))
 
     if config is None:
         command = ('git', 'config', key)
@@ -101,8 +112,22 @@ def get(key, default=None, config=None, file=None):
     p = Popen(command, stdout=PIPE, stderr=STDOUT)
     value = p.communicate()[0]
 
-    value = default if len(value) == 0 else value.splitlines()[0]
+    value = default if len(value) == 0 else as_type(value.splitlines()[0])
     return value
+
+
+def as_bool(value):
+    """Returns whether the input is a string representation of a boolean."""
+
+    if not isinstance(value, str):
+        raise Exception('{0!r} is not a string, use bool() instead'.format(value))
+
+    if value.lower() in ('true', 't', 'yes', 'y'):
+        return True
+    elif value.lower() in ('false', 'f', 'no', 'n'):
+        return False
+    else:
+        raise Exception('{0!r} is not a boolean representation'.format(value))
 
 
 def _get(**kwargs):
