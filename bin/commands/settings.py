@@ -116,6 +116,20 @@ def get(key, default=None, config=None, file=None, as_type=str):
     return value
 
 
+def as_bool(value):
+    """Returns whether the input is a string representation of a boolean."""
+
+    if not isinstance(value, str):
+        raise Exception('{0!r} is not a string, use bool() instead'.format(value))
+
+    if value.lower() in ('true', 't', 'yes', 'y'):
+        return True
+    elif value.lower() in ('false', 'f', 'no', 'n'):
+        return False
+    else:
+        raise Exception('{0!r} is not a boolean representation'.format(value))
+
+
 def _get(**kwargs):
     value = get(**kwargs)
     if value is not None: print value
