@@ -1,11 +1,11 @@
 """More ways to view and edit config files."""
 
 import re
-
-from subprocess import check_output, STDOUT, Popen, PIPE
+from subprocess import check_output, PIPE, Popen, STDOUT
 
 
 def list(section, config, count, format, file=None):
+    """List configuration settings respecting override precedence."""
 
     result = []
     if config is None:
@@ -49,7 +49,7 @@ def list(section, config, count, format, file=None):
         for section, section_map in all_sections_map.iteritems():
             match = re.match('^([-a-zA-Z0-9]+)\.(.*)$', section)
             if match is None:
-                result += ["[{}]".format(section)]
+                result += ['[{}]'.format(section)]
             else:
                 result += ['[{} "{}"]'.format(match.group(1), match.group(2))]
             for key, value in section_map.iteritems():
@@ -72,10 +72,12 @@ def _dry_destroy_section(config, section):
     list_output = p.communicate()[0][:-1] # just ignore stderr and removing trailing newline
 
     for line in list_output.splitlines():
-        print "Would be deleted from {}: {}".format(config, line)
+        print 'Would be deleted from {}: {}'.format(config, line)
 
 
 def destroy(section, dry_run):
+    """Destroy a section from the local, global, and system config files."""
+
     if dry_run:
         _dry_destroy_section('local', section)
         _dry_destroy_section('global', section)
@@ -87,6 +89,8 @@ def destroy(section, dry_run):
 
 
 def get(key, default=None, config=None, file=None):
+    """Retrieve a configuration value."""
+
     if config is None:
         command = ('git', 'config', key)
     elif config is not None:

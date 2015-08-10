@@ -2,26 +2,26 @@
 
 import argparse
 
-from commands import changes, upstream, settings
+from commands import changes, settings, upstream
 
 
 def main():
 
     parser = argparse.ArgumentParser(
-        prog="git changes",
-        version="git-changes 0.2.0",
+        prog='git changes',
+        version='git-changes 0.2.0',
         description=changes.__doc__,
-        epilog="for more detail, use: git help changes"
+        epilog='for more detail, use: git help changes'
     )
 
     # -b|--branch
     default_branch = settings.get('git-changes.default-branch', default='master')
     branch_group = parser.add_mutually_exclusive_group()
     branch_group.add_argument(
-        "-b",
-        "--branch",
-        help="show the commits between HEAD and <branch>",
-        metavar="<branch>",
+        '-b',
+        '--branch',
+        help='show the commits between HEAD and <branch>',
+        metavar='<branch>',
         default=default_branch
     )
 
@@ -83,5 +83,5 @@ def main():
 
     changes.changes(**vars(parser.parse_args()))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

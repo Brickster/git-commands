@@ -2,8 +2,7 @@
 
 import argparse
 
-from commands import upstream, settings
-from subprocess import check_output
+from commands import settings, upstream
 
 
 def get_include_remote_default():
@@ -17,34 +16,34 @@ def get_include_remote_default():
 def main():
 
     parser = argparse.ArgumentParser(
-        prog="git upstream",
-        version="git-upstream 0.2.0",
+        prog='git upstream',
+        version='git-upstream 0.2.0',
         description=upstream.__doc__,
-        epilog="for more detail, use: git help upstream"
+        epilog='for more detail, use: git help upstream'
     )
 
     include_remote_group = parser.add_mutually_exclusive_group()
 
     # -r|--include-remote
     include_remote_group.add_argument(
-        "-r",
-        "--include-remote",
-        help="include the remote name",
-        action="store_true",
-        dest="include_remote",
+        '-r',
+        '--include-remote',
+        help='include the remote name',
+        action='store_true',
+        dest='include_remote',
         default=get_include_remote_default()
     )
 
     # -R|--no-include-remote
     include_remote_group.add_argument(
-        "-R",
-        "--no-include-remote",
+        '-R',
+        '--no-include-remote',
         help="don't include the remote name",
-        action="store_false",
-        dest="include_remote"
+        action='store_false',
+        dest='include_remote'
     )
 
     print upstream.upstream(**vars(parser.parse_args()))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

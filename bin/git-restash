@@ -4,25 +4,26 @@ import argparse
 
 from commands import restash
 
+
 def main():
 
     parser = argparse.ArgumentParser(
-        prog="git restash",
-        version="git-restash 0.2.0",
+        prog='git restash',
+        version='git-restash 0.2.0',
         description=restash.__doc__,
-        epilog="for more detail, use: git help restash"
+        epilog='for more detail, use: git help restash'
     )
 
     # <stash>
     parser.add_argument(
-        "stash",
-        help="stash whose patch should be reverse applied (default: stash@{0})",
-        metavar="<stash>",
-        nargs="?",
-        default="stash@{0}"
+        'stash',
+        help='stash whose patch should be reverse applied (default: stash@{0})',
+        metavar='<stash>',
+        nargs='?',
+        default='stash@{0}'
     )
 
     restash.restash(**vars(parser.parse_args()))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
