@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 
 import argparse
-from ast import literal_eval
 
 from commands import settings, state
 
@@ -9,33 +8,33 @@ from commands import settings, state
 def main():
 
     # status defaults
-    default_show_status = literal_eval(settings.get('git-state.status.show', default='True'))
+    default_show_status = settings.get('git-state.status.show', default=True, as_type=settings.as_bool)
 
     # log defaults
-    show_log = literal_eval(settings.get('git-state.log.show', default='True'))
+    show_log = settings.get('git-state.log.show', default=True, as_type=settings.as_bool)
     if show_log:
-        default_log_count = literal_eval(settings.get('git-state.log.count', default='10'))
+        default_log_count = settings.get('git-state.log.count', default=10, as_type=int)
     else:
         default_log_count = 0
 
     # reflog defaults
-    show_reflog = literal_eval(settings.get('git-state.reflog.show', default='True'))
+    show_reflog = settings.get('git-state.reflog.show', default=True, as_type=settings.as_bool)
     if show_reflog:
-        default_reflog_count = literal_eval(settings.get('git-state.reflog.count', default='5'))
+        default_reflog_count = settings.get('git-state.reflog.count', default=5, as_type=int)
     else:
         default_reflog_count = 0
 
     # branches defaults
-    default_show_branches = literal_eval(settings.get('git-state.branches.show', default='True'))
+    default_show_branches = settings.get('git-state.branches.show', default=True, as_type=settings.as_bool)
 
     # stashes defaults
-    default_show_stashes = literal_eval(settings.get('git-state.stashes.show', default='True'))
+    default_show_stashes = settings.get('git-state.stashes.show', default=True, as_type=settings.as_bool)
 
     # general defaults
-    default_show_empty = literal_eval(settings.get('git-state.show-empty', default='False'))
+    default_show_empty = settings.get('git-state.show-empty', default=False, as_type=settings.as_bool)
     default_format = settings.get('git-state.format', default='compact')
     default_show_color = settings.get('color.ui', default='auto')
-    default_clear = literal_eval(settings.get('git-state.clear', default='True'))
+    default_clear = settings.get('git-state.clear', default=True, as_type=settings.as_bool)
 
     parser = argparse.ArgumentParser(
         prog='git state',

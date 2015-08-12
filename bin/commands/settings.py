@@ -1,7 +1,8 @@
 """More ways to view and edit config files."""
 
+import os
 import re
-from subprocess import check_output, PIPE, Popen, STDOUT
+from subprocess import call, check_output, PIPE, Popen, STDOUT
 
 
 def list(section, config, count, format, file=None):
@@ -83,9 +84,10 @@ def destroy(section, dry_run):
         _dry_destroy_section('global', section)
         _dry_destroy_section('system', section)
     else:
-        Popen(('git', 'config', '--local', '--remove-section', section), stdout=PIPE, stderr=STDOUT).communicate()
-        Popen(('git', 'config', '--global', '--remove-section', section), stdout=PIPE, stderr=STDOUT).communicate()
-        Popen(('git', 'config', '--system', '--remove-section', section), stdout=PIPE, stderr=STDOUT).communicate()
+        with open(os.devnull, 'w') as devnull:
+            call(('git', 'config', '--local', '--remove-section', section), stdout=devnull, stderr=STDOUT)
+            call(('git', 'config', '--global', '--remove-section', section), stdout=devnull, stderr=STDOUT)
+            call(('git', 'config', '--system', '--remove-section', section), stdout=devnull, stderr=STDOUT)
 
 
 def get(key, default=None, config=None, file=None, as_type=str):
