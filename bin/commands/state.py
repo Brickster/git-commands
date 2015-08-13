@@ -1,5 +1,6 @@
 """View the state of the working tree."""
 
+import os
 import re
 import sys
 from ast import literal_eval
@@ -61,8 +62,17 @@ def _is_new_repository():
     return log_err != '' and log_err.splitlines()[0] == "fatal: bad default revision 'HEAD'"
 
 
+def _is_git_repository():
+    """Returns whether the current working directory is a Git repository."""
+
+    return os.path.exists('./.git')
+
+
 def state(show_color, format, show_status, log_count, reflog_count, show_branches, show_stashes, show_empty, clear):
     """Print the state of the working tree."""
+
+    if not _is_git_repository():
+        error('{0!r} not a git repository'.format(os.getcwd()))
 
     show_only_default_branch = settings.get(
         'git-state.branches.show-only-default',
