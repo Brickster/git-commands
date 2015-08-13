@@ -1,5 +1,6 @@
 """Restash changes."""
 
+import os
 import re
 import sys
 from subprocess import check_output, PIPE, Popen
@@ -7,10 +8,21 @@ from subprocess import check_output, PIPE, Popen
 from utils.messages import error
 
 
+def _is_valid_stash(stash):
+    """Determines if a stash reference is valid."""
+
+    if re.match('^stash@{.*}$', stash) is None:
+        return False
+
+    with open(os.devnull, 'w') as devnull:
+        proc = Popen(('git', 'cat-file', '-t', stash), stdout=devnull, stderr=devnull)
+        proc.wait()
+        return proc.returncode == 0
+
 def restash(stash='stash@{0}'):
     """Restashes a stash reference."""
 
-    if re.match('^stash@{.*}$', stash) is None:
+    if not _is_valid_stash(stash):
         error('{} is not a valid stash reference'.format(stash))
 
     patch = Popen(['git', 'stash', 'show', '--patch', '--no-color', stash], stdout=PIPE)
