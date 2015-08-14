@@ -108,6 +108,7 @@ def main():
         dest='format'
     )
     list_group.add_argument('-c', '--count', help='print the count of configurations', action='store_true')
+    list_group.add_argument('-k', '--keys', help='list the keys for a section', action='store_true')
     list_parser.set_defaults(func=settings._list)
 
     # destroy command

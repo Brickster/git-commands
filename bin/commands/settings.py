@@ -5,7 +5,7 @@ import re
 from subprocess import call, check_output, PIPE, Popen, STDOUT
 
 
-def list(section, config, count, format, file=None):
+def list(section, config, count, keys, format, file=None):
     """List configuration settings respecting override precedence."""
 
     result = []
@@ -30,7 +30,9 @@ def list(section, config, count, format, file=None):
         config_map[key] = value
 
     if count:
-        result += [str(len(config_map))]
+        result = [str(len(config_map))]
+    elif keys:
+        result = [key[key.rfind('.') + 1 :] for key in config_map.keys()]
     elif format == 'pretty':
 
         all_sections_map = {}
@@ -55,7 +57,6 @@ def list(section, config, count, format, file=None):
                 result += ['[{} "{}"]'.format(match.group(1), match.group(2))]
             for key, value in section_map.iteritems():
                 result += ['\t{} = {}'.format(key, value)]
-
     else:
         for key, value in config_map.iteritems():
             result += ['{}={}'.format(key, value)]

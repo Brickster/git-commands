@@ -76,7 +76,9 @@
 
 <p><code>git settings get</code> [<var>file-option</var>] [(<code>-d</code>|<code>--default</code>) <var>value</var>] <var>key</var><br />
 <code>git settings destroy</code> [(<code>-d</code>|<code>--dry-run</code>)] <var>section</var><br />
-<code>git settings list</code> [<var>file-option</var>] [(<code>-p</code>|<code>--pretty</code>)] [(<code>-f</code>|<code>--format</code>) <var>format</var>] [(<code>-c</code>|<code>--count</code>)] [<var>section</var>]<br />
+<code>git settings list</code> [<var>file-option</var>] [(<code>-p</code>|<code>--pretty</code>)]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-f</code>|<code>--format</code>) <var>format</var>] [(<code>-c</code>|<code>--count</code>)]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-k</code>|<code>--keys</code>)] [<var>section</var>]<br />
 <code>git settings</code> (<code>-h</code>|<code>--help</code>)<br />
 <code>git settings</code> (<code>-v</code>|<code>--version</code>)</p>
 
@@ -108,6 +110,7 @@
 <dt><code>-p</code>|<code>--pretty</code></dt><dd><p>  The section is printed in config file format.</p></dd>
 <dt><code>-f</code>|<code>--format</code> <var>format</var></dt><dd><p>  The section is printed in the specified format. Valid values include: <var>compact</var> and <var>pretty</var>.</p></dd>
 <dt><code>-c</code>|<code>--count</code></dt><dd><p>  The count of keys in a given section is printed rather than the section itself.</p></dd>
+<dt><code>-k</code>|<code>--keys</code></dt><dd><p>  List only the keys for the section.</p></dd>
 </dl>
 </dd>
 <dt><code>-h</code>|<code>--help</code></dt><dd><p>  Print a simple help message.</p></dd>
@@ -139,7 +142,7 @@
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>June 2015</li>
+    <li class='tc'>August 2015</li>
     <li class='tr'>git-settings(1)</li>
   </ol>
 
