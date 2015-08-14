@@ -11,33 +11,44 @@ class Colors:
     no_color = '\x1B[0m'
 
 
-def title(show_color):
+def title(**kwargs):
+
+    new_repository = kwargs.get('new_repository', False)
+    show_color = kwargs.get('show_color', 'always')
+
     if show_color == 'never':
         Colors.green = Colors.no_color
         Colors.red = Colors.no_color
 
-    branches = check_output(('git', 'branch')).splitlines()
-    branch = [m.group(1) for branch in branches for m in [re.match(r'\* (.*)', branch)] if m][0]
-    upstream_output = upstream.upstream(True)
-
-    if upstream_output:
-        return 'status{no_color} ({green}{branch}{no_color}...{red}{remote}{no_color})'.format(
-            no_color=Colors.no_color,
-            green=Colors.green,
-            red=Colors.red,
-            branch=branch,
-            remote=upstream_output
-        )
+    if new_repository:
+        title = 'status {no_color}({green}master{no_color})'.format(no_color=Colors.no_color, green=Colors.green)
     else:
-        return 'status{no_color} ({green}{branch}{no_color})'.format(
-            no_color=Colors.no_color,
-            green=Colors.green,
-            branch=branch
-        )
+        branches = check_output(('git', 'branch')).splitlines()
+        branch = [m.group(1) for branch in branches for m in [re.match(r'\* (.*)', branch)] if m][0]
+        upstream_output = upstream.upstream(True)
+
+        if upstream_output:
+            title = 'status{no_color} ({green}{branch}{no_color}...{red}{remote}{no_color})'.format(
+                no_color=Colors.no_color,
+                green=Colors.green,
+                red=Colors.red,
+                branch=branch,
+                remote=upstream_output
+            )
+        else:
+            title = 'status{no_color} ({green}{branch}{no_color})'.format(
+                no_color=Colors.no_color,
+                green=Colors.green,
+                branch=branch
+            )
+
+    return title
 
 
 def get(**kwargs):
-    show_color = kwargs['show_color']
+
+    new_repository = kwargs.get('new_repository', False)
+    show_color = kwargs.get('show_color', 'always')
 
     # make sure status will output ANSI codes
     # this must be done using config since status has no --color option
@@ -46,7 +57,13 @@ def get(**kwargs):
     status_color_out = status_color_out.rstrip()  # strip the newline
     call(['git', 'config', 'color.status', show_color])
 
-    status = check_output(['git', 'status', '--short', '--untracked-files=all'])
+    if new_repository:
+        # check if status is empty
+        status_output = check_output(['git', 'status', '--short'])
+        if not status_output:
+            status_output = 'Empty repository'
+    else:
+        status_output = check_output(['git', 'status', '--short', '--untracked-files=all'])
 
     # reset color.status to its original setting
     if status_color_out == '':
@@ -59,4 +76,4 @@ def get(**kwargs):
     else:
         call(['git', 'config', 'color.status', status_color_out])
 
-    return status
+    return status_output
