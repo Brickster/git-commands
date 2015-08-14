@@ -94,7 +94,7 @@ Used to see a more concise and comprehensive view of the working directory. The 
 	Default: <true>
 
 * `git-state.log.count` <int>:
-	The default log length. Can be overridden using the `-d`|`--log` <count> option.
+	The default log length. Can be overridden using the `-l`|`--log` <count> option.
 
 	Default: <10>
 
@@ -149,6 +149,6 @@ Used to see a more concise and comprehensive view of the working directory. The 
 	Default: <true>
 
 * `color.ui` <string>:
-	Determines whether or not colors are printed in the output. Options `--color` and `--no-color` override this value.
+	Determines whether or not colors are printed in the output. Options `--color` [<when>] and `--no-color` override this value.
 
 	Default: <auto>
