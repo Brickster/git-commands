@@ -7,6 +7,7 @@ from ast import literal_eval
 from subprocess import call, check_output, PIPE, Popen
 
 from commands import settings
+from stateextensions import branches, log, reflog, stashes, status
 from utils.messages import error
 
 
@@ -17,6 +18,9 @@ class Colors:
 
 def _print_section(title, text=None, format='compact'):
     """Print a section."""
+
+    if not text:
+        return ""
 
     section = '# {}{}{}'.format(Colors.green, title, Colors.no_color) + '\n'
 
@@ -36,21 +40,6 @@ def _print_section(title, text=None, format='compact'):
         error("unknown format '{}'".format(format))
 
     return section
-
-
-def _only_default_branch():
-    """Determine whether the branches section only contains the default branch."""
-
-    branches = check_output(['git', 'branch', '--no-color']).splitlines()
-
-    if len(branches) > 1:
-        return False
-
-    default_branch = settings.get('git-state.branches.default', default='master')
-    if re.match('\* {}'.format(default_branch), branches[0]) is not None:
-        return True
-    else:
-        return False
 
 
 def _is_new_repository():
@@ -99,12 +88,12 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
         call(['git', 'config', 'color.status', show_color])
 
         # check if status is empty
-        status = check_output(['git', 'status', '--short'])
-        if status == '':
-            status = 'Initial commit'
+        status_output = check_output(['git', 'status', '--short'])
+        if status_output == '':
+            status_output = 'Initial commit'
 
         title = 'status {}({}master{})'.format(Colors.no_color, Colors.green, Colors.no_color)
-        state += _print_section(title, status, format)
+        state += _print_section(title, status_output, format)
 
         # reset color.status to its original setting
         if status_color_out == '':
@@ -119,44 +108,24 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
 
     else:
         if show_status:
-            # make sure status will output ANSI codes
-            # this must be done using config since status has no --color option
-            status_color = Popen(['git', 'config', '--local', 'color.status'], stdout=PIPE, stderr=PIPE)
-            status_color_out, status_color_err = status_color.communicate()
-            status_color_out = status_color_out.rstrip()  # strip the newline
-            call(['git', 'config', 'color.status', show_color])
+            status_output = status.get(show_color=show_color)
+            state += _print_section(status.title(show_color), status_output, format)
 
-            status = check_output(['git', 'status', '--short', '--untracked-files=all', '--branch']).splitlines()
-            status_title = 'status {}({})'.format(Colors.no_color, status.pop(0).lstrip('# '))
-            status = '\n'.join(status)
-            state += _print_section(status_title, status, format)
+        if log_count:
+            log_output = log.get(log_count=log_count, show_color=show_color)
+            state += _print_section(log.title(), log_output, format)
 
-            # reset color.status to its original setting
-            if status_color_out == '':
-                call(['git', 'config', '--unset', 'color.status'])
+        if reflog_count:
+            reflog_output = reflog.get(reflog_count=reflog_count, show_color=show_color)
+            state += _print_section(reflog.title(), reflog_output, format)
 
-                # unset may leave an empty section, remove it if it is
-                section_count = literal_eval(check_output(['git', 'settings', 'list', '--local', '--count', 'color']))
-                if section_count == 0:
-                    call(['git', 'config', '--remove-section', 'color'])
-            else:
-                call(['git', 'config', 'color.status', status_color_out])
+        if show_branches:
+            branches_output = branches.get(show_only_default_branch=show_only_default_branch, show_color=show_color)
+            state += _print_section(branches.title(), branches_output, format)
 
-        if log_count != 0:
-            log = check_output(['git', 'log', '-n', str(log_count), '--oneline', '--color={}'.format(show_color)])
-            state += _print_section('log', log, format)
-
-        if reflog_count != 0:
-            reflog = check_output(['git', 'reflog', '-n', str(reflog_count), '--color={}'.format(show_color)])
-            state += _print_section('reflog', reflog, format)
-
-        if show_branches and (show_only_default_branch or not _only_default_branch()):
-            branches = check_output(['git', 'branch', '-vv', '--color={}'.format(show_color)])
-            state += _print_section('branches', branches, format)
-
-        stashes = stashes = check_output(['git', 'stash', 'list', '--oneline', '--color={}'.format(show_color)])
-        if show_stashes and (show_empty or len(stashes) > 0):
-            state += _print_section('stashes', stashes, format)
+        if show_stashes:
+            stashes_output = stashes.get(show_color=show_color)
+            state += _print_section(stashes.title(), stashes_output, format)
 
     state = state[:-1] # strip the extra trailing newline
     state_lines = len(state.splitlines())
