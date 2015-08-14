@@ -4,7 +4,9 @@
 
 `git settings get` [<file-option>] [(`-d`|`--default`) <value>] <key><br>
 `git settings destroy` [(`-d`|`--dry-run`)] <section><br>
-`git settings list` [<file-option>] [(`-p`|`--pretty`)] [(`-f`|`--format`) <format>] [(`-c`|`--count`)] [<section>]<br>
+`git settings list` [<file-option>] [(`-p`|`--pretty`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-f`|`--format`) <format>] [(`-c`|`--count`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-k`|`--keys`)] [<section>]<br>
 `git settings` (`-h`|`--help`)<br>
 `git settings` (`-v`|`--version`)
 
@@ -46,6 +48,9 @@
 
     * `-c`|`--count`:
         The count of keys in a given section is printed rather than the section itself.
+
+    * `-k`|`--keys`:
+        List only the keys for the section.
 
 * `-h`|`--help`:
     Print a simple help message.
