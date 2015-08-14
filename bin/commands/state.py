@@ -1,7 +1,6 @@
 """View the state of the working tree."""
 
 import os
-import re
 import sys
 from ast import literal_eval
 from subprocess import call, check_output, PIPE, Popen
@@ -80,36 +79,14 @@ def state(show_color, format, show_status, log_count, reflog_count, show_branche
     state = ''
     if _is_new_repository():
 
-        # make sure status will output ANSI codes
-        # this must be done using config since status has no --color option
-        status_color = Popen(['git', 'config', '--local', 'color.status'], stdout=PIPE, stderr=PIPE)
-        status_color_out, status_color_err = status_color.communicate()
-        status_color_out = status_color_out.rstrip()  # strip the newline
-        call(['git', 'config', 'color.status', show_color])
-
-        # check if status is empty
-        status_output = check_output(['git', 'status', '--short'])
-        if status_output == '':
-            status_output = 'Initial commit'
-
-        title = 'status {}({}master{})'.format(Colors.no_color, Colors.green, Colors.no_color)
+        status_output = status.get(new_repository=True, show_color=show_color)
+        title = status.title(new_repository=True, show_color=show_color)
         state += _print_section(title, status_output, format)
-
-        # reset color.status to its original setting
-        if status_color_out == '':
-            call(['git', 'config', '--unset', 'color.status'])
-
-            # unset may leave an empty section, remove it if it is
-            section_count = literal_eval(check_output(['git', 'settings', 'list', '--local', '--count', 'color']))
-            if section_count == 0:
-                call(['git', 'config', '--remove-section', 'color'])
-        else:
-            call(['git', 'config', 'color.status', status_color_out])
 
     else:
         if show_status:
             status_output = status.get(show_color=show_color)
-            state += _print_section(status.title(show_color), status_output, format)
+            state += _print_section(status.title(show_color=show_color), status_output, format)
 
         if log_count:
             log_output = log.get(log_count=log_count, show_color=show_color)
