@@ -62,7 +62,7 @@
 
 Some subcommands can be limited to a specific file. The valid options are:
 
-* `--local`:
+* `--local` :
     Use local config file.
 
 * `--global`:
