@@ -13,7 +13,7 @@
 
 ## OPTIONS
 
-* `-b`|`--branch`:
+* `-b`|`--branch` <branch>:
     Show the commits between HEAD and <branch>. When not specified, master is used.
 
 * `-c`|`--count`:
