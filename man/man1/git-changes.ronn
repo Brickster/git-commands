@@ -13,7 +13,7 @@
 
 ## OPTIONS
 
-* `-b`|`--branch`:
+* `-b`|`--branch` <branch>:
     Show the commits between HEAD and <branch>. When not specified, master is used.
 
 * `-c`|`--count`:
@@ -43,3 +43,7 @@
     The default branch to use when finding changes. Option (`-b`|`--branch`) <branch> overrides this setting.
 
     Default: master
+
+## SEE ALSO
+
+[git-diff(1)](http://git-scm.com/docs/git-diff), [git-log(1)](http://git-scm.com/docs/git-log)
