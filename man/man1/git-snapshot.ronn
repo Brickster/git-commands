@@ -25,3 +25,7 @@ $ git stash apply
 
 * `-v`|`--version`:
 	Print version.
+
+## SEE ALSO
+
+[git-stash(1)](http://git-scm.com/docs/git-stash)
