@@ -152,3 +152,7 @@ Used to see a more concise and comprehensive view of the working directory. The 
 	Determines whether or not colors are printed in the output. Options `--color` [<when>] and `--no-color` override this value.
 
 	Default: <auto>
+
+## SEE ALSO
+
+[git-status(1)](http://git-scm.com/docs/git-status), [git-log(1)](http://git-scm.com/docs/git-log), [git-reflog(1)](http://git-scm.com/docs/git-reflog), [git-branch(1)](http://git-scm.com/docs/git-branch), [git-stash(1)](http://git-scm.com/docs/git-stash)

@@ -62,7 +62,7 @@
 
 Some subcommands can be limited to a specific file. The valid options are:
 
-* `--local`:
+* `--local` :
     Use local config file.
 
 * `--global`:
@@ -80,3 +80,7 @@ Some subcommands can be limited to a specific file. The valid options are:
     The default formatting for git-setting list. Valid options include: `pretty` and `compact`. If no value is specified or an invalid value is entered, compact is used. The option `-p`|`--pretty` will override this setting.
 
     Default: <compact>
+
+## SEE ALSO
+
+[git-config(1)](http://git-scm.com/docs/git-config)
