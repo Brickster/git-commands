@@ -31,7 +31,11 @@ def get(**kwargs):
     """Show branches."""
 
     show_color = kwargs['show_color']
-    show_only_default_branch = kwargs['show_only_default_branch']
+    show_only_default_branch = settings.get(
+        'git-state.branches.show-only-default',
+        default=True,
+        as_type=settings.as_bool
+    )
 
     if show_only_default_branch or not _only_default_branch():
         return check_output(['git', 'branch', '-vv', '--color={}'.format(show_color)])
