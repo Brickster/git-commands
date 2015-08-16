@@ -5,7 +5,6 @@ import sys
 from ast import literal_eval
 from subprocess import call, check_output, PIPE, Popen
 
-from commands import settings
 from stateextensions import branches, log, reflog, stashes, status
 from utils.messages import error
 
@@ -15,10 +14,10 @@ class Colors:
     no_color = '\x1B[0m'
 
 
-def _print_section(title, text=None, format='compact'):
+def _print_section(title, text=None, format='compact', show_empty=False):
     """Print a section."""
 
-    if not text:
+    if not show_empty and not text:
         return ""
 
     section = '# {}{}{}'.format(Colors.green, title, Colors.no_color) + '\n'
@@ -56,59 +55,55 @@ def _is_git_repository():
     return os.path.exists('./.git')
 
 
-def state(show_color, format, show_status, log_count, reflog_count, show_branches, show_stashes, show_empty, clear):
+def state(**kwargs):
     """Print the state of the working tree."""
 
     if not _is_git_repository():
         error('{0!r} not a git repository'.format(os.getcwd()))
 
-    show_only_default_branch = settings.get(
-        'git-state.branches.show-only-default',
-        default=True,
-        as_type=settings.as_bool
-    )
-
-    show_color = show_color.lower()
+    show_color = kwargs.get('show_color').lower()
     if show_color == 'never' or (show_color == 'auto' and not sys.stdout.isatty()):
         show_color = 'never'
         Colors.green = ''
         Colors.no_color = ''
     elif show_color == 'auto' and sys.stdout.isatty():
         show_color = 'always'
+    kwargs['show_color'] = show_color
 
     state = ''
+    format = kwargs.get('format')
     if _is_new_repository():
 
-        status_output = status.get(new_repository=True, show_color=show_color)
-        title = status.title(new_repository=True, show_color=show_color)
+        status_output = status.get(new_repository=True, **kwargs)
+        title = status.title(new_repository=True, **kwargs)
         state += _print_section(title, status_output, format)
 
     else:
-        if show_status:
-            status_output = status.get(show_color=show_color)
-            state += _print_section(status.title(show_color=show_color), status_output, format)
+        if kwargs.get('show_status'):
+            status_output = status.get(**kwargs)
+            state += _print_section(status.title(show_color=show_color), status_output, format, show_empty=True)
 
-        if log_count:
-            log_output = log.get(log_count=log_count, show_color=show_color)
+        if kwargs.get('log_count'):
+            log_output = log.get(**kwargs)
             state += _print_section(log.title(), log_output, format)
 
-        if reflog_count:
-            reflog_output = reflog.get(reflog_count=reflog_count, show_color=show_color)
+        if kwargs.get('reflog_count'):
+            reflog_output = reflog.get(**kwargs)
             state += _print_section(reflog.title(), reflog_output, format)
 
-        if show_branches:
-            branches_output = branches.get(show_only_default_branch=show_only_default_branch, show_color=show_color)
+        if kwargs.get('show_branches'):
+            branches_output = branches.get(**kwargs)
             state += _print_section(branches.title(), branches_output, format)
 
-        if show_stashes:
+        if kwargs.get('show_stashes'):
             stashes_output = stashes.get(show_color=show_color)
-            state += _print_section(stashes.title(), stashes_output, format)
+            state += _print_section(stashes.title(), stashes_output, format, kwargs.get('show_empty'))
 
     state = state[:-1] # strip the extra trailing newline
     state_lines = len(state.splitlines())
     terminal_lines = literal_eval(check_output(['tput', 'lines']))
     if terminal_lines >= state_lines + 2: # one for the newline and one for the prompt
-        if clear and sys.stdout.isatty():
+        if kwargs.get('clear') and sys.stdout.isatty():
             call('clear')
         print state
     else:
