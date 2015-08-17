@@ -13,3 +13,18 @@ def multi_set(**kwargs):
             for dest, value in kwargs.iteritems():
                 setattr(namespace, dest, value)
     return MultiSet
+
+
+def optional_list(const):
+    """Return a OptionalList action for with a given const value."""
+
+    class OptionalList(argparse.Action):
+        """An action that supports an optional list of arguments.
+
+        This is a list equivalent to supplying a const value with nargs='?'. Which itself only allows a single optional
+        value.
+        """
+
+        def __call__(self, parser, namespace, values, option_string=None):
+            setattr(namespace, self.dest, values if values else const)
+    return OptionalList
