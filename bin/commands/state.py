@@ -5,6 +5,7 @@ import sys
 from ast import literal_eval
 from subprocess import call, check_output, PIPE, Popen
 
+from . import settings
 from stateextensions import branches, log, reflog, stashes, status
 from utils.messages import error
 
@@ -98,6 +99,28 @@ def state(**kwargs):
         if kwargs.get('show_stashes'):
             stashes_output = stashes.get(show_color=show_color)
             state += _print_section(stashes.title(), stashes_output, format, kwargs.get('show_empty'))
+
+        # show any user defined sections
+        extensions = settings.list(
+            section='git-state.extensions',
+            config=None,
+            count=False,
+            keys=True,
+            format=None,
+            file=None
+        ).splitlines()
+        for extension in extensions or []:
+            extension_command = settings.get('git-state.extensions.' + extension)
+            extension_command = extension_command.split() + ['--color={}'.format(show_color)]
+            extension_proc = Popen(extension_command, stdout=PIPE, stderr=PIPE)
+            extension_out, extension_error = extension_proc.communicate()
+
+            state += _print_section(
+                title=extension,
+                text=extension_out if not extension_proc.returncode else extension_error,
+                format=format
+            )
+
 
     state = state[:-1] # strip the extra trailing newline
     state_lines = len(state.splitlines())

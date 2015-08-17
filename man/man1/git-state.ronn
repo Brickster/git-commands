@@ -152,3 +152,44 @@ Used to see a more concise and comprehensive view of the working directory. The 
 	Determines whether or not colors are printed in the output. Options `--color` [<when>] and `--no-color` override this value.
 
 	Default: <auto>
+
+* `git-state.extensions.*` <string>:
+	A custom command to execute and print as its own section. See "**EXTENSIONS**" section for more detail.
+
+## EXTENSIONS
+
+Custom sections can be created by setting a config in the following format:
+
+```
+git-state.extensions.<section-name>
+```
+
+The extension can be any valid script or command but must accept the flag `--color=`<when>. <when> will only be one of: <never> or <always>. Unlike `git state` itself, <when> won't ever be omitted.
+
+```bash
+$ git config git-state.extenstions.graph "git log --oneline --graph --all --decorate -n 10"
+$ git state -LRTB # ignore most sections for brevity
+# status (state-extensions)
+
+     M bin/commands/state.py
+     M man/man1/git-state.ronn
+
+# graph
+
+    *   b27b2e5 (master) Merge branch 'fix-blank-lines'
+    |\
+    | * c40b5cf Fix upstream printing blank line
+    | * 918d4f7 Fix settings printing blank line
+    |/
+    *   89736f9 Merge branch 'fix-documentation'
+    |\
+    | * 0e7cc6e Add see also section
+    | * 059ff8b Fix settings documentation formatting
+    | * 4d66f32 Fix changes documentation
+    |/
+    | * 48ab35e (HEAD, state-extensions) Fix status title
+    | * bc45540 Refactor how arguments are passed into subcommands
+    | * a0ea096 Refactor parameters
+
+$
+```
