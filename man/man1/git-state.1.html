@@ -83,6 +83,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-c</code>|<code>--color</code>) [<var>when</var>]] [(<code>-C</code>|<code>--no-color</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-p</code>|<code>--pretty</code>)] [(<code>-f</code>|<code>--format</code>) <var>format</var>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>--clear</code>|<code>--no-clear</code>)]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--ignore-extensions</code> [<var>extension</var> ...]]<br />
 <code>git state</code> (<code>-h</code>|<code>--help</code>)<br />
 <code>git state</code> (<code>-v</code>|<code>--version</code>)</p>
 
@@ -115,6 +116,7 @@
 <dt><code>-f</code>|<code>--format</code> <var>format</var></dt><dd><p>  The format used to print each section. Valid values include: <var>compact</var> and <var>pretty</var>.</p></dd>
 <dt><code>--clear</code> </dt><dd><p>  Clear the screen before printing.</p></dd>
 <dt><code>--no-clear</code></dt><dd><p>  Do not clear the screen before printing.</p></dd>
+<dt><code>--ignore-extensions</code> [<var>extension</var> ...]</dt><dd><p>  A list of extensions to ignore when printing. If none are specified, all of them will be ignored. See "<strong>EXTENSIONS</strong>" section for more detail.</p></dd>
 </dl>
 
 
@@ -199,6 +201,8 @@ $ git state -LRTB # ignore most sections for brevity
 
 $
 </code></pre>
+
+<p>An extension can be ignored by listing it in <code>--ignore-extensions</code> [<var>extension</var> ...].</p>
 
 
   <ol class='man-decor man-foot man foot'>

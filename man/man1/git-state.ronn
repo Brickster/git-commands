@@ -11,6 +11,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-c`|`--color`) [<when>]] [(`-C`|`--no-color`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`--clear`|`--no-clear`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--ignore-extensions` [<extension> ...]]<br>
 `git state` (`-h`|`--help`)<br>
 `git state` (`-v`|`--version`)
 
@@ -85,6 +86,9 @@ Used to see a more concise and comprehensive view of the working directory. The 
 
 * `--no-clear`:
 	Do not clear the screen before printing.
+
+* `--ignore-extensions` [<extension> ...]:
+	A list of extensions to ignore when printing. If none are specified, all of them will be ignored. See "**EXTENSIONS**" section for more detail.
 
 ## CONFIGURATION
 
@@ -193,3 +197,5 @@ $ git state -LRTB # ignore most sections for brevity
 
 $
 ```
+
+An extension can be ignored by listing it in `--ignore-extensions` [<extension> ...].
