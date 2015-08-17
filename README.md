@@ -36,7 +36,8 @@ git state [(-l|--log) <count>] [(-L|--no-log)] [--full-log]
           [(-e|--show-empty)] [(-E|--no-show-empty)]
           [(-c|--color) [when]] [(-C|--no-color)]
           [(-p|--pretty)] [(-f|--format) <format>]
-          [(--clear|--no-clear)]
+          [--clear] [--no-clear]
+          [--ignore-extensions [<extension> ...]]
 git state (-h|--help)
 git state (-v|--version)
 ```

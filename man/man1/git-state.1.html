@@ -58,6 +58,7 @@
     <a href="#DESCRIPTION">DESCRIPTION</a>
     <a href="#OPTIONS">OPTIONS</a>
     <a href="#CONFIGURATION">CONFIGURATION</a>
+    <a href="#EXTENSIONS">EXTENSIONS</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
   </div>
 
@@ -82,7 +83,8 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-e</code>|<code>--show-empty</code>)] [(<code>-E</code>|<code>--no-show-empty</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-c</code>|<code>--color</code>) [<var>when</var>]] [(<code>-C</code>|<code>--no-color</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-p</code>|<code>--pretty</code>)] [(<code>-f</code>|<code>--format</code>) <var>format</var>]<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>--clear</code>|<code>--no-clear</code>)]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--clear</code>] [<code>--no-clear</code>]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--ignore-extensions</code> [<var>extension</var> ...]]<br />
 <code>git state</code> (<code>-h</code>|<code>--help</code>)<br />
 <code>git state</code> (<code>-v</code>|<code>--version</code>)</p>
 
@@ -115,6 +117,7 @@
 <dt><code>-f</code>|<code>--format</code> <var>format</var></dt><dd><p>  The format used to print each section. Valid values include: <var>compact</var> and <var>pretty</var>.</p></dd>
 <dt><code>--clear</code> </dt><dd><p>  Clear the screen before printing.</p></dd>
 <dt><code>--no-clear</code></dt><dd><p>  Do not clear the screen before printing.</p></dd>
+<dt><code>--ignore-extensions</code> [<var>extension</var> ...]</dt><dd><p>  A list of extensions to ignore when printing. If none are specified, all of them will be ignored. See "<strong>EXTENSIONS</strong>" section for more detail.</p></dd>
 </dl>
 
 
@@ -160,8 +163,47 @@
 <dt><code>color.ui</code> <var>string</var></dt><dd><p>  Determines whether or not colors are printed in the output. Options <code>--color</code> [<var>when</var>] and <code>--no-color</code> override this value.</p>
 
 <p>  Default: <var>auto</var></p></dd>
+<dt><code>git-state.extensions.*</code> <var>string</var></dt><dd><p>  A custom command to execute and print as its own section. See "<strong>EXTENSIONS</strong>" section for more detail.</p></dd>
 </dl>
 
+
+<h2 id="EXTENSIONS">EXTENSIONS</h2>
+
+<p>Custom sections can be created by setting a config in the following format:</p>
+
+<pre><code>git-state.extensions.&lt;section-name>
+</code></pre>
+
+<p>The extension can be any valid script or command but must accept the flag <code>--color=</code><var>when</var>. <var>when</var> will only be one of: <var>never</var> or <var>always</var>. Unlike <code>git state</code> itself, <var>when</var> won't ever be omitted.</p>
+
+<pre><code class="bash">$ git config git-state.extenstions.graph "git log --oneline --graph --all --decorate -n 10"
+$ git state -LRTB # ignore most sections for brevity
+# status (state-extensions)
+
+     M bin/commands/state.py
+     M man/man1/git-state.ronn
+
+# graph
+
+    *   b27b2e5 (master) Merge branch 'fix-blank-lines'
+    |\
+    | * c40b5cf Fix upstream printing blank line
+    | * 918d4f7 Fix settings printing blank line
+    |/
+    *   89736f9 Merge branch 'fix-documentation'
+    |\
+    | * 0e7cc6e Add see also section
+    | * 059ff8b Fix settings documentation formatting
+    | * 4d66f32 Fix changes documentation
+    |/
+    | * 48ab35e (HEAD, state-extensions) Fix status title
+    | * bc45540 Refactor how arguments are passed into subcommands
+    | * a0ea096 Refactor parameters
+
+$
+</code></pre>
+
+<p>An extension can be ignored by listing it in <code>--ignore-extensions</code> [<var>extension</var> ...].</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
