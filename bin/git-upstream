@@ -35,7 +35,9 @@ def main():
         dest='include_remote'
     )
 
-    print upstream.upstream(**vars(parser.parse_args()))
+    upstream_output = upstream.upstream(**vars(parser.parse_args()))
+    if upstream_output:
+        print upstream_output
 
 if __name__ == '__main__':
     main()
