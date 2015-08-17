@@ -3,6 +3,7 @@
 import argparse
 
 from commands import settings, state
+from utils.parse_actions import optional_list
 
 
 def main():
@@ -224,6 +225,21 @@ def main():
         help='do not clear the screen before printing',
         action='store_false',
         dest='clear'
+    )
+
+    # ignore sections
+    parser.add_argument(
+        '--ignore-extensions',
+        help='a list of extensions to ignore',
+        nargs='*',
+        action=optional_list(settings.list(
+            'git-state.extensions',
+            config=None,
+            count=False,
+            keys=True,
+            format=None
+        ).splitlines()),
+        default=[]
     )
 
     state.state(**vars(parser.parse_args()))

@@ -31,7 +31,10 @@
 \~\~\~\~\~\~\~\~\~\~[(\fB\-p\fR|\fB\-\-pretty\fR)] [(\fB\-f\fR|\fB\-\-format\fR) \fIformat\fR]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~[(\fB\-\-clear\fR|\fB\-\-no\-clear\fR)]
+\~\~\~\~\~\~\~\~\~\~[\fB\-\-clear\fR] [\fB\-\-no\-clear\fR]
+.
+.br
+\~\~\~\~\~\~\~\~\~\~[\fB\-\-ignore\-extensions\fR [\fIextension\fR \.\.\.]]
 .
 .br
 \fBgit state\fR (\fB\-h\fR|\fB\-\-help\fR)
@@ -132,6 +135,10 @@ Clear the screen before printing\.
 \fB\-\-no\-clear\fR
 Do not clear the screen before printing\.
 .
+.TP
+\fB\-\-ignore\-extensions\fR [\fIextension\fR \.\.\.]
+A list of extensions to ignore when printing\. If none are specified, all of them will be ignored\. See "\fBEXTENSIONS\fR" section for more detail\.
+.
 .SH "CONFIGURATION"
 .
 .TP
@@ -224,6 +231,63 @@ Determines whether or not colors are printed in the output\. Options \fB\-\-colo
 .
 .IP
 Default: \fIauto\fR
+.
+.TP
+\fBgit\-state\.extensions\.*\fR \fIstring\fR
+A custom command to execute and print as its own section\. See "\fBEXTENSIONS\fR" section for more detail\.
+.
+.SH "EXTENSIONS"
+Custom sections can be created by setting a config in the following format:
+.
+.IP "" 4
+.
+.nf
+
+git\-state\.extensions\.<section\-name>
+.
+.fi
+.
+.IP "" 0
+.
+.P
+The extension can be any valid script or command but must accept the flag \fB\-\-color=\fR\fIwhen\fR\. \fIwhen\fR will only be one of: \fInever\fR or \fIalways\fR\. Unlike \fBgit state\fR itself, \fIwhen\fR won\'t ever be omitted\.
+.
+.IP "" 4
+.
+.nf
+
+$ git config git\-state\.extenstions\.graph "git log \-\-oneline \-\-graph \-\-all \-\-decorate \-n 10"
+$ git state \-LRTB # ignore most sections for brevity
+# status (state\-extensions)
+
+     M bin/commands/state\.py
+     M man/man1/git\-state\.ronn
+
+# graph
+
+    *   b27b2e5 (master) Merge branch \'fix\-blank\-lines\'
+    |\e
+    | * c40b5cf Fix upstream printing blank line
+    | * 918d4f7 Fix settings printing blank line
+    |/
+    *   89736f9 Merge branch \'fix\-documentation\'
+    |\e
+    | * 0e7cc6e Add see also section
+    | * 059ff8b Fix settings documentation formatting
+    | * 4d66f32 Fix changes documentation
+    |/
+    | * 48ab35e (HEAD, state\-extensions) Fix status title
+    | * bc45540 Refactor how arguments are passed into subcommands
+    | * a0ea096 Refactor parameters
+
+$
+.
+.fi
+.
+.IP "" 0
+.
+.P
+An extension can be ignored by listing it in \fB\-\-ignore\-extensions\fR [\fIextension\fR \.\.\.]\.
 .
 .SH "SEE ALSO"
 git\-status(1) \fIhttp://git\-scm\.com/docs/git\-status\fR, git\-log(1) \fIhttp://git\-scm\.com/docs/git\-log\fR, git\-reflog(1) \fIhttp://git\-scm\.com/docs/git\-reflog\fR, git\-branch(1) \fIhttp://git\-scm\.com/docs/git\-branch\fR, git\-stash(1) \fIhttp://git\-scm\.com/docs/git\-stash\fR

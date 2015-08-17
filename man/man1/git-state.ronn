@@ -10,7 +10,8 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-c`|`--color`) [<when>]] [(`-C`|`--no-color`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`--clear`|`--no-clear`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--clear`] [`--no-clear`]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--ignore-extensions` [<extension> ...]]<br>
 `git state` (`-h`|`--help`)<br>
 `git state` (`-v`|`--version`)
 
@@ -86,6 +87,9 @@ Used to see a more concise and comprehensive view of the working directory. The 
 * `--no-clear`:
 	Do not clear the screen before printing.
 
+* `--ignore-extensions` [<extension> ...]:
+	A list of extensions to ignore when printing. If none are specified, all of them will be ignored. See "**EXTENSIONS**" section for more detail.
+
 ## CONFIGURATION
 
 * `git-state.log.show` <bool>:
@@ -153,6 +157,48 @@ Used to see a more concise and comprehensive view of the working directory. The 
 
 	Default: <auto>
 
+* `git-state.extensions.*` <string>:
+	A custom command to execute and print as its own section. See "**EXTENSIONS**" section for more detail.
+
+## EXTENSIONS
+
+Custom sections can be created by setting a config in the following format:
+
+```
+git-state.extensions.<section-name>
+```
+
+The extension can be any valid script or command but must accept the flag `--color=`<when>. <when> will only be one of: <never> or <always>. Unlike `git state` itself, <when> won't ever be omitted.
+
+```bash
+$ git config git-state.extenstions.graph "git log --oneline --graph --all --decorate -n 10"
+$ git state -LRTB # ignore most sections for brevity
+# status (state-extensions)
+
+     M bin/commands/state.py
+     M man/man1/git-state.ronn
+
+# graph
+
+    *   b27b2e5 (master) Merge branch 'fix-blank-lines'
+    |\
+    | * c40b5cf Fix upstream printing blank line
+    | * 918d4f7 Fix settings printing blank line
+    |/
+    *   89736f9 Merge branch 'fix-documentation'
+    |\
+    | * 0e7cc6e Add see also section
+    | * 059ff8b Fix settings documentation formatting
+    | * 4d66f32 Fix changes documentation
+    |/
+    | * 48ab35e (HEAD, state-extensions) Fix status title
+    | * bc45540 Refactor how arguments are passed into subcommands
+    | * a0ea096 Refactor parameters
+
+$
+```
+
+An extension can be ignored by listing it in `--ignore-extensions` [<extension> ...].
 ## SEE ALSO
 
 [git-status(1)](http://git-scm.com/docs/git-status), [git-log(1)](http://git-scm.com/docs/git-log), [git-reflog(1)](http://git-scm.com/docs/git-reflog), [git-branch(1)](http://git-scm.com/docs/git-branch), [git-stash(1)](http://git-scm.com/docs/git-stash)

@@ -1,12 +1,12 @@
 """View the state of the working tree."""
 
 import os
-import re
 import sys
 from ast import literal_eval
 from subprocess import call, check_output, PIPE, Popen
 
-from commands import settings
+from . import settings
+from stateextensions import branches, log, reflog, stashes, status
 from utils.messages import error
 
 
@@ -15,8 +15,11 @@ class Colors:
     no_color = '\x1B[0m'
 
 
-def _print_section(title, text=None, format='compact'):
+def _print_section(title, text=None, format='compact', show_empty=False):
     """Print a section."""
+
+    if not show_empty and not text:
+        return ""
 
     section = '# {}{}{}'.format(Colors.green, title, Colors.no_color) + '\n'
 
@@ -38,21 +41,6 @@ def _print_section(title, text=None, format='compact'):
     return section
 
 
-def _only_default_branch():
-    """Determine whether the branches section only contains the default branch."""
-
-    branches = check_output(['git', 'branch', '--no-color']).splitlines()
-
-    if len(branches) > 1:
-        return False
-
-    default_branch = settings.get('git-state.branches.default', default='master')
-    if re.match('\* {}'.format(default_branch), branches[0]) is not None:
-        return True
-    else:
-        return False
-
-
 def _is_new_repository():
     """Determines whether a repository is empty."""
 
@@ -68,101 +56,78 @@ def _is_git_repository():
     return os.path.exists('./.git')
 
 
-def state(show_color, format, show_status, log_count, reflog_count, show_branches, show_stashes, show_empty, clear):
+def state(**kwargs):
     """Print the state of the working tree."""
 
     if not _is_git_repository():
         error('{0!r} not a git repository'.format(os.getcwd()))
 
-    show_only_default_branch = settings.get(
-        'git-state.branches.show-only-default',
-        default=True,
-        as_type=settings.as_bool
-    )
-
-    show_color = show_color.lower()
+    show_color = kwargs.get('show_color').lower()
     if show_color == 'never' or (show_color == 'auto' and not sys.stdout.isatty()):
         show_color = 'never'
         Colors.green = ''
         Colors.no_color = ''
     elif show_color == 'auto' and sys.stdout.isatty():
         show_color = 'always'
+    kwargs['show_color'] = show_color
 
     state = ''
+    format = kwargs.get('format')
     if _is_new_repository():
 
-        # make sure status will output ANSI codes
-        # this must be done using config since status has no --color option
-        status_color = Popen(['git', 'config', '--local', 'color.status'], stdout=PIPE, stderr=PIPE)
-        status_color_out, status_color_err = status_color.communicate()
-        status_color_out = status_color_out.rstrip()  # strip the newline
-        call(['git', 'config', 'color.status', show_color])
-
-        # check if status is empty
-        status = check_output(['git', 'status', '--short'])
-        if status == '':
-            status = 'Initial commit'
-
-        title = 'status {}({}master{})'.format(Colors.no_color, Colors.green, Colors.no_color)
-        state += _print_section(title, status, format)
-
-        # reset color.status to its original setting
-        if status_color_out == '':
-            call(['git', 'config', '--unset', 'color.status'])
-
-            # unset may leave an empty section, remove it if it is
-            section_count = literal_eval(check_output(['git', 'settings', 'list', '--local', '--count', 'color']))
-            if section_count == 0:
-                call(['git', 'config', '--remove-section', 'color'])
-        else:
-            call(['git', 'config', 'color.status', status_color_out])
+        status_output = status.get(new_repository=True, **kwargs)
+        title = status.title(new_repository=True, **kwargs)
+        state += _print_section(title, status_output, format)
 
     else:
-        if show_status:
-            # make sure status will output ANSI codes
-            # this must be done using config since status has no --color option
-            status_color = Popen(['git', 'config', '--local', 'color.status'], stdout=PIPE, stderr=PIPE)
-            status_color_out, status_color_err = status_color.communicate()
-            status_color_out = status_color_out.rstrip()  # strip the newline
-            call(['git', 'config', 'color.status', show_color])
+        if kwargs.get('show_status'):
+            status_output = status.get(**kwargs)
+            state += _print_section(status.title(show_color=show_color), status_output, format, show_empty=True)
 
-            status = check_output(['git', 'status', '--short', '--untracked-files=all', '--branch']).splitlines()
-            status_title = 'status {}({})'.format(Colors.no_color, status.pop(0).lstrip('# '))
-            status = '\n'.join(status)
-            state += _print_section(status_title, status, format)
+        if kwargs.get('log_count'):
+            log_output = log.get(**kwargs)
+            state += _print_section(log.title(), log_output, format)
 
-            # reset color.status to its original setting
-            if status_color_out == '':
-                call(['git', 'config', '--unset', 'color.status'])
+        if kwargs.get('reflog_count'):
+            reflog_output = reflog.get(**kwargs)
+            state += _print_section(reflog.title(), reflog_output, format)
 
-                # unset may leave an empty section, remove it if it is
-                section_count = literal_eval(check_output(['git', 'settings', 'list', '--local', '--count', 'color']))
-                if section_count == 0:
-                    call(['git', 'config', '--remove-section', 'color'])
-            else:
-                call(['git', 'config', 'color.status', status_color_out])
+        if kwargs.get('show_branches'):
+            branches_output = branches.get(**kwargs)
+            state += _print_section(branches.title(), branches_output, format)
 
-        if log_count != 0:
-            log = check_output(['git', 'log', '-n', str(log_count), '--oneline', '--color={}'.format(show_color)])
-            state += _print_section('log', log, format)
+        if kwargs.get('show_stashes'):
+            stashes_output = stashes.get(show_color=show_color)
+            state += _print_section(stashes.title(), stashes_output, format, kwargs.get('show_empty'))
 
-        if reflog_count != 0:
-            reflog = check_output(['git', 'reflog', '-n', str(reflog_count), '--color={}'.format(show_color)])
-            state += _print_section('reflog', reflog, format)
+        # show any user defined sections
+        extensions = settings.list(
+            section='git-state.extensions',
+            config=None,
+            count=False,
+            keys=True,
+            format=None,
+            file=None
+        ).splitlines()
+        extensions = list(set(extensions) - set(kwargs.get('ignore_extensions')))
+        for extension in extensions or []:
+            extension_command = settings.get('git-state.extensions.' + extension)
+            extension_command = extension_command.split() + ['--color={}'.format(show_color)]
+            extension_proc = Popen(extension_command, stdout=PIPE, stderr=PIPE)
+            extension_out, extension_error = extension_proc.communicate()
 
-        if show_branches and (show_only_default_branch or not _only_default_branch()):
-            branches = check_output(['git', 'branch', '-vv', '--color={}'.format(show_color)])
-            state += _print_section('branches', branches, format)
+            state += _print_section(
+                title=extension,
+                text=extension_out if not extension_proc.returncode else extension_error,
+                format=format
+            )
 
-        stashes = stashes = check_output(['git', 'stash', 'list', '--oneline', '--color={}'.format(show_color)])
-        if show_stashes and (show_empty or len(stashes) > 0):
-            state += _print_section('stashes', stashes, format)
 
     state = state[:-1] # strip the extra trailing newline
     state_lines = len(state.splitlines())
     terminal_lines = literal_eval(check_output(['tput', 'lines']))
     if terminal_lines >= state_lines + 2: # one for the newline and one for the prompt
-        if clear and sys.stdout.isatty():
+        if kwargs.get('clear') and sys.stdout.isatty():
             call('clear')
         print state
     else:
