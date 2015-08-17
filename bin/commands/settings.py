@@ -64,7 +64,9 @@ def list(section, config, count, keys, format, file=None):
 
 
 def _list(**kwargs):
-    print list(**kwargs)
+    list_output = list(**kwargs)
+    if list_output:
+        print list_output
 
 
 def _dry_destroy_section(config, section):
