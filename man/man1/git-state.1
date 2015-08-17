@@ -34,6 +34,9 @@
 \~\~\~\~\~\~\~\~\~\~[(\fB\-\-clear\fR|\fB\-\-no\-clear\fR)]
 .
 .br
+\~\~\~\~\~\~\~\~\~\~[\fB\-\-ignore\-extensions\fR [\fIextension\fR \.\.\.]]
+.
+.br
 \fBgit state\fR (\fB\-h\fR|\fB\-\-help\fR)
 .
 .br
@@ -131,6 +134,10 @@ Clear the screen before printing\.
 .TP
 \fB\-\-no\-clear\fR
 Do not clear the screen before printing\.
+.
+.TP
+\fB\-\-ignore\-extensions\fR [\fIextension\fR \.\.\.]
+A list of extensions to ignore when printing\. If none are specified, all of them will be ignored\. See "\fBEXTENSIONS\fR" section for more detail\.
 .
 .SH "CONFIGURATION"
 .
@@ -278,4 +285,6 @@ $
 .fi
 .
 .IP "" 0
-
+.
+.P
+An extension can be ignored by listing it in \fB\-\-ignore\-extensions\fR [\fIextension\fR \.\.\.]\.

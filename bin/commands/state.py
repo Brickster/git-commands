@@ -109,6 +109,7 @@ def state(**kwargs):
             format=None,
             file=None
         ).splitlines()
+        extensions = list(set(extensions) - set(kwargs.get('ignore_extensions')))
         for extension in extensions or []:
             extension_command = settings.get('git-state.extensions.' + extension)
             extension_command = extension_command.split() + ['--color={}'.format(show_color)]
