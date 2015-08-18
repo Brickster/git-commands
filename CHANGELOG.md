@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file. This projec
 - state: color codes still being printed even when told not to
 - state: color.status config value getting overridden
 - state: error message when run in a non-Git directory
+- state: extensions not properly handling quoted strings #20
 - state: extensions not printing when empty even if `-e|--show-empty` is included #21
 - upstream: printing a blank line when no upstream branch exists
 - Documentation typos
