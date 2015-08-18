@@ -119,7 +119,8 @@ def state(**kwargs):
             state += _print_section(
                 title=extension,
                 text=extension_out if not extension_proc.returncode else extension_error,
-                format=format
+                format=format,
+                show_empty=kwargs.get('show_empty')
             )
 
 
