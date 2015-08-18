@@ -1,6 +1,7 @@
 """View the state of the working tree."""
 
 import os
+import shlex
 import sys
 from ast import literal_eval
 from subprocess import call, check_output, PIPE, Popen
@@ -112,14 +113,15 @@ def state(**kwargs):
         extensions = list(set(extensions) - set(kwargs.get('ignore_extensions')))
         for extension in extensions or []:
             extension_command = settings.get('git-state.extensions.' + extension)
-            extension_command = extension_command.split() + ['--color={}'.format(show_color)]
+            extension_command = shlex.split(extension_command) + ['--color={}'.format(show_color)]
             extension_proc = Popen(extension_command, stdout=PIPE, stderr=PIPE)
             extension_out, extension_error = extension_proc.communicate()
 
             state += _print_section(
                 title=extension,
                 text=extension_out if not extension_proc.returncode else extension_error,
-                format=format
+                format=format,
+                show_empty=kwargs.get('show_empty')
             )
 
 
