@@ -11,7 +11,7 @@
 
 `git-fixup` is a shortcut for committing staged changes as an autosquashable fixup. The commit message starts with "fixup!" and ends with the last commit's message. The changes can then be autosquashed using an interactive rebase.
 
-While `git-commit` does include a `--fixup=<commit>` option, using it consecutively without getting commit messages with multiple "fixup!" entries is more tedious than it should to be.
+While `git-commit` does include a `--fixup=<commit>` option, using it consecutively without getting commit messages with multiple "fixup!" entries is more tedious than it should be.
 
 ## OPTIONS
 
