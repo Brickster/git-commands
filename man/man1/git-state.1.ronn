@@ -199,6 +199,7 @@ $
 ```
 
 An extension can be ignored by listing it in `--ignore-extensions` [<extension> ...].
+
 ## SEE ALSO
 
-[git-status(1)](http://git-scm.com/docs/git-status), [git-log(1)](http://git-scm.com/docs/git-log), [git-reflog(1)](http://git-scm.com/docs/git-reflog), [git-branch(1)](http://git-scm.com/docs/git-branch), [git-stash(1)](http://git-scm.com/docs/git-stash)
+git-status(1), git-log(1), git-reflog(1), git-branch(1), git-stash(1)

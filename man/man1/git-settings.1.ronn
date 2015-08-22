@@ -83,4 +83,4 @@ Some subcommands can be limited to a specific file. The valid options are:
 
 ## SEE ALSO
 
-[git-config(1)](http://git-scm.com/docs/git-config)
+git-config(1)
