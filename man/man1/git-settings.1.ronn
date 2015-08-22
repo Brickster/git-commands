@@ -23,7 +23,7 @@
         A default value to use when no configuration exists.
 
     * <file-option>:
-        The key will be loaded from a specific file. See "**FILE OPTIONS**" section for more details.
+        The key will be loaded from a specific file. See **[FILE OPTIONS][]** section for more details.
 
 * `destroy` <section>:
     Destroy a section from the local, global, and system config files.
@@ -38,7 +38,7 @@
         Limit the output to a given section.
 
     * <file-option>:
-        Limits the section values to a specific file. See "**FILE OPTIONS**" section for more details.
+        Limits the section values to a specific file. See **[FILE OPTIONS][]** section for more details.
 
     * `-p`|`--pretty`:
         The section is printed in config file format.
