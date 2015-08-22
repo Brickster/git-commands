@@ -88,7 +88,7 @@ Used to see a more concise and comprehensive view of the working directory. The 
 	Do not clear the screen before printing.
 
 * `--ignore-extensions` [<extension> ...]:
-	A list of extensions to ignore when printing. If none are specified, all of them will be ignored. See "**EXTENSIONS**" section for more detail.
+	A list of extensions to ignore when printing. If none are specified, all of them will be ignored. See **[EXTENSIONS][]** section for more detail.
 
 ## CONFIGURATION
 
@@ -158,7 +158,7 @@ Used to see a more concise and comprehensive view of the working directory. The 
 	Default: <auto>
 
 * `git-state.extensions.*` <string>:
-	A custom command to execute and print as its own section. See "**EXTENSIONS**" section for more detail.
+	A custom command to execute and print as its own section. See **[EXTENSIONS][]** section for more detail.
 
 ## EXTENSIONS
 
