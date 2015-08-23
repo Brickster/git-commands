@@ -164,6 +164,7 @@
 
 <p>  Default: <var>auto</var></p></dd>
 <dt><code>git-state.extensions.*</code> <var>string</var></dt><dd><p>  A custom command to execute and print as its own section. See "<strong>EXTENSIONS</strong>" section for more detail.</p></dd>
+<dt><code>git-state.extensions.*.name</code> <var>string</var></dt><dd><p>  A custom name for an extension. If not specified, the extension key is used. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
 </dl>
 
 
@@ -174,7 +175,7 @@
 <pre><code>git-state.extensions.&lt;section-name>
 </code></pre>
 
-<p>The extension can be any valid script or command but must accept the flag <code>--color=</code><var>when</var>. <var>when</var> will only be one of: <var>never</var> or <var>always</var>. Unlike <code>git state</code> itself, <var>when</var> won't ever be omitted.</p>
+<p>The extension can be any valid script or command but must accept the flag <code>--color=</code><var>when</var>. <var>when</var> will only be one of: <var>never</var> or <var>always</var>. Unlike <code>git state</code> itself, <var>when</var> won't ever be omitted. The section name for an extension defaults to the key name but can be overridden by defining <code>git-state.extensions.&lt;section-name>.name</code>.</p>
 
 <pre><code class="bash">$ git config git-state.extenstions.graph "git log --oneline --graph --all --decorate -n 10"
 $ git state -LRTB # ignore most sections for brevity
