@@ -113,12 +113,13 @@ def state(**kwargs):
         extensions = list(set(extensions) - set(kwargs.get('ignore_extensions')))
         for extension in extensions or []:
             extension_command = settings.get('git-state.extensions.' + extension)
+            extension_name = settings.get('git-state.extensions.' + extension + '.name', extension)
             extension_command = shlex.split(extension_command) + ['--color={}'.format(show_color)]
             extension_proc = Popen(extension_command, stdout=PIPE, stderr=PIPE)
             extension_out, extension_error = extension_proc.communicate()
 
             state += _print_section(
-                title=extension,
+                title=extension_name,
                 text=extension_out if not extension_proc.returncode else extension_error,
                 format=format,
                 show_empty=kwargs.get('show_empty')

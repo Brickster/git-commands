@@ -236,6 +236,10 @@ Default: \fIauto\fR
 \fBgit\-state\.extensions\.*\fR \fIstring\fR
 A custom command to execute and print as its own section\. See "\fBEXTENSIONS\fR" section for more detail\.
 .
+.TP
+\fBgit\-state\.extensions\.*\.name\fR \fIstring\fR
+A custom name for an extension\. If not specified, the extension key is used\. See \fB\fIEXTENSIONS\fR\fR section for more detail\.
+.
 .SH "EXTENSIONS"
 Custom sections can be created by setting a config in the following format:
 .
@@ -250,7 +254,7 @@ git\-state\.extensions\.<section\-name>
 .IP "" 0
 .
 .P
-The extension can be any valid script or command but must accept the flag \fB\-\-color=\fR\fIwhen\fR\. \fIwhen\fR will only be one of: \fInever\fR or \fIalways\fR\. Unlike \fBgit state\fR itself, \fIwhen\fR won\'t ever be omitted\.
+The extension can be any valid script or command but must accept the flag \fB\-\-color=\fR\fIwhen\fR\. \fIwhen\fR will only be one of: \fInever\fR or \fIalways\fR\. Unlike \fBgit state\fR itself, \fIwhen\fR won\'t ever be omitted\. The section name for an extension defaults to the key name but can be overridden by defining \fBgit\-state\.extensions\.<section\-name>\.name\fR\.
 .
 .IP "" 4
 .
