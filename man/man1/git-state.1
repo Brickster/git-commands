@@ -240,6 +240,10 @@ A custom command to execute and print as its own section\. See \fB\fIEXTENSIONS\
 \fBgit\-state\.extensions\.*\.name\fR \fIstring\fR
 A custom name for an extension\. If not specified, the extension key is used\. See \fB\fIEXTENSIONS\fR\fR section for more detail\.
 .
+.TP
+\fBgit\-state\.order\fR \fIstring\fR
+Custom order in which to print sections\. Multiple section names are separated by a pipe (|) character\. Any remaining sections not included are printed in the order they are handled internally\.
+.
 .SH "EXTENSIONS"
 Custom sections can be created by setting a config in the following format:
 .
