@@ -37,6 +37,9 @@
 \~\~\~\~\~\~\~\~\~\~[\fB\-\-ignore\-extensions\fR [\fIextension\fR \.\.\.]]
 .
 .br
+\~\~\~\~\~\~\~\~\~\~[(\fB\-o\fR|\fB\-\-order\fR) \fIsection\fR [\fIsection\fR \.\.\.]]
+.
+.br
 \fBgit state\fR (\fB\-h\fR|\fB\-\-help\fR)
 .
 .br
@@ -138,6 +141,10 @@ Do not clear the screen before printing\.
 .TP
 \fB\-\-ignore\-extensions\fR [\fIextension\fR \.\.\.]
 A list of extensions to ignore when printing\. If none are specified, all of them will be ignored\. See \fB\fIEXTENSIONS\fR\fR section for more detail\.
+.
+.TP
+\fB\-o\fR|\fB\-\-order\fR \fIsection\fR [\fIsection\fR \.\.\.]
+A custom section order\.
 .
 .SH "CONFIGURATION"
 .
@@ -242,7 +249,7 @@ A custom name for an extension\. If not specified, the extension key is used\. S
 .
 .TP
 \fBgit\-state\.order\fR \fIstring\fR
-Custom order in which to print sections\. Multiple section names are separated by a pipe (|) character\. Any remaining sections not included are printed in the order they are handled internally\.
+Custom order in which to print sections\. Multiple section names are separated by a pipe (|) character\. Any remaining sections not included are printed in the order they are handled internally\. Option \fB\-o\fR|\fB\-\-order\fR overrides this value\.
 .
 .SH "EXTENSIONS"
 Custom sections can be created by setting a config in the following format:
