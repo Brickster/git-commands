@@ -4,6 +4,7 @@ import os
 import shlex
 import sys
 from ast import literal_eval
+from collections import OrderedDict
 from subprocess import call, check_output, PIPE, Popen
 
 from . import settings
@@ -81,25 +82,31 @@ def state(**kwargs):
         state += _print_section(title, status_output, format)
 
     else:
+        sections = OrderedDict()
         if kwargs.get('show_status'):
             status_output = status.get(**kwargs)
-            state += _print_section(status.title(show_color=show_color), status_output, format, show_empty=True)
+            status_title = status.title(show_color=show_color)
+            sections[status_title] = _print_section(status_title, status_output, format, show_empty=True)
 
         if kwargs.get('log_count'):
             log_output = log.get(**kwargs)
-            state += _print_section(log.title(), log_output, format)
+            log_title = log.title()
+            sections[log_title] = _print_section(log_title, log_output, format)
 
         if kwargs.get('reflog_count'):
             reflog_output = reflog.get(**kwargs)
-            state += _print_section(reflog.title(), reflog_output, format)
+            reflog_title = reflog.title()
+            sections[reflog_title] = _print_section(reflog_title, reflog_output, format)
 
         if kwargs.get('show_branches'):
             branches_output = branches.get(**kwargs)
-            state += _print_section(branches.title(), branches_output, format)
+            branches_title = branches.title()
+            sections[branches_title] = _print_section(branches_title, branches_output, format)
 
         if kwargs.get('show_stashes'):
             stashes_output = stashes.get(show_color=show_color)
-            state += _print_section(stashes.title(), stashes_output, format, kwargs.get('show_empty'))
+            stashes_title = stashes.title()
+            sections[stashes_title] = _print_section(stashes_title, stashes_output, format, kwargs.get('show_empty'))
 
         # show any user defined sections
         extensions = settings.list(
@@ -118,13 +125,24 @@ def state(**kwargs):
             extension_proc = Popen(extension_command, stdout=PIPE, stderr=PIPE)
             extension_out, extension_error = extension_proc.communicate()
 
-            state += _print_section(
+            sections[extension_name] = _print_section(
                 title=extension_name,
                 text=extension_out if not extension_proc.returncode else extension_error,
                 format=format,
                 show_empty=kwargs.get('show_empty')
             )
 
+    state = ''
+
+    # print sections with a predefined order
+    order = settings.get('git-state.order')
+    if order:
+        for section in [section for section in order.split('|') if section in sections]:
+            state += sections.pop(section)
+
+    # print any remaining sections in the order they were defined
+    for section_info in sections:
+        state += sections[section_info]
 
     state = state[:-1] # strip the extra trailing newline
     state_lines = len(state.splitlines())
