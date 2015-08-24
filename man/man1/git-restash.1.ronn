@@ -27,4 +27,4 @@ git stash show --patch | git apply --reverse
 
 ## SEE ALSO
 
-[git-stash(1)](http://git-scm.com/docs/git-stash), [git-apply(1)](http://git-scm.com/docs/git-apply)
+git-stash(1), git-apply(1)

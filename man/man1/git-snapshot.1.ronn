@@ -28,4 +28,4 @@ $ git stash apply
 
 ## SEE ALSO
 
-[git-stash(1)](http://git-scm.com/docs/git-stash)
+git-stash(1)
