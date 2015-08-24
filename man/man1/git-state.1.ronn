@@ -160,6 +160,9 @@ Used to see a more concise and comprehensive view of the working directory. The 
 * `git-state.extensions.*` <string>:
 	A custom command to execute and print as its own section. See **[EXTENSIONS][]** section for more detail.
 
+* `git-state.extensions.*.name` <string>:
+	A custom name for an extension. If not specified, the extension key is used. See **[EXTENSIONS][]** section for more detail.
+
 ## EXTENSIONS
 
 Custom sections can be created by setting a config in the following format:
@@ -168,7 +171,7 @@ Custom sections can be created by setting a config in the following format:
 git-state.extensions.<section-name>
 ```
 
-The extension can be any valid script or command but must accept the flag `--color=`<when>. <when> will only be one of: <never> or <always>. Unlike `git state` itself, <when> won't ever be omitted.
+The extension can be any valid script or command but must accept the flag `--color=`<when>. <when> will only be one of: <never> or <always>. Unlike `git state` itself, <when> won't ever be omitted. The section name for an extension defaults to the key name but can be overridden by defining `git-state.extensions.<section-name>.name`.
 
 ```bash
 $ git config git-state.extenstions.graph "git log --oneline --graph --all --decorate -n 10"
