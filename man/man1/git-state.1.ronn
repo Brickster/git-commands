@@ -163,6 +163,9 @@ Used to see a more concise and comprehensive view of the working directory. The 
 * `git-state.extensions.*.name` <string>:
 	A custom name for an extension. If not specified, the extension key is used. See **[EXTENSIONS][]** section for more detail.
 
+* `git-state.order` <string>:
+	Custom order in which to print sections. Multiple section names are separated by a pipe (|) character. Any remaining sections not included are printed in the order they are handled internally.
+
 ## EXTENSIONS
 
 Custom sections can be created by setting a config in the following format:
