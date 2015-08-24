@@ -135,9 +135,9 @@ def state(**kwargs):
     state = ''
 
     # print sections with a predefined order
-    order = settings.get('git-state.order')
-    if order:
-        for section in [section for section in order.split('|') if section in sections]:
+    order = kwargs.get('order', settings.get('git-state.order', default=[], as_type=settings.as_delimited_list('|')))
+    for section in order:
+        if section in sections:
             state += sections.pop(section)
 
     # print any remaining sections in the order they were defined
