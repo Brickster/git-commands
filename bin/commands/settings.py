@@ -135,6 +135,12 @@ def as_bool(value):
         raise Exception('{0!r} is not a boolean representation'.format(value))
 
 
+def as_delimited_list(delimiter):
+    """Parse a list by a specific delimiter."""
+
+    return lambda value: value.split(delimiter) if value else []
+
+
 def _get(**kwargs):
     value = get(**kwargs)
     if value is not None: print value

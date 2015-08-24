@@ -242,6 +242,14 @@ def main():
         default=[]
     )
 
+    parser.add_argument(
+        '-o',
+        '--order',
+        help='custom section order',
+        nargs='+',
+        default=argparse.SUPPRESS
+    )
+
     state.state(**vars(parser.parse_args()))
 
 if __name__ == '__main__':
