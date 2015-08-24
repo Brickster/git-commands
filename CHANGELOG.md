@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ## Unreleased
 ### Added
-- Section order configuration
+- Section order configuration and option
 - Extension name configuration
 
 ### Fixed

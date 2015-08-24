@@ -85,6 +85,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-p</code>|<code>--pretty</code>)] [(<code>-f</code>|<code>--format</code>) <var>format</var>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--clear</code>] [<code>--no-clear</code>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--ignore-extensions</code> [<var>extension</var> ...]]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-o</code>|<code>--order</code>) <var>section</var> [<var>section</var> ...]]<br />
 <code>git state</code> (<code>-h</code>|<code>--help</code>)<br />
 <code>git state</code> (<code>-v</code>|<code>--version</code>)</p>
 
@@ -118,6 +119,7 @@
 <dt><code>--clear</code> </dt><dd><p>  Clear the screen before printing.</p></dd>
 <dt><code>--no-clear</code></dt><dd><p>  Do not clear the screen before printing.</p></dd>
 <dt><code>--ignore-extensions</code> [<var>extension</var> ...]</dt><dd><p>  A list of extensions to ignore when printing. If none are specified, all of them will be ignored. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
+<dt><code>-o</code>|<code>--order</code> <var>section</var> [<var>section</var> ...]</dt><dd><p>  A custom section order.</p></dd>
 </dl>
 
 
@@ -165,7 +167,7 @@
 <p>  Default: <var>auto</var></p></dd>
 <dt><code>git-state.extensions.*</code> <var>string</var></dt><dd><p>  A custom command to execute and print as its own section. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
 <dt><code>git-state.extensions.*.name</code> <var>string</var></dt><dd><p>  A custom name for an extension. If not specified, the extension key is used. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
-<dt><code>git-state.order</code> <var>string</var></dt><dd><p>  Custom order in which to print sections. Multiple section names are separated by a pipe (|) character. Any remaining sections not included are printed in the order they are handled internally.</p></dd>
+<dt><code>git-state.order</code> <var>string</var></dt><dd><p>  Custom order in which to print sections. Multiple section names are separated by a pipe (|) character. Any remaining sections not included are printed in the order they are handled internally. Option <code>-o</code>|<code>--order</code> overrides this value.</p></dd>
 </dl>
 
 
