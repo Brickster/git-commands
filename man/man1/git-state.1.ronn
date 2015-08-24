@@ -12,6 +12,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--clear`] [`--no-clear`]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--ignore-extensions` [<extension> ...]]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--order`) <section> [<section> ...]]<br>
 `git state` (`-h`|`--help`)<br>
 `git state` (`-v`|`--version`)
 
@@ -90,6 +91,9 @@ Used to see a more concise and comprehensive view of the working directory. The 
 * `--ignore-extensions` [<extension> ...]:
 	A list of extensions to ignore when printing. If none are specified, all of them will be ignored. See **[EXTENSIONS][]** section for more detail.
 
+* `-o`|`--order` <section> [<section> ...]:
+	A custom section order.
+
 ## CONFIGURATION
 
 * `git-state.log.show` <bool>:
@@ -164,7 +168,7 @@ Used to see a more concise and comprehensive view of the working directory. The 
 	A custom name for an extension. If not specified, the extension key is used. See **[EXTENSIONS][]** section for more detail.
 
 * `git-state.order` <string>:
-	Custom order in which to print sections. Multiple section names are separated by a pipe (|) character. Any remaining sections not included are printed in the order they are handled internally.
+	Custom order in which to print sections. Multiple section names are separated by a pipe (|) character. Any remaining sections not included are printed in the order they are handled internally. Option `-o`|`--order` overrides this value.
 
 ## EXTENSIONS
 
