@@ -46,4 +46,4 @@
 
 ## SEE ALSO
 
-[git-diff(1)](http://git-scm.com/docs/git-diff), [git-log(1)](http://git-scm.com/docs/git-log)
+git-diff(1), git-log(1)
