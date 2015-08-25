@@ -76,10 +76,9 @@ def state(**kwargs):
     state = ''
     format = kwargs.get('format')
     if _is_new_repository():
-
         status_output = status.get(new_repository=True, **kwargs)
         title = status.title(new_repository=True, **kwargs)
-        state += _print_section(title, status_output, format)
+        sections = {title: _print_section(title, status_output, format)}
 
     else:
         sections = OrderedDict()
