@@ -5,6 +5,10 @@ def title():
     return 'stashes'
 
 
+def accent():
+    return None
+
+
 def get(**kwargs):
     """Run stashes"""
 
