@@ -12,6 +12,10 @@ def title():
     return 'branches'
 
 
+def accent():
+    return None
+
+
 def _only_default_branch():
     """Determine whether the branches section only contains the default branch."""
 

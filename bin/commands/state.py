@@ -17,13 +17,16 @@ class Colors:
     no_color = '\x1B[0m'
 
 
-def _print_section(title, text=None, format='compact', show_empty=False):
+def _print_section(title, accent=None, text=None, format='compact', show_empty=False):
     """Print a section."""
 
     if not show_empty and not text:
         return ""
 
-    section = '# {}{}{}'.format(Colors.green, title, Colors.no_color) + '\n'
+    if accent:
+        section = '# {}{} {}{}'.format(Colors.green, title, accent, Colors.no_color) + '\n'
+    else:
+        section = '# {}{}{}'.format(Colors.green, title, Colors.no_color) + '\n'
 
     if format == 'pretty' and text is not None and len(text) > 0:
         # pretty print
@@ -76,37 +79,42 @@ def state(**kwargs):
     state = ''
     format = kwargs.get('format')
     if _is_new_repository():
-
         status_output = status.get(new_repository=True, **kwargs)
         title = status.title(new_repository=True, **kwargs)
-        state += _print_section(title, status_output, format)
+        sections = {title: _print_section(title, status_output, format)}
 
     else:
         sections = OrderedDict()
         if kwargs.get('show_status'):
             status_output = status.get(**kwargs)
-            status_title = status.title(show_color=show_color)
-            sections[status_title] = _print_section(status_title, status_output, format, show_empty=True)
+            status_title = status.title()
+            status_accent = status.accent(show_color=show_color)
+            sections[status_title] = _print_section(status_title, status_accent, status_output, format, show_empty=True)
 
         if kwargs.get('log_count'):
             log_output = log.get(**kwargs)
             log_title = log.title()
-            sections[log_title] = _print_section(log_title, log_output, format)
+            sections[log_title] = _print_section(log_title, text=log_output, format=format)
 
         if kwargs.get('reflog_count'):
             reflog_output = reflog.get(**kwargs)
             reflog_title = reflog.title()
-            sections[reflog_title] = _print_section(reflog_title, reflog_output, format)
+            sections[reflog_title] = _print_section(reflog_title, text=reflog_output, format=format)
 
         if kwargs.get('show_branches'):
             branches_output = branches.get(**kwargs)
             branches_title = branches.title()
-            sections[branches_title] = _print_section(branches_title, branches_output, format)
+            sections[branches_title] = _print_section(branches_title, text=branches_output, format=format)
 
         if kwargs.get('show_stashes'):
             stashes_output = stashes.get(show_color=show_color)
             stashes_title = stashes.title()
-            sections[stashes_title] = _print_section(stashes_title, stashes_output, format, kwargs.get('show_empty'))
+            sections[stashes_title] = _print_section(
+                stashes_title,
+                text=stashes_output,
+                format=format,
+                show_empty=kwargs.get('show_empty')
+            )
 
         # show any user defined sections
         extensions = settings.list(
