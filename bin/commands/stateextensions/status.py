@@ -34,7 +34,7 @@ def _reset_color_status(color_status):
         call(['git', 'config', 'color.status', color_status])
 
 
-def title(**kwargs):
+def accent(**kwargs):
 
     new_repository = kwargs.get('new_repository', False)
     show_color = kwargs.get('show_color', 'always')
@@ -44,14 +44,18 @@ def title(**kwargs):
         Colors.red = Colors.no_color
 
     if new_repository:
-        title = 'status {no_color}({green}master{no_color})'.format(no_color=Colors.no_color, green=Colors.green)
+        title = '{no_color}({green}master{no_color})'.format(no_color=Colors.no_color, green=Colors.green)
     else:
         original_color_status = _set_color_status(show_color)
         title = check_output('git status --branch --short'.split()).splitlines()[0].lstrip('# ')
-        title = 'status{} ({})'.format(Colors.no_color, title)
+        title = '{}({})'.format(Colors.no_color, title)
         _reset_color_status(original_color_status)
 
     return title
+
+
+def title():
+    return 'status'
 
 
 def get(**kwargs):

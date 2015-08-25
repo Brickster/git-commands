@@ -5,6 +5,10 @@ def title():
     return 'log'
 
 
+def accent():
+    return None
+
+
 def get(**kwargs):
     """Log."""
 

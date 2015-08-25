@@ -5,6 +5,10 @@ def title():
     return 'reflog'
 
 
+def accent():
+    return None
+
+
 def get(**kwargs):
     """Reflog."""
 
