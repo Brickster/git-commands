@@ -39,7 +39,7 @@ def main():
 
     parser = argparse.ArgumentParser(
         prog='git state',
-        version='git-state 0.3.0',
+        version='git-state 0.4.0',
         description=state.__doc__,
         epilog='for more detail, use: git help state'
     )
