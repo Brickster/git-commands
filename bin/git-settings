@@ -53,7 +53,7 @@ def main():
         description=settings.__doc__,
         epilog='for more detail, use: git help settings'
     )
-    parser.add_argument('-v', '--version', action='version', help='show version and exit', version='git-settings 0.3.0')
+    parser.add_argument('-v', '--version', action='version', help='show version and exit', version='git-settings 0.4.0')
     subparsers = parser.add_subparsers(help='sub-command help')
 
     # get command
