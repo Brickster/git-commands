@@ -9,7 +9,7 @@ def main():
 
     parser = argparse.ArgumentParser(
         prog='git changes',
-        version='git-changes 0.3.0',
+        version='git-changes 0.4.0',
         description=changes.__doc__,
         epilog='for more detail, use: git help changes'
     )
