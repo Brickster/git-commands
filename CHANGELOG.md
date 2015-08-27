@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org).
 
-## Unreleased
+## [v0.4.0][] - 2015-08-26
 ### Added
 - Section order configuration and option
 - Extension name configuration
@@ -63,5 +63,6 @@ All notable changes to this project will be documented in this file. This projec
 ### Added
 - Everything
 
+[v0.3.0]: https://github.com/Brickstertwo/git-commands/compare/v0.3.0...v0.4.0
 [v0.3.0]: https://github.com/Brickstertwo/git-commands/compare/v0.2.0...v0.3.0
 [v0.2.0]: https://github.com/Brickstertwo/git-commands/compare/v0.1.0...v0.2.0
