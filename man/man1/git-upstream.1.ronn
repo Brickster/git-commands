@@ -30,3 +30,7 @@
     <true> or <false> flag determining whether the remote name should be printed by default. Options (`-r`|`--include-remote`) and (`-R`|`--no-include-remote`) override this value.
 
     Default: <false>
+
+## SEE ALSO
+
+git-config(1)
