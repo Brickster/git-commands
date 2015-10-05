@@ -7,9 +7,10 @@ from ast import literal_eval
 from collections import OrderedDict
 from subprocess import call, check_output, PIPE, Popen
 
-from . import settings
+from commands import settings
+from commands.utils.messages import error
 from stateextensions import branches, log, reflog, stashes, status
-from utils.messages import error
+from utils import directories
 
 
 class Colors:
@@ -55,16 +56,10 @@ def _is_new_repository():
     return log_err != '' and log_err.splitlines()[0] == "fatal: bad default revision 'HEAD'"
 
 
-def _is_git_repository():
-    """Returns whether the current working directory is a Git repository."""
-
-    return os.path.exists('./.git')
-
-
 def state(**kwargs):
     """Print the state of the working tree."""
 
-    if not _is_git_repository():
+    if not directories.is_git_repository():
         error('{0!r} not a git repository'.format(os.getcwd()))
 
     show_color = kwargs.get('show_color').lower()

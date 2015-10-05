@@ -3,11 +3,15 @@
 import os
 from subprocess import call, check_output, STDOUT
 
-from utils.messages import info
+from commands.utils import directories
+from commands.utils.messages import error, info
 
 
 def snapshot(message):
     """Create a snapshot of the working directory and index."""
+
+    if not directories.is_git_repository():
+        error('{0!r} not a git repository'.format(os.getcwd()))
 
     status_command = ['git', 'status', '--porcelain']
     status_output = check_output(status_command).splitlines()
