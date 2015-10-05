@@ -4,9 +4,15 @@ import os
 import re
 from subprocess import call, check_output, PIPE, Popen, STDOUT
 
+from commands.utils import directories
+from commands.utils.messages import error
+
 
 def list(section, config, count, keys, format, file=None):
     """List configuration settings respecting override precedence."""
+
+    if not directories.is_git_repository():
+        error('{0!r} not a git repository'.format(os.getcwd()))
 
     result = []
     if config is None:
@@ -82,6 +88,9 @@ def _dry_destroy_section(config, section):
 def destroy(section, dry_run):
     """Destroy a section from the local, global, and system config files."""
 
+    if not directories.is_git_repository():
+        error('{0!r} not a git repository'.format(os.getcwd()))
+
     if dry_run:
         _dry_destroy_section('local', section)
         _dry_destroy_section('global', section)
@@ -103,6 +112,9 @@ def get(key, default=None, config=None, file=None, as_type=str):
         - file: a config file to retrieve from
         - as_type: a callable, built-in type, or class object used to convert the result
     """
+
+    if not directories.is_git_repository():
+        error('{0!r} not a git repository'.format(os.getcwd()))
 
     if not hasattr(as_type, '__call__') and not hasattr(as_type, '__bases__'):
         raise Exception('{} is not callable'.format(as_type))

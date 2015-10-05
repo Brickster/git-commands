@@ -5,6 +5,7 @@ import re
 import sys
 from subprocess import check_output, PIPE, Popen
 
+from commands.utils import directories
 from commands.utils.messages import error
 
 
@@ -19,8 +20,12 @@ def _is_valid_stash(stash):
         proc.wait()
         return proc.returncode == 0
 
+
 def restash(stash='stash@{0}'):
-    """Restashes a stash reference."""
+    """Restash a stash reference."""
+
+    if not directories.is_git_repository():
+        error('{0!r} not a git repository'.format(os.getcwd()))
 
     if not _is_valid_stash(stash):
         error('{} is not a valid stash reference'.format(stash))
