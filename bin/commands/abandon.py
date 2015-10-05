@@ -2,7 +2,7 @@
 
 from subprocess import call, check_output
 
-from utils.messages import error
+from commands.utils.messages import error
 
 
 def abandon(start, end, dry_run=False):

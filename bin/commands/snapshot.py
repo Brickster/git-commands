@@ -3,7 +3,7 @@
 import os
 from subprocess import call, check_output, STDOUT
 
-from utils.messages import info
+from commands.utils.messages import info
 
 
 def snapshot(message):

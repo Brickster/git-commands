@@ -5,7 +5,7 @@ import re
 import sys
 from subprocess import check_output, PIPE, Popen
 
-from utils.messages import error
+from commands.utils.messages import error
 
 
 def _is_valid_stash(stash):

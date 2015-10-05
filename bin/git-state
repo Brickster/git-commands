@@ -3,7 +3,7 @@
 import argparse
 
 from commands import settings, state
-from utils.parse_actions import optional_list
+from commands.utils.parse_actions import optional_list
 
 
 def main():
