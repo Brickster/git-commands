@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file. This projec
 ### Fixed
 - State not working on repositories without any commits
 
+### Removed
+- git-fixup
+
 ## [v0.4.0][] - 2015-08-26
 ### Added
 - Section order configuration and option
