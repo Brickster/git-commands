@@ -88,16 +88,6 @@ git upstream (-h|--help)
 git upstream (-v|--version)
 ```
 
-### [fixup][]
-
-Used as a shortcut for committing the currently staged files as an autosquashable fixup.
-
-```bash
-git fixup [(-a|--all)] [(-u|--update)] [(-b|--message-body) <message-body>] [<commit>]
-git fixup (-h|--help)
-git fixup (-v|--version)
-```
-
 ### [abandon][]
 
 Used to drop a count or range of stashes.
@@ -123,6 +113,5 @@ git restash (-v|--version)
 [changes]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-changes.1.html
 [settings]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-settings.1.html
 [upstream]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-upstream.1.html
-[fixup]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-fixup.1.html
 [abandon]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-abandon.1.html
 [restash]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-restash.1.html
