@@ -1,12 +1,17 @@
 """Drop a count or range of stashes."""
 
+import os
 from subprocess import call, check_output
 
+from commands.utils import directories
 from commands.utils.messages import error
 
 
 def abandon(start, end, dry_run=False):
     """Drop a range of stashes from start (inclusive) to end (exclusive)."""
+
+    if not directories.is_git_repository():
+        error('{0!r} not a git repository'.format(os.getcwd()))
 
     stash_count = len(check_output(['git', 'stash', 'list']).splitlines())
     if end < start:
