@@ -7,9 +7,9 @@ from ast import literal_eval
 from collections import OrderedDict
 from subprocess import call, check_output, PIPE, Popen
 
-from . import settings
+from commands import settings
+from commands.utils.messages import error
 from stateextensions import branches, log, reflog, stashes, status
-from utils.messages import error
 
 
 class Colors:

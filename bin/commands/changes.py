@@ -3,7 +3,7 @@
 import sys
 from subprocess import call, check_output
 
-from utils.messages import info
+from commands.utils.messages import info
 
 
 def changes(branch, details=None, color_when='auto'):
