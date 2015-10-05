@@ -3,11 +3,15 @@
 import sys
 from subprocess import call, check_output
 
-from utils.messages import info
+from commands.utils import directories
+from commands.utils.messages import error, info
 
 
 def changes(branch, details=None, color_when='auto'):
     """Print the changes between a given branch and HEAD"""
+
+    if not directories.is_git_repository():
+        error('{0!r} not a git repository'.format(os.getcwd()))
 
     color_when = color_when.lower()
     if color_when == 'never' or (color_when == 'auto' and not sys.stdout.isatty()):
