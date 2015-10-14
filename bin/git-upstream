@@ -35,6 +35,14 @@ def main():
         dest='include_remote'
     )
 
+    # -b|--branch
+    parser.add_argument(
+        '-b',
+        '--branch',
+        help='branch to find upstream for',
+        metavar='<branch>'
+    )
+
     upstream_output = upstream.upstream(**vars(parser.parse_args()))
     if upstream_output:
         print upstream_output

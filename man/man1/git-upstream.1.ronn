@@ -3,6 +3,7 @@
 ## SYNOPSIS
 
 `git upstream` [(`-r`|`--include-remote`)] [(`-R`|`--no-include-remote`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-b`|`--branch`)]<br>
 `git upstream` (`-h`|`--help`)<br>
 `git upstream` (`-v`|`--version`)
 
@@ -17,6 +18,9 @@
 
 * `-R`|`--no-include-remote`:
     Don't print the remote name.
+
+* `-b`|`--branch`:
+    The branch whose upstream should be returned. If not specified, the current branch is used.
 
 * `-h`|`--help`:
     Print a simple help message.
