@@ -84,6 +84,7 @@ Used to get the current upstream branch.
 
 ```bash
 git upstream [(-r|--include-remote)] [(-R|--no-include-remote)]
+             [(-b|--branch)]
 git upstream (-h|--help)
 git upstream (-v|--version)
 ```

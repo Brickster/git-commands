@@ -1,13 +1,16 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-UPSTREAM" "1" "September 2015" "" ""
+.TH "GIT\-UPSTREAM" "1" "October 2015" "" ""
 .
 .SH "NAME"
 \fBgit\-upstream\fR \- get the current upstream branch
 .
 .SH "SYNOPSIS"
 \fBgit upstream\fR [(\fB\-r\fR|\fB\-\-include\-remote\fR)] [(\fB\-R\fR|\fB\-\-no\-include\-remote\fR)]
+.
+.br
+\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-b\fR|\fB\-\-branch\fR)]
 .
 .br
 \fBgit upstream\fR (\fB\-h\fR|\fB\-\-help\fR)
@@ -27,6 +30,10 @@ Print the remote name, as well\.
 .TP
 \fB\-R\fR|\fB\-\-no\-include\-remote\fR
 Don\'t print the remote name\.
+.
+.TP
+\fB\-b\fR|\fB\-\-branch\fR
+The branch whose upstream should be returned\. If not specified, the current branch is used\.
 .
 .TP
 \fB\-h\fR|\fB\-\-help\fR
