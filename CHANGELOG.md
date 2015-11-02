@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Fixed
 - State not working on repositories without any commits
+- Printing ANCI codes in status when using `--no-color` [#27](https://github.com/Brickstertwo/git-commands/issues/27)
 
 ### Removed
 - git-fixup
