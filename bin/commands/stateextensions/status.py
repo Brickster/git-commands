@@ -40,6 +40,7 @@ def accent(**kwargs):
     show_color = kwargs.get('show_color', 'always')
 
     if show_color == 'never':
+        Colors.no_color = ''
         Colors.green = Colors.no_color
         Colors.red = Colors.no_color
 
