@@ -77,7 +77,7 @@ All notable changes to this project will be documented in this file. This projec
 - Everything
 
 [Unreleased]: https://github.com/Brickstertwo/git-commands/compare/v0.4.0...HEAD
-[v0.3.0]: https://github.com/Brickstertwo/git-commands/compare/v0.3.0...v0.4.0
+[v0.4.0]: https://github.com/Brickstertwo/git-commands/compare/v0.3.0...v0.4.0
 [v0.3.0]: https://github.com/Brickstertwo/git-commands/compare/v0.2.0...v0.3.0
 [v0.2.0]: https://github.com/Brickstertwo/git-commands/compare/v0.1.0...v0.2.0
 [v0.1.0]: https://github.com/Brickstertwo/git-commands/compare/4a8227e7ea81bcc641a142078c59cbc71f6aa4dc...v0.1.0
