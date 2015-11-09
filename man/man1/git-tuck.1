@@ -1,0 +1,73 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "GIT\-TUCK" "1" "November 2015" "" ""
+.
+.SH "NAME"
+\fBgit\-tuck\fR \- stash specific files
+.
+.SH "SYNOPSIS"
+\fBgit tuck\fR [(\fB\-m\fR|\fB\-\-message\fR) \fImessage\fR] \-\- \fIfiles\fR
+.
+.br
+\fBgit tuck\fR (\fB\-h\fR|\fB\-\-help\fR)
+.
+.br
+\fBgit tuck\fR (\fB\-v\fR|\fB\-\-version\fR)
+.
+.SH "DESCRIPTION"
+Used to stash specific files rather than the all\-or\-thing style of \fBgit stash\fR\.
+.
+.SH "OPTIONS"
+.
+.TP
+\fB\-h\fR|\fB\-\-help\fR
+Print a simple help message\.
+.
+.TP
+\fB\-v\fR|\fB\-\-version\fR
+Print version\.
+.
+.TP
+\fB\-m\fR|\fB\-\-message\fR \fImessage\fR
+The message to use when stashing the files\.
+.
+.SH "EXAMPLE"
+For repository:
+.
+.IP "" 4
+.
+.nf
+
+$ git status \-\-short
+A  CONTRIBUTING\.md
+ M config\.yml
+M  file1\.txt
+MM file2\.txt
+ M file3\.txt
+?? CHANGELOG\.md
+?? file4\.txt
+.
+.fi
+.
+.IP "" 0
+.
+.P
+To stash all non\-documentation related changes:
+.
+.IP "" 4
+.
+.nf
+
+$ git tuck \-\- *\.txt config\.yml
+Tucked files: config\.yml file4\.txt file1\.txt file2\.txt file3\.txt
+$ git status \-\-short
+A  CONTRIBUTING\.md
+ M README\.md
+.
+.fi
+.
+.IP "" 0
+.
+.SH "SEE ALSO"
+git\-stash(1)

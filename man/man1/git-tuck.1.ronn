@@ -1,0 +1,51 @@
+# git-tuck(1) -- stash specific files
+
+## SYNOPSIS
+
+`git tuck` [(`-m`|`--message`) <message>] -- <files><br>
+`git tuck` (`-h`|`--help`)<br>
+`git tuck` (`-v`|`--version`)
+
+## DESCRIPTION
+
+Used to stash specific files rather than the all-or-thing style of `git stash`.
+
+## OPTIONS
+
+* `-h`|`--help`:
+	Print a simple help message.
+
+* `-v`|`--version`:
+	Print version.
+
+* `-m`|`--message` <message>:
+    The message to use when stashing the files.
+
+## EXAMPLE
+
+For repository:
+
+```bash
+$ git status --short
+A  CONTRIBUTING.md
+ M config.yml
+M  file1.txt
+MM file2.txt
+ M file3.txt
+?? CHANGELOG.md
+?? file4.txt
+```
+
+To stash all non-documentation related changes:
+
+```bash
+$ git tuck -- *.txt config.yml
+Tucked files: config.yml file4.txt file1.txt file2.txt file3.txt
+$ git status --short
+A  CONTRIBUTING.md
+ M README.md
+```
+
+## SEE ALSO
+
+git-stash(1)

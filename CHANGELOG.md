@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file. This projec
 ## [Unreleased][]
 ### Added
 - `-b|--branch` option to `upstream`
+- `git-tuck` for stashing specific files
 
 ### Fixed
 - State not working on repositories without any commits

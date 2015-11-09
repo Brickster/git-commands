@@ -109,6 +109,16 @@ git restash (-h|--help)
 git restash (-v|--version)
 ```
 
+### [tuck][]
+
+Used to stash specific files rather than the all-or-thing style of `git stash`.
+
+```bash
+git tuck [(-m|--message) <message>] -- <files>
+git tuck (-h|--help)
+git tuck (-v|--version)
+```
+
 [state]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-state.1.html
 [snapshot]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-snapshot.1.html
 [changes]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-changes.1.html
@@ -116,3 +126,4 @@ git restash (-v|--version)
 [upstream]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-upstream.1.html
 [abandon]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-abandon.1.html
 [restash]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-restash.1.html
+[restash]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-tuck.1.html
