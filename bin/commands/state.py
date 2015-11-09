@@ -50,10 +50,10 @@ def _print_section(title, accent=None, text=None, format='compact', show_empty=F
 def _is_new_repository():
     """Determines whether a repository is empty."""
 
-    log = Popen(['git', 'log', '--oneline', '-1'], stdout=PIPE, stderr=PIPE)
-    log_out, log_err = log.communicate()
-
-    return log_err != '' and log_err.splitlines()[0] == "fatal: bad default revision 'HEAD'"
+    with open(os.devnull, 'w') as devnull:
+        log_proc = Popen(['git', 'log', '--oneline', '-1'], stdout=devnull, stderr=devnull)
+        log_proc.wait()
+        return log_proc.returncode != 0
 
 
 def state(**kwargs):
