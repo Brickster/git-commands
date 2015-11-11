@@ -96,6 +96,11 @@ Used to see a more concise and comprehensive view of the working directory. The 
 
 ## CONFIGURATION
 
+* `git-state.status.show-clean-message` <bool>:
+	True or false flag determining whether a message should be printed when the working directory is clean. Similar to `git status`.
+
+	Default: <true>
+
 * `git-state.log.show` <bool>:
 	True or false flag determining whether the log section should show when no other related flags are specified.
 
