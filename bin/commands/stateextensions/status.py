@@ -63,6 +63,7 @@ def get(**kwargs):
 
     new_repository = kwargs.get('new_repository', False)
     show_color = kwargs.get('show_color', 'always')
+    show_clean_message = kwargs.get('show_clean_message', True)
     original_color_status = _set_color_status(show_color)
 
     if new_repository:
@@ -74,5 +75,8 @@ def get(**kwargs):
         status_output = check_output(['git', 'status', '--short', '--untracked-files=all'])
 
     _reset_color_status(original_color_status)
+
+    if not status_output and show_clean_message:
+        status_output = 'nothing to commit, working directory is clean\n'
 
     return status_output

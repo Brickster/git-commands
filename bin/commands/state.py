@@ -70,6 +70,11 @@ def state(**kwargs):
     elif show_color == 'auto' and sys.stdout.isatty():
         show_color = 'always'
     kwargs['show_color'] = show_color
+    kwargs['show_clean_message'] = settings.get(
+        'git-state.status.show-clean-message',
+        default=True,
+        as_type=settings.as_bool
+    )
 
     state = ''
     format = kwargs.get('format')
