@@ -111,7 +111,7 @@ git restash (-v|--version)
 
 ### [tuck][]
 
-Used to stash specific files rather than the all-or-thing style of `git stash`.
+Used to stash specific files rather than the all-or-nothing style of `git stash`.
 
 ```bash
 git tuck [(-m|--message) <message>] -- <files>
