@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This projec
 ### Added
 - `-b|--branch` option to `upstream`
 - `git-tuck` for stashing specific files
+- `git-state.status.show-clean-message` configuration toggling a message in the status section when the working directory is clean
 
 ### Fixed
 - State not working on repositories without any commits
