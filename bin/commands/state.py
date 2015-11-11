@@ -7,10 +7,10 @@ from ast import literal_eval
 from collections import OrderedDict
 from subprocess import call, check_output, PIPE, Popen
 
-from commands import settings
-from commands.utils.messages import error
+from . import settings
 from stateextensions import branches, log, reflog, stashes, status
 from utils import directories
+from utils.messages import error
 
 
 class Colors:
@@ -70,6 +70,11 @@ def state(**kwargs):
     elif show_color == 'auto' and sys.stdout.isatty():
         show_color = 'always'
     kwargs['show_color'] = show_color
+    kwargs['show_clean_message'] = settings.get(
+        'git-state.status.show-clean-message',
+        default=True,
+        as_type=settings.as_bool
+    )
 
     state = ''
     format = kwargs.get('format')
