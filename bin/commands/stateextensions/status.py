@@ -1,11 +1,7 @@
 from ast import literal_eval
 from subprocess import call, check_output, Popen, PIPE
 
-
-class Colors:
-    green = '\x1B[0;32m'
-    red='\x1B[0;31m'
-    no_color = '\x1B[0m'
+from colorama import Fore
 
 
 def _set_color_status(show_color):
@@ -39,17 +35,12 @@ def accent(**kwargs):
     new_repository = kwargs.get('new_repository', False)
     show_color = kwargs.get('show_color', 'always')
 
-    if show_color == 'never':
-        Colors.no_color = ''
-        Colors.green = Colors.no_color
-        Colors.red = Colors.no_color
-
     if new_repository:
-        title = '{no_color}({green}master{no_color})'.format(no_color=Colors.no_color, green=Colors.green)
+        title = '{no_color}({green}master{no_color})'.format(no_color=Fore.RESET, green=Fore.GREEN)
     else:
         original_color_status = _set_color_status(show_color)
         title = check_output('git status --branch --short'.split()).splitlines()[0].lstrip('# ')
-        title = '{}({})'.format(Colors.no_color, title)
+        title = '{}({})'.format(Fore.RESET, title)
         _reset_color_status(original_color_status)
 
     return title
