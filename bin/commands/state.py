@@ -7,15 +7,12 @@ from ast import literal_eval
 from collections import OrderedDict
 from subprocess import call, check_output, PIPE, Popen
 
+import colorama
+
 from . import settings
 from stateextensions import branches, log, reflog, stashes, status
 from utils import directories
 from utils.messages import error
-
-
-class Colors:
-    green = '\x1B[0;32m'
-    no_color = '\x1B[0m'
 
 
 def _print_section(title, accent=None, text=None, format='compact', show_empty=False):
@@ -25,9 +22,9 @@ def _print_section(title, accent=None, text=None, format='compact', show_empty=F
         return ""
 
     if accent:
-        section = '# {}{} {}{}'.format(Colors.green, title, accent, Colors.no_color) + '\n'
+        section = '# {}{} {}{}'.format(colorama.Fore.GREEN, title, accent, colorama.Fore.RESET) + '\n'
     else:
-        section = '# {}{}{}'.format(Colors.green, title, Colors.no_color) + '\n'
+        section = '# {}{}{}'.format(colorama.Fore.GREEN, title, colorama.Fore.RESET) + '\n'
 
     if format == 'pretty' and text is not None and len(text) > 0:
         # pretty print
@@ -65,10 +62,11 @@ def state(**kwargs):
     show_color = kwargs.get('show_color').lower()
     if show_color == 'never' or (show_color == 'auto' and not sys.stdout.isatty()):
         show_color = 'never'
-        Colors.green = ''
-        Colors.no_color = ''
+        colorama.init(strip=True)
     elif show_color == 'auto' and sys.stdout.isatty():
         show_color = 'always'
+        colorama.init()
+
     kwargs['show_color'] = show_color
     kwargs['show_clean_message'] = settings.get(
         'git-state.status.show-clean-message',
