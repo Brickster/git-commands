@@ -12,6 +12,8 @@ or
 export PATH="$PATH:/path/to/git-commands/repository/bin"
 ```
 
+See the dependencies section for other installation details.
+
 ## Uninstall
 
 ```bash
@@ -118,6 +120,10 @@ git tuck [(-m|--message) <message>] -- <files>
 git tuck (-h|--help)
 git tuck (-v|--version)
 ```
+
+## Dependencies
+
+- [colorama](https://pypi.python.org/pypi/colorama): `$ pip install colorama`
 
 [state]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-state.1.html
 [snapshot]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-snapshot.1.html
