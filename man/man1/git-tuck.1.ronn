@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git tuck` [(`-m`|`--message`) <message>] -- <files><br>
+`git tuck` [(`-m`|`--message`) <message>] [(`-q`|`--quiet`)] -- <files><br>
 `git tuck` (`-h`|`--help`)<br>
 `git tuck` (`-v`|`--version`)
 
@@ -12,14 +12,17 @@ Used to stash specific files rather than the all-or-nothing style of `git stash`
 
 ## OPTIONS
 
+* `-m`|`--message` <message>:
+    The message to use when stashing the files.
+
+* `-q`|`--quiet`:
+		Suppress all non-error output.
+
 * `-h`|`--help`:
 	Print a simple help message.
 
 * `-v`|`--version`:
 	Print version.
-
-* `-m`|`--message` <message>:
-    The message to use when stashing the files.
 
 ## EXAMPLE
 

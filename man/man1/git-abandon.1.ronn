@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git abandon` [(`-d`|`--dry-run`)] [<start>] <end><br>
+`git abandon` [(`-d`|`--dry-run`)] [(`-q`|`--quiet`)] [<start>] <end><br>
 `git abandon` (`-h`|`--help`)<br>
 `git abandon` (`-v`|`--version`)
 
@@ -20,6 +20,9 @@
 
 * `-d`|`--dry-run`:
     Print the stashes that would be dropped but don't drop them.
+
+* `-q`|`--quiet`:
+    Suppress all non-error output.
 
 * `-h`|`--help`:
     Print a simple help message.
