@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file. This projec
 - `-b|--branch` option to `upstream`
 - `git-tuck` for stashing specific files
 - `git-state.status.show-clean-message` configuration toggling a message in the status section when the working directory is clean
+- `-q|--quiet` option to `abandon`, `restash`, `snapshot`, and `tuck` [#30](https://github.com/Brickstertwo/git-commands/issues/30)
 
 ### Fixed
 - State not working on repositories without any commits
