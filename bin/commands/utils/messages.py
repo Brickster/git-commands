@@ -14,7 +14,8 @@ def error(message, exit=True):
         sys.exit(1)
 
 
-def info(message):
-    """Print a simple info message"""
+def info(message, quiet=False):
+    """Print a simple info message."""
 
-    print(message)
+    if not quiet:
+        print(message)
