@@ -3,8 +3,8 @@
 import os
 from subprocess import call, check_output, STDOUT
 
-from commands.utils import directories
-from commands.utils.messages import error, info
+from utils import directories
+from utils.messages import error, info
 
 
 def snapshot(message):

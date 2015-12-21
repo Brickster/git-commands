@@ -2,8 +2,8 @@
 
 from subprocess import check_output, PIPE, Popen
 
-from commands.utils import directories
-from commands.utils.messages import error
+from utils import directories
+from utils.messages import error
 
 _MERGE_CONFIG = 'git config --local branch.{}.merge'
 _REMOTE_CONFIG = 'git config --local branch.{}.remote'
