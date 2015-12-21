@@ -35,12 +35,23 @@ def main():
         type=int
     )
 
+    dry_quiet_group = parser.add_mutually_exclusive_group()
+
     # -d|--dry-run
-    parser.add_argument(
+    dry_quiet_group.add_argument(
         '-d',
         '--dry-run',
         help="print the stashes that would be dropped but don't drop them",
         action='store_true'
+    )
+
+    # -q|--quiet
+    dry_quiet_group.add_argument(
+        '-q',
+        '--quiet',
+        help='suppress all non-error output',
+        action='store_true',
+        default=False
     )
 
     abandon.abandon(**vars(parser.parse_args()))

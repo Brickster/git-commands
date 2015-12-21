@@ -32,6 +32,15 @@ parser.add_argument(
     dest='files'
 )
 
+# -q|--quiet
+parser.add_argument(
+    '-q',
+    '--quiet',
+    help='suppress all non-error output',
+    action='store_true',
+    default=False
+)
+
 # check that the remaining args match the format: '-- <files> [<files> ..]
 args = parser.parse_args()
 if args.files and len(args.files) > 1:

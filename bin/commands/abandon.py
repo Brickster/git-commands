@@ -4,10 +4,10 @@ import os
 from subprocess import call, check_output
 
 from utils import directories
-from utils.messages import error
+from utils.messages import error, info
 
 
-def abandon(start, end, dry_run=False):
+def abandon(start, end, dry_run=False, quiet=False):
     """Drop a range of stashes from start (inclusive) to end (exclusive)."""
 
     if not directories.is_git_repository():
@@ -26,10 +26,10 @@ def abandon(start, end, dry_run=False):
         for i in range(start, end):
             stash = 'stash@{{{}}}'.format(i)
             stash_sha = check_output(['git', 'rev-parse', stash]).splitlines()[0]
-            print 'Would drop refs/{} ({})'.format(stash, stash_sha)
+            info('Would drop refs/{} ({})'.format(stash, stash_sha))
     else:
         start_stash = 'stash@{{{}}}'.format(start)
         for i in range(start, end):
             stash_sha = check_output(['git', 'rev-parse', start_stash]).splitlines()[0]
             call(['git', 'stash', 'drop', '--quiet', start_stash])
-            print 'Dropped refs/stash@{{{}}} ({})'.format(i, stash_sha)
+            info('Dropped refs/stash@{{{}}} ({})'.format(i, stash_sha), quiet)
