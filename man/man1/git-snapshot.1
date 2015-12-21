@@ -1,13 +1,13 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-SNAPSHOT" "1" "August 2015" "" ""
+.TH "GIT\-SNAPSHOT" "1" "December 2015" "" ""
 .
 .SH "NAME"
 \fBgit\-snapshot\fR \- create a snapshot of the changes in a dirty working directory
 .
 .SH "SYNOPSIS"
-\fBgit snapshot\fR \fImessage\fR
+\fBgit snapshot\fR [(\fB\-q\fR|\fB\-\-quiet\fR)] \fImessage\fR
 .
 .br
 \fBgit snapshot\fR (\fB\-h\fR|\fB\-\-help\fR)
@@ -34,6 +34,10 @@ $ git stash apply
 .TP
 \fImessage\fR
 The message to use when creating the underlying stash\. If no message is supplied, the default \fBgit\-stash\fR message is used\.
+.
+.TP
+\fB\-q\fR|\fB\-\-quiet\fR
+Suppress all non\-error output\.
 .
 .TP
 \fB\-h\fR|\fB\-\-help\fR

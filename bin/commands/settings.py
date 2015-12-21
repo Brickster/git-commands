@@ -4,8 +4,8 @@ import os
 import re
 from subprocess import call, check_output, PIPE, Popen, STDOUT
 
-from commands.utils import directories
-from commands.utils.messages import error
+from utils import directories
+from utils.messages import error
 
 
 def list(section, config, count, keys, format, file=None):

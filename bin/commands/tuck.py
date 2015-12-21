@@ -5,7 +5,7 @@ from subprocess import call, check_output
 from utils.messages import error, info
 
 
-def tuck(files, message=None):
+def tuck(files, message=None, quiet=False):
     """Stash specific files."""
 
     # resolve the files to be tucked
@@ -42,4 +42,4 @@ def tuck(files, message=None):
     if staged:
         call(reset_command + ['--soft'])
 
-    info('Tucked files: ' + ' '.join(files_to_tuck))
+    info('Tucked files: ' + ' '.join(files_to_tuck), quiet)
