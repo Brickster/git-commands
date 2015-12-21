@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git restash` [<stash>]<br>
+`git restash` [(`-q`|`--quiet`)] [<stash>]<br>
 `git restash` (`-h`|`--help`)<br>
 `git restash` (`-v`|`--version`)
 
@@ -18,6 +18,9 @@ git stash show --patch | git apply --reverse
 
 * <stash>:
 	The stash whose patch should be reverse applied. If not supplied, the latest stash will be used.
+
+* `-q`|`--quiet`:
+	Suppress all non-error output.
 
 * `-h`|`--help`:
 	Print a simple help message.

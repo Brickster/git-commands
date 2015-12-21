@@ -1,13 +1,13 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-TUCK" "1" "November 2015" "" ""
+.TH "GIT\-TUCK" "1" "December 2015" "" ""
 .
 .SH "NAME"
 \fBgit\-tuck\fR \- stash specific files
 .
 .SH "SYNOPSIS"
-\fBgit tuck\fR [(\fB\-m\fR|\fB\-\-message\fR) \fImessage\fR] \-\- \fIfiles\fR
+\fBgit tuck\fR [(\fB\-m\fR|\fB\-\-message\fR) \fImessage\fR] [(\fB\-q\fR|\fB\-\-quiet\fR)] \-\- \fIfiles\fR
 .
 .br
 \fBgit tuck\fR (\fB\-h\fR|\fB\-\-help\fR)
@@ -21,16 +21,20 @@ Used to stash specific files rather than the all\-or\-nothing style of \fBgit st
 .SH "OPTIONS"
 .
 .TP
+\fB\-m\fR|\fB\-\-message\fR \fImessage\fR
+The message to use when stashing the files\.
+.
+.TP
+\fB\-q\fR|\fB\-\-quiet\fR
+Suppress all non\-error output\.
+.
+.TP
 \fB\-h\fR|\fB\-\-help\fR
 Print a simple help message\.
 .
 .TP
 \fB\-v\fR|\fB\-\-version\fR
 Print version\.
-.
-.TP
-\fB\-m\fR|\fB\-\-message\fR \fImessage\fR
-The message to use when stashing the files\.
 .
 .SH "EXAMPLE"
 For repository:

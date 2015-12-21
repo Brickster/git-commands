@@ -23,6 +23,15 @@ def main():
         default='stash@{0}'
     )
 
+    # -q|--quiet
+    parser.add_argument(
+        '-q',
+        '--quiet',
+        help='suppress all non-error output',
+        action='store_true',
+        default=False
+    )
+
     restash.restash(**vars(parser.parse_args()))
 
 if __name__ == '__main__':

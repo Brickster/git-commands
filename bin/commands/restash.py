@@ -6,7 +6,7 @@ import sys
 from subprocess import check_output, PIPE, Popen
 
 from utils import directories
-from utils.messages import error
+from utils.messages import error, info
 
 
 def _is_valid_stash(stash):
@@ -21,7 +21,7 @@ def _is_valid_stash(stash):
         return proc.returncode == 0
 
 
-def restash(stash='stash@{0}'):
+def restash(stash='stash@{0}', quiet=False):
     """Restash a stash reference."""
 
     if not directories.is_git_repository():
@@ -37,6 +37,6 @@ def restash(stash='stash@{0}'):
 
     if not restash_proc.returncode:
         stash_sha = check_output(['git', 'rev-parse', stash]).splitlines()[0]
-        print 'Restashed {} ({})'.format(stash, stash_sha)
+        info('Restashed {} ({})'.format(stash, stash_sha), quiet)
     else:
         sys.exit(1)

@@ -7,7 +7,7 @@ from utils import directories
 from utils.messages import error, info
 
 
-def snapshot(message):
+def snapshot(message, quiet=False):
     """Create a snapshot of the working directory and index."""
 
     if not directories.is_git_repository():
@@ -26,4 +26,4 @@ def snapshot(message):
         with open(os.devnull, 'w') as devnull:
             call(['git', 'stash', 'apply', '--quiet'], stdout=devnull, stderr=STDOUT)
     else:
-        info('No local changes to save. No snapshot created.')
+        info('No local changes to save. No snapshot created.', quiet)
