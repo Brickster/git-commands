@@ -3,8 +3,8 @@
 import sys
 from subprocess import call, check_output
 
-from commands.utils import directories
-from commands.utils.messages import error, info
+from utils import directories
+from utils.messages import error, info
 
 
 def changes(branch, details=None, color_when='auto'):
