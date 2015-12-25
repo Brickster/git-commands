@@ -2,8 +2,7 @@
 
 import os
 import re
-import sys
-from subprocess import check_output, PIPE, Popen
+from subprocess import call, check_output, PIPE, Popen
 
 from utils import directories
 from utils.messages import error, info
@@ -21,6 +20,12 @@ def _is_valid_stash(stash):
         return proc.returncode == 0
 
 
+def _parents(commit):
+    """Returns the parents of a commmit."""
+
+    return check_output(['git', 'rev-list', '--parents', '-1', commit]).strip().split(' ')[1:]
+
+
 def restash(stash='stash@{0}', quiet=False):
     """Restash a stash reference."""
 
@@ -30,13 +35,21 @@ def restash(stash='stash@{0}', quiet=False):
     if not _is_valid_stash(stash):
         error('{} is not a valid stash reference'.format(stash))
 
-    patch = Popen(['git', 'stash', 'show', '--patch', '--no-color', stash], stdout=PIPE)
-    restash_proc = Popen(['git', 'apply', '--reverse'], stdin=patch.stdout)
-    patch.communicate()
-    restash_proc.communicate()
+    # if there are modifications, reverse apply them
+    reverse_patch = check_output(['git', 'stash', 'show', '--patch', '--no-color', stash])
+    if reverse_patch:
+        restash_proc = Popen(['git', 'apply', '--reverse'], stdin=PIPE)
+        restash_proc.communicate(input=reverse_patch)
 
-    if not restash_proc.returncode:
-        stash_sha = check_output(['git', 'rev-parse', stash]).splitlines()[0]
-        info('Restashed {} ({})'.format(stash, stash_sha), quiet)
-    else:
-        sys.exit(1)
+        if restash_proc.returncode:
+            error('unable to reverse modifications', exit=True)
+
+    # check if we need remove any untracked files. For a stash ref, the third parent contains the untracked files
+    parents = _parents(stash)
+    if len(parents) == 3:
+        untracked_files = check_output(['git', 'ls-tree', '--name-only', '{}^3'.format(stash)]).splitlines()
+        if untracked_files:
+            call(['git', 'clean', '--force', '--quiet', '--'] + untracked_files)
+
+    stash_sha = check_output(['git', 'rev-parse', stash]).splitlines()[0]
+    info('Restashed {} ({})'.format(stash, stash_sha), quiet)
