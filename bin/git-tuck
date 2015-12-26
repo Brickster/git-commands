@@ -3,10 +3,10 @@
 import argparse
 import sys
 
-from commands import tuck
+from commands import settings, tuck
 
 # specific usage message needed to include the '--' part
-_USAGE_MESSAGE = 'git tuck [-h] [-v] [-m MESSAGE] [-- <file> [<file> ...]]'
+_USAGE_MESSAGE = 'git tuck [-h] [-v] [-m MESSAGE] [-i|-I] [-- <file> [<file> ...]]'
 
 parser = argparse.ArgumentParser(
     prog='git tuck',
@@ -39,6 +39,23 @@ parser.add_argument(
     help='suppress all non-error output',
     action='store_true',
     default=False
+)
+
+# -i|--ignore-deleted
+ignored_deleted_group = parser.add_mutually_exclusive_group()
+ignored_deleted_group.add_argument(
+    '-i',
+    '--ignore-deleted',
+    help="don't print the error message for deleted files not explicitly included",
+    action='store_true',
+    default=settings.get('git-tuck.ignore-deleted', default=False, as_type=settings.as_bool)
+)
+ignored_deleted_group.add_argument(
+    '-I',
+    '--no-ignore-deleted',
+    help="don't print the error message for deleted files not explicitly included",
+    action='store_false',
+    dest='ignore_deleted'
 )
 
 # check that the remaining args match the format: '-- <files> [<files> ..]

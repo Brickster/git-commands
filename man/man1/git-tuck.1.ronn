@@ -2,7 +2,8 @@
 
 ## SYNOPSIS
 
-`git tuck` [(`-m`|`--message`) <message>] [(`-q`|`--quiet`)] -- <files><br>
+`git tuck` [(`-m`|`--message`) <message>] [(`-q`|`--quiet`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-i`|`--ignore-deleted`)|(`-I`|`--no-ignore-deleted`)] -- <files><br>
 `git tuck` (`-h`|`--help`)<br>
 `git tuck` (`-v`|`--version`)
 
@@ -17,6 +18,16 @@ Used to stash specific files rather than the all-or-nothing style of `git stash`
 
 * `-q`|`--quiet`:
 		Suppress all non-error output.
+
+* `-i`|`--ignore-deleted`:
+    Suppress warnings related to not explicitly including deleted files.
+
+    Pathspec expressions won't match deleted files unless they are explicitly
+    included. If the intention is to tuck them, add absolute references to them.
+    If they aren't supposed to be included, use this flag.
+
+* `-I`|`--no-ignore-deleted`:
+    Show warnings related to not explicitly including deleted files.
 
 * `-h`|`--help`:
 	Print a simple help message.
@@ -35,19 +46,26 @@ A  CONTRIBUTING.md
 M  file1.txt
 MM file2.txt
  M file3.txt
+ M README.md
 ?? CHANGELOG.md
-?? file4.txt
 ```
 
 To stash all non-documentation related changes:
 
 ```bash
-$ git tuck -- *.txt config.yml
-Tucked files: config.yml file4.txt file1.txt file2.txt file3.txt
+$ git tuck -- *.txt config.yml CHANGELOG.md
+Tucked files: config.yml file4.txt file1.txt file2.txt file3.txt CHANGELOG.md
 $ git status --short
 A  CONTRIBUTING.md
  M README.md
 ```
+
+## CONFIGURATION
+
+* `git-tuck.ignore-deleted` <bool>:
+    Whether or not to ignore deleted files by default. Option (`-i`|`--ignore-deleted`) overrides this setting.
+
+    Default: <false>
 
 ## SEE ALSO
 
