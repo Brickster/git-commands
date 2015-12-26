@@ -35,7 +35,7 @@ def tuck(files, message=None, quiet=False, ignore_deleted=False):
     files_to_tuck += check_output(['git', 'ls-files', '--others', '--'] + files).splitlines()
 
     if not files_to_tuck:
-        error("no files to tuck using: " + ' '.join(files))
+        error("no files to tuck using")
 
     # reset the files to be tucked in the event they have changes. Like stash, we won't keep track of staged/unstaged
     # changes
