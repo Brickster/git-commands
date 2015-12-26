@@ -1,12 +1,31 @@
 """Stash specific files."""
 
+import re
+import sys
 from subprocess import call, check_output
 
-from utils.messages import error, info
+from utils.messages import error, info, usage, warn
 
 
-def tuck(files, message=None, quiet=False):
+def _deleted_files():
+    """Get the deleted files in a dirty working tree."""
+
+    all_files = check_output(['git', 'status', '--short', '--porcelain'])
+    return [match.group(1) for match in re.finditer('^(?:D\s|\sD)\s(.*)', all_files, re.MULTILINE)]
+
+
+def tuck(files, message=None, quiet=False, ignore_deleted=False):
     """Stash specific files."""
+
+    if not ignore_deleted:
+        deleted_files = _deleted_files()
+        not_explicitly_deleted_files = [f for f in deleted_files if f not in files]
+        if not_explicitly_deleted_files:
+            warn('deleted files exist in working tree')
+            warn('deleted files are not considered by pathspec and must be added explicitly or ignored')
+            usage('git tuck -- <pathspec> {}'.format(' '.join(not_explicitly_deleted_files)))
+            usage('git tuck --ignore-deleted -- <pathspac>')
+            sys.exit(1)
 
     # resolve the files to be tucked
     files_to_tuck = check_output(['git', 'diff', '--name-only', '--cached', '--'] + files).splitlines()

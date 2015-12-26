@@ -7,7 +7,10 @@
 \fBgit\-tuck\fR \- stash specific files
 .
 .SH "SYNOPSIS"
-\fBgit tuck\fR [(\fB\-m\fR|\fB\-\-message\fR) \fImessage\fR] [(\fB\-q\fR|\fB\-\-quiet\fR)] \-\- \fIfiles\fR
+\fBgit tuck\fR [(\fB\-m\fR|\fB\-\-message\fR) \fImessage\fR] [(\fB\-q\fR|\fB\-\-quiet\fR)]
+.
+.br
+\~\~\~\~\~\~\~\~\~[(\fB\-i\fR|\fB\-\-ignore\-deleted\fR)|(\fB\-I\fR|\fB\-\-no\-ignore\-deleted\fR)] \-\- \fIfiles\fR
 .
 .br
 \fBgit tuck\fR (\fB\-h\fR|\fB\-\-help\fR)
@@ -27,6 +30,17 @@ The message to use when stashing the files\.
 .TP
 \fB\-q\fR|\fB\-\-quiet\fR
 Suppress all non\-error output\.
+.
+.TP
+\fB\-i\fR|\fB\-\-ignore\-deleted\fR
+Suppress warnings related to not explicitly including deleted files\.
+.
+.IP
+Pathspec expressions won\'t match deleted files unless they are explicitly included\. If the intention is to tuck them, add absolute references to them\. If they aren\'t supposed to be included, use this flag\.
+.
+.TP
+\fB\-I\fR|\fB\-\-no\-ignore\-deleted\fR
+Show warnings related to not explicitly including deleted files\.
 .
 .TP
 \fB\-h\fR|\fB\-\-help\fR
@@ -49,8 +63,8 @@ A  CONTRIBUTING\.md
 M  file1\.txt
 MM file2\.txt
  M file3\.txt
+ M README\.md
 ?? CHANGELOG\.md
-?? file4\.txt
 .
 .fi
 .
@@ -63,8 +77,8 @@ To stash all non\-documentation related changes:
 .
 .nf
 
-$ git tuck \-\- *\.txt config\.yml
-Tucked files: config\.yml file4\.txt file1\.txt file2\.txt file3\.txt
+$ git tuck \-\- *\.txt config\.yml CHANGELOG\.md
+Tucked files: config\.yml file4\.txt file1\.txt file2\.txt file3\.txt CHANGELOG\.md
 $ git status \-\-short
 A  CONTRIBUTING\.md
  M README\.md
@@ -72,6 +86,15 @@ A  CONTRIBUTING\.md
 .fi
 .
 .IP "" 0
+.
+.SH "CONFIGURATION"
+.
+.TP
+\fBgit\-tuck\.ignore\-deleted\fR \fIbool\fR
+Whether or not to ignore deleted files by default\. Option (\fB\-i\fR|\fB\-\-ignore\-deleted\fR) overrides this setting\.
+.
+.IP
+Default: \fIfalse\fR
 .
 .SH "SEE ALSO"
 git\-stash(1)
