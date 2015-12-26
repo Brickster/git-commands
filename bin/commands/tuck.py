@@ -9,7 +9,12 @@ def tuck(files, message=None, quiet=False):
     """Stash specific files."""
 
     # resolve the files to be tucked
-    files_to_tuck = check_output(['git', 'ls-files', '--others', '--cached', '--'] + files).splitlines()
+    files_to_tuck = check_output(['git', 'diff', '--name-only', '--cached', '--'] + files).splitlines()
+    files_to_tuck += check_output(['git', 'diff', '--name-only', '--'] + files).splitlines()
+
+    # resolve new files to be tucked
+    files_to_tuck += check_output(['git', 'ls-files', '--others', '--'] + files).splitlines()
+
     if not files_to_tuck:
         error("no files to tuck using: " + ' '.join(files))
 
