@@ -14,6 +14,16 @@ def error(message, exit=True):
         sys.exit(1)
 
 
+def warn(message):
+    """Print a simple warning message."""
+    info('warn: {}'.format(message), False)
+
+
+def usage(message):
+    """Print a simple usage message."""
+    info('usage: {}'.format(message), False)
+
+
 def info(message, quiet=False):
     """Print a simple info message."""
 
