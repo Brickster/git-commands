@@ -5,8 +5,12 @@
 #
 
 import argparse
+import sys
 
 from commands import snapshot
+
+# specific usage message needed to include the '--' part
+_USAGE_MESSAGE = 'git snapshot [-h] [-v] [-q] [-m <message>] [-- <file> [<file> ...]]'
 
 
 def main():
@@ -14,17 +18,18 @@ def main():
     parser = argparse.ArgumentParser(
         prog='git snapshot',
         version='git-snapshot 0.4.0',
+        usage=_USAGE_MESSAGE,
         description=snapshot.__doc__,
         epilog='for more detail, use: git help snapshot'
     )
 
-    # <message>
+    # -m|-message <message>
     parser.add_argument(
-        'message',
+        '-m',
+        '--message',
         help='the message to use when creating the underlying stash',
         metavar='<message>',
-        default=None,
-        nargs='?'
+        default=None
     )
 
     # -q|--quiet
@@ -36,7 +41,25 @@ def main():
         default=False
     )
 
-    snapshot.snapshot(**vars(parser.parse_args()))
+    # -- <files> ..
+    parser.add_argument(
+        help='files to create a snapshot of',
+        nargs=argparse.REMAINDER,
+        metavar='<files>',
+        dest='files'
+    )
+
+    # check that the remaining args match the format: '-- <files> [<files> ..]
+    args = parser.parse_args()
+    if args.files and len(args.files) > 1:
+        if args.files[0] != '--':
+            sys.exit('usage: {}\ngit snapshot: error: unrecognized arguments: {}'.format(
+                _USAGE_MESSAGE,
+                ' '.join(args.files)
+            ))
+        args.files = args.files[1:]
+
+    snapshot.snapshot(**vars(args))
 
 if __name__ == '__main__':
     main()
