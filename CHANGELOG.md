@@ -7,8 +7,7 @@ All notable changes to this project will be documented in this file. This projec
 - `-b|--branch` option to `upstream`
 - `git-tuck` for stashing specific files
 - `git-state.status.show-clean-message` configuration toggling a message in the status section when the working directory is clean
-- `-q|--quiet` option to `abandon`, `restash`, `snapshot`, and `tuck` [#30](https://github.com/Brickstertwo/git-commands/issues/30)
-- `-i|--ignored-deleted` and `-I|--no-ignored-deleted` to `tuck`
+- `-q|--quiet` option to `abandon`, `restash`, and `snapshot` [#30](https://github.com/Brickstertwo/git-commands/issues/30)
 
 ### Fixed
 - State not working on repositories without any commits
@@ -16,8 +15,6 @@ All notable changes to this project will be documented in this file. This projec
 - `git-state` not working for new repositories
 - Colored output not working on Windows machines [#28](https://github.com/Brickstertwo/git-commands/issues/28)
 - Restash not removing untracked files [#25](https://github.com/Brickstertwo/git-commands/issues/25)
-- Tuck printing unrelated files in success message [#32](https://github.com/Brickstertwo/git-commands/issues/32)
-- Tuck referencing an intermediate commit when no message is specified [#34](https://github.com/Brickstertwo/git-commands/issues/34)
 
 ### Removed
 - git-fixup
