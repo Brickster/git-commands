@@ -50,7 +50,7 @@ git state (-v|--version)
 Used to record the current state of the working directory without reverting it.
 
 ```bash
-git snapshot <message>
+git snapshot [(-q|--quiet)] <message>
 git snapshot (-h|--help)
 git snapshot (-v|--version)
 ```
@@ -96,7 +96,7 @@ git upstream (-v|--version)
 Used to drop a count or range of stashes.
 
 ```bash
-git abandon [(-d|--dry-run)] [<start>] <end>
+git abandon [(-d|--dry-run)] [(-q|--quiet)] [<start>] <end>
 git abandon (-h|--help)
 git abandon (-v|--version)
 ```
@@ -106,7 +106,7 @@ git abandon (-v|--version)
 Used to restash changes.
 
 ```bash
-git restash [<stash>]
+git restash [(-q|--quiet)] [<stash>]
 git restash (-h|--help)
 git restash (-v|--version)
 ```
@@ -116,7 +116,8 @@ git restash (-v|--version)
 Used to stash specific files rather than the all-or-nothing style of `git stash`.
 
 ```bash
-git tuck [(-m|--message) <message>] -- <files>
+git tuck [(-m|--message) <message>] [(-i|--ignore-deleted)|(-I|--no-ignore-deleted)]
+         [(-q|--quiet)] -- <files>
 git tuck (-h|--help)
 git tuck (-v|--version)
 ```
