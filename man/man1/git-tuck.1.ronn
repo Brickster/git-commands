@@ -3,7 +3,8 @@
 ## SYNOPSIS
 
 `git tuck` [(`-m`|`--message`) <message>] [(`-q`|`--quiet`)]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-i`|`--ignore-deleted`)|(`-I`|`--no-ignore-deleted`)] -- <files><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-i`|`--ignore-deleted`)|(`-I`|`--no-ignore-deleted`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- <file> [<file> ...]<br>
 `git tuck` (`-h`|`--help`)<br>
 `git tuck` (`-v`|`--version`)
 

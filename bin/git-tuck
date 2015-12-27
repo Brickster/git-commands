@@ -6,7 +6,7 @@ import sys
 from commands import settings, tuck
 
 # specific usage message needed to include the '--' part
-_USAGE_MESSAGE = 'git tuck [-h] [-v] [-m MESSAGE] [-i|-I] [-q] [-- <file> [<file> ...]]'
+_USAGE_MESSAGE = 'git tuck [-h] [-v] [-m MESSAGE] [-i|-I] [-q] -- <file> [<file> ...]'
 
 parser = argparse.ArgumentParser(
     prog='git tuck',
