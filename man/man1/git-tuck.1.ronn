@@ -36,6 +36,12 @@ Used to stash specific files rather than the all-or-nothing style of `git stash`
 * `-v`|`--version`:
 	Print version.
 
+* `--`:
+    Do not interpret any more arguments as options.
+
+* `<file>` ...:
+    Files to be tucked. The files can be absolute or specified using pathspecs.
+
 ## EXAMPLE
 
 For repository:
@@ -70,4 +76,4 @@ A  CONTRIBUTING.md
 
 ## SEE ALSO
 
-git-stash(1)
+git-stash(1), gitglossary(7)
