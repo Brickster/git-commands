@@ -54,10 +54,10 @@ def tuck(files, message=None, quiet=False, ignore_deleted=False):
         call(['git', 'commit', '--message', 'TUCK: unstaged', '--quiet'])
 
     # stash files to be tucked
-    stash_command = ['git', 'stash', 'save', '--include-untracked', '--quiet']
+    stash_command = ['git', 'stash', 'save', '--include-untracked']
     if message:
         stash_command += [message]
-        check_output(stash_command)
+        result_message = check_output(stash_command)
     else:
         # the default stash message includes the HEAD commit and won't look right if the intermediate commit is used
         current_branch = check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).strip()
@@ -65,14 +65,14 @@ def tuck(files, message=None, quiet=False, ignore_deleted=False):
         call(['git', 'branch', '--move', temp_branch])
         checkout_command = ['git', 'checkout', '--quiet', '-b', current_branch]
         if unstaged and staged:
-            checkout_command += ['HEAD^^']
+            call(checkout_command + ['HEAD^^'])
+        elif unstaged or staged:
+            call(checkout_command + ['HEAD^'])
         else:
-            checkout_command += ['HEAD^']
-        call(checkout_command)
-        call(stash_command)
+            call(checkout_command)  # TODO: this isn't necessary and should be refactored
+        result_message = check_output(stash_command)
         call(['git', 'checkout', '--quiet', '-B', current_branch, temp_branch])
         call(['git', 'branch', '--quiet', '-D', temp_branch])
-
 
     # reset all original files
     reset_command = ['git', 'reset', '--quiet', 'HEAD^']
@@ -81,4 +81,4 @@ def tuck(files, message=None, quiet=False, ignore_deleted=False):
     if staged:
         call(reset_command + ['--soft'])
 
-    info('Tucked files: ' + ' '.join(files_to_tuck), quiet)
+    info(result_message.strip(), quiet)
