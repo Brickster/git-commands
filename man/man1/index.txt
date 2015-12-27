@@ -8,6 +8,7 @@ git-config(1)   http://git-scm.com/docs/git-config
 git-status(1)   http://git-scm.com/docs/git-status
 git-reflog(1)   http://git-scm.com/docs/git-reflog
 git-branch(1)   http://git-scm.com/docs/git-branch
+gitglossary(7)  http://git-scm.com/docs/gitglossary.html
 
 # HTML man pages
 git-state(1)    http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-state.1.html
