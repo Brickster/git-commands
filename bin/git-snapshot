@@ -18,13 +18,13 @@ def main():
         epilog='for more detail, use: git help snapshot'
     )
 
-    # <message>
+    # -m|-message <message>
     parser.add_argument(
-        'message',
+        '-m',
+        '--message',
         help='the message to use when creating the underlying stash',
         metavar='<message>',
-        default=None,
-        nargs='?'
+        default=None
     )
 
     # -q|--quiet
