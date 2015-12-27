@@ -117,7 +117,7 @@ Used to stash specific files rather than the all-or-nothing style of `git stash`
 
 ```bash
 git tuck [(-m|--message) <message>] [(-i|--ignore-deleted)|(-I|--no-ignore-deleted)]
-         [(-q|--quiet)] -- <files>
+         [(-q|--quiet)] -- <file> [<file> ...]
 git tuck (-h|--help)
 git tuck (-v|--version)
 ```
