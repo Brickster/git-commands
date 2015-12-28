@@ -7,6 +7,7 @@
 `git settings list` [<file-option>] [(`-p`|`--pretty`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-f`|`--format`) <format>] [(`-c`|`--count`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-k`|`--keys`)] [<section>]<br>
+`git settings cleanup` <file><br>
 `git settings` (`-h`|`--help`)<br>
 `git settings` (`-v`|`--version`)
 
@@ -51,6 +52,12 @@
 
     * `-k`|`--keys`:
         List only the keys for the section.
+
+* `cleanup` :
+    Clean a config file of empty or duplicate sections.
+
+    * <file>:
+        A config file to clean.
 
 * `-h`|`--help`:
     Print a simple help message.
