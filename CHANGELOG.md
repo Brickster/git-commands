@@ -15,9 +15,8 @@ All notable changes to this project will be documented in this file. This projec
 - Snapshot messages now must be specified using `-m|--message <message>`
 
 ### Fixed
-- State not working on repositories without any commits
+- State not working with new repositories
 - Printing ANCI codes in status when using `--no-color` [#27](https://github.com/Brickstertwo/git-commands/issues/27)
-- `git-state` not working for new repositories
 - Colored output not working on Windows machines [#28](https://github.com/Brickstertwo/git-commands/issues/28)
 - Restash not removing untracked files [#25](https://github.com/Brickstertwo/git-commands/issues/25)
 
