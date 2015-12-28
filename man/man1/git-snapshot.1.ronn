@@ -30,10 +30,10 @@ $ git stash apply
 * `-v`|`--version`:
 	Print version.
 
-* `--`:
+* --:
     Do not interpret any more arguments as options.
 
-* `<file>` ...:
+* <file> ...:
     Files to be tucked. The files can be absolute or specified using pathspecs.
 
 ## SEE ALSO
