@@ -76,6 +76,7 @@ git settings destroy [(-d|--dry-run)] <section>
 git settings list [<file-option>] [(-p|--pretty)]
                   [(-f|--format) <format>] [(-c|--count)]
                   [(-k|--keys)] [<section>]
+git settings cleanup <file>
 git settings (-h|--help)
 git settings (-v|--version)
 ```

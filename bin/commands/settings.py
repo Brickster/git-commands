@@ -133,6 +133,33 @@ def get(key, default=None, config=None, file=None, as_type=str):
     return value
 
 
+def cleanup(file_path=None):
+    """Removes empty and merges duplicate sections from a config file."""
+
+    if not os.path.isfile(file_path):
+        error('no such file: {0!r}'.format(file_path), exit=True)
+
+    # TODO: check that the file is a valid config file
+
+    with open(file_path, 'r') as config_file:
+        old_config = config_file.read()
+
+    config = {}
+    key = None
+    for line in old_config.splitlines():
+        if line.startswith('['):
+            key = line
+            if key not in config:
+                config[key] = []
+        else:
+            config[key] += [line + os.linesep]
+
+    with open(file_path, 'w') as config_file:
+        for key, values in config.iteritems():
+            config_file.write(key + os.linesep)
+            config_file.writelines(values)
+
+
 def as_bool(value):
     """Returns whether the input is a string representation of a boolean."""
 
