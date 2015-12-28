@@ -126,6 +126,18 @@ def main():
     )
     destroy_parser.set_defaults(func=settings.destroy)
 
+    cleanup_parser = subparsers.add_parser(
+        'cleanup',
+        help='clean a config file',
+        description='clean a config file by removing empty sections and merging duplicates'
+    )
+    cleanup_parser.add_argument(
+        'file_path',
+        help='the path to the config file to clean',
+        metavar='<file>'
+    )
+    cleanup_parser.set_defaults(func=settings.cleanup)
+
     args = vars(parser.parse_args())
     func = args.pop('func')
     func(**args)
