@@ -162,8 +162,9 @@ def cleanup(file_path=None):
 
     with open(file_path, 'w') as config_file:
         for key, values in config.iteritems():
-            config_file.write(key + os.linesep)
-            config_file.writelines(values)
+            if values:
+                config_file.write(key + os.linesep)
+                config_file.writelines(values)
 
 
 def as_bool(value):
