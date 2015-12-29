@@ -32,7 +32,7 @@ def list(section, config, count, keys, format, file=None):
 
     config_map = {}
     for config in all_configs:
-        key, value = config.split('=')
+        key, value = config.split('=', 1)
         config_map[key] = value
 
     if count:
