@@ -1,3 +1,4 @@
+import os
 from ast import literal_eval
 from subprocess import call, check_output, Popen, PIPE
 
@@ -68,6 +69,6 @@ def get(**kwargs):
     _reset_color_status(original_color_status)
 
     if not status_output and show_clean_message:
-        status_output = 'nothing to commit, working directory is clean\n'
+        status_output = 'nothing to commit, working directory is clean' + os.linesep
 
     return status_output

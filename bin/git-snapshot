@@ -5,6 +5,7 @@
 #
 
 import argparse
+import os
 import sys
 
 from commands import snapshot
@@ -53,8 +54,9 @@ def main():
     args = parser.parse_args()
     if args.files and len(args.files) > 1:
         if args.files[0] != '--':
-            sys.exit('usage: {}\ngit snapshot: error: unrecognized arguments: {}'.format(
+            sys.exit('usage: {}{}git snapshot: error: unrecognized arguments: {}'.format(
                 _USAGE_MESSAGE,
+                os.linesep,
                 ' '.join(args.files)
             ))
         args.files = args.files[1:]

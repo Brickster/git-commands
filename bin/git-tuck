@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import argparse
+import os
 import sys
 
 from commands import settings, tuck
@@ -62,7 +63,11 @@ ignored_deleted_group.add_argument(
 args = parser.parse_args()
 if args.files and len(args.files) > 1:
     if args.files[0] != '--':
-        sys.exit('usage: {}\ngit tuck: error: unrecognized arguments: {}'.format(_USAGE_MESSAGE, ' '.join(args.files)))
+        sys.exit('usage: {}{}git tuck: error: unrecognized arguments: {}'.format(
+            _USAGE_MESSAGE,
+            os.linesep,
+            ' '.join(args.files))
+        )
     args.files = args.files[1:]
 else:
     sys.exit('git tuck: error: at least one file must be included to stash')
