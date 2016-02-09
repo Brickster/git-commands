@@ -66,7 +66,7 @@ def list(section, config, count, keys, format, file=None):
     else:
         for key, value in config_map.iteritems():
             result += ['{}={}'.format(key, value)]
-    return '\n'.join(result)
+    return os.linesep.join(result)
 
 
 def _list(**kwargs):

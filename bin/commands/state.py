@@ -22,20 +22,20 @@ def _print_section(title, accent=None, text=None, format='compact', show_empty=F
         return ""
 
     if accent:
-        section = '# {}{} {}{}'.format(colorama.Fore.GREEN, title, accent, colorama.Fore.RESET) + '\n'
+        section = '# {}{} {}{}'.format(colorama.Fore.GREEN, title, accent, colorama.Fore.RESET) + os.linesep
     else:
-        section = '# {}{}{}'.format(colorama.Fore.GREEN, title, colorama.Fore.RESET) + '\n'
+        section = '# {}{}{}'.format(colorama.Fore.GREEN, title, colorama.Fore.RESET) + os.linesep
 
     if format == 'pretty' and text is not None and len(text) > 0:
         # pretty print
-        section += '\n'
+        section += os.linesep
         text = text.splitlines()
         for line in text:
-            section += '    ' + line + '\n'
-        section += '\n'
+            section += '    ' + line + os.linesep
+        section += os.linesep
     elif format == 'pretty':
         # there's no text but we still want some nicer formatting
-        section += '\n'
+        section += os.linesep
     elif format == 'compact':
         section += text
     else:
