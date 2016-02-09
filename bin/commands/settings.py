@@ -121,7 +121,7 @@ def get(key, default=None, config=None, file=None, as_type=str):
 
     if config is None:
         command = ('git', 'config', key)
-    elif config is not None:
+    elif file is not None:
         command = ('git', 'config', '--file', file, key)
     else:
         command = ('git', 'config', '--{}'.format(config), key)
