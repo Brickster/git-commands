@@ -127,10 +127,16 @@ def get(key, default=None, config=None, file=None, as_type=str):
         command = ('git', 'config', '--{}'.format(config), key)
 
     p = Popen(command, stdout=PIPE, stderr=STDOUT)
-    value = p.communicate()[0]
+    value = p.communicate()[0].strip()
 
-    value = default if len(value) == 0 else as_type(value.splitlines()[0])
-    return value
+    if not value:
+        return default
+    else:
+        try:
+            return as_type(value)
+        except ValueError:
+            error('Cannot parse value {0!r} for key {1!r} using format {2!r}'.format(value, key, as_type.__name__))
+            # error('{0!r} cannot be parsed as a {1}'.format(value, as_type.__name__))
 
 
 def cleanup(file_path=None):
@@ -164,14 +170,14 @@ def as_bool(value):
     """Returns whether the input is a string representation of a boolean."""
 
     if not isinstance(value, str):
-        raise Exception('{0!r} is not a string, use bool() instead'.format(value))
+        raise ValueError('{0!r} is not a string, use bool() instead'.format(value))
 
     if value.lower() in ('true', 't', 'yes', 'y'):
         return True
     elif value.lower() in ('false', 'f', 'no', 'n'):
         return False
     else:
-        raise Exception('{0!r} is not a boolean representation'.format(value))
+        raise ValueError('{0!r} is not a boolean representation'.format(value))
 
 
 def as_delimited_list(delimiter):
@@ -182,4 +188,5 @@ def as_delimited_list(delimiter):
 
 def _get(**kwargs):
     value = get(**kwargs)
-    if value is not None: print value
+    if value is not None:
+        print value
