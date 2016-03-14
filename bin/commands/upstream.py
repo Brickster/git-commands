@@ -2,7 +2,7 @@
 
 from subprocess import check_output, PIPE, Popen
 
-from utils import directories
+from utils import directories, git
 from utils.messages import error
 
 _MERGE_CONFIG = 'git config --local branch.{}.merge'
@@ -17,6 +17,8 @@ def upstream(branch=None, include_remote=False):
 
     if not branch:
         branch = check_output('git rev-parse --abbrev-ref HEAD'.split()).strip()
+    elif not git.is_valid_branch(branch):
+        error('{0!r} is not a valid branch'.format(branch))
 
     # get remote branch name
     proc = Popen(_MERGE_CONFIG.format(branch).split(), stdout=PIPE)
