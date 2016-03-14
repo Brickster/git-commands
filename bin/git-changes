@@ -31,7 +31,7 @@ def main():
         '--remote',
         help='show the commits between the local and remote head',
         action='store_const',
-        const=upstream.upstream(True),
+        const=upstream.upstream(include_remote=True),
         dest='branch'
     )
 
