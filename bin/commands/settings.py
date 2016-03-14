@@ -8,11 +8,17 @@ from utils import directories
 from utils.messages import error
 
 
+def _validate_config(config=None):
+    """Validates that the directory and file specified are compatible."""
+
+    if config == 'local' and not directories.is_git_repository():
+        error('{0!r} is not a git repository so {1!r} does not apply'.format(os.getcwd(), 'local'))
+
+
 def list(section, config, count, keys, format, file=None):
     """List configuration settings respecting override precedence."""
 
-    if not directories.is_git_repository():
-        error('{0!r} not a git repository'.format(os.getcwd()))
+    _validate_config(config)
 
     result = []
     if config is None:
@@ -32,7 +38,7 @@ def list(section, config, count, keys, format, file=None):
 
     config_map = {}
     for config in all_configs:
-        key, value = config.split('=')
+        key, value = config.split('=', 1)
         config_map[key] = value
 
     if count:
@@ -88,16 +94,17 @@ def _dry_destroy_section(config, section):
 def destroy(section, dry_run):
     """Destroy a section from the local, global, and system config files."""
 
-    if not directories.is_git_repository():
-        error('{0!r} not a git repository'.format(os.getcwd()))
+    has_local = directories.is_git_repository()
 
     if dry_run:
-        _dry_destroy_section('local', section)
+        if has_local:
+            _dry_destroy_section('local', section)
         _dry_destroy_section('global', section)
         _dry_destroy_section('system', section)
     else:
         with open(os.devnull, 'w') as devnull:
-            call(('git', 'config', '--local', '--remove-section', section), stdout=devnull, stderr=STDOUT)
+            if has_local:
+                call(('git', 'config', '--local', '--remove-section', section), stdout=devnull, stderr=STDOUT)
             call(('git', 'config', '--global', '--remove-section', section), stdout=devnull, stderr=STDOUT)
             call(('git', 'config', '--system', '--remove-section', section), stdout=devnull, stderr=STDOUT)
 
@@ -113,8 +120,7 @@ def get(key, default=None, config=None, file=None, as_type=str):
         - as_type: a callable, built-in type, or class object used to convert the result
     """
 
-    if not directories.is_git_repository():
-        error('{0!r} not a git repository'.format(os.getcwd()))
+    _validate_config(config)
 
     if not hasattr(as_type, '__call__') and not hasattr(as_type, '__bases__'):
         raise Exception('{} is not callable'.format(as_type))
@@ -162,8 +168,9 @@ def cleanup(file_path=None):
 
     with open(file_path, 'w') as config_file:
         for key, values in config.iteritems():
-            config_file.write(key + os.linesep)
-            config_file.writelines(values)
+            if values:
+                config_file.write(key + os.linesep)
+                config_file.writelines(values)
 
 
 def as_bool(value):
