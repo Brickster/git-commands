@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-CHANGES" "1" "August 2015" "" ""
+.TH "GIT\-CHANGES" "1" "March 2016" "" ""
 .
 .SH "NAME"
 \fBgit\-changes\fR \- lists the commits between this branch and another
@@ -24,8 +24,12 @@
 .SH "OPTIONS"
 .
 .TP
+\fBview\fR
+View changes between branches\. This is the default when no subcommand is specified\.
+.
+.TP
 \fB\-b\fR|\fB\-\-branch\fR \fIbranch\fR
-Show the commits between HEAD and \fIbranch\fR\. When not specified, master is used\.
+Show the commits between HEAD and \fIbranch\fR\. When not specified, the branch\'s association is used\. If no association exists, master is used\.
 .
 .TP
 \fB\-c\fR|\fB\-\-count\fR
@@ -46,6 +50,24 @@ Show colored output\. \fIwhen\fR must be one of \fBalways\fR, \fBnever\fR, or \f
 .TP
 \fB\-\-no\-color\fR
 Never color output\. Same as \fB\-\-color=never\fR\.
+
+.
+.TP
+\fBassociate\fR
+View/update the current association\.
+.
+.TP
+\fINone\fR
+Print the current association\.
+.
+.TP
+\fB\-b\fR|\fB\-\-branch\fR \fIbranch\fR
+Associate the current branch with another\. Once associated, \fB\-b\fR|\fB\-\-branch\fR can be omitted when using \fBview\fR and the association will be used\.
+
+.
+.TP
+\fBunassociate\fR
+Remove the current association\.
 .
 .TP
 \fB\-h\fR|\fB\-\-help\fR
@@ -62,7 +84,14 @@ Print version\.
 The default branch to use when finding changes\. Option (\fB\-b\fR|\fB\-\-branch\fR) \fIbranch\fR overrides this setting\.
 .
 .IP
-Default: master
+Default: \fImaster\fR
+.
+.TP
+\fBgit\-changes\.associations\.*\fR \fIstring\fR
+Defines an association between the branch in the key and the value\. Under normal circumstances, these entries are created/removed automatically\.
+.
+.IP
+Default: \fImaster\fR
 .
 .SH "SEE ALSO"
 git\-diff(1), git\-log(1)
