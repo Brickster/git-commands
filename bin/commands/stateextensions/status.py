@@ -1,4 +1,5 @@
 import os
+import re
 from ast import literal_eval
 from subprocess import call, check_output, Popen, PIPE
 
@@ -37,14 +38,16 @@ def accent(**kwargs):
     show_color = kwargs.get('show_color', 'always')
 
     if new_repository:
-        title = '{no_color}({green}master{no_color})'.format(no_color=Fore.RESET, green=Fore.GREEN)
+        status_title = '{no_color}({green}master{no_color})'.format(no_color=Fore.RESET, green=Fore.GREEN)
     else:
         original_color_status = _set_color_status(show_color)
-        title = check_output('git status --branch --short'.split()).splitlines()[0].lstrip('# ')
-        title = '{}({})'.format(Fore.RESET, title)
+        status_title_pattern = re.compile('.*##.*? (.*)')
+        status_title = check_output('git status --branch --short'.split()).splitlines()[0]
+        status_title = status_title_pattern.match(status_title).group(1)
+        status_title = '{}({})'.format(Fore.RESET, status_title)
         _reset_color_status(original_color_status)
 
-    return title
+    return status_title
 
 
 def title():
