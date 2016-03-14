@@ -13,7 +13,7 @@ def changes(branch, details=None, color_when='auto'):
 
     if not directories.is_git_repository():
         error('{0!r} not a git repository'.format(os.getcwd()))
-    elif not git.is_valid_branch(branch):
+    elif not git.is_valid_reference(branch):
         error('{0!r} is not a valid branch'.format(branch))
 
     color_when = color_when.lower()

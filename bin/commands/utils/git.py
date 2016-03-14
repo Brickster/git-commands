@@ -3,14 +3,13 @@
 from subprocess import Popen
 
 
-def is_valid_branch(branch):
-    """Determines if a branch is valid.
+def is_valid_reference(reference):
+    """Determines if a reference is valid.
 
-    :param str branch: name of the branch to validate
+    :param str reference: name of the reference to validate
 
-    :return bool: whether or not the branch is valid"""
+    :return bool: whether or not the reference is valid"""
 
-    show_ref_proc = Popen(['git', 'show-ref',  '--verify', '--quiet', 'refs/heads/' + branch])
+    show_ref_proc = Popen(['git', 'show-ref', '--quiet', reference])
     show_ref_proc.communicate()
     return not show_ref_proc.returncode
-
