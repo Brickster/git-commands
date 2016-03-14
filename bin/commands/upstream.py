@@ -17,7 +17,7 @@ def upstream(branch=None, include_remote=False):
 
     if not branch:
         branch = check_output('git rev-parse --abbrev-ref HEAD'.split()).strip()
-    elif not git.is_valid_branch(branch):
+    elif not git.is_valid_reference(branch):
         error('{0!r} is not a valid branch'.format(branch))
 
     # get remote branch name
