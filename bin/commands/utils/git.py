@@ -1,6 +1,6 @@
 """A collection of common git actions."""
 
-from subprocess import Popen
+from subprocess import check_output, Popen
 
 
 def is_valid_reference(reference):
@@ -13,3 +13,11 @@ def is_valid_reference(reference):
     show_ref_proc = Popen(['git', 'show-ref', '--quiet', reference])
     show_ref_proc.communicate()
     return not show_ref_proc.returncode
+
+
+def current_branch():
+    """Returns the current branch.
+
+    :return str or unicode: the name of the current branch"""
+
+    return check_output(('git', 'rev-parse', '--abbrev-ref', 'HEAD')).strip()

@@ -13,23 +13,38 @@
 
 ## OPTIONS
 
-* `-b`|`--branch` <branch>:
-    Show the commits between HEAD and <branch>. When not specified, master is used.
+* `view`:
+    View changes between branches. This is the default when no subcommand is specified.
 
-* `-c`|`--count`:
-	Show as a count of changes.
+    * `-b`|`--branch` <branch>:
+        Show the commits between HEAD and <branch>. When not specified, the branch's association is used. If no association exists, master is used.
 
-* `-s`|`--stat`:
-    Show as a diffstat.
+    * `-c`|`--count`:
+        Show as a count of changes.
 
-* `-d`|`--diff`:
-    Show as a full diff.
+    * `-s`|`--stat`:
+        Show as a diffstat.
 
-* `--color` [<when>]:
-    Show colored output. <when> must be one of `always`, `never`, or `auto`. Not including <when> is equivalent to `--color=always`.
+    * `-d`|`--diff`:
+        Show as a full diff.
 
-* `--no-color`:
-    Never color output. Same as `--color=never`.
+    * `--color` [<when>]:
+        Show colored output. <when> must be one of `always`, `never`, or `auto`. Not including <when> is equivalent to `--color=always`.
+
+    * `--no-color`:
+        Never color output. Same as `--color=never`.
+
+* `associate`:
+    View/update the current association.
+
+    * _None_:
+        Print the current association.
+
+    * `-b`|`--branch` <branch>:
+        Associate the current branch with another. Once associated, `-b`|`--branch` can be omitted when using `view` and the association will be used.
+
+* `unassociate`:
+    Remove the current association.
 
 * `-h`|`--help`:
     Print a simple help message.
@@ -42,7 +57,12 @@
 * `git-changes.default-branch` <string>:
     The default branch to use when finding changes. Option (`-b`|`--branch`) <branch> overrides this setting.
 
-    Default: master
+    Default: <master>
+
+* `git-changes.associations.*` <string>:
+    Defines an association between the branch in the key and the value. Under normal circumstances, these entries are created/removed automatically.
+
+    Default: <master>
 
 ## SEE ALSO
 

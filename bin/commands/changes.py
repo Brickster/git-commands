@@ -4,8 +4,41 @@ import os
 import sys
 from subprocess import call, check_output
 
+from . import settings
 from utils import directories, git
 from utils.messages import error, info
+
+
+def associate(branch):
+    """Associate branches."""
+
+    if not directories.is_git_repository():
+        error('{0!r} not a git repository'.format(os.getcwd()))
+
+    current_branch = git.current_branch()
+    call(['git', 'config', '--local', 'git-changes.associations.' + current_branch, branch])
+    info('{} has been associated with {}'.format(current_branch, branch))
+
+
+def unassociate(branch=git.current_branch()):
+    """Unassociate a branch."""
+
+    if not directories.is_git_repository():
+        error('{0!r} not a git repository'.format(os.getcwd()))
+
+    call(['git', 'config', '--local', '--unset', 'git-changes.associations.' + branch])
+
+
+def get_association(branch=git.current_branch()):
+    """Return the associated branch.
+
+    :param str or unicode branch: the branch whose association should be returned
+    :return str or unicode: the associated branch or None
+    """
+
+    if not directories.is_git_repository():
+        error('{0!r} not a git repository'.format(os.getcwd()))
+    return settings.get('git-changes.associations.' + branch, config='local')
 
 
 def changes(branch, details=None, color_when='auto'):

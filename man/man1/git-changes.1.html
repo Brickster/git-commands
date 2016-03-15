@@ -86,12 +86,25 @@
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
-<dt><code>-b</code>|<code>--branch</code> <var>branch</var></dt><dd><p>  Show the commits between HEAD and <var>branch</var>. When not specified, master is used.</p></dd>
+<dt class="flush"><code>view</code></dt><dd><p>  View changes between branches. This is the default when no subcommand is specified.</p>
+
+<dl>
+<dt><code>-b</code>|<code>--branch</code> <var>branch</var></dt><dd><p>  Show the commits between HEAD and <var>branch</var>. When not specified, the branch's association is used. If no association exists, master is used.</p></dd>
 <dt><code>-c</code>|<code>--count</code></dt><dd><p>  Show as a count of changes.</p></dd>
 <dt><code>-s</code>|<code>--stat</code></dt><dd><p>  Show as a diffstat.</p></dd>
 <dt><code>-d</code>|<code>--diff</code></dt><dd><p>  Show as a full diff.</p></dd>
 <dt><code>--color</code> [<var>when</var>]</dt><dd><p>  Show colored output. <var>when</var> must be one of <code>always</code>, <code>never</code>, or <code>auto</code>. Not including <var>when</var> is equivalent to <code>--color=always</code>.</p></dd>
 <dt><code>--no-color</code></dt><dd><p>  Never color output. Same as <code>--color=never</code>.</p></dd>
+</dl>
+</dd>
+<dt><code>associate</code></dt><dd><p>  View/update the current association.</p>
+
+<dl>
+<dt class="flush"><em>None</em></dt><dd><p>  Print the current association.</p></dd>
+<dt><code>-b</code>|<code>--branch</code> <var>branch</var></dt><dd><p>  Associate the current branch with another. Once associated, <code>-b</code>|<code>--branch</code> can be omitted when using <code>view</code> and the association will be used.</p></dd>
+</dl>
+</dd>
+<dt><code>unassociate</code></dt><dd><p>  Remove the current association.</p></dd>
 <dt><code>-h</code>|<code>--help</code></dt><dd><p>  Print a simple help message.</p></dd>
 <dt><code>-v</code>|<code>--version</code></dt><dd><p>  Print version.</p></dd>
 </dl>
@@ -102,7 +115,10 @@
 <dl>
 <dt><code>git-changes.default-branch</code> <var>string</var></dt><dd><p>  The default branch to use when finding changes. Option (<code>-b</code>|<code>--branch</code>) <var>branch</var> overrides this setting.</p>
 
-<p>  Default: master</p></dd>
+<p>  Default: <var>master</var></p></dd>
+<dt><code>git-changes.associations.*</code> <var>string</var></dt><dd><p>  Defines an association between the branch in the key and the value. Under normal circumstances, these entries are created/removed automatically.</p>
+
+<p>  Default: <var>master</var></p></dd>
 </dl>
 
 
@@ -113,7 +129,7 @@
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>August 2015</li>
+    <li class='tc'>March 2016</li>
     <li class='tr'>git-changes(1)</li>
   </ol>
 
