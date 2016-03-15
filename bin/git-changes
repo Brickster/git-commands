@@ -1,8 +1,10 @@
 #! /usr/bin/env python
 
 import argparse
+import sys
 
 from commands import changes, settings, upstream
+from commands.utils import git
 
 
 def main():
@@ -14,15 +16,49 @@ def main():
         epilog='for more detail, use: git help changes'
     )
 
+    # --------------------------------------------
+    # associate sub-command
+    # --------------------------------------------
+    subparsers = parser.add_subparsers(help='sub-command help', dest='subcommand')
+    associate_parser = subparsers.add_parser(
+        'associate',
+        help='associate a branch',
+        description='associate a branch'
+    )
+    associate_parser.set_defaults(func=changes.associate)
+
+    associate_parser.add_argument(
+        '-b',
+        '--branch',
+        help='associate this branch with another',
+        metavar='<branch>'
+    )
+
+    # --------------------------------------------
+    # unassociate sub-command
+    # --------------------------------------------
+    unassociate_parser = subparsers.add_parser(
+        'unassociate',
+        help="remove a branch's association",
+        description="remove a branch's association",
+    )
+    unassociate_parser.set_defaults(func=changes.unassociate)
+
+    # --------------------------------------------
+    # view sub-command
+    # --------------------------------------------
+    view_parser = subparsers.add_parser('view', help='view changes (default when omitted)', description='view changes')
+    view_parser.set_defaults(func=changes.changes)
+
     # -b|--branch
-    default_branch = settings.get('git-changes.default-branch', default='master')
-    branch_group = parser.add_mutually_exclusive_group()
+    branch_group = view_parser.add_mutually_exclusive_group()
+    associated_reference = changes.get_association()
     branch_group.add_argument(
         '-b',
         '--branch',
         help='show the commits between HEAD and <branch>',
         metavar='<branch>',
-        default=default_branch
+        default=associated_reference if associated_reference else 'master'
     )
 
     # -r|--remote
@@ -36,7 +72,7 @@ def main():
     )
 
     # details
-    details_group = parser.add_mutually_exclusive_group()
+    details_group = view_parser.add_mutually_exclusive_group()
     details_group.add_argument(
         '-c',
         '--count',
@@ -63,7 +99,7 @@ def main():
     )
 
     # color
-    color_group = parser.add_mutually_exclusive_group()
+    color_group = view_parser.add_mutually_exclusive_group()
     color_group.add_argument(
         '--color',
         help='always color output',
@@ -81,7 +117,19 @@ def main():
         dest='color_when'
     )
 
-    changes.changes(**vars(parser.parse_args()))
+    # default to view mode
+    if len(sys.argv) == 1 or sys.argv[1] not in ('view', 'associate', 'unassociate') and '-h' not in sys.argv and '--help' not in sys.argv:
+        sys.argv.insert(1, 'view')
+
+    args = vars(parser.parse_args())
+    if args.pop('subcommand') == 'associate' and not args['branch']:
+        args['func'] = changes.get_association
+        del args['branch']
+
+    func = args.pop('func')
+    result = func(**args)
+    if result:
+        print result
 
 if __name__ == '__main__':
     main()
