@@ -4,6 +4,7 @@ import re
 import sys
 from subprocess import call, check_output
 
+from utils import git
 from utils.messages import error, info, usage, warn
 
 
@@ -60,7 +61,7 @@ def tuck(files, message=None, quiet=False, ignore_deleted=False):
         result_message = check_output(stash_command)
     else:
         # the default stash message includes the HEAD commit and won't look right if the intermediate commit is used
-        current_branch = check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).strip()
+        current_branch = git.current_branch()
         temp_branch = current_branch + '-tmp'
         call(['git', 'branch', '--move', temp_branch])
         checkout_command = ['git', 'checkout', '--quiet', '-b', current_branch]

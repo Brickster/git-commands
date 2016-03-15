@@ -16,7 +16,7 @@ def upstream(branch=None, include_remote=False):
         error('{0!r} not a git repository'.format(os.getcwd()))
 
     if not branch:
-        branch = check_output('git rev-parse --abbrev-ref HEAD'.split()).strip()
+        branch = git.current_branch()
     elif not git.is_valid_reference(branch):
         error('{0!r} is not a valid branch'.format(branch))
 
