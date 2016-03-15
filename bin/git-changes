@@ -58,7 +58,7 @@ def main():
         '--branch',
         help='show the commits between HEAD and <branch>',
         metavar='<branch>',
-        default=associated_reference if associated_reference else 'master'
+        default=associated_reference if associated_reference else settings.get('git-changes.default-branch', default='master')
     )
 
     # -r|--remote
