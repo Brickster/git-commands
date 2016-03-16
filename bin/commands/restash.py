@@ -9,7 +9,12 @@ from utils.messages import error, info
 
 
 def _is_valid_stash(stash):
-    """Determines if a stash reference is valid."""
+    """Determines if a stash reference is valid.
+
+    :param str or unicode stash: a stash reference
+
+    :return bool: whether or not the stash is valid
+    """
 
     if re.match('^stash@{.*}$', stash) is None:
         return False
@@ -21,13 +26,22 @@ def _is_valid_stash(stash):
 
 
 def _parents(commit):
-    """Returns the parents of a commmit."""
+    """Returns the parents of a commit.
+
+    :param str or unicode commit: a commit to find parents of
+
+    :return list: a list of parent SHAs
+    """
 
     return check_output(['git', 'rev-list', '--parents', '-1', commit]).strip().split(' ')[1:]
 
 
 def restash(stash='stash@{0}', quiet=False):
-    """Restash a stash reference."""
+    """Restash a stash reference.
+
+    :param str or unicode stash: stash reference to reverse apply
+    :param bool quiet: suppress all output
+    """
 
     if not directories.is_git_repository():
         error('{0!r} not a git repository'.format(os.getcwd()))
