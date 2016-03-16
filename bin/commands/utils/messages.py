@@ -20,17 +20,27 @@ def error(message, prefix='error:', exit=True):
 
 
 def warn(message):
-    """Print a simple warning message."""
+    """Print a simple warning message.
+
+    :param str or unicode message: the warning message to print
+    """
     info('warn: {}'.format(message), False)
 
 
 def usage(message):
-    """Print a simple usage message."""
+    """Print a simple usage message.
+
+    :param str or unicode message: the usage message to print
+    """
     info('usage: {}'.format(message), False)
 
 
 def info(message, quiet=False):
-    """Print a simple info message."""
+    """Print a simple info message.
+
+    :param str or unicode message: the message to print
+    :param bool quiet: suppress message
+    """
 
     if not quiet:
         print(message)

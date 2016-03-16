@@ -9,14 +9,23 @@ from utils.messages import error, info, usage, warn
 
 
 def _deleted_files():
-    """Get the deleted files in a dirty working tree."""
+    """Get the deleted files in a dirty working tree.
+
+    :return list: a list of deleted file paths
+    """
 
     all_files = check_output(['git', 'status', '--short', '--porcelain'])
     return [match.group(1) for match in re.finditer('^(?:D\s|\sD)\s(.*)', all_files, re.MULTILINE)]
 
 
 def tuck(files, message=None, quiet=False, ignore_deleted=False):
-    """Stash specific files."""
+    """Stash specific files.
+
+    :param list files: the list of pathspecs for files to tuck
+    :param str or unicode message: the message to use when creating the stash
+    :param bool quiet: suppress output
+    :param bool ignore_deleted: suppress deleted file error
+    """
 
     if not ignore_deleted:
         deleted_files = _deleted_files()
