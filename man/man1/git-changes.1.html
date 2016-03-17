@@ -104,7 +104,14 @@
 <dt><code>-b</code>|<code>--branch</code> <var>branch</var></dt><dd><p>  Associate the current branch with another. Once associated, <code>-b</code>|<code>--branch</code> can be omitted when using <code>view</code> and the association will be used.</p></dd>
 </dl>
 </dd>
-<dt><code>unassociate</code></dt><dd><p>  Remove the current association.</p></dd>
+<dt><code>unassociate</code></dt><dd><p>  Remove associations.</p>
+
+<dl>
+<dt class="flush"><em>None</em></dt><dd><p>  Unassociate the current branch.</p></dd>
+<dt><code>-a</code>|<code>--all</code></dt><dd><p>  Unassociate all branches.</p></dd>
+<dt><code>-p</code>|<code>--prune</code></dt><dd><p>  Unassociate branches that no longer exist.</p></dd>
+</dl>
+</dd>
 <dt><code>-h</code>|<code>--help</code></dt><dd><p>  Print a simple help message.</p></dd>
 <dt><code>-v</code>|<code>--version</code></dt><dd><p>  Print version.</p></dd>
 </dl>
