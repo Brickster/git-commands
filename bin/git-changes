@@ -44,12 +44,23 @@ def main():
     )
     unassociate_parser.set_defaults(func=changes.unassociate)
 
-    # -a|--all
-    unassociate_parser.add_argument(
+    # clean up: -a|--all or -p|--prune
+    cleanup_group = unassociate_parser.add_mutually_exclusive_group()
+    cleanup_group.add_argument(
         '-a',
         '--all',
         help='unassociate all branches',
-        action='store_true'
+        action='store_const',
+        const='all',
+        dest='cleanup'
+    )
+    cleanup_group.add_argument(
+        '-p',
+        '--prune',
+        help='remove associations for branches that no longer exist',
+        action='store_const',
+        const='prune',
+        dest='cleanup'
     )
 
     # --------------------------------------------
