@@ -44,7 +44,16 @@
         Associate the current branch with another. Once associated, `-b`|`--branch` can be omitted when using `view` and the association will be used.
 
 * `unassociate`:
-    Remove the current association.
+    Remove associations.
+
+    * _None_:
+        Unassociate the current branch.
+
+    * `-a`|`--all`:
+        Unassociate all branches.
+
+    * `-p`|`--prune`:
+        Unassociate branches that no longer exist.
 
 * `-h`|`--help`:
     Print a simple help message.
