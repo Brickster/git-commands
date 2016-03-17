@@ -44,6 +44,14 @@ def main():
     )
     unassociate_parser.set_defaults(func=changes.unassociate)
 
+    # -a|--all
+    unassociate_parser.add_argument(
+        '-a',
+        '--all',
+        help='unassociate all branches',
+        action='store_true'
+    )
+
     # --------------------------------------------
     # view sub-command
     # --------------------------------------------

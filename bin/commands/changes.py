@@ -2,7 +2,7 @@
 
 import os
 import sys
-from subprocess import call, check_output
+from subprocess import call, check_output, STDOUT
 
 from . import settings
 from utils import directories, git
@@ -20,13 +20,21 @@ def associate(branch):
     info('{} has been associated with {}'.format(current_branch, branch))
 
 
-def unassociate(branch=git.current_branch()):
-    """Unassociate a branch."""
+def unassociate(branch=git.current_branch(), all=False):
+    """Unassociate a branch.
+
+    :param str or unicode branch: branch to unassociate
+    :param bool all: unassociate all branches
+    """
 
     if not directories.is_git_repository():
         error('{0!r} not a git repository'.format(os.getcwd()))
 
-    call(['git', 'config', '--local', '--unset', 'git-changes.associations.' + branch])
+    if all:
+        with open(os.devnull, 'w') as devnull:
+            call(('git', 'config', '--local', '--remove-section', 'git-changes.associations'), stdout=devnull, stderr=STDOUT)
+    else:
+        call(['git', 'config', '--local', '--unset', 'git-changes.associations.' + branch])
 
 
 def get_association(branch=git.current_branch()):
