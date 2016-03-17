@@ -52,6 +52,9 @@
     * `-a`|`--all`:
         Unassociate all branches.
 
+    * `-p`|`--prune`:
+        Unassociate branches that no longer exist.
+
 * `-h`|`--help`:
     Print a simple help message.
 
