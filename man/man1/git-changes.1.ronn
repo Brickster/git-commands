@@ -40,7 +40,7 @@
     * _None_:
         Print the current association.
 
-    * `-b`|`--branch` <branch>:
+    * <branch>:
         Associate the current branch with another. Once associated, `-b`|`--branch` can be omitted when using `view` and the association will be used.
 
 * `unassociate`:

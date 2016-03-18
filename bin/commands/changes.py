@@ -58,7 +58,6 @@ def unassociate(branch=git.current_branch(), cleanup=None):
         _prune_associations()
 
 
-
 def get_association(branch=git.current_branch()):
     """Return the associated branch.
 
