@@ -28,10 +28,10 @@ def main():
     associate_parser.set_defaults(func=changes.associate)
 
     associate_parser.add_argument(
-        '-b',
-        '--branch',
-        help='associate this branch with another',
-        metavar='<branch>'
+        'branch',
+        help='associate this branch with another or returns the assoication if not included',
+        nargs='?',
+        metavar='[branch]'
     )
 
     # --------------------------------------------
