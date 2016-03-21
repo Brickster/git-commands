@@ -4,7 +4,7 @@ import argparse
 import sys
 
 from commands import changes, settings, upstream
-from commands.utils import git
+from commands.utils.messages import error
 
 
 def main():
@@ -23,15 +23,26 @@ def main():
     associate_parser = subparsers.add_parser(
         'associate',
         help='associate a branch',
-        description='associate a branch'
+        description='associate a branch',
+        usage='git changes associate [-h] [branch [-q]]'
     )
     associate_parser.set_defaults(func=changes.associate)
 
+    # branch
     associate_parser.add_argument(
         'branch',
         help='associate this branch with another or returns the assoication if not included',
         nargs='?',
         metavar='[branch]'
+    )
+
+    # -q|--quiet
+    associate_parser.add_argument(
+        '-q',
+        '--quiet',
+        help='suppress all non-error output',
+        action='store_true',
+        default=argparse.SUPPRESS
     )
 
     # --------------------------------------------
@@ -61,6 +72,14 @@ def main():
         action='store_const',
         const='prune',
         dest='cleanup'
+    )
+
+    # -q|--quiet
+    unassociate_parser.add_argument(
+        '-q',
+        '--quiet',
+        help='suppress all non-error output',
+        action='store_true'
     )
 
     # --------------------------------------------
@@ -142,6 +161,10 @@ def main():
 
     args = vars(parser.parse_args())
     if args.pop('subcommand') == 'associate' and not args['branch']:
+        # suppressing output on retrieval makes no sense
+        if 'quiet' in args:
+            associate_parser.print_usage()
+            error('argument -q/--quiet: not allowed without positional argument: branch', prefix='git changes: error:')
         args['func'] = changes.get_association
         del args['branch']
 
