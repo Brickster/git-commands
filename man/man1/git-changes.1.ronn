@@ -2,8 +2,10 @@
 
 ## SYNOPSIS
 
-`git changes` [(`-b`|`--branch`) <branch>] [(`-c`|`--count`)] [(`-s`|`--stat`)]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-d`|`--diff`)] [`--color` [<when>]] [`--no-color`]<br>
+`git changes view` [(`-b`|`--branch`) <branch>] [(`-c`|`--count`)] [(`-s`|`--stat`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-d`|`--diff`)] [`--color` [<when>]] [`--no-color`]<br>
+`git changes associate` [(`-q`|`--quiet`)] [<branch>]<br>
+`git changes unassociate` [(`-a`|`--all`)] [(`-p`|`--prune`)] [(`-q`|`--quiet`)]<br>
 `git changes` (`-h`|`--help`)<br>
 `git changes` (`-v`|`--version`)
 
@@ -43,6 +45,9 @@
     * <branch>:
         Associate the current branch with another. Once associated, `-b`|`--branch` can be omitted when using `view` and the association will be used.
 
+    * `-q`|`--quiet`:
+        Suppress all non-error output. Cannot be used without <branch>.
+
 * `unassociate`:
     Remove associations.
 
@@ -54,6 +59,9 @@
 
     * `-p`|`--prune`:
         Unassociate branches that no longer exist.
+
+    * `-q`|`--quiet`:
+        Suppress all non-error output.
 
 * `-h`|`--help`:
     Print a simple help message.

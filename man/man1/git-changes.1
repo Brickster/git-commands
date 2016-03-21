@@ -7,10 +7,16 @@
 \fBgit\-changes\fR \- lists the commits between this branch and another
 .
 .SH "SYNOPSIS"
-\fBgit changes\fR [(\fB\-b\fR|\fB\-\-branch\fR) \fIbranch\fR] [(\fB\-c\fR|\fB\-\-count\fR)] [(\fB\-s\fR|\fB\-\-stat\fR)]
+\fBgit changes view\fR [(\fB\-b\fR|\fB\-\-branch\fR) \fIbranch\fR] [(\fB\-c\fR|\fB\-\-count\fR)] [(\fB\-s\fR|\fB\-\-stat\fR)]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-d\fR|\fB\-\-diff\fR)] [\fB\-\-color\fR [\fIwhen\fR]] [\fB\-\-no\-color\fR]
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-d\fR|\fB\-\-diff\fR)] [\fB\-\-color\fR [\fIwhen\fR]] [\fB\-\-no\-color\fR]
+.
+.br
+\fBgit changes associate\fR [(\fB\-q\fR|\fB\-\-quiet\fR)] [\fIbranch\fR]
+.
+.br
+\fBgit changes unassociate\fR [(\fB\-a\fR|\fB\-\-all\fR)] [(\fB\-p\fR|\fB\-\-prune\fR)] [(\fB\-q\fR|\fB\-\-quiet\fR)]
 .
 .br
 \fBgit changes\fR (\fB\-h\fR|\fB\-\-help\fR)
@@ -63,6 +69,10 @@ Print the current association\.
 .TP
 \fIbranch\fR
 Associate the current branch with another\. Once associated, \fB\-b\fR|\fB\-\-branch\fR can be omitted when using \fBview\fR and the association will be used\.
+.
+.TP
+\fB\-q\fR|\fB\-\-quiet\fR
+Suppress all non\-error output\. Cannot be used without \fIbranch\fR\.
 
 .
 .TP
@@ -80,6 +90,10 @@ Unassociate all branches\.
 .TP
 \fB\-p\fR|\fB\-\-prune\fR
 Unassociate branches that no longer exist\.
+.
+.TP
+\fB\-q\fR|\fB\-\-quiet\fR
+Suppress all non\-error output\.
 
 .
 .TP

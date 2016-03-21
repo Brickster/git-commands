@@ -9,7 +9,7 @@ from utils import directories, git
 from utils.messages import error, info
 
 
-def associate(branch):
+def associate(branch, quiet=False):
     """Associate branches."""
 
     if not directories.is_git_repository():
@@ -17,10 +17,10 @@ def associate(branch):
 
     current_branch = git.current_branch()
     call(['git', 'config', '--local', 'git-changes.associations.' + current_branch, branch])
-    info('{} has been associated with {}'.format(current_branch, branch))
+    info('{} has been associated with {}'.format(current_branch, branch), quiet)
 
 
-def _prune_associations():
+def _prune_associations(quiet):
     """Remove associations for branches that no longer exist."""
 
     # get branches
@@ -34,10 +34,10 @@ def _prune_associations():
     stale_associations = list(set(current_associations) - set(current_branches))
     for stale_association in stale_associations:
         unassociate(stale_association)
-        info('Removed association {0!r}'.format(stale_association))
+        info('Removed association {0!r}'.format(stale_association), quiet)
 
 
-def unassociate(branch=git.current_branch(), cleanup=None):
+def unassociate(branch=git.current_branch(), cleanup=None, quiet=False):
     """Unassociate a branch.
 
     :param str or unicode branch: branch to unassociate
@@ -55,7 +55,7 @@ def unassociate(branch=git.current_branch(), cleanup=None):
         with open(os.devnull, 'w') as devnull:
             call(('git', 'config', '--local', '--remove-section', 'git-changes.associations'), stdout=devnull, stderr=STDOUT)
     else:
-        _prune_associations()
+        _prune_associations(quiet)
 
 
 def get_association(branch=git.current_branch()):
