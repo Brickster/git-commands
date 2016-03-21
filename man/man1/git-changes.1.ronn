@@ -2,8 +2,10 @@
 
 ## SYNOPSIS
 
-`git changes` [(`-b`|`--branch`) <branch>] [(`-c`|`--count`)] [(`-s`|`--stat`)]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-d`|`--diff`)] [`--color` [<when>]] [`--no-color`]<br>
+`git changes view` [(`-b`|`--branch`) <branch>] [(`-c`|`--count`)] [(`-s`|`--stat`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-d`|`--diff`)] [`--color` [<when>]] [`--no-color`]<br>
+`git changes associate` [<branch>]<br>
+`git changes unassociate` [(`-a`|`--all`)] [(`-p`|`--prune`)]<br>
 `git changes` (`-h`|`--help`)<br>
 `git changes` (`-v`|`--version`)
 
