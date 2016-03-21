@@ -76,8 +76,8 @@
 
 <p><code>git changes view</code> [(<code>-b</code>|<code>--branch</code>) <var>branch</var>] [(<code>-c</code>|<code>--count</code>)] [(<code>-s</code>|<code>--stat</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-d</code>|<code>--diff</code>)] [<code>--color</code> [<var>when</var>]] [<code>--no-color</code>]<br />
-<code>git changes associate</code> [<var>branch</var>]<br />
-<code>git changes unassociate</code> [(<code>-a</code>|<code>--all</code>)] [(<code>-p</code>|<code>--prune</code>)]<br />
+<code>git changes associate</code> [(<code>-q</code>|<code>--quiet</code>)] [<var>branch</var>]<br />
+<code>git changes unassociate</code> [(<code>-a</code>|<code>--all</code>)] [(<code>-p</code>|<code>--prune</code>)] [(<code>-q</code>|<code>--quiet</code>)]<br />
 <code>git changes</code> (<code>-h</code>|<code>--help</code>)<br />
 <code>git changes</code> (<code>-v</code>|<code>--version</code>)</p>
 
@@ -104,6 +104,7 @@
 <dl>
 <dt class="flush"><em>None</em></dt><dd><p>  Print the current association.</p></dd>
 <dt class="flush"><var>branch</var></dt><dd><p>  Associate the current branch with another. Once associated, <code>-b</code>|<code>--branch</code> can be omitted when using <code>view</code> and the association will be used.</p></dd>
+<dt><code>-q</code>|<code>--quiet</code></dt><dd><p>  Suppress all non-error output. Cannot be used without <var>branch</var>.</p></dd>
 </dl>
 </dd>
 <dt><code>unassociate</code></dt><dd><p>  Remove associations.</p>
@@ -112,6 +113,7 @@
 <dt class="flush"><em>None</em></dt><dd><p>  Unassociate the current branch.</p></dd>
 <dt><code>-a</code>|<code>--all</code></dt><dd><p>  Unassociate all branches.</p></dd>
 <dt><code>-p</code>|<code>--prune</code></dt><dd><p>  Unassociate branches that no longer exist.</p></dd>
+<dt><code>-q</code>|<code>--quiet</code></dt><dd><p>  Suppress all non-error output.</p></dd>
 </dl>
 </dd>
 <dt><code>-h</code>|<code>--help</code></dt><dd><p>  Print a simple help message.</p></dd>
