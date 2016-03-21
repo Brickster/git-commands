@@ -12,6 +12,7 @@ def error(message, prefix='error:', exit=True):
     """
 
     assert isinstance(message, str), "message must be a str"
+    assert isinstance(prefix, str), "prefix must be a str"
     assert isinstance(exit, bool), "exit must be a bool"
 
     print(prefix, message, file=sys.stderr)
