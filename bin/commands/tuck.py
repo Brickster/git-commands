@@ -4,18 +4,28 @@ import re
 import sys
 from subprocess import call, check_output
 
+from utils import git
 from utils.messages import error, info, usage, warn
 
 
 def _deleted_files():
-    """Get the deleted files in a dirty working tree."""
+    """Get the deleted files in a dirty working tree.
+
+    :return list: a list of deleted file paths
+    """
 
     all_files = check_output(['git', 'status', '--short', '--porcelain'])
     return [match.group(1) for match in re.finditer('^(?:D\s|\sD)\s(.*)', all_files, re.MULTILINE)]
 
 
 def tuck(files, message=None, quiet=False, ignore_deleted=False):
-    """Stash specific files."""
+    """Stash specific files.
+
+    :param list files: the list of pathspecs for files to tuck
+    :param str or unicode message: the message to use when creating the stash
+    :param bool quiet: suppress output
+    :param bool ignore_deleted: suppress deleted file error
+    """
 
     if not ignore_deleted:
         deleted_files = _deleted_files()
@@ -60,7 +70,7 @@ def tuck(files, message=None, quiet=False, ignore_deleted=False):
         result_message = check_output(stash_command)
     else:
         # the default stash message includes the HEAD commit and won't look right if the intermediate commit is used
-        current_branch = check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).strip()
+        current_branch = git.current_branch()
         temp_branch = current_branch + '-tmp'
         call(['git', 'branch', '--move', temp_branch])
         checkout_command = ['git', 'checkout', '--quiet', '-b', current_branch]

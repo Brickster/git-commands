@@ -9,14 +9,27 @@ from utils.messages import error
 
 
 def _validate_config(config=None):
-    """Validates that the directory and file specified are compatible."""
+    """Validates that the directory and file specified are compatible.
+
+    :param config: the config name
+    """
 
     if config == 'local' and not directories.is_git_repository():
         error('{0!r} is not a git repository so {1!r} does not apply'.format(os.getcwd(), 'local'))
 
 
 def list(section, config, count, keys, format, file=None):
-    """List configuration settings respecting override precedence."""
+    """List configuration settings respecting override precedence.
+
+    :param section: limit to a specific section
+    :param config: limit to a specific config (local|global|system)
+    :param count: return the total configuration values count rather than the configurations themselves
+    :param keys: return only the keys
+    :param format: output format (compact|pretty)
+    :param str or unicode file: path to a config file
+
+    :return str or unicode: configuration details
+    """
 
     _validate_config(config)
 
@@ -92,7 +105,11 @@ def _dry_destroy_section(config, section):
 
 
 def destroy(section, dry_run):
-    """Destroy a section from the local, global, and system config files."""
+    """Destroy a section from the local, global, and system config files.
+
+    :param str or unicode section: the section to remove
+    :param bool dry_run: print the sections that would be removed but don't remove them
+    """
 
     has_local = directories.is_git_repository()
 
@@ -112,12 +129,13 @@ def destroy(section, dry_run):
 def get(key, default=None, config=None, file=None, as_type=str):
     """Retrieve a configuration value.
 
-    Arguments:
-        - key: the value key
-        - default: a default to return if no value is found
-        - config: the config to retrieve from
-        - file: a config file to retrieve from
-        - as_type: a callable, built-in type, or class object used to convert the result
+    :param str or unicode key: the value key
+    :param str or unicode default: a default to return if no value is found
+    :param str or unicode config: the config to retrieve from
+    :param str or unicode file: path to a config file to retrieve from
+    :param callable as_type: a callable, built-in type, or class object used to convert the result
+
+    :return: the configuration value
     """
 
     _validate_config(config)
@@ -146,7 +164,10 @@ def get(key, default=None, config=None, file=None, as_type=str):
 
 
 def cleanup(file_path=None):
-    """Removes empty and merges duplicate sections from a config file."""
+    """Removes empty and merges duplicate sections from a config file.
+
+    :param str or unicode file_path: path to a config file
+    """
 
     if not os.path.isfile(file_path):
         error('no such file: {0!r}'.format(file_path), exit=True)
@@ -174,7 +195,12 @@ def cleanup(file_path=None):
 
 
 def as_bool(value):
-    """Returns whether the input is a string representation of a boolean."""
+    """Returns whether the input is a string representation of a boolean.
+
+    :param str value: value to convert to a bool
+
+    :return bool: the bool representation
+    """
 
     if not isinstance(value, str):
         raise ValueError('{0!r} is not a string, use bool() instead'.format(value))
@@ -188,7 +214,12 @@ def as_bool(value):
 
 
 def as_delimited_list(delimiter):
-    """Parse a list by a specific delimiter."""
+    """Parse a list by a specific delimiter.
+
+    :param str or unicode delimiter: delimiter to split on
+
+    :return lambda: lambda that splits by the delimiter
+    """
 
     return lambda value: value.split(delimiter) if value else []
 

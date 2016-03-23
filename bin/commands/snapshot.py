@@ -9,7 +9,12 @@ from utils.messages import error, info
 
 
 def snapshot(message, quiet=False, files=None):
-    """Create a snapshot of the working directory and index."""
+    """Create a snapshot of the working directory and index.
+
+    :param str or unicode message: the message to use when creating the underlying stash
+    :param bool quiet: suppress all output
+    :param list files: a list of pathspecs to specific files to use when creating the snapshot
+    """
 
     if not directories.is_git_repository():
         error('{0!r} not a git repository'.format(os.getcwd()))

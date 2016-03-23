@@ -8,7 +8,13 @@ from utils.messages import error, info
 
 
 def abandon(start, end, dry_run=False, quiet=False):
-    """Drop a range of stashes from start (inclusive) to end (exclusive)."""
+    """Drop a range of stashes from start (inclusive) to end (exclusive).
+
+    :param int start: the range start (inclusive) of stashes to drop
+    :param int end: the range end (exclusive) of stashes to drop
+    :param bool dry_run: print the stashes that would be dropped but don't drop them
+    :param bool quiet: suppress all output
+    """
 
     if not directories.is_git_repository():
         error('{0!r} not a git repository'.format(os.getcwd()))

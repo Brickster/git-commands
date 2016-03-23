@@ -10,13 +10,19 @@ _REMOTE_CONFIG = 'git config --local branch.{}.remote'
 
 
 def upstream(branch=None, include_remote=False):
-    """Get the upstream branch of the current branch."""
+    """Get the upstream branch of the current branch.
+
+    :param str or unicode branch: the branch whose upstream to find
+    :param bool include_remote: include the remote name in the response
+
+    :return str or unicode: the upstream branch name or an empty string
+    """
 
     if not directories.is_git_repository():
         error('{0!r} not a git repository'.format(os.getcwd()))
 
     if not branch:
-        branch = check_output('git rev-parse --abbrev-ref HEAD'.split()).strip()
+        branch = git.current_branch()
     elif not git.is_valid_reference(branch):
         error('{0!r} is not a valid branch'.format(branch))
 
