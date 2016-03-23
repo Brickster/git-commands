@@ -6,7 +6,7 @@ import sys
 def _print(message, prefix=None, quiet=False, exit=False, file=sys.stdout):
 
     assert isinstance(message, str), "message must be a str"
-    assert isinstance(prefix, str), "prefix must be a str"
+    assert not prefix or isinstance(prefix, str), "prefix must be a str"
     assert isinstance(quiet, bool), "quiet must be a bool"
     assert isinstance(exit, bool), "exit must be a bool"
 
