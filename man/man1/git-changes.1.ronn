@@ -76,7 +76,7 @@
 
     Default: <master>
 
-* `git-changes.associations.*` <string>:
+* `git-changes.associations.*.with` <string>:
     Defines an association between the branch in the key and the value. Under normal circumstances, these entries are created/removed automatically.
 
     Default: <master>
