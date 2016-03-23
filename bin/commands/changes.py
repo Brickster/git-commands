@@ -20,11 +20,11 @@ def associate(branch, quiet=False):
         error('{0!r} not a git repository'.format(os.getcwd()))
 
     current_branch = git.current_branch()
-    call(['git', 'config', '--local', 'git-changes.associations.' + current_branch, branch])
+    call(['git', 'config', '--local', 'git-changes.associations.' + current_branch + '.with', branch])
     info('{} has been associated with {}'.format(current_branch, branch), quiet)
 
 
-def _prune_associations(quiet):
+def _prune_associations(cleanup, quiet):
     """Remove associations for branches that no longer exist."""
 
     # get branches
@@ -32,13 +32,15 @@ def _prune_associations(quiet):
 
     # get associations
     current_associations = check_output(('git', 'config', '--local', '--name-only', '--get-regexp', 'git-changes.associations')).splitlines()
-    current_associations = [association[25:] for association in current_associations]
+    current_associations = [association[25:-5] for association in current_associations]
 
-    # remove stale associations
-    stale_associations = list(set(current_associations) - set(current_branches))
-    for stale_association in stale_associations:
-        unassociate(stale_association)
-        info('Removed association {0!r}'.format(stale_association), quiet)
+    branches_to_prune = current_associations
+    if cleanup == 'prune':
+        # remove only stale associations
+        branches_to_prune = list(set(current_associations) - set(current_branches))
+    for to_prune in branches_to_prune:
+        unassociate(to_prune)
+        info('Removed association {0!r}'.format(to_prune), quiet)
 
 
 def unassociate(branch=git.current_branch(), cleanup=None, quiet=False):
@@ -53,13 +55,10 @@ def unassociate(branch=git.current_branch(), cleanup=None, quiet=False):
     if not directories.is_git_repository():
         error('{0!r} not a git repository'.format(os.getcwd()))
 
-    if not cleanup:
-        call(['git', 'config', '--local', '--unset', 'git-changes.associations.' + branch])
-    elif cleanup == 'all':
-        with open(os.devnull, 'w') as devnull:
-            call(('git', 'config', '--local', '--remove-section', 'git-changes.associations'), stdout=devnull, stderr=STDOUT)
+    if cleanup:
+        _prune_associations(cleanup, quiet)
     else:
-        _prune_associations(quiet)
+        call(['git', 'config', '--local', '--unset', 'git-changes.associations.' + branch + '.with'])
 
 
 def get_association(branch=git.current_branch()):
@@ -71,7 +70,7 @@ def get_association(branch=git.current_branch()):
 
     if not directories.is_git_repository():
         error('{0!r} not a git repository'.format(os.getcwd()))
-    return settings.get('git-changes.associations.' + branch, config='local')
+    return settings.get('git-changes.associations.' + branch + '.with', config='local')
 
 
 def changes(branch, details=None, color_when='auto'):
