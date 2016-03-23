@@ -10,7 +10,11 @@ from utils.messages import error, info
 
 
 def associate(branch, quiet=False):
-    """Associate branches."""
+    """Associate branches.
+
+    :param str or unicode branch: the branch name to associate the current branch with
+    :param bool quiet: suppress non-error output
+    """
 
     if not directories.is_git_repository():
         error('{0!r} not a git repository'.format(os.getcwd()))
@@ -71,7 +75,12 @@ def get_association(branch=git.current_branch()):
 
 
 def changes(branch, details=None, color_when='auto'):
-    """Print the changes between a given branch and HEAD"""
+    """Print the changes between a given branch and HEAD.
+
+    :param str or unicode branch: branch to view changes from
+    :param str or unicode details: the level of details to show (diff, stat, or None)
+    :param str or unicode color_when: when to color output
+    """
 
     if not directories.is_git_repository():
         error('{0!r} not a git repository'.format(os.getcwd()))
