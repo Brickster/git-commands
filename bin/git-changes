@@ -85,17 +85,24 @@ def main():
     # --------------------------------------------
     # view sub-command
     # --------------------------------------------
-    view_parser = subparsers.add_parser('view', help='view changes (default when omitted)', description='view changes')
+    view_parser = subparsers.add_parser(
+        'view',
+        help='view changes (default when omitted)',
+        description='view changes',
+        usage="""usage: git changes view [-h] [-r] [-c | -s | -d]
+                        [--color [{always,never,auto}] | --no-color]
+                        [branch]"""
+    )
     view_parser.set_defaults(func=changes.changes)
 
-    # -b|--branch
+    # branch
     branch_group = view_parser.add_mutually_exclusive_group()
     associated_reference = changes.get_association()
     branch_group.add_argument(
-        '-b',
-        '--branch',
-        help='show the commits between HEAD and <branch>',
-        metavar='<branch>',
+        'branch',
+        help='show the commits between HEAD and the specified branch',
+        nargs='?',
+        metavar='[branch]',
         default=associated_reference if associated_reference else settings.get('git-changes.default-branch', default='master')
     )
 

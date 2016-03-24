@@ -7,10 +7,10 @@
 \fBgit\-changes\fR \- lists the commits between this branch and another
 .
 .SH "SYNOPSIS"
-\fBgit changes view\fR [(\fB\-b\fR|\fB\-\-branch\fR) \fIbranch\fR] [(\fB\-c\fR|\fB\-\-count\fR)] [(\fB\-s\fR|\fB\-\-stat\fR)]
+\fBgit changes view\fR [(\fB\-c\fR|\fB\-\-count\fR)] [(\fB\-s\fR|\fB\-\-stat\fR)] [(\fB\-d\fR|\fB\-\-diff\fR)]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-d\fR|\fB\-\-diff\fR)] [\fB\-\-color\fR [\fIwhen\fR]] [\fB\-\-no\-color\fR]
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-color\fR [\fIwhen\fR]] [\fB\-\-no\-color\fR] [branch]
 .
 .br
 \fBgit changes associate\fR [(\fB\-q\fR|\fB\-\-quiet\fR)] [\fIbranch\fR]
@@ -34,8 +34,8 @@
 View changes between branches\. This is the default when no subcommand is specified\.
 .
 .TP
-\fB\-b\fR|\fB\-\-branch\fR \fIbranch\fR
-Show the commits between HEAD and \fIbranch\fR\. When not specified, the branch\'s association is used\. If no association exists, master is used\.
+\fBbranch\fR
+Show the commits between HEAD and the specified branch\. If not specified, following are considered and the first to evaluate is used: (1) config value \fBgit\-state\.associations\.<branch>\.with\fR, (2) config value \fBgit\-changes\.default\-branch\fR, (3) \fBmaster\fR
 .
 .TP
 \fB\-c\fR|\fB\-\-count\fR
