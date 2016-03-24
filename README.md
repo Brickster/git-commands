@@ -60,8 +60,8 @@ git snapshot (-v|--version)
 Used to list the commits between this branch and another.
 
 ```bash
-git changes [view] [(-b|--branch) <branch>] [(-c|--count)] [(-s|--stat)]
-                   [(-d|--diff)] [--color [when]] [--no-color]
+git changes [view] [(-c|--count)] [(-s|--stat)] [(-d|--diff)]
+                   [--color [when]] [--no-color] [branch]
 git changes associate [(-q|--quiet)] [<branch>]
 git changes unassociate [(-a|--all)] [(-p|--prune)] [(-q|--quiet)]
 git changes (-h|--help)
