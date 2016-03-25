@@ -93,9 +93,9 @@ def changes(branch, details=None, color_when='auto'):
         color_when = 'always'
 
     if details == 'diff':
-        call(['git', 'diff', '--color={}'.format(color_when), branch, 'HEAD'])
+        call(['git', 'diff', '--color={}'.format(color_when), branch + '...HEAD'])
     elif details == 'stat':
-        call(['git', 'diff', '--color={}'.format(color_when), '--stat', branch, 'HEAD'])
+        call(['git', 'diff', '--color={}'.format(color_when), '--stat', branch + '...HEAD'])
     else:
         command = ['git', 'log', '--oneline', '{}..HEAD'.format(branch)]
         if details == 'count':
