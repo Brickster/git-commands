@@ -13,6 +13,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--clear`] [`--no-clear`]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--ignore-extensions` [<extension> ...]]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--order`) <section> [<section> ...]]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-O`|`--options`) _option_ [_option_ ...]]<br>
 `git state` (`-h`|`--help`)<br>
 `git state` (`-v`|`--version`)
 
@@ -93,6 +94,9 @@ Used to see a more concise and comprehensive view of the working directory. The 
 
 * `-o`|`--order` <section> [<section> ...]:
 	A custom section order.
+
+* `-O`|`--options` _option_ [_option_ ...]:
+    A list of options to pass to an extension. Options are formatted as `<extension_name>:<option>`. See **[EXTENSIONS][]** section for more detail.
 
 ## CONFIGURATION
 
@@ -214,6 +218,11 @@ $
 ```
 
 An extension can be ignored by listing it in `--ignore-extensions` [<extension> ...].
+
+### Option Passing
+Options can be passed to an extension using the `-O|--option` flag and are applied in the order they are received. Values passed this way must be formatted as `<extension_name>:<option>`. The `extension_name` refers to the value used in configuration defining the extension. Not the display name.
+
+For instance, say an extension were defined to show changes: `git-state.extensions.changes=git changes`. It could be toggled to run in stat mode and against develop by using `--options changes:develop changes:--stat`.
 
 ## SEE ALSO
 
