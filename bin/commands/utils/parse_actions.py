@@ -31,3 +31,27 @@ def optional_list(const):
         def __call__(self, parser, namespace, values, option_string=None):
             setattr(namespace, self.dest, values if values else const)
     return OptionalList
+
+
+def dict_set(delimiter):
+    """Return a DictSet action for the specified delimiter.
+
+    :param str or unicode delimiter: the character separating keys and value
+    """
+
+    class DictSet(argparse.Action):
+        """An action that collects all values into a dict.
+
+        Values are defined as <key><delimiter><value>. All values for a given key are collected into a list.
+        """
+
+        def __call__(self, parse, namespace, values, option_string=None):
+            result = {}
+            for current_value in values:
+                key, value = current_value.split(delimiter, 1)
+                if key not in result:
+                    result[key] = []
+                result[key] += [value]
+            if result:
+                setattr(namespace, self.dest, result)
+    return DictSet
