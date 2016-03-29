@@ -16,7 +16,10 @@ def multi_set(**kwargs):
 
 
 def optional_list(const):
-    """Return a OptionalList action for with a given const value."""
+    """Return an OptionalList action with a given const value.
+
+    :param const: constant to use when no values are present
+    """
 
     class OptionalList(argparse.Action):
         """An action that supports an optional list of arguments.
