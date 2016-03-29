@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-STATE" "1" "November 2015" "" ""
+.TH "GIT\-STATE" "1" "March 2016" "" ""
 .
 .SH "NAME"
 \fBgit\-state\fR \- view the state of the working tree
@@ -38,6 +38,9 @@
 .
 .br
 \~\~\~\~\~\~\~\~\~\~[(\fB\-o\fR|\fB\-\-order\fR) \fIsection\fR [\fIsection\fR \.\.\.]]
+.
+.br
+\~\~\~\~\~\~\~\~\~\~[(\fB\-O\fR|\fB\-\-options\fR) \fIoption\fR [\fIoption\fR \.\.\.]]
 .
 .br
 \fBgit state\fR (\fB\-h\fR|\fB\-\-help\fR)
@@ -145,6 +148,10 @@ A list of extensions to ignore when printing\. If none are specified, all of the
 .TP
 \fB\-o\fR|\fB\-\-order\fR \fIsection\fR [\fIsection\fR \.\.\.]
 A custom section order\.
+.
+.TP
+\fB\-O\fR|\fB\-\-options\fR \fIoption\fR [\fIoption\fR \.\.\.]
+A list of options to pass to an extension\. Options are formatted as \fB<extension_name>:<option>\fR\. See \fB\fIEXTENSIONS\fR\fR section for more detail\.
 .
 .SH "CONFIGURATION"
 .
@@ -310,6 +317,12 @@ $
 .
 .P
 An extension can be ignored by listing it in \fB\-\-ignore\-extensions\fR [\fIextension\fR \.\.\.]\.
+.
+.SS "Option Passing"
+Options can be passed to an extension using the \fB\-O|\-\-option\fR flag and are applied in the order they are received\. Values passed this way must be formatted as \fB<extension_name>:<option>\fR\. The \fBextension_name\fR refers to the value used in configuration defining the extension\. Not the display name\.
+.
+.P
+For instance, say an extension were defined to show changes: \fBgit\-state\.extensions\.changes=git changes\fR\. It could be toggled to run in stat mode and against develop by using \fB\-\-options changes:develop changes:\-\-stat\fR\.
 .
 .SH "SEE ALSO"
 git\-status(1), git\-log(1), git\-reflog(1), git\-branch(1), git\-stash(1)

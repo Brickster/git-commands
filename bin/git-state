@@ -3,7 +3,7 @@
 import argparse
 
 from commands import settings, state
-from commands.utils.parse_actions import optional_list
+from commands.utils.parse_actions import dict_set, optional_list
 
 
 def main():
@@ -248,6 +248,15 @@ def main():
         help='custom section order',
         nargs='+',
         default=argparse.SUPPRESS
+    )
+
+    parser.add_argument(
+        '-O',
+        '--options',
+        help='options to pass to custom extensions',
+        nargs='+',
+        default=[],
+        action=dict_set(':')
     )
 
     state.state(**vars(parser.parse_args()))

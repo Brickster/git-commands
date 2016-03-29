@@ -86,6 +86,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--clear</code>] [<code>--no-clear</code>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--ignore-extensions</code> [<var>extension</var> ...]]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-o</code>|<code>--order</code>) <var>section</var> [<var>section</var> ...]]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-O</code>|<code>--options</code>) <em>option</em> [<em>option</em> ...]]<br />
 <code>git state</code> (<code>-h</code>|<code>--help</code>)<br />
 <code>git state</code> (<code>-v</code>|<code>--version</code>)</p>
 
@@ -120,6 +121,7 @@
 <dt><code>--no-clear</code></dt><dd><p>  Do not clear the screen before printing.</p></dd>
 <dt><code>--ignore-extensions</code> [<var>extension</var> ...]</dt><dd><p>  A list of extensions to ignore when printing. If none are specified, all of them will be ignored. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
 <dt><code>-o</code>|<code>--order</code> <var>section</var> [<var>section</var> ...]</dt><dd><p>  A custom section order.</p></dd>
+<dt><code>-O</code>|<code>--options</code> <em>option</em> [<em>option</em> ...]</dt><dd><p>  A list of options to pass to an extension. Options are formatted as <code>&lt;extension_name>:&lt;option&gt;</code>. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
 </dl>
 
 
@@ -212,6 +214,12 @@ $
 
 <p>An extension can be ignored by listing it in <code>--ignore-extensions</code> [<var>extension</var> ...].</p>
 
+<h3 id="Option-Passing">Option Passing</h3>
+
+<p>Options can be passed to an extension using the <code>-O|--option</code> flag and are applied in the order they are received. Values passed this way must be formatted as <code>&lt;extension_name>:&lt;option&gt;</code>. The <code>extension_name</code> refers to the value used in configuration defining the extension. Not the display name.</p>
+
+<p>For instance, say an extension were defined to show changes: <code>git-state.extensions.changes=git changes</code>. It could be toggled to run in stat mode and against develop by using <code>--options changes:develop changes:--stat</code>.</p>
+
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
 <p><a class="man-ref" href="http://git-scm.com/docs/git-status">git-status<span class="s">(1)</span></a>, <a class="man-ref" href="http://git-scm.com/docs/git-log">git-log<span class="s">(1)</span></a>, <a class="man-ref" href="http://git-scm.com/docs/git-reflog">git-reflog<span class="s">(1)</span></a>, <a class="man-ref" href="http://git-scm.com/docs/git-branch">git-branch<span class="s">(1)</span></a>, <a class="man-ref" href="http://git-scm.com/docs/git-stash">git-stash<span class="s">(1)</span></a></p>
@@ -219,7 +227,7 @@ $
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>November 2015</li>
+    <li class='tc'>March 2016</li>
     <li class='tr'>git-state(1)</li>
   </ol>
 
