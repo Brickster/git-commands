@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. This projec
 - Snapshots can now be created with a subset of files [#35](https://github.com/Brickstertwo/git-commands/issues/35)
 - Cleanup subcommand to `settings`
 - Associations to `git-changes`
+- Option passing to custom extensions
 
 ### Changed
 - Snapshot messages now must be specified using `-m|--message <message>`
