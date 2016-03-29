@@ -124,10 +124,12 @@ def state(**kwargs):
             file=None
         ).splitlines()
         extensions = list(set(extensions) - set(kwargs.get('ignore_extensions')))
+        options = kwargs.get('options')
         for extension in extensions or []:
             extension_command = settings.get('git-state.extensions.' + extension)
             extension_name = settings.get('git-state.extensions.' + extension + '.name', extension)
-            extension_command = shlex.split(extension_command) + ['--color={}'.format(show_color)]
+            extension_options = options[extension_name] if extension_name in options else []
+            extension_command = shlex.split(extension_command) + ['--color={}'.format(show_color)] + extension_options
             extension_proc = Popen(extension_command, stdout=PIPE, stderr=PIPE)
             extension_out, extension_error = extension_proc.communicate()
 
