@@ -113,7 +113,7 @@ def main():
         help='show the commits between the local and remote head',
         action='store_const',
         const=upstream.upstream(include_remote=True),
-        dest='committish'
+        default=argparse.SUPPRESS
     )
 
     # details
@@ -167,13 +167,17 @@ def main():
         sys.argv.insert(1, 'view')
 
     args = vars(parser.parse_args())
-    if args.pop('subcommand') == 'associate' and not args['committish']:
+    subcommand = args.pop('subcommand')
+    if subcommand == 'associate' and not args['committish']:
         # suppressing output on retrieval makes no sense
         if 'quiet' in args:
             associate_parser.print_usage()
             error('argument -q/--quiet: not allowed without positional argument: committish', prefix='git changes: error:')
         args['func'] = changes.get_association
         del args['committish']
+    elif subcommand == 'view' and 'remote' in args:
+        # -r|--remote doesn't work with dest='committish' when committish is positional
+        args['committish'] = args.pop('remote')
 
     func = args.pop('func')
     result = func(**args)
