@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Changed
 - Snapshot messages now must be specified using `-m|--message <message>`
+- The default commit-ish for changes was renamed from `git-changes.default-branch` to `git-changes.default-commit-ish`
 
 ### Fixed
 - State not working with new repositories
