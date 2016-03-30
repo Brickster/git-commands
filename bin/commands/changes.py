@@ -9,10 +9,10 @@ from utils import directories, git
 from utils.messages import error, info
 
 
-def associate(branch, quiet=False):
-    """Associate branches.
+def associate(committish, quiet=False):
+    """Associate the current branch with a commit-ish.
 
-    :param str or unicode branch: the branch name to associate the current branch with
+    :param str or unicode committish: the commit-ish to associate the current branch with
     :param bool quiet: suppress non-error output
     """
 
@@ -20,8 +20,8 @@ def associate(branch, quiet=False):
         error('{0!r} not a git repository'.format(os.getcwd()))
 
     current_branch = git.current_branch()
-    call(['git', 'config', '--local', 'git-changes.associations.' + current_branch + '.with', branch])
-    info('{} has been associated with {}'.format(current_branch, branch), quiet)
+    call(['git', 'config', '--local', 'git-changes.associations.' + current_branch + '.with', committish])
+    info('{} has been associated with {}'.format(current_branch, committish), quiet)
 
 
 def _prune_associations(cleanup, quiet):
@@ -62,10 +62,10 @@ def unassociate(branch=git.current_branch(), cleanup=None, quiet=False):
 
 
 def get_association(branch=git.current_branch()):
-    """Return the associated branch.
+    """Return the associated commit-ish.
 
     :param str or unicode branch: the branch whose association should be returned
-    :return str or unicode: the associated branch or None
+    :return str or unicode: the associated commit-ish or None
     """
 
     if not directories.is_git_repository():
@@ -73,18 +73,18 @@ def get_association(branch=git.current_branch()):
     return settings.get('git-changes.associations.' + branch + '.with', config='local')
 
 
-def changes(branch, details=None, color_when='auto'):
+def changes(committish, details=None, color_when='auto'):
     """Print the changes between a given branch and HEAD.
 
-    :param str or unicode branch: branch to view changes from
+    :param str or unicode committish: commit-ish to view changes from
     :param str or unicode details: the level of details to show (diff, stat, or None)
     :param str or unicode color_when: when to color output
     """
 
     if not directories.is_git_repository():
         error('{0!r} not a git repository'.format(os.getcwd()))
-    elif not git.is_valid_reference(branch):
-        error('{0!r} is not a valid branch'.format(branch))
+    elif not git.is_commit(committish):
+        error('{0!r} is not a valid commit'.format(committish))
 
     color_when = color_when.lower()
     if color_when == 'never' or (color_when == 'auto' and not sys.stdout.isatty()):
@@ -93,11 +93,11 @@ def changes(branch, details=None, color_when='auto'):
         color_when = 'always'
 
     if details == 'diff':
-        call(['git', 'diff', '--color={}'.format(color_when), branch + '...HEAD'])
+        call(['git', 'diff', '--color={}'.format(color_when), committish + '...HEAD'])
     elif details == 'stat':
-        call(['git', 'diff', '--color={}'.format(color_when), '--stat', branch + '...HEAD'])
+        call(['git', 'diff', '--color={}'.format(color_when), '--stat', committish + '...HEAD'])
     else:
-        command = ['git', 'log', '--oneline', '{}..HEAD'.format(branch)]
+        command = ['git', 'log', '--oneline', '{}..HEAD'.format(committish)]
         if details == 'count':
             log = check_output(command)
             log = log.splitlines()

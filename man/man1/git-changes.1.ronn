@@ -1,25 +1,25 @@
-# git-changes(1) -- lists the commits between this branch and another
+# git-changes(1) -- lists the commits between this branch and a commit-ish
 
 ## SYNOPSIS
 
 `git changes view` [(`-c`|`--count`)] [(`-s`|`--stat`)] [(`-d`|`--diff`)]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--color` [<when>]] [`--no-color`] [branch]<br>
-`git changes associate` [(`-q`|`--quiet`)] [<branch>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--color` [<when>]] [`--no-color`] [<commit-ish>]<br>
+`git changes associate` [(`-q`|`--quiet`)] [<commit-ish>]<br>
 `git changes unassociate` [(`-a`|`--all`)] [(`-p`|`--prune`)] [(`-q`|`--quiet`)]<br>
 `git changes` (`-h`|`--help`)<br>
 `git changes` (`-v`|`--version`)
 
 ## DESCRIPTION
 
-`git-changes` lists the commits between the current branch and another. Changes are defined as the commits between HEAD and the merge base calculated using the current and a user specified branch.
+`git-changes` lists the commits between the current branch and a commit-ish. Changes are defined as the commits between HEAD and the merge base calculated using the commit-ish.
 
 ## OPTIONS
 
 * `view`:
-    View changes between branches. This is the default when no subcommand is specified.
+    View changes between a branch and a commit-ish. This is the default when no subcommand is specified.
 
-    * `branch`:
-        Show the commits between HEAD and the specified branch. If not specified, following are considered and the first to evaluate is used: (1) config value `git-state.associations.<branch>.with`, (2) config value `git-changes.default-branch`, (3) `master`
+    * `commit-ish`:
+        Show the commits between HEAD and the specified commit-ish. If not specified, following are considered and the first to evaluate is used: (1) config value `git-state.associations.<branch>.with`, (2) config value `git-changes.default-commit-ish`, (3) `master`
 
     * `-c`|`--count`:
         Show as a count of changes.
@@ -42,11 +42,11 @@
     * _None_:
         Print the current association.
 
-    * <branch>:
-        Associate the current branch with another. Once associated, `-b`|`--branch` can be omitted when using `view` and the association will be used.
+    * <commit-ish>:
+        Associate the current branch with a commit-ish. Once associated, <commit-ish> can be omitted when using `view` and the association will be used.
 
     * `-q`|`--quiet`:
-        Suppress all non-error output. Cannot be used without <branch>.
+        Suppress all non-error output. Cannot be used without <commit-ish>.
 
 * `unassociate`:
     Remove associations.
@@ -71,13 +71,13 @@
 
 ## CONFIGURATION
 
-* `git-changes.default-branch` <string>:
-    The default branch to use when finding changes. Option (`-b`|`--branch`) <branch> overrides this setting.
+* `git-changes.default-commit-ish` <string>:
+    The default commit-ish to use when finding changes. Option <branch> overrides this setting.
 
     Default: <master>
 
 * `git-changes.associations.*.with` <string>:
-    Defines an association between the branch in the key and the value. Under normal circumstances, these entries are created/removed automatically.
+    Defines an association between the branch in the key and the value. The value must be a commit-ish. Under normal circumstances, these entries are created/removed automatically.
 
     Default: <master>
 
