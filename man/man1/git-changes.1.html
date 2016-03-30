@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv='content-type' value='text/html;charset=utf8'>
   <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
-  <title>git-changes(1) - lists the commits between this branch and another</title>
+  <title>git-changes(1) - lists the commits between this branch and a commit-ish</title>
   <style type='text/css' media='all'>
   /* style: man */
   body#manpage {margin:0}
@@ -69,29 +69,29 @@
 
   <h2 id="NAME">NAME</h2>
 <p class="man-name">
-  <code>git-changes</code> - <span class="man-whatis">lists the commits between this branch and another</span>
+  <code>git-changes</code> - <span class="man-whatis">lists the commits between this branch and a commit-ish</span>
 </p>
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
 <p><code>git changes view</code> [(<code>-c</code>|<code>--count</code>)] [(<code>-s</code>|<code>--stat</code>)] [(<code>-d</code>|<code>--diff</code>)]<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--color</code> [<var>when</var>]] [<code>--no-color</code>] [branch]<br />
-<code>git changes associate</code> [(<code>-q</code>|<code>--quiet</code>)] [<var>branch</var>]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--color</code> [<var>when</var>]] [<code>--no-color</code>] [<var>commit-ish</var>]<br />
+<code>git changes associate</code> [(<code>-q</code>|<code>--quiet</code>)] [<var>commit-ish</var>]<br />
 <code>git changes unassociate</code> [(<code>-a</code>|<code>--all</code>)] [(<code>-p</code>|<code>--prune</code>)] [(<code>-q</code>|<code>--quiet</code>)]<br />
 <code>git changes</code> (<code>-h</code>|<code>--help</code>)<br />
 <code>git changes</code> (<code>-v</code>|<code>--version</code>)</p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
-<p><code>git-changes</code> lists the commits between the current branch and another. Changes are defined as the commits between HEAD and the merge base calculated using the current and a user specified branch.</p>
+<p><code>git-changes</code> lists the commits between the current branch and a commit-ish. Changes are defined as the commits between HEAD and the merge base calculated using the commit-ish.</p>
 
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
-<dt class="flush"><code>view</code></dt><dd><p>  View changes between branches. This is the default when no subcommand is specified.</p>
+<dt class="flush"><code>view</code></dt><dd><p>  View changes between a branch and a commit-ish. This is the default when no subcommand is specified.</p>
 
 <dl>
-<dt class="flush"><code>branch</code></dt><dd><p>  Show the commits between HEAD and the specified branch. If not specified, following are considered and the first to evaluate is used: (1) config value <code>git-state.associations.&lt;branch>.with</code>, (2) config value <code>git-changes.default-branch</code>, (3) <code>master</code></p></dd>
+<dt><code>commit-ish</code></dt><dd><p>  Show the commits between HEAD and the specified commit-ish. If not specified, following are considered and the first to evaluate is used: (1) config value <code>git-state.associations.&lt;branch>.with</code>, (2) config value <code>git-changes.default-commit-ish</code>, (3) <code>master</code></p></dd>
 <dt><code>-c</code>|<code>--count</code></dt><dd><p>  Show as a count of changes.</p></dd>
 <dt><code>-s</code>|<code>--stat</code></dt><dd><p>  Show as a diffstat.</p></dd>
 <dt><code>-d</code>|<code>--diff</code></dt><dd><p>  Show as a full diff.</p></dd>
@@ -103,8 +103,8 @@
 
 <dl>
 <dt class="flush"><em>None</em></dt><dd><p>  Print the current association.</p></dd>
-<dt class="flush"><var>branch</var></dt><dd><p>  Associate the current branch with another. Once associated, <code>-b</code>|<code>--branch</code> can be omitted when using <code>view</code> and the association will be used.</p></dd>
-<dt><code>-q</code>|<code>--quiet</code></dt><dd><p>  Suppress all non-error output. Cannot be used without <var>branch</var>.</p></dd>
+<dt><var>commit-ish</var></dt><dd><p>  Associate the current branch with a commit-ish. Once associated, <var>commit-ish</var> can be omitted when using <code>view</code> and the association will be used.</p></dd>
+<dt><code>-q</code>|<code>--quiet</code></dt><dd><p>  Suppress all non-error output. Cannot be used without <var>commit-ish</var>.</p></dd>
 </dl>
 </dd>
 <dt><code>unassociate</code></dt><dd><p>  Remove associations.</p>
@@ -124,10 +124,10 @@
 <h2 id="CONFIGURATION">CONFIGURATION</h2>
 
 <dl>
-<dt><code>git-changes.default-branch</code> <var>string</var></dt><dd><p>  The default branch to use when finding changes. Option (<code>-b</code>|<code>--branch</code>) <var>branch</var> overrides this setting.</p>
+<dt><code>git-changes.default-commit-ish</code> <var>string</var></dt><dd><p>  The default commit-ish to use when finding changes. Option <var>branch</var> overrides this setting.</p>
 
 <p>  Default: <var>master</var></p></dd>
-<dt><code>git-changes.associations.*.with</code> <var>string</var></dt><dd><p>  Defines an association between the branch in the key and the value. Under normal circumstances, these entries are created/removed automatically.</p>
+<dt><code>git-changes.associations.*.with</code> <var>string</var></dt><dd><p>  Defines an association between the branch in the key and the value. The value must be a commit-ish. Under normal circumstances, these entries are created/removed automatically.</p>
 
 <p>  Default: <var>master</var></p></dd>
 </dl>

@@ -24,16 +24,16 @@ def main():
         'associate',
         help='associate a branch',
         description='associate a branch',
-        usage='git changes associate [-h] [branch [-q]]'
+        usage='git changes associate [-h] [commit-ish [-q]]'
     )
     associate_parser.set_defaults(func=changes.associate)
 
-    # branch
+    # committish
     associate_parser.add_argument(
-        'branch',
-        help='associate this branch with another or returns the assoication if not included',
+        'committish',
+        help='associate the current branch with a commit-ish or returns the assoication if not included',
         nargs='?',
-        metavar='[branch]'
+        metavar='[commit-ish]'
     )
 
     # -q|--quiet
@@ -90,30 +90,30 @@ def main():
         help='view changes (default when omitted)',
         description='view changes',
         usage="""usage: git changes view [-h] [-r] [-c | -s | -d]
-                        [--color [{always,never,auto}] | --no-color]
-                        [branch]"""
+                               [--color [{always,never,auto}] | --no-color]
+                               [commit-ish]"""
     )
     view_parser.set_defaults(func=changes.changes)
 
-    # branch
-    branch_group = view_parser.add_mutually_exclusive_group()
+    # committish
+    committish_group = view_parser.add_mutually_exclusive_group()
     associated_reference = changes.get_association()
-    branch_group.add_argument(
-        'branch',
-        help='show the commits between HEAD and the specified branch',
+    committish_group.add_argument(
+        'committish',
+        help='show the commits between HEAD and a commit-ish',
         nargs='?',
-        metavar='[branch]',
-        default=associated_reference if associated_reference else settings.get('git-changes.default-branch', default='master')
+        metavar='[commit-ish]',
+        default=associated_reference if associated_reference else settings.get('git-changes.default-commit-ish', default='master')
     )
 
     # -r|--remote
-    branch_group.add_argument(
+    committish_group.add_argument(
         '-r',
         '--remote',
         help='show the commits between the local and remote head',
         action='store_const',
         const=upstream.upstream(include_remote=True),
-        dest='branch'
+        dest='committish'
     )
 
     # details
@@ -167,13 +167,13 @@ def main():
         sys.argv.insert(1, 'view')
 
     args = vars(parser.parse_args())
-    if args.pop('subcommand') == 'associate' and not args['branch']:
+    if args.pop('subcommand') == 'associate' and not args['committish']:
         # suppressing output on retrieval makes no sense
         if 'quiet' in args:
             associate_parser.print_usage()
-            error('argument -q/--quiet: not allowed without positional argument: branch', prefix='git changes: error:')
+            error('argument -q/--quiet: not allowed without positional argument: committish', prefix='git changes: error:')
         args['func'] = changes.get_association
-        del args['branch']
+        del args['committish']
 
     func = args.pop('func')
     result = func(**args)

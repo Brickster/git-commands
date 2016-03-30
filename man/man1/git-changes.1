@@ -4,16 +4,16 @@
 .TH "GIT\-CHANGES" "1" "March 2016" "" ""
 .
 .SH "NAME"
-\fBgit\-changes\fR \- lists the commits between this branch and another
+\fBgit\-changes\fR \- lists the commits between this branch and a commit\-ish
 .
 .SH "SYNOPSIS"
 \fBgit changes view\fR [(\fB\-c\fR|\fB\-\-count\fR)] [(\fB\-s\fR|\fB\-\-stat\fR)] [(\fB\-d\fR|\fB\-\-diff\fR)]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-color\fR [\fIwhen\fR]] [\fB\-\-no\-color\fR] [branch]
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-color\fR [\fIwhen\fR]] [\fB\-\-no\-color\fR] [\fIcommit\-ish\fR]
 .
 .br
-\fBgit changes associate\fR [(\fB\-q\fR|\fB\-\-quiet\fR)] [\fIbranch\fR]
+\fBgit changes associate\fR [(\fB\-q\fR|\fB\-\-quiet\fR)] [\fIcommit\-ish\fR]
 .
 .br
 \fBgit changes unassociate\fR [(\fB\-a\fR|\fB\-\-all\fR)] [(\fB\-p\fR|\fB\-\-prune\fR)] [(\fB\-q\fR|\fB\-\-quiet\fR)]
@@ -25,17 +25,17 @@
 \fBgit changes\fR (\fB\-v\fR|\fB\-\-version\fR)
 .
 .SH "DESCRIPTION"
-\fBgit\-changes\fR lists the commits between the current branch and another\. Changes are defined as the commits between HEAD and the merge base calculated using the current and a user specified branch\.
+\fBgit\-changes\fR lists the commits between the current branch and a commit\-ish\. Changes are defined as the commits between HEAD and the merge base calculated using the commit\-ish\.
 .
 .SH "OPTIONS"
 .
 .TP
 \fBview\fR
-View changes between branches\. This is the default when no subcommand is specified\.
+View changes between a branch and a commit\-ish\. This is the default when no subcommand is specified\.
 .
 .TP
-\fBbranch\fR
-Show the commits between HEAD and the specified branch\. If not specified, following are considered and the first to evaluate is used: (1) config value \fBgit\-state\.associations\.<branch>\.with\fR, (2) config value \fBgit\-changes\.default\-branch\fR, (3) \fBmaster\fR
+\fBcommit\-ish\fR
+Show the commits between HEAD and the specified commit\-ish\. If not specified, following are considered and the first to evaluate is used: (1) config value \fBgit\-state\.associations\.<branch>\.with\fR, (2) config value \fBgit\-changes\.default\-commit\-ish\fR, (3) \fBmaster\fR
 .
 .TP
 \fB\-c\fR|\fB\-\-count\fR
@@ -67,12 +67,12 @@ View/update the current association\.
 Print the current association\.
 .
 .TP
-\fIbranch\fR
-Associate the current branch with another\. Once associated, \fB\-b\fR|\fB\-\-branch\fR can be omitted when using \fBview\fR and the association will be used\.
+\fIcommit\-ish\fR
+Associate the current branch with a commit\-ish\. Once associated, \fIcommit\-ish\fR can be omitted when using \fBview\fR and the association will be used\.
 .
 .TP
 \fB\-q\fR|\fB\-\-quiet\fR
-Suppress all non\-error output\. Cannot be used without \fIbranch\fR\.
+Suppress all non\-error output\. Cannot be used without \fIcommit\-ish\fR\.
 
 .
 .TP
@@ -107,15 +107,15 @@ Print version\.
 .SH "CONFIGURATION"
 .
 .TP
-\fBgit\-changes\.default\-branch\fR \fIstring\fR
-The default branch to use when finding changes\. Option (\fB\-b\fR|\fB\-\-branch\fR) \fIbranch\fR overrides this setting\.
+\fBgit\-changes\.default\-commit\-ish\fR \fIstring\fR
+The default commit\-ish to use when finding changes\. Option \fIbranch\fR overrides this setting\.
 .
 .IP
 Default: \fImaster\fR
 .
 .TP
 \fBgit\-changes\.associations\.*\.with\fR \fIstring\fR
-Defines an association between the branch in the key and the value\. Under normal circumstances, these entries are created/removed automatically\.
+Defines an association between the branch in the key and the value\. The value must be a commit\-ish\. Under normal circumstances, these entries are created/removed automatically\.
 .
 .IP
 Default: \fImaster\fR
