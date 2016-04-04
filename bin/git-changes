@@ -24,7 +24,7 @@ def main():
         'associate',
         help='associate a branch',
         description='associate a branch',
-        usage='git changes associate [-h] [commit-ish [-q]]'
+        usage='git changes associate [-h] [COMMIT-ISH [-q]]'
     )
     associate_parser.set_defaults(func=changes.associate)
 
@@ -33,7 +33,7 @@ def main():
         'committish',
         help='associate the current branch with a commit-ish or returns the assoication if not included',
         nargs='?',
-        metavar='[commit-ish]'
+        metavar='COMMIT-ISH'
     )
 
     # -q|--quiet
@@ -88,10 +88,7 @@ def main():
     view_parser = subparsers.add_parser(
         'view',
         help='view changes (default when omitted)',
-        description='view changes',
-        usage="""usage: git changes view [-h] [-r] [-c | -s | -d]
-                               [--color [{always,never,auto}] | --no-color]
-                               [commit-ish]"""
+        description='view changes'
     )
     view_parser.set_defaults(func=changes.changes)
 
@@ -102,7 +99,7 @@ def main():
         'committish',
         help='show the commits between HEAD and a commit-ish',
         nargs='?',
-        metavar='[commit-ish]',
+        metavar='COMMIT-ISH',
         default=associated_reference if associated_reference else settings.get('git-changes.default-commit-ish', default='master')
     )
 

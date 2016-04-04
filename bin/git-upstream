@@ -39,8 +39,7 @@ def main():
     parser.add_argument(
         '-b',
         '--branch',
-        help='branch to find upstream for',
-        metavar='<branch>'
+        help='branch to find upstream for'
     )
 
     upstream_output = upstream.upstream(**vars(parser.parse_args()))

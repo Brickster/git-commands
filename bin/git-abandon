@@ -23,7 +23,7 @@ def main():
         help='the range start (inclusive) (default: 0)',
         nargs='?',
         default='0',
-        metavar='<start>',
+        metavar='START',
         type=int
     )
 
@@ -31,7 +31,7 @@ def main():
     parser.add_argument(
         'end',
         help='the range end (exclusive)',
-        metavar='<end>',
+        metavar='END',
         type=int
     )
 

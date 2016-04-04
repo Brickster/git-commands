@@ -70,7 +70,7 @@ def main():
         help='limit the commits in the log section',
         type=int,
         dest='log_count',
-        metavar='<count>',
+        metavar='COUNT',
         default=default_log_count
     )
     log_group.add_argument(
@@ -97,7 +97,7 @@ def main():
         help='limit the reflog section',
         type=int,
         dest='reflog_count',
-        metavar='<count>',
+        metavar='COUNT',
         default=default_reflog_count
     )
     reflog_group.add_argument(
@@ -180,7 +180,7 @@ def main():
         '--format',
         help='format the each section (choices: compact, pretty)',
         choices=('pretty', 'compact'),
-        metavar='<format>',
+        metavar='FORMAT',
         dest='format',
         default=default_format
     )
@@ -239,7 +239,8 @@ def main():
             keys=True,
             format=None
         ).splitlines()),
-        default=[]
+        default=[],
+        metavar='EXTENSION'
     )
 
     parser.add_argument(
@@ -247,7 +248,8 @@ def main():
         '--order',
         help='custom section order',
         nargs='+',
-        default=argparse.SUPPRESS
+        default=argparse.SUPPRESS,
+        metavar='SECTION'
     )
 
     parser.add_argument(
@@ -256,7 +258,8 @@ def main():
         help='options to pass to custom extensions',
         nargs='+',
         default=[],
-        action=dict_set(':')
+        action=dict_set(':'),
+        metavar='OPTION'
     )
 
     state.state(**vars(parser.parse_args()))

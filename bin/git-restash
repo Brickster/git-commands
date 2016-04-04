@@ -18,7 +18,7 @@ def main():
     parser.add_argument(
         'stash',
         help='stash whose patch should be reverse applied (default: stash@{0})',
-        metavar='<stash>',
+        metavar='STASH',
         nargs='?',
         default='stash@{0}'
     )

@@ -10,7 +10,7 @@ import sys
 from commands import snapshot
 
 # specific usage message needed to include the '--' part
-_USAGE_MESSAGE = 'git snapshot [<message>] [-h] [-v] [-q] [-- <file> [<file> ...]]'
+_USAGE_MESSAGE = 'git snapshot [MESSAGE] [-h] [-v] [-q] [-- FILE [FILE ...]]'
 
 
 def main():
@@ -23,12 +23,12 @@ def main():
         epilog='for more detail, use: git help snapshot'
     )
 
-    parser.add_argument('message', help='the message to use when creating the underlying stash', nargs='?')
+    parser.add_argument('message', help='the message when creating the underlying stash', nargs='?', metavar='MESSAGE')
     parser.add_argument('-q', '--quiet', help='suppress all non-error output', action='store_true', default=False)
 
     # -- <files> ...
     # NOTE: this is so the files argument is listed in the argparse output. All file arguments are handled manually.
-    parser.add_argument('files', help='files to create a snapshot of', nargs='?')
+    parser.add_argument('files', help='files to create a snapshot of', nargs='?', metavar='FILE')
 
     # check for args that match the format: '-- <files> [<files> ..]
     args = sys.argv[1:]
