@@ -7,7 +7,7 @@ import sys
 from commands import settings, tuck
 
 # specific usage message needed to include the '--' part
-_USAGE_MESSAGE = 'git tuck [-h] [-v] [-m MESSAGE] [-i|-I] [-q] -- <file> [<file> ...]'
+_USAGE_MESSAGE = 'git tuck [MESSAGE] [-h] [-v] [-i|-I] [-q] -- FILE [FILE ...]'
 
 parser = argparse.ArgumentParser(
     prog='git tuck',
@@ -17,21 +17,11 @@ parser = argparse.ArgumentParser(
     epilog='for more detail, use: git help tuck'
 )
 
-# --message <message>
-parser.add_argument(
-    '-m',
-    '--message',
-    metavar='<message>',
-    help='message used when stashing the files'
-)
+parser.add_argument('message', help='message used when stashing the files', nargs='?')
 
-# -- <files> ..
-parser.add_argument(
-    help='files to stash',
-    nargs=argparse.REMAINDER,
-    metavar='<files>',
-    dest='files'
-)
+# -- <files> ...
+# NOTE: this is so the files argument is listed in the argparse output. All file arguments are handled manually.
+parser.add_argument('files', help='files to stash', nargs='?')
 
 # -q|--quiet
 parser.add_argument(
@@ -59,17 +49,17 @@ ignored_deleted_group.add_argument(
     dest='ignore_deleted'
 )
 
-# check that the remaining args match the format: '-- <files> [<files> ..]
-args = parser.parse_args()
-if args.files and len(args.files) > 1:
-    if args.files[0] != '--':
-        sys.exit('usage: {}{}git tuck: error: unrecognized arguments: {}'.format(
-            _USAGE_MESSAGE,
-            os.linesep,
-            ' '.join(args.files))
-        )
-    args.files = args.files[1:]
-else:
-    sys.exit('git tuck: error: at least one file must be included to stash')
+# check for args that match the format: '-- <files> [<files> ..]
+args = sys.argv[1:]
+file_args = []
+if '--' in args:
+    delimiter_index = args.index('--') if '--' in args else len(args)
+    file_args = args[delimiter_index + 1:]
+    args = args[:delimiter_index]
+
+args = parser.parse_args(args)
+args.files = file_args
+if not args.files:
+    sys.exit('usage: {}{}git tuck: error: at least one file must be included'.format(_USAGE_MESSAGE, os.linesep))
 
 tuck.tuck(**vars(args))
