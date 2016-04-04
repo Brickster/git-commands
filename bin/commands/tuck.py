@@ -83,25 +83,6 @@ def tuck(files, message=None, quiet=False, ignore_deleted=False):
     call(['git', 'checkout', '--quiet', '-B', current_branch, temp_branch])
     call(['git', 'branch', '--quiet', '-D', temp_branch])
 
-    # if message:
-    #     stash_command += [message]
-    #     result_message = check_output(stash_command)
-    # else:
-    #     # the default stash message includes the HEAD commit and won't look right if the intermediate commit is used
-    #     current_branch = git.current_branch()
-    #     temp_branch = current_branch + '-tmp'
-    #     call(['git', 'branch', '--move', temp_branch])
-    #     checkout_command = ['git', 'checkout', '--quiet', '-b', current_branch]
-    #     if unstaged and staged:
-    #         call(checkout_command + ['HEAD^^'])
-    #     elif unstaged or staged:
-    #         call(checkout_command + ['HEAD^'])
-    #     else:
-    #         call(checkout_command)  # TODO: this isn't necessary and should be refactored
-    #     result_message = check_output(stash_command)
-    #     call(['git', 'checkout', '--quiet', '-B', current_branch, temp_branch])
-    #     call(['git', 'branch', '--quiet', '-D', temp_branch])
-
     # reset all original files
     reset_command = ['git', 'reset', '--quiet', 'HEAD^']
     if unstaged:
