@@ -30,18 +30,18 @@ or
 Used to see a more concise and comprehensive view of the working directory. The output includes results from git status, git log, and git branch.
 
 ```bash
-git state [(-l|--log) <count>] [(-L|--no-log)] [--full-log]
-          [(-r|--reflog) <count>] [(-R|--no-reflog)] [--full-reflog]
+git state [(-l|--log) COUNT] [(-L|--no-log)] [--full-log]
+          [(-r|--reflog) COUNT] [(-R|--no-reflog)] [--full-reflog]
           [(-s|--status)] [(-S|--no-status)]
           [(-b|--branches)] [(-B|--no-branches)]
           [(-t|--stashes)] [(-T|--no-stashes)]
           [(-e|--show-empty)] [(-E|--no-show-empty)]
-          [(-c|--color) [when]] [(-C|--no-color)]
-          [(-p|--pretty)] [(-f|--format) <format>]
+          [(-c|--color) [WHEN]] [(-C|--no-color)]
+          [(-p|--pretty)] [(-f|--format) FORMAT]
           [--clear] [--no-clear]
-          [--ignore-extensions [<extension> ...]]
-          [(-o|--order) <section> [<section> ...]]
-          [(-O|--options) <option> [<option> ...]]
+          [--ignore-extensions [EXTENSION ...]]
+          [(-o|--order) SECTION [SECTION ...]]
+          [(-O|--options) OPTION [OPTION ...]]
 git state (-h|--help)
 git state (-v|--version)
 ```
@@ -51,7 +51,7 @@ git state (-v|--version)
 Used to record the current state of the working directory without reverting it.
 
 ```bash
-git snapshot [<message>] [(-q|--quiet)] [-- <file> [<file> ...]]
+git snapshot [MESSAGE] [(-q|--quiet)] [-- FILE [FILE ...]]
 git snapshot (-h|--help)
 git snapshot (-v|--version)
 ```
@@ -62,8 +62,8 @@ Used to list the commits between this branch and another.
 
 ```bash
 git changes [view] [(-c|--count)] [(-s|--stat)] [(-d|--diff)]
-                   [--color [when]] [--no-color] [<commit-ish>]
-git changes associate [(-q|--quiet)] [<commit-ish>]
+                   [--color [WHEN]] [--no-color] [COMMIT-ISH]
+git changes associate [(-q|--quiet)] [COMMIT-ISH]
 git changes unassociate [(-a|--all)] [(-p|--prune)] [(-q|--quiet)]
 git changes (-h|--help)
 git changes (-v|--version)
@@ -74,12 +74,12 @@ git changes (-v|--version)
 Used as a compliment to `git-config` by adding missing features.
 
 ```bash
-git settings get [<file-option>] [(-d|--default) <value>] <key>
-git settings destroy [(-d|--dry-run)] <section>
-git settings list [<file-option>] [(-p|--pretty)]
-                  [(-f|--format) <format>] [(-c|--count)]
-                  [(-k|--keys)] [<section>]
-git settings cleanup <file>
+git settings get [FILE-OPTION] [(-d|--default) VALUE] KEY
+git settings destroy [(-d|--dry-run)] SECTION
+git settings list [FILE-OPTION] [(-p|--pretty)]
+                  [(-f|--format) FORMAT] [(-c|--count)]
+                  [(-k|--keys)] [SETION]
+git settings cleanup FILE
 git settings (-h|--help)
 git settings (-v|--version)
 ```
@@ -100,7 +100,7 @@ git upstream (-v|--version)
 Used to drop a count or range of stashes.
 
 ```bash
-git abandon [(-d|--dry-run)] [(-q|--quiet)] [<start>] <end>
+git abandon [(-d|--dry-run)] [(-q|--quiet)] [START] END
 git abandon (-h|--help)
 git abandon (-v|--version)
 ```
@@ -110,7 +110,7 @@ git abandon (-v|--version)
 Used to restash changes.
 
 ```bash
-git restash [(-q|--quiet)] [<stash>]
+git restash [(-q|--quiet)] [STASH]
 git restash (-h|--help)
 git restash (-v|--version)
 ```
@@ -120,8 +120,8 @@ git restash (-v|--version)
 Used to stash specific files rather than the all-or-nothing style of `git stash`.
 
 ```bash
-git tuck [<message>] [(-i|--ignore-deleted)|(-I|--no-ignore-deleted)]
-         [(-q|--quiet)] -- <file> [<file> ...]
+git tuck [MESSAGE] [(-i|--ignore-deleted)|(-I|--no-ignore-deleted)]
+         [(-q|--quiet)] -- FILE [FILE ...]
 git tuck (-h|--help)
 git tuck (-v|--version)
 ```

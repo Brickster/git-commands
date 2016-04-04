@@ -17,11 +17,11 @@ parser = argparse.ArgumentParser(
     epilog='for more detail, use: git help tuck'
 )
 
-parser.add_argument('message', help='message used when stashing the files', nargs='?')
+parser.add_argument('message', help='message used when stashing the files', nargs='?', metavar='MESSAGE')
 
 # -- <files> ...
 # NOTE: this is so the files argument is listed in the argparse output. All file arguments are handled manually.
-parser.add_argument('files', help='files to stash', nargs='?')
+parser.add_argument('files', help='files to stash', nargs='?', metavar='FILE')
 
 # -q|--quiet
 parser.add_argument(
