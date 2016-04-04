@@ -48,23 +48,28 @@ For repository:
 
 ```bash
 $ git status --short
-A  CONTRIBUTING.md
+M  CONTRIBUTING.md
+ M README.md
  M config.yml
 M  file1.txt
 MM file2.txt
  M file3.txt
- M README.md
 ?? CHANGELOG.md
+?? file4.md
 ```
 
 To stash all non-documentation related changes:
 
 ```bash
-$ git tuck -- *.txt config.yml CHANGELOG.md
-Tucked files: config.yml file4.txt file1.txt file2.txt file3.txt CHANGELOG.md
+$ git tuck -m "non-docs" -- *.txt config.yml file4.md
+Saved working directory and index state On master: non-docs
+HEAD is now at 5a35bd5 Initial commit
 $ git status --short
-A  CONTRIBUTING.md
+M  CONTRIBUTING.md
  M README.md
+?? CHANGELOG.md
+$ git stash list
+stash@{0}: On master: non-docs
 ```
 
 ## CONFIGURATION

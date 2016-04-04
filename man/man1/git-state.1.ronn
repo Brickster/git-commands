@@ -190,7 +190,8 @@ git-state.extensions.<section-name>
 The extension can be any valid script or command but must accept the flag `--color=`<when>. <when> will only be one of: <never> or <always>. Unlike `git state` itself, <when> won't ever be omitted. The section name for an extension defaults to the key name but can be overridden by defining `git-state.extensions.<section-name>.name`.
 
 ```bash
-$ git config git-state.extenstions.graph "git log --oneline --graph --all --decorate -n 10"
+$ git alias graph "git log --oneline --graph --all --decorate -10"
+$ git config git-state.extenstions.graph "git graph"
 $ git state -LRTB # ignore most sections for brevity
 # status (state-extensions)
 

@@ -41,6 +41,12 @@
   ol.man-decor li.tc {text-align:center;letter-spacing:4px}
   ol.man-decor li.tr {text-align:right;float:right}
   </style>
+  <style type='text/css' media='all'>
+  /* style: toc */
+  .man-navigation {display:block !important;position:fixed;top:0;left:113ex;height:100%;width:100%;padding:48px 0 0 0;border-left:1px solid #dbdbdb;background:#eee}
+  .man-navigation a,.man-navigation a:hover,.man-navigation a:link,.man-navigation a:visited {display:block;margin:0;padding:5px 2px 5px 30px;color:#999;text-decoration:none}
+  .man-navigation a:hover {color:#111;text-decoration:underline}
+  </style>
 </head>
 <!--
   The following styles are deprecated and will be removed at some point:
@@ -108,22 +114,27 @@
 <p>For repository:</p>
 
 <pre><code class="bash">$ git status --short
-A  CONTRIBUTING.md
+M  CONTRIBUTING.md
+ M README.md
  M config.yml
 M  file1.txt
 MM file2.txt
  M file3.txt
- M README.md
 ?? CHANGELOG.md
+?? file4.md
 </code></pre>
 
 <p>To stash all non-documentation related changes:</p>
 
-<pre><code class="bash">$ git tuck -- *.txt config.yml CHANGELOG.md
-Tucked files: config.yml file4.txt file1.txt file2.txt file3.txt CHANGELOG.md
+<pre><code class="bash">$ git tuck -m "non-docs" -- *.txt config.yml file4.md
+Saved working directory and index state On master: non-docs
+HEAD is now at 5a35bd5 Initial commit
 $ git status --short
-A  CONTRIBUTING.md
+M  CONTRIBUTING.md
  M README.md
+?? CHANGELOG.md
+$ git stash list
+stash@{0}: On master: non-docs
 </code></pre>
 
 <h2 id="CONFIGURATION">CONFIGURATION</h2>
@@ -142,7 +153,7 @@ A  CONTRIBUTING.md
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>December 2015</li>
+    <li class='tc'>April 2016</li>
     <li class='tr'>git-tuck(1)</li>
   </ol>
 

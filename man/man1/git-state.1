@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-STATE" "1" "March 2016" "" ""
+.TH "GIT\-STATE" "1" "April 2016" "" ""
 .
 .SH "NAME"
 \fBgit\-state\fR \- view the state of the working tree
@@ -285,7 +285,8 @@ The extension can be any valid script or command but must accept the flag \fB\-\
 .
 .nf
 
-$ git config git\-state\.extenstions\.graph "git log \-\-oneline \-\-graph \-\-all \-\-decorate \-n 10"
+$ git alias graph "git log \-\-oneline \-\-graph \-\-all \-\-decorate \-10"
+$ git config git\-state\.extenstions\.graph "git graph"
 $ git state \-LRTB # ignore most sections for brevity
 # status (state\-extensions)
 

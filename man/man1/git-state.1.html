@@ -41,6 +41,12 @@
   ol.man-decor li.tc {text-align:center;letter-spacing:4px}
   ol.man-decor li.tr {text-align:right;float:right}
   </style>
+  <style type='text/css' media='all'>
+  /* style: toc */
+  .man-navigation {display:block !important;position:fixed;top:0;left:113ex;height:100%;width:100%;padding:48px 0 0 0;border-left:1px solid #dbdbdb;background:#eee}
+  .man-navigation a,.man-navigation a:hover,.man-navigation a:link,.man-navigation a:visited {display:block;margin:0;padding:5px 2px 5px 30px;color:#999;text-decoration:none}
+  .man-navigation a:hover {color:#111;text-decoration:underline}
+  </style>
 </head>
 <!--
   The following styles are deprecated and will be removed at some point:
@@ -185,7 +191,8 @@
 
 <p>The extension can be any valid script or command but must accept the flag <code>--color=</code><var>when</var>. <var>when</var> will only be one of: <var>never</var> or <var>always</var>. Unlike <code>git state</code> itself, <var>when</var> won't ever be omitted. The section name for an extension defaults to the key name but can be overridden by defining <code>git-state.extensions.&lt;section-name>.name</code>.</p>
 
-<pre><code class="bash">$ git config git-state.extenstions.graph "git log --oneline --graph --all --decorate -n 10"
+<pre><code class="bash">$ git alias graph "git log --oneline --graph --all --decorate -10"
+$ git config git-state.extenstions.graph "git graph"
 $ git state -LRTB # ignore most sections for brevity
 # status (state-extensions)
 
@@ -227,7 +234,7 @@ $
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>March 2016</li>
+    <li class='tc'>April 2016</li>
     <li class='tr'>git-state(1)</li>
   </ol>
 
