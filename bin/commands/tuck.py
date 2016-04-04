@@ -32,9 +32,9 @@ def tuck(files, message=None, quiet=False, ignore_deleted=False):
         not_explicitly_deleted_files = [f for f in deleted_files if f not in files]
         if not_explicitly_deleted_files:
             warn('deleted files exist in working tree')
-            warn('deleted files are not considered by pathspec and must be added explicitly or ignored')
-            usage('git tuck -- <pathspec> {}'.format(' '.join(not_explicitly_deleted_files)))
-            usage('git tuck --ignore-deleted -- <pathspac>')
+            warn('deleted files are not considered by pathspecs and must be added explicitly or ignored')
+            usage('git tuck -- PATHSPEC {}'.format(' '.join(not_explicitly_deleted_files)))
+            usage('git tuck --ignore-deleted -- PATHSPEC')
             sys.exit(1)
 
     # resolve the files to be tucked
