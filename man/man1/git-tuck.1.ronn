@@ -2,9 +2,8 @@
 
 ## SYNOPSIS
 
-`git tuck` [(`-m`|`--message`) <message>] [(`-q`|`--quiet`)]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-i`|`--ignore-deleted`)|(`-I`|`--no-ignore-deleted`)]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- <file> [<file> ...]<br>
+`git tuck` [<message>] [(`-i`|`--ignore-deleted`)|(`-I`|`--no-ignore-deleted`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-q`|`--quiet`)] -- <file> [<file> ...]<br>
 `git tuck` (`-h`|`--help`)<br>
 `git tuck` (`-v`|`--version`)
 
@@ -14,7 +13,7 @@ Used to stash specific files rather than the all-or-nothing style of `git stash`
 
 ## OPTIONS
 
-* `-m`|`--message` <message>:
+* <message> :
     The message to use when stashing the files.
 
 * `-q`|`--quiet`:
@@ -61,7 +60,7 @@ MM file2.txt
 To stash all non-documentation related changes:
 
 ```bash
-$ git tuck -m "non-docs" -- *.txt config.yml file4.md
+$ git tuck "non-docs" -- *.txt config.yml file4.md
 Saved working directory and index state On master: non-docs
 HEAD is now at 5a35bd5 Initial commit
 $ git status --short

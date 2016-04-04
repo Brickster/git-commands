@@ -7,13 +7,10 @@
 \fBgit\-tuck\fR \- stash specific files
 .
 .SH "SYNOPSIS"
-\fBgit tuck\fR [(\fB\-m\fR|\fB\-\-message\fR) \fImessage\fR] [(\fB\-q\fR|\fB\-\-quiet\fR)]
+\fBgit tuck\fR [\fImessage\fR] [(\fB\-i\fR|\fB\-\-ignore\-deleted\fR)|(\fB\-I\fR|\fB\-\-no\-ignore\-deleted\fR)]
 .
 .br
-\~\~\~\~\~\~\~\~\~[(\fB\-i\fR|\fB\-\-ignore\-deleted\fR)|(\fB\-I\fR|\fB\-\-no\-ignore\-deleted\fR)]
-.
-.br
-\~\~\~\~\~\~\~\~\~\-\- \fIfile\fR [\fIfile\fR \.\.\.]
+\~\~\~\~\~\~\~\~\~[(\fB\-q\fR|\fB\-\-quiet\fR)] \-\- \fIfile\fR [\fIfile\fR \.\.\.]
 .
 .br
 \fBgit tuck\fR (\fB\-h\fR|\fB\-\-help\fR)
@@ -27,7 +24,7 @@ Used to stash specific files rather than the all\-or\-nothing style of \fBgit st
 .SH "OPTIONS"
 .
 .TP
-\fB\-m\fR|\fB\-\-message\fR \fImessage\fR
+\fImessage\fR
 The message to use when stashing the files\.
 .
 .TP
@@ -89,7 +86,7 @@ To stash all non\-documentation related changes:
 .
 .nf
 
-$ git tuck \-m "non\-docs" \-\- *\.txt config\.yml file4\.md
+$ git tuck "non\-docs" \-\- *\.txt config\.yml file4\.md
 Saved working directory and index state On master: non\-docs
 HEAD is now at 5a35bd5 Initial commit
 $ git status \-\-short
