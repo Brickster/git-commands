@@ -160,7 +160,8 @@ def main():
     )
 
     # default to view mode
-    if len(sys.argv) == 1 or sys.argv[1] not in ('view', 'associate', 'unassociate') and '-h' not in sys.argv and '--help' not in sys.argv:
+    if len(sys.argv) == 1 or sys.argv[1] not in ('view', 'associate', 'unassociate') and not any(
+            [opt in sys.argv for opt in ('-h', '--help', '-v', '--version')]):
         sys.argv.insert(1, 'view')
 
     args = vars(parser.parse_args())
