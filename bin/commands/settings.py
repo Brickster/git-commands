@@ -7,6 +7,135 @@ from subprocess import call, check_output, PIPE, Popen, STDOUT
 from utils import directories
 from utils.messages import error
 
+_COMMENT_PATTERN = re.compile('[#;](?P<comment>.*)')
+_SECTION_PATTERN = re.compile('\[(?P<section>[a-zA-Z0-9.-]+)(?:\s+"(?P<subsection>.+)"\s*)?\](?:\s+#(?P<comment>.*))?$')
+_KEY_VALUE_PATTERN = re.compile('(?P<key>[a-zA-Z][a-zA-Z0-9-]*)(?:\s?=\s?(?P<value>[^#]*)(?:\s+#(?P<comment>.*))?)?$')
+
+
+class Config(object):
+    def __init__(self, sections):
+        self.sections = sections
+
+    def __str__(self):
+        return os.linesep.join([str(s) for s in self.sections])
+
+
+class Comment(object):
+    def __init__(self, comment):
+        self.comment = comment
+
+    def __str__(self):
+        return '# ' + self.comment
+
+
+class Section(object):
+    def __init__(self, section, subsection=None, inline_comment=None, comments=None):
+        self.section = section.strip()
+        self.subsection = subsection.strip() if subsection else None
+        self.inline_comment = inline_comment
+        self.comments = comments
+        self.values = []
+
+    def __str__(self):
+        result = ''
+        if self.comments:
+            result += os.linesep.join([str(c) for c in self.comments]) + os.linesep
+        result += '[' + self.section
+        if self.subsection:
+            result += ' "{}"'.format(self.subsection)
+        result += ']'
+        if self.inline_comment:
+            result += '  ' + str(self.inline_comment)
+
+        for value in self.values:
+            if type(value) == Comment:
+                result += os.linesep + '    ' + str(value)
+            else:
+                result += os.linesep + str(value)
+
+        return result
+
+
+class Value(object):
+    def __init__(self, key, value=True, inline_comment=None, comments=None):
+        self.key = key.strip()
+        self.value = value.strip() if type(value) != bool else value
+        self.inline_comment = inline_comment
+        self.comments = comments
+
+    def __str__(self):
+        result = ''
+        if self.comments:
+            result += '    ' + (os.linesep + '    ').join([str(c) for c in self.comments]) + os.linesep
+        result += '    ' + self.key + ' = '
+        if type(self.value) == bool:
+            result += 'true' if self.value else 'false'
+        else:
+            result += self.value
+        if self.inline_comment:
+            result += '  ' + str(self.inline_comment)
+        return result
+
+
+def _parse_config(lines):
+    pending_comments = []
+    all_sections = []
+    multi = False
+    for line in lines:
+
+        # handle multiline value
+        if multi:
+            line = line.rstrip()
+            all_sections[-1].values[-1].value += os.linesep + line
+            multi = line.endswith('\\') and not groups['comment']  # TODO: confirm subsequent lines can have comments
+            continue
+
+        line = line.strip()
+
+        # comments
+        m = _COMMENT_PATTERN.match(line)
+        if m:
+            pending_comments += [Comment(comment=m.groupdict()['comment'].strip())]
+            continue
+
+        # sections
+        m = _SECTION_PATTERN.match(line)
+        if m:
+            groups = m.groupdict()
+            # TODO: handle inline comments differently than attached
+            all_sections += [Section(
+                section=groups['section'],
+                subsection=groups['subsection'],
+                inline_comment=Comment(groups['comment'].strip()) if groups['comment'] else None,
+                comments=pending_comments if pending_comments else None
+            )]
+            pending_comments = []
+            continue
+
+        # key/values
+        m = _KEY_VALUE_PATTERN.match(line)
+        if m:
+            groups = m.groupdict()
+            key_value = Value(
+                key=groups['key'],
+                value=groups['value'] if groups['value'] else True,
+                inline_comment=Comment(groups['comment'].strip()) if groups['comment'] else None,
+                comments=pending_comments if pending_comments else None
+            )
+            pending_comments = []
+            all_sections[-1].values += [key_value]
+            multi = line.endswith('\\') and not groups['comment']  # it can't be multi-line if there's an inline comment
+            continue
+
+        # skip whitespace
+        if line:
+            raise Exception('cannot parse line: {0!r}'.format(line))
+
+    if pending_comments:
+        all_sections += pending_comments  # TODO: may want to differentiate pending comments from previous section
+
+    return Config(all_sections)
+
 
 def _validate_config(config=None):
     """Validates that the directory and file specified are compatible.
@@ -81,7 +210,7 @@ def list(section, config, count, keys, format, file=None):
             else:
                 result += ['[{} "{}"]'.format(match.group(1), match.group(2))]
             for key, value in section_map.iteritems():
-                result += ['\t{} = {}'.format(key, value)]
+                result += ['    {} = {}'.format(key, value)]
     else:
         for key, value in config_map.iteritems():
             result += ['{}={}'.format(key, value)]
@@ -172,26 +301,17 @@ def cleanup(file_path=None):
     if not os.path.isfile(file_path):
         error('no such file: {0!r}'.format(file_path), exit=True)
 
-    # TODO: check that the file is a valid config file
-
     with open(file_path, 'r') as config_file:
-        old_config = config_file.read()
+        old_config = config_file.read().splitlines()
 
-    config = {}
-    key = None
-    for line in old_config.splitlines():
-        if line.startswith('['):
-            key = line
-            if key not in config:
-                config[key] = []
-        else:
-            config[key] += [line + os.linesep]
+    config = _parse_config(old_config)
+    for section in config.sections:
+        if type(section) == Section and not section.values:
+            config.sections.remove(section)  # TODO: do NOT remove while iterating
 
     with open(file_path, 'w') as config_file:
-        for key, values in config.iteritems():
-            if values:
-                config_file.write(key + os.linesep)
-                config_file.writelines(values)
+        config_file.write(str(config))
+        config_file.write(os.linesep)
 
 
 def as_bool(value):
