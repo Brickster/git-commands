@@ -305,9 +305,22 @@ def cleanup(file_path=None):
         old_config = config_file.read().splitlines()
 
     config = _parse_config(old_config)
+
+    # iterate over sections merge duplicates and remove empty ones
+    visited_sections = {}
+    newer_sections = []
     for section in config.sections:
-        if type(section) == Section and not section.values:
-            config.sections.remove(section)  # TODO: do NOT remove while iterating
+        if type(section) == Section and section.values:
+            name = section.section + (section.subsection if section.subsection else '')
+            if name in visited_sections:
+                # TODO: merge section level comments somehow
+                visited_sections[name].values += section.values
+            else:
+                visited_sections[name] = section
+                newer_sections += [section]
+        elif type(section) != Section:
+            newer_sections += [section]
+    config.sections = newer_sections
 
     with open(file_path, 'w') as config_file:
         config_file.write(str(config))
