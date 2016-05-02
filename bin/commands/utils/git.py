@@ -1,5 +1,6 @@
 """A collection of common git actions."""
 
+import os
 from subprocess import check_output, PIPE, Popen, STDOUT
 
 
@@ -11,6 +12,8 @@ def is_valid_reference(reference):
     :return bool: whether or not the reference is valid
     """
 
+    assert isinstance(reference, str), "'reference' must be a str. Given: " + type(reference).__name__
+
     show_ref_proc = Popen(['git', 'show-ref', '--quiet', reference])
     show_ref_proc.communicate()
     return not show_ref_proc.returncode
@@ -19,14 +22,17 @@ def is_valid_reference(reference):
 def is_commit(object):
     """Determines if an object is a commit.
 
-    :param object: a git object
+    :param str object: a git object
 
     :return bool: whether or not the object is a commit object
     """
 
-    cat_file_proc = Popen(['git', 'cat-file', '-t', object], stdout=PIPE, stderr=STDOUT)
-    object_type = cat_file_proc.communicate()[0].strip()
-    return not cat_file_proc.returncode and object_type == 'commit'
+    assert isinstance(object, str), "'object' must be a str. Given: " + type(object).__name__
+
+    with open(os.devnull, 'w') as dev_null:
+        cat_file_proc = Popen(['git', 'cat-file', '-t', object], stdout=PIPE, stderr=dev_null)
+        object_type = cat_file_proc.communicate()[0].strip()
+        return not cat_file_proc.returncode and object_type == 'commit'
 
 
 def current_branch():
