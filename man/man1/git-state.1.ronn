@@ -72,7 +72,7 @@ Used to see a more concise and comprehensive view of the working directory. The 
 	Omit empty sections. This does not apply to the status section.
 
 * `-c`|`--color` [<when>]:
-    Show colored output. <when> must be one of `always`, `never`, or `auto`. Not including <when> is equivalent to `--color=always`.
+    Color output. <when> must be one of `always`, `never`, or `auto`. Defaults to `color.ui` configuration value or `auto`.
 
 * `-C`|`--no-color`:
     Never color output. Same as `--color=never`.

@@ -144,7 +144,7 @@ def main():
     color_group = view_parser.add_mutually_exclusive_group()
     color_group.add_argument(
         '--color',
-        help='always color output',
+        help='color output',
         const='always',
         dest='color_when',
         nargs='?',
