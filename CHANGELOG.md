@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org).
 
+## [Unreleased](https://github.com/Brickstertwo/git-commands/compare/v0.5.0...HEAD)
+### Fixed
+- `git-changes` reporting ambiguous refs as not being a valid commit [#58](https://github.com/Brickstertwo/git-commands/issues/58)
+
 ## [v0.5.0][] - 2016-04-14
 ### Added
 - `-b|--branch` option to `upstream`
