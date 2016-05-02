@@ -85,6 +85,9 @@ def changes(committish, details=None, color_when='auto'):
         error('{0!r} not a git repository'.format(os.getcwd()))
     elif not git.is_commit(committish):
         error('{0!r} is not a valid commit'.format(committish))
+    elif git.is_ref(committish) and git.is_ref_ambiguous(committish, limit=('heads', 'tags')):
+        ref_names = [ref.split(' ')[1] for ref in check_output(('git', 'show-ref', '--tags', '--heads', committish)).splitlines()]
+        error('{0!r} is an ambiguous ref. Use one of:\n{1}'.format(committish, '\n'.join(ref_names)))
 
     color_when = color_when.lower()
     if color_when == 'never' or (color_when == 'auto' and not sys.stdout.isatty()):
