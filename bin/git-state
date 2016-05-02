@@ -157,7 +157,7 @@ def main():
     color_group.add_argument(
         '-c',
         '--color',
-        help='always color output',
+        help='color output',
         const='always',
         dest='show_color',
         nargs='?',
