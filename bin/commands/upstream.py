@@ -1,5 +1,6 @@
 """Get the current upstream branch."""
 
+import os
 from subprocess import check_output, PIPE, Popen
 
 from utils import directories, git
