@@ -21,6 +21,9 @@
     * `commit-ish`:
         Show the commits between HEAD and the specified commit-ish. If not specified, following are considered and the first to evaluate is used: (1) config value `git-state.associations.<branch>.with`, (2) config value `git-changes.default-commit-ish`, (3) `master`
 
+    * `-r`|`--remote`:
+        Show the commits between the local and remote head.
+
     * `-c`|`--count`:
         Show as a count of changes.
 
