@@ -4,6 +4,7 @@ import argparse
 import sys
 
 from commands import changes, settings, upstream
+from commands.utils import git
 from commands.utils.messages import error
 
 
@@ -172,7 +173,10 @@ def main():
     elif subcommand == 'view' and 'remote' in args:
         # -r|--remote doesn't work with dest='committish' when committish is positional
         del args['remote']
-        args['committish'] = upstream.upstream(include_remote=True)
+        remote_branch = upstream.upstream(include_remote=True)
+        if not remote_branch:
+            error('{0!r} has no remote branch'.format(git.current_branch()))
+        args['committish'] = remote_branch
     elif subcommand == 'view' and not args['committish']:
         committish = changes.get_association()
         if not committish:
