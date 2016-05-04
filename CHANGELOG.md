@@ -4,8 +4,13 @@ All notable changes to this project will be documented in this file. This projec
 
 ## [Unreleased](https://github.com/Brickstertwo/git-commands/compare/v0.5.0...HEAD)
 ### Fixed
-- `git-changes` reporting ambiguous refs as not being a valid commit [#58](https://github.com/Brickstertwo/git-commands/issues/58)
-- Documentation issues [#59](https://github.com/Brickstertwo/git-commands/issues/59)
+- `git-changes` reporting ambiguous refs as not being a valid commit [#58][]
+- `git-changes` options `--help` and `--version` not working in non-git repositories [#60][]
+- Documentation issues [#59][]
+
+[#58]: https://github.com/Brickstertwo/git-commands/issues/58
+[#59]: https://github.com/Brickstertwo/git-commands/issues/59
+[#60]: https://github.com/Brickstertwo/git-commands/issues/60
 
 ## [v0.5.0][] - 2016-04-14
 ### Added
