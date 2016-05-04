@@ -43,7 +43,7 @@ def _prune_associations(cleanup, quiet):
         info('Removed association {0!r}'.format(to_prune), quiet)
 
 
-def unassociate(branch=git.current_branch(), cleanup=None, quiet=False):
+def unassociate(branch=None, cleanup=None, quiet=False):
     """Unassociate a branch.
 
     :param str or unicode branch: branch to unassociate
@@ -58,10 +58,11 @@ def unassociate(branch=git.current_branch(), cleanup=None, quiet=False):
     if cleanup:
         _prune_associations(cleanup, quiet)
     else:
+        branch = branch if branch else git.current_branch()
         call(['git', 'config', '--local', '--unset', 'git-changes.associations.' + branch + '.with'])
 
 
-def get_association(branch=git.current_branch()):
+def get_association(branch=None):
     """Return the associated commit-ish.
 
     :param str or unicode branch: the branch whose association should be returned
@@ -70,10 +71,11 @@ def get_association(branch=git.current_branch()):
 
     if not directories.is_git_repository():
         error('{0!r} not a git repository'.format(os.getcwd()))
+    branch = branch if branch else git.current_branch()
     return settings.get('git-changes.associations.' + branch + '.with', config='local')
 
 
-def changes(committish, details=None, color_when='auto'):
+def changes(committish, details=None, color_when=None):
     """Print the changes between a given branch and HEAD.
 
     :param str or unicode committish: commit-ish to view changes from
@@ -89,7 +91,7 @@ def changes(committish, details=None, color_when='auto'):
         ref_names = [ref.split(' ')[1] for ref in check_output(('git', 'show-ref', '--tags', '--heads', committish)).splitlines()]
         error('{0!r} is an ambiguous ref. Use one of:\n{1}'.format(committish, '\n'.join(ref_names)))
 
-    color_when = color_when.lower()
+    color_when = color_when.lower() if color_when else settings.get('color.ui', default='auto')
     if color_when == 'never' or (color_when == 'auto' and not sys.stdout.isatty()):
         color_when = 'never'
     elif color_when == 'auto' and sys.stdout.isatty():

@@ -94,13 +94,11 @@ def main():
 
     # committish
     committish_group = view_parser.add_mutually_exclusive_group()
-    associated_reference = changes.get_association()
     committish_group.add_argument(
         'committish',
         help='show the commits between HEAD and a commit-ish',
         nargs='?',
-        metavar='COMMIT-ISH',
-        default=associated_reference if associated_reference else settings.get('git-changes.default-commit-ish', default='master')
+        metavar='COMMIT-ISH'
     )
 
     # -r|--remote
@@ -108,8 +106,7 @@ def main():
         '-r',
         '--remote',
         help='show the commits between the local and remote head',
-        action='store_const',
-        const=upstream.upstream(include_remote=True),
+        action='store_true',
         default=argparse.SUPPRESS
     )
 
@@ -148,8 +145,7 @@ def main():
         const='always',
         dest='color_when',
         nargs='?',
-        choices=('always', 'never', 'auto'),
-        default=settings.get('color.ui', default='auto')
+        choices=('always', 'never', 'auto')
     )
     color_group.add_argument(
         '--no-color',
@@ -175,7 +171,13 @@ def main():
         del args['committish']
     elif subcommand == 'view' and 'remote' in args:
         # -r|--remote doesn't work with dest='committish' when committish is positional
-        args['committish'] = args.pop('remote')
+        del args['remote']
+        args['committish'] = upstream.upstream(include_remote=True)
+    elif subcommand == 'view' and not args['committish']:
+        committish = changes.get_association()
+        if not committish:
+            committish = settings.get('git-changes.default-commit-ish', default='master')
+        args['committish'] = committish
 
     func = args.pop('func')
     result = func(**args)
