@@ -78,7 +78,7 @@ git settings get [FILE-OPTION] [(-d|--default) VALUE] KEY
 git settings destroy [(-d|--dry-run)] SECTION
 git settings list [FILE-OPTION] [(-p|--pretty)]
                   [(-f|--format) FORMAT] [(-c|--count)]
-                  [(-k|--keys)] [SETION]
+                  [(-k|--keys)] [SECTION]
 git settings cleanup FILE
 git settings (-h|--help)
 git settings (-v|--version)
