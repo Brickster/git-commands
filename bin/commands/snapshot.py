@@ -33,6 +33,6 @@ def snapshot(message, quiet=False, files=None):
 
         # apply isn't completely quiet when the stash only contains untracked files so swallow all output
         with open(os.devnull, 'w') as devnull:
-            call(['git', 'stash', 'apply', '--quiet'], stdout=devnull, stderr=STDOUT)
+            call(['git', 'stash', 'apply', '--quiet', '--index'], stdout=devnull, stderr=STDOUT)
     else:
         info('No local changes to save. No snapshot created.', quiet)
