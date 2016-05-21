@@ -3,7 +3,7 @@
 import os
 from subprocess import call, check_output, STDOUT
 
-from . import tuck
+import tuck
 from utils import directories
 from utils.messages import error, info
 
