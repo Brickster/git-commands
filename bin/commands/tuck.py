@@ -4,7 +4,7 @@ import re
 import sys
 from subprocess import call, check_output
 
-from utils import git
+import snapshot
 from utils.messages import error, info, usage, warn
 
 
@@ -44,50 +44,35 @@ def tuck(files, message=None, quiet=False, ignore_deleted=False):
     # resolve new files to be tucked
     files_to_tuck += check_output(['git', 'ls-files', '--others', '--'] + files).splitlines()
 
+    files_to_tuck = list(set(files_to_tuck))
+
     if not files_to_tuck:
         error("no files to tuck using")
 
-    # reset the files to be tucked in the event they have changes. Like stash, we won't keep track of staged/unstaged
-    # changes
-    call(['git', 'reset', '--quiet', '--'] + files_to_tuck)
+    snapshot.snapshot(None, False)  # TODO: possibly use `git stash create`?
 
-    # commit already staged files
-    staged = check_output('git diff --name-only --cached'.split())
-    if staged:
-        check_output(['git', 'commit', '--message', 'TUCK: staged', '--quiet']).splitlines()
-
-    # commit unstaged files
+    # clean the working tree of any files we won't stash
     ignore_files = [':!{}'.format(f) for f in files_to_tuck]
-    call(['git', 'add', '--', '.'] + ignore_files)
-    unstaged = check_output('git diff --name-only --cached'.split())
-    if unstaged:
-        call(['git', 'commit', '--message', 'TUCK: unstaged', '--quiet'])
+    call(['git', 'reset', '--quiet', '--', '.'] + ignore_files)                     # reset all non-tuck files
+    call(['git', 'checkout', '--quiet', '--', '.'] + ignore_files)                  # checkout all non-tuck files
+    call(['git', 'clean', '--quiet', '-d', '--force', '--', '.'] + ignore_files)    # clean all non-tuck files
 
-    # the default stash message includes the HEAD commit and won't look right if the intermediate commit is used
-    current_branch = git.current_branch()
-    temp_branch = current_branch + '-tmp'
-    call(['git', 'branch', '--move', temp_branch])
-    checkout_command = ['git', 'checkout', '--quiet', '-b', current_branch]
-    if unstaged and staged:
-        call(checkout_command + ['HEAD^^'])
-    elif unstaged or staged:
-        call(checkout_command + ['HEAD^'])
-    else:
-        call(checkout_command)  # TODO: this isn't necessary and should be refactored
-
-    # stash files to be tucked
+    # stash the files
     stash_command = ['git', 'stash', 'save', '--include-untracked']
     if message:
         stash_command += [message]
     result_message = check_output(stash_command)
-    call(['git', 'checkout', '--quiet', '-B', current_branch, temp_branch])
-    call(['git', 'branch', '--quiet', '-D', temp_branch])
 
-    # reset all original files
-    reset_command = ['git', 'reset', '--quiet', 'HEAD^']
-    if unstaged:
-        call(reset_command)
-    if staged:
-        call(reset_command + ['--soft'])
+    # restore the original state then clean the working tree of the files we stashed
+    call(['git', 'stash', 'pop', '--quiet', '--index', 'stash@{1}'])
+    call(['git', 'reset', '--quiet', '--'] + files_to_tuck)
+
+    # checkout will complain about new files so find them and handle them accordingly
+    new_files = check_output(['git', 'ls-files', '--others', '--'] + files).splitlines()
+    if new_files:
+        call(['git', 'checkout', '--quiet', '--'] + [x for x in files_to_tuck if x not in new_files])
+        call(['git', 'clean', '--quiet', '-d', '--force', '--'] + new_files)
+    else:
+        call(['git', 'checkout', '--quiet', '--'] + files_to_tuck)
 
     info(result_message.strip(), quiet)
