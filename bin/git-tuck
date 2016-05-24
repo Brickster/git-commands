@@ -44,7 +44,7 @@ ignored_deleted_group.add_argument(
 ignored_deleted_group.add_argument(
     '-I',
     '--no-ignore-deleted',
-    help="don't print the error message for deleted files not explicitly included",
+    help="always print the error message for deleted files not explicitly included",
     action='store_false',
     dest='ignore_deleted'
 )
