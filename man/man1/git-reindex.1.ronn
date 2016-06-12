@@ -1,0 +1,41 @@
+# git-reindex(1) -- re-add indexed files to the index
+
+## SYNOPSIS
+
+`git reindex` (`-h`|`--help`)<br>
+`git reindex` (`-v`|`--version`)
+
+## DESCRIPTION
+
+Used to re-add already indexed files to the index.
+
+## OPTIONS
+
+* `-h`|`--help`:
+	Print a simple help message.
+
+* `-v`|`--version`:
+	Print version.
+
+## EXAMPLE
+
+For repository:
+
+```bash
+$ git status --short
+MM CONTRIBUTING.md
+ M README.md
+```
+
+To add un-indexed changes for indexed files:
+
+```bash
+$ git reindex
+$ git status --short
+M  CONTRIBUTING.md
+ M README.md
+```
+
+## SEE ALSO
+
+git-add(1)
