@@ -2,7 +2,7 @@ PREFIX ?= /usr/local
 BINPREFIX ?= "$(PREFIX)/bin"
 MANPREFIX ?= "$(PREFIX)/share/man/man1"
 
-GIT_COMMANDS = git-abandon git-changes git-restash git-settings git-snapshot git-state git-tuck git-upstream
+GIT_COMMANDS = git-abandon git-changes git-restash git-settings git-snapshot git-state git-tuck git-upstream git-reindex
 
 install:
 	@cp bin/git-* $(BINPREFIX)

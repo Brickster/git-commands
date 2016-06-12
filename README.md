@@ -126,6 +126,15 @@ git tuck (-h|--help)
 git tuck (-v|--version)
 ```
 
+### [reindex][]
+
+Used to re-add already indexed files to the index.
+
+```bash
+git reindex (-h|--help)
+git reindex (-v|--version)
+```
+
 ## Dependencies
 
 - [colorama](https://pypi.python.org/pypi/colorama): `$ pip install colorama`
@@ -138,3 +147,4 @@ git tuck (-v|--version)
 [abandon]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-abandon.1.html
 [restash]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-restash.1.html
 [tuck]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-tuck.1.html
+[tuck]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-reindex.1.html

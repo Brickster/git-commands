@@ -1,0 +1,60 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "GIT\-REINDEX" "1" "June 2016" "" ""
+.
+.SH "NAME"
+\fBgit\-reindex\fR \- re\-add indexed files to the index
+.
+.SH "SYNOPSIS"
+\fBgit reindex\fR (\fB\-h\fR|\fB\-\-help\fR)
+.
+.br
+\fBgit reindex\fR (\fB\-v\fR|\fB\-\-version\fR)
+.
+.SH "DESCRIPTION"
+Used to re\-add already indexed files to the index\.
+.
+.SH "OPTIONS"
+.
+.TP
+\fB\-h\fR|\fB\-\-help\fR
+Print a simple help message\.
+.
+.TP
+\fB\-v\fR|\fB\-\-version\fR
+Print version\.
+.
+.SH "EXAMPLE"
+For repository:
+.
+.IP "" 4
+.
+.nf
+
+$ git status \-\-short
+MM CONTRIBUTING\.md
+ M README\.md
+.
+.fi
+.
+.IP "" 0
+.
+.P
+To add un\-indexed changes for indexed files:
+.
+.IP "" 4
+.
+.nf
+
+$ git reindex
+$ git status \-\-short
+M  CONTRIBUTING\.md
+ M README\.md
+.
+.fi
+.
+.IP "" 0
+.
+.SH "SEE ALSO"
+git\-add(1)
