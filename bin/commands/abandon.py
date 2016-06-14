@@ -20,7 +20,9 @@ def abandon(start, end, dry_run=False, quiet=False):
         error('{0!r} not a git repository'.format(os.getcwd()))
 
     stash_count = len(check_output(['git', 'stash', 'list']).splitlines())
-    if end < start:
+    if end < 0:
+        error('end cannot be negative')
+    elif end < start:
         error('end of range cannot come before the start')
     elif start > stash_count:
         error('start too high', exit=False)
