@@ -390,6 +390,21 @@ M  CONTRIBUTING.md
         output = subprocess.check_output('git -c color.ui=never status --short'.split())
         self.assertEqual(output, expected_status)
 
+    def test_tuck_nonGitRepository(self):
+
+        # setup
+        os.mkdir(self.dirpath + '/dir')
+        os.chdir(self.dirpath + '/dir')
+
+        # run
+        p = subprocess.Popen('git tuck -- file.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = p.communicate()
+
+        # verify
+        expected = "error: '{}' not a git repository".format('/private' + self.dirpath + '/dir')
+        self.assertEqual(expected, stderr.strip())
+        self.assertFalse(stdout)
+
     def tearDown(self):
         shutil.rmtree(self.dirpath)
 

@@ -6,8 +6,9 @@ All notable changes to this project will be documented in this file. This projec
 ### Fixed
 - `git-changes` reporting ambiguous refs as not being a valid commit [#58][]
 - `git-changes` options `--help` and `--version` not working in non-git repositories [#60][]
-- `git-changes` printing an incorrect error message when using `--remote` without an upstream branch [#61]
+- `git-changes` printing an incorrect error message when using `--remote` without an upstream branch [#61][]
 - `git-tuck` not preserving index changes [#62][]
+- `git-tuck` attempting to run in a non-git repository [#66][]
 - `git-snapshot` not preserving restoring index changes [#64][]
 - Documentation issues [#59][]
 
@@ -17,6 +18,7 @@ All notable changes to this project will be documented in this file. This projec
 [#61]: https://github.com/Brickstertwo/git-commands/issues/61
 [#62]: https://github.com/Brickstertwo/git-commands/issues/62
 [#64]: https://github.com/Brickstertwo/git-commands/issues/64
+[#66]: https://github.com/Brickstertwo/git-commands/issues/66
 
 ## [v0.5.0][] - 2016-04-14
 ### Added

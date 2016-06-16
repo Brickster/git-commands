@@ -1,10 +1,12 @@
 """Stash specific files."""
 
+import os
 import re
 import sys
 from subprocess import call, check_output
 
 import snapshot
+from utils import directories
 from utils.messages import error, info, usage, warn
 
 
@@ -26,6 +28,9 @@ def tuck(files, message=None, quiet=False, ignore_deleted=False):
     :param bool quiet: suppress output
     :param bool ignore_deleted: suppress deleted file error
     """
+
+    if not directories.is_git_repository():
+        error('{0!r} not a git repository'.format(os.getcwd()))
 
     if not ignore_deleted:
         deleted_files = _deleted_files()
