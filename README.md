@@ -121,7 +121,8 @@ Used to stash specific files rather than the all-or-nothing style of `git stash`
 
 ```bash
 git tuck [MESSAGE] [(-i|--ignore-deleted)|(-I|--no-ignore-deleted)]
-         [(-q|--quiet)] -- FILE [FILE ...]
+         [(-c|--color) [WHEN]|(-C|--no-color)]
+         [(-d|--dry-run)|(-q|--quiet)] -- FILE [FILE ...]
 git tuck (-h|--help)
 git tuck (-v|--version)
 ```
