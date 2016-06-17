@@ -7,7 +7,8 @@ import sys
 from commands import settings, tuck
 
 # specific usage message needed to include the '--' part
-_USAGE_MESSAGE = 'git tuck [MESSAGE] [-h] [-v] [-i|-I] [-q] -- FILE [FILE ...]'
+_USAGE_MESSAGE = """git tuck [MESSAGE] [-h] [-v] [-i|-I] [-q|-d]
+                [-c [{always,never,auto}]|-C] -- FILE [FILE ...]"""
 
 parser = argparse.ArgumentParser(
     prog='git tuck',
@@ -24,10 +25,18 @@ parser.add_argument('message', help='message used when stashing the files', narg
 parser.add_argument('files', help='files to stash', nargs='?', metavar='FILE')
 
 # -q|--quiet
-parser.add_argument(
+quiet_dry_group = parser.add_mutually_exclusive_group()
+quiet_dry_group.add_argument(
     '-q',
     '--quiet',
     help='suppress all non-error output',
+    action='store_true',
+    default=False
+)
+quiet_dry_group.add_argument(
+    '-d',
+    '--dry-run',
+    help='print the resulting stash and working directory but do not tuck anything',
     action='store_true',
     default=False
 )
@@ -47,6 +56,28 @@ ignored_deleted_group.add_argument(
     help="always print the error message for deleted files not explicitly included",
     action='store_false',
     dest='ignore_deleted'
+)
+
+default_show_color = settings.get('color.ui', default='auto')
+# color
+color_group = parser.add_mutually_exclusive_group()
+color_group.add_argument(
+    '-c',
+    '--color',
+    help='color output',
+    const='always',
+    dest='show_color',
+    nargs='?',
+    choices=('always', 'never', 'auto'),
+    default=default_show_color
+)
+color_group.add_argument(
+    '-C',
+    '--no-color',
+    help='never color output',
+    action='store_const',
+    const='never',
+    dest='show_color'
 )
 
 # check for args that match the format: '-- <files> [<files> ..]
