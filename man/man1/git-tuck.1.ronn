@@ -3,7 +3,8 @@
 ## SYNOPSIS
 
 `git tuck` [<message>] [(`-i`|`--ignore-deleted`)|(`-I`|`--no-ignore-deleted`)]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-q`|`--quiet`)] -- <file> [<file> ...]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-d`|`--dry-run`)|(`-q`|`--quiet`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[((`-c`|`--color`) [<when>]]|[(`-C`|`--no-color`))] -- <file> [<file> ...]<br>
 `git tuck` (`-h`|`--help`)<br>
 `git tuck` (`-v`|`--version`)
 
@@ -28,6 +29,15 @@ Used to stash specific files rather than the all-or-nothing style of `git stash`
 
 * `-I`|`--no-ignore-deleted`:
     Show warnings related to not explicitly including deleted files.
+
+* `-d`|`--dry-run`:
+    Print the resulting stash and working directory but do not tuck anything.
+
+* `-c`|`--color` [<when>]:
+    Color output. <when> must be one of `always`, `never`, or `auto`. Defaults to `color.ui` configuration value or `auto`.
+
+* `-C`|`--no-color`:
+    Never color output. Same as `--color=never`.
 
 * `-h`|`--help`:
 	Print a simple help message.
@@ -77,6 +87,11 @@ stash@{0}: On master: non-docs
     Whether or not to ignore deleted files by default. Option (`-i`|`--ignore-deleted`) overrides this setting.
 
     Default: <false>
+
+* `color.ui` <string>:
+	Default color setting when either `--color` is not included or does not specify a <when> value. Options `--color` <when> and `--no-color` override this value.
+
+	Default: <auto>
 
 ## SEE ALSO
 

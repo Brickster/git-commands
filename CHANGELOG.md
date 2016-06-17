@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased](https://github.com/Brickstertwo/git-commands/compare/v0.5.0...HEAD)
+### Added
+- `git-tuck` options `--dry-run` and `--color` [#67][]
+
 ### Fixed
 - `git-changes` reporting ambiguous refs as not being a valid commit [#58][]
 - `git-changes` options `--help` and `--version` not working in non-git repositories [#60][]
@@ -19,6 +22,7 @@ All notable changes to this project will be documented in this file. This projec
 [#62]: https://github.com/Brickstertwo/git-commands/issues/62
 [#64]: https://github.com/Brickstertwo/git-commands/issues/64
 [#66]: https://github.com/Brickstertwo/git-commands/issues/66
+[#67]: https://github.com/Brickstertwo/git-commands/issues/67
 
 ## [v0.5.0][] - 2016-04-14
 ### Added
