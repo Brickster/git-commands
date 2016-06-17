@@ -78,7 +78,7 @@ HEAD is now at {commit}
 
         self.assertFalse(stdout)
         self.assertTrue(stderr.splitlines()[0].startswith('usage: git tuck'))
-        self.assertEqual(stderr.splitlines()[1], "git tuck: error: at least one file must be included")
+        self.assertEqual(stderr.splitlines()[2], "git tuck: error: at least one file must be included")
 
     def test_tuck_deletedFilesExistsButNotFlag(self):
 
@@ -404,6 +404,86 @@ M  CONTRIBUTING.md
         expected = "error: '{}' not a git repository".format('/private' + self.dirpath + '/dir')
         self.assertEqual(expected, stderr.strip())
         self.assertFalse(stdout)
+
+    def test_tuck_dryRun(self):
+        expected = """Would tuck:
+
+    MM CHANGELOG.md
+    M  CONTRIBUTING.md
+     M README.md
+    A  file3.txt
+
+Leaving working directory:
+
+    D  file1.txt
+     D file2.txt
+    ?? file4.txt
+
+"""
+
+        # run
+        actual = subprocess.check_output('git tuck --dry-run --ignore-delete --no-color -- *.md file3.txt'.split())
+
+        # verify
+        self.assertEqual(actual, expected)
+
+    def test_tuck_dryRun_nothingMatched(self):
+        expected = """Would tuck:
+
+    nothing
+
+Leaving working directory:
+
+    MM CHANGELOG.md
+    M  CONTRIBUTING.md
+     M README.md
+    D  file1.txt
+     D file2.txt
+    A  file3.txt
+    ?? file4.txt
+
+"""
+
+        # run
+        actual = subprocess.check_output('git tuck --dry-run --ignore-delete --no-color -- *.log'.split())
+
+        # verify
+        self.assertEqual(actual, expected)
+
+    def test_tuck_dryRun_allMatched(self):
+        expected = """Would tuck:
+
+    MM CHANGELOG.md
+    M  CONTRIBUTING.md
+     M README.md
+    D  file1.txt
+     D file2.txt
+    A  file3.txt
+    ?? file4.txt
+
+Leaving working directory:
+
+    clean
+
+"""
+
+        # run
+        actual = subprocess.check_output('git tuck --dry-run --ignore-delete --no-color -- .'.split())
+
+        # verify
+        self.assertEqual(actual, expected)
+
+    def test_tuck_dryRun_directoryStartedClean(self):
+
+        # setup
+        subprocess.call('git reset --hard --quiet'.split())
+        subprocess.call('git clean -fd --quiet'.split())
+
+        # run
+        stdout, stderr = subprocess.Popen('git tuck --dry-run -- *.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+
+        self.assertFalse(stdout)
+        self.assertEqual(stderr.strip(), 'error: no files to tuck, the working directory is clean')
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
