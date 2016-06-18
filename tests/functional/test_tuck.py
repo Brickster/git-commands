@@ -485,6 +485,60 @@ Leaving working directory:
         self.assertFalse(stdout)
         self.assertEqual(stderr.strip(), 'error: no files to tuck, the working directory is clean')
 
+    def test_tuck_ignoreFlagAndNotIgnoreFlag(self):
+
+        expected = """usage: git tuck [MESSAGE] [-h] [-v] [-i|-I] [-q|-d]
+                [-c [{always,never,auto}]|-C] -- FILE [FILE ...]
+git tuck: error: argument -I/--no-ignore-deleted: not allowed with argument -i/--ignore-deleted
+"""
+
+        # run 1
+        stdout, stderr = subprocess.Popen('git tuck --ignore-deleted --no-ignore-deleted -- *.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        self.assertFalse(stdout)
+        self.assertEquals(stderr, expected)
+
+        # run 2
+        stdout, stderr = subprocess.Popen('git tuck --ignore-deleted -I -- *.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        self.assertFalse(stdout)
+        self.assertEquals(stderr, expected)
+
+        # run 3
+        stdout, stderr = subprocess.Popen('git tuck -i --no-ignore-deleted -- *.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        self.assertFalse(stdout)
+        self.assertEquals(stderr, expected)
+
+        # run 4
+        stdout, stderr = subprocess.Popen('git tuck -i -I -- *.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        self.assertFalse(stdout)
+        self.assertEquals(stderr, expected)
+
+    def test_tuck_quietAndDryRun(self):
+
+        expected = """usage: git tuck [MESSAGE] [-h] [-v] [-i|-I] [-q|-d]
+                [-c [{always,never,auto}]|-C] -- FILE [FILE ...]
+git tuck: error: argument -d/--dry-run: not allowed with argument -q/--quiet
+"""
+
+        # run 1
+        stdout, stderr = subprocess.Popen('git tuck --quiet --dry-run -- *.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        self.assertFalse(stdout)
+        self.assertEquals(stderr, expected)
+
+        # run 1
+        stdout, stderr = subprocess.Popen('git tuck --quiet -d -- *.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        self.assertFalse(stdout)
+        self.assertEquals(stderr, expected)
+
+        # run 1
+        stdout, stderr = subprocess.Popen('git tuck -q --dry-run -- *.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        self.assertFalse(stdout)
+        self.assertEquals(stderr, expected)
+
+        # run 1
+        stdout, stderr = subprocess.Popen('git tuck -q -d -- *.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        self.assertFalse(stdout)
+        self.assertEquals(stderr, expected)
+
     def tearDown(self):
         shutil.rmtree(self.dirpath)
 

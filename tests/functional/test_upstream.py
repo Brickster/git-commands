@@ -161,3 +161,29 @@ class TestGitUpstream(unittest.TestCase):
         expected = "error: '{}' not a git repository".format('/private' + self.dirpath + '/dir')
         self.assertEqual(expected, stderr.strip())
         self.assertFalse(stdout)
+
+    def test_upstream_includeRemoteAndNoIncludeRemote(self):
+
+        expected = """usage: git upstream [-h] [-v] [-r | -R] [-b BRANCH]
+git upstream: error: argument -R/--no-include-remote: not allowed with argument -r/--include-remote
+"""
+
+        # run 1
+        stdout, stderr = subprocess.Popen('git upstream --include-remote --no-include-remote'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        self.assertFalse(stdout)
+        self.assertEqual(stderr, expected)
+
+        # run 2
+        stdout, stderr = subprocess.Popen('git upstream --include-remote -R'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        self.assertFalse(stdout)
+        self.assertEqual(stderr, expected)
+
+        # run 3
+        stdout, stderr = subprocess.Popen('git upstream -r --no-include-remote'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        self.assertFalse(stdout)
+        self.assertEqual(stderr, expected)
+
+        # run 4
+        stdout, stderr = subprocess.Popen('git upstream -r -R'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        self.assertFalse(stdout)
+        self.assertEqual(stderr, expected)
