@@ -6,7 +6,7 @@ import unittest
 
 _DROPPED_FORMAT = 'Dropped refs/stash@{{{}}} ({})'
 _DRY_RUN_FORMAT = 'Would drop refs/stash@{{{}}} ({})'
-_STASH_FORMAT = '{} refs/stash@{{{}}}: WIP on master: 001c499 Initial commit'
+_STASH_FORMAT = '{} refs/stash@{{{}}}: WIP on master: {}'
 
 
 class TestGitAbandon(unittest.TestCase):
@@ -18,52 +18,51 @@ class TestGitAbandon(unittest.TestCase):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         subprocess.call('git init --quiet'.split())
-        subprocess.call('git config --local user.name username'.split())
-        subprocess.call('git config --local user.mail username@mail.com'.split())
         subprocess.call('touch README.md'.split())
         with open('README.md', 'w') as a_file:
             a_file.write('readme\n')
         subprocess.call('git add -A'.split())
 
-        # 001c499 001c499d1f0503e95bc452f41c5cd9de5d735e15
+        # initial commit
         pyenv = os.environ.copy()
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-15T20:38:31Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-15T20:38:31Z'
         subprocess.call(['git', 'commit', '--quiet', '-m', 'Initial commit'], env=pyenv)
         with open('README.md', 'a') as a_file:
             a_file.write('readme\n')
+        self.initial_commit = subprocess.check_output('git log --no-color --oneline -1'.split()).strip()
 
         # stash@{3}
-        self.stash3 = '548a8f32b37f8f08ba89b52b400575bba222778a'
-        self.stash3_abbrev = '548a8f3'
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-16T20:38:31Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-16T20:38:31Z'
         subprocess.call('git stash --quiet'.split(), env=pyenv)
         subprocess.call('git stash apply --quiet'.split())
+        self.stash3 = subprocess.check_output('git rev-parse stash@{0}'.split()).strip()
+        self.stash3_abbrev = subprocess.check_output('git rev-parse --short stash@{0}'.split()).strip()
 
         # stash@{2}
-        self.stash2 = 'e4fd7148a47afa483cfac68ad7a96dd82f1a0083'
-        self.stash2_abbrev = 'e4fd714'
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-17T20:38:31Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-17T20:38:31Z'
         subprocess.call('git stash --quiet'.split(), env=pyenv)
         subprocess.call('git stash apply --quiet'.split())
+        self.stash2 = subprocess.check_output('git rev-parse stash@{0}'.split()).strip()
+        self.stash2_abbrev = subprocess.check_output('git rev-parse --short stash@{0}'.split()).strip()
 
         # stash@{1}
-        self.stash1 = '4e12234d05e22c2d3aa970ec25be3147b402b3bc'
-        self.stash1_abbrev = '4e12234'
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-18T20:38:31Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-18T20:38:31Z'
         subprocess.call('git stash --quiet'.split(), env=pyenv)
         subprocess.call('git stash apply --quiet'.split())
+        self.stash1 = subprocess.check_output('git rev-parse stash@{0}'.split()).strip()
+        self.stash1_abbrev = subprocess.check_output('git rev-parse --short stash@{0}'.split()).strip()
 
         # stash@{0}
-        self.stash0 = '3ef3f6941016f472341d0ca081320556c41842e3'
-        self.stash0_abbrev = '3ef3f69'
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-19T20:38:31Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-19T20:38:31Z'
         subprocess.call('git stash --quiet'.split(), env=pyenv)
         subprocess.call('git stash apply --quiet'.split())
+        self.stash0 = subprocess.check_output('git rev-parse stash@{0}'.split()).strip()
+        self.stash0_abbrev = subprocess.check_output('git rev-parse --short stash@{0}'.split()).strip()
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
@@ -78,8 +77,8 @@ class TestGitAbandon(unittest.TestCase):
         self.assertEqual(abandon_output[1], _DROPPED_FORMAT.format('1', self.stash1))
 
         stash_output = self._stashes().splitlines()
-        self.assertEqual(stash_output[0], _STASH_FORMAT.format(self.stash2_abbrev, '0'))
-        self.assertEqual(stash_output[1], _STASH_FORMAT.format(self.stash3_abbrev, '1'))
+        self.assertEqual(stash_output[0], _STASH_FORMAT.format(self.stash2_abbrev, '0', self.initial_commit))
+        self.assertEqual(stash_output[1], _STASH_FORMAT.format(self.stash3_abbrev, '1', self.initial_commit))
 
     def test_abandon_endOnly_negative(self):
 
@@ -128,8 +127,8 @@ class TestGitAbandon(unittest.TestCase):
         self.assertEqual(abandon_output[1], _DROPPED_FORMAT.format('1', self.stash1))
 
         stash_output = self._stashes().splitlines()
-        self.assertEqual(stash_output[0], _STASH_FORMAT.format(self.stash2_abbrev, '0'))
-        self.assertEqual(stash_output[1], _STASH_FORMAT.format(self.stash3_abbrev, '1'))
+        self.assertEqual(stash_output[0], _STASH_FORMAT.format(self.stash2_abbrev, '0', self.initial_commit))
+        self.assertEqual(stash_output[1], _STASH_FORMAT.format(self.stash3_abbrev, '1', self.initial_commit))
 
     def test_abandon_startAndEnd_endsAtStashCount(self):
 
@@ -141,8 +140,8 @@ class TestGitAbandon(unittest.TestCase):
         self.assertEqual(abandon_output[1], _DROPPED_FORMAT.format('3', self.stash3))
 
         stash_output = self._stashes().splitlines()
-        self.assertEqual(stash_output[0], _STASH_FORMAT.format(self.stash0_abbrev, '0'))
-        self.assertEqual(stash_output[1], _STASH_FORMAT.format(self.stash1_abbrev, '1'))
+        self.assertEqual(stash_output[0], _STASH_FORMAT.format(self.stash0_abbrev, '0', self.initial_commit))
+        self.assertEqual(stash_output[1], _STASH_FORMAT.format(self.stash1_abbrev, '1', self.initial_commit))
 
     def test_abandon_startAndEnd_pastEnd(self):
 
@@ -154,8 +153,8 @@ class TestGitAbandon(unittest.TestCase):
         self.assertEqual(abandon_output[1], _DROPPED_FORMAT.format('3', self.stash3))
 
         stash_output = self._stashes().splitlines()
-        self.assertEqual(stash_output[0], _STASH_FORMAT.format(self.stash0_abbrev, '0'))
-        self.assertEqual(stash_output[1], _STASH_FORMAT.format(self.stash1_abbrev, '1'))
+        self.assertEqual(stash_output[0], _STASH_FORMAT.format(self.stash0_abbrev, '0', self.initial_commit))
+        self.assertEqual(stash_output[1], _STASH_FORMAT.format(self.stash1_abbrev, '1', self.initial_commit))
 
     def test_abandon_startAndEnd_startGreaterThanTotal(self):
 
@@ -194,10 +193,10 @@ class TestGitAbandon(unittest.TestCase):
         self.assertEqual(abandon_output[1], _DRY_RUN_FORMAT.format('1', self.stash1))
 
         stash_output = self._stashes().splitlines()
-        self.assertEqual(stash_output[0], _STASH_FORMAT.format(self.stash0_abbrev, '0'))
-        self.assertEqual(stash_output[1], _STASH_FORMAT.format(self.stash1_abbrev, '1'))
-        self.assertEqual(stash_output[2], _STASH_FORMAT.format(self.stash2_abbrev, '2'))
-        self.assertEqual(stash_output[3], _STASH_FORMAT.format(self.stash3_abbrev, '3'))
+        self.assertEqual(stash_output[0], _STASH_FORMAT.format(self.stash0_abbrev, '0', self.initial_commit))
+        self.assertEqual(stash_output[1], _STASH_FORMAT.format(self.stash1_abbrev, '1', self.initial_commit))
+        self.assertEqual(stash_output[2], _STASH_FORMAT.format(self.stash2_abbrev, '2', self.initial_commit))
+        self.assertEqual(stash_output[3], _STASH_FORMAT.format(self.stash3_abbrev, '3', self.initial_commit))
 
     def test_abandon_dryRun_longOption(self):
 
@@ -209,10 +208,10 @@ class TestGitAbandon(unittest.TestCase):
         self.assertEqual(abandon_output[1], _DRY_RUN_FORMAT.format('1', self.stash1))
 
         stash_output = self._stashes().splitlines()
-        self.assertEqual(stash_output[0], _STASH_FORMAT.format(self.stash0_abbrev, '0'))
-        self.assertEqual(stash_output[1], _STASH_FORMAT.format(self.stash1_abbrev, '1'))
-        self.assertEqual(stash_output[2], _STASH_FORMAT.format(self.stash2_abbrev, '2'))
-        self.assertEqual(stash_output[3], _STASH_FORMAT.format(self.stash3_abbrev, '3'))
+        self.assertEqual(stash_output[0], _STASH_FORMAT.format(self.stash0_abbrev, '0', self.initial_commit))
+        self.assertEqual(stash_output[1], _STASH_FORMAT.format(self.stash1_abbrev, '1', self.initial_commit))
+        self.assertEqual(stash_output[2], _STASH_FORMAT.format(self.stash2_abbrev, '2', self.initial_commit))
+        self.assertEqual(stash_output[3], _STASH_FORMAT.format(self.stash3_abbrev, '3', self.initial_commit))
 
     def test_abandon_dryRunAndQuiet(self):
 
@@ -240,8 +239,8 @@ class TestGitAbandon(unittest.TestCase):
         self.assertFalse(abandon_output)
 
         stash_output = self._stashes().splitlines()
-        self.assertEqual(stash_output[0], _STASH_FORMAT.format(self.stash2_abbrev, '0'))
-        self.assertEqual(stash_output[1], _STASH_FORMAT.format(self.stash3_abbrev, '1'))
+        self.assertEqual(stash_output[0], _STASH_FORMAT.format(self.stash2_abbrev, '0', self.initial_commit))
+        self.assertEqual(stash_output[1], _STASH_FORMAT.format(self.stash3_abbrev, '1', self.initial_commit))
 
     def test_abandon_quiet_longOption(self):
 
@@ -252,8 +251,8 @@ class TestGitAbandon(unittest.TestCase):
         self.assertFalse(abandon_output)
 
         stash_output = self._stashes().splitlines()
-        self.assertEqual(stash_output[0], _STASH_FORMAT.format(self.stash2_abbrev, '0'))
-        self.assertEqual(stash_output[1], _STASH_FORMAT.format(self.stash3_abbrev, '1'))
+        self.assertEqual(stash_output[0], _STASH_FORMAT.format(self.stash2_abbrev, '0', self.initial_commit))
+        self.assertEqual(stash_output[1], _STASH_FORMAT.format(self.stash3_abbrev, '1', self.initial_commit))
 
     def test_abandon_nonGitRepository(self):
 
