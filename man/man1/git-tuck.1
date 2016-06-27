@@ -13,6 +13,9 @@
 \~\~\~\~\~\~\~\~\~[(\fB\-d\fR|\fB\-\-dry\-run\fR)|(\fB\-q\fR|\fB\-\-quiet\fR)]
 .
 .br
+\~\~\~\~\~\~\~\~\~[(\fB\-x\fR|\fB\-\-indexed\fR)|(\fB\-X\fR|\fB\-\-unindexed\fR)]
+.
+.br
 \~\~\~\~\~\~\~\~\~[((\fB\-c\fR|\fB\-\-color\fR) [\fIwhen\fR]]|[(\fB\-C\fR|\fB\-\-no\-color\fR))] \-\- \fIfile\fR [\fIfile\fR \.\.\.]
 .
 .br
@@ -56,6 +59,14 @@ Color output\. \fIwhen\fR must be one of \fBalways\fR, \fBnever\fR, or \fBauto\f
 .TP
 \fB\-C\fR|\fB\-\-no\-color\fR
 Never color output\. Same as \fB\-\-color=never\fR\.
+.
+.TP
+\fB\-x\fR|\fB\-\-indexed\fR
+Only tuck indexed files\. If an indexed file has unindexed changes, they are also tucked\.
+.
+.TP
+\fB\-X\fR|\fB\-\-unindexed\fR
+Only tuck unindexed files\. If an unindexed file has indexed changes, they are also tucked\.
 .
 .TP
 \fB\-h\fR|\fB\-\-help\fR
