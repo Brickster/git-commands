@@ -4,6 +4,7 @@
 
 `git tuck` [<message>] [(`-i`|`--ignore-deleted`)|(`-I`|`--no-ignore-deleted`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-d`|`--dry-run`)|(`-q`|`--quiet`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-x`|`--indexed`)|(`-X`|`--unindexed`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[((`-c`|`--color`) [<when>]]|[(`-C`|`--no-color`))] -- <file> [<file> ...]<br>
 `git tuck` (`-h`|`--help`)<br>
 `git tuck` (`-v`|`--version`)
@@ -38,6 +39,12 @@ Used to stash specific files rather than the all-or-nothing style of `git stash`
 
 * `-C`|`--no-color`:
     Never color output. Same as `--color=never`.
+
+* `-x`|`--indexed`:
+    Only tuck indexed files. If an indexed file has unindexed changes, they are also tucked.
+
+* `-X`|`--unindexed`:
+    Only tuck unindexed files. If an unindexed file has indexed changes, they are also tucked.
 
 * `-h`|`--help`:
 	Print a simple help message.
