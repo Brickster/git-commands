@@ -7,7 +7,7 @@ import sys
 from commands import settings, tuck
 
 # specific usage message needed to include the '--' part
-_USAGE_MESSAGE = """git tuck [MESSAGE] [-h] [-v] [-i|-I] [-q|-d]
+_USAGE_MESSAGE = """git tuck [MESSAGE] [-h] [-v] [-i|-I] [-q|-d] [-x|-X]
                 [-c [{always,never,auto}]|-C] -- FILE [FILE ...]"""
 
 parser = argparse.ArgumentParser(
@@ -80,6 +80,18 @@ color_group.add_argument(
     dest='show_color'
 )
 
+# indexed group
+indexed_group = parser.add_mutually_exclusive_group()
+indexed_group.add_argument(
+    '-x',
+    '--indexed',
+    help='tuck indexed files',
+    dest='indexed',
+    action='store_true',
+    default=None
+)
+indexed_group.add_argument('-X', '--unindexed', help='tuck unindexed files', dest='indexed', action='store_false')
+
 # check for args that match the format: '-- <files> [<files> ..]
 args = sys.argv[1:]
 file_args = []
@@ -90,7 +102,14 @@ if '--' in args:
 
 args = parser.parse_args(args)
 args.files = file_args
-if not args.files:
+if not args.files and args.indexed is None:
     sys.exit('usage: {}{}git tuck: error: at least one file must be included'.format(_USAGE_MESSAGE, os.linesep))
+elif args.files and args.indexed is not None:
+    index_opt = '-x|--indexed' if args.indexed else '-X|--unindexed'
+    sys.exit('usage: {}{}git tuck: error: specifying files is not compatible with indexing option: {}'.format(
+        _USAGE_MESSAGE,
+        os.linesep,
+        index_opt
+    ))
 
 tuck.tuck(**vars(args))
