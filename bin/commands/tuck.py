@@ -24,7 +24,7 @@ def _status(show_color='auto'):
     return check_output(['git', '-c', 'color.ui=' + show_color, 'status', '--short'])
 
 
-def tuck(files, message=None, quiet=False, ignore_deleted=False, dry_run=False, show_color='auto'):
+def tuck(files, indexed=None, message=None, quiet=False, ignore_deleted=False, dry_run=False, show_color='auto'):
     """Stash specific files.
 
     :param list files: the list of pathspecs for files to tuck
@@ -36,24 +36,32 @@ def tuck(files, message=None, quiet=False, ignore_deleted=False, dry_run=False, 
     if not directories.is_git_repository():
         error('{0!r} not a git repository'.format(os.getcwd()))
 
-    if not ignore_deleted:
-        deleted_files = _deleted_files()
-        not_explicitly_deleted_files = [f for f in deleted_files if f not in files]
-        if not_explicitly_deleted_files:
-            warn('deleted files exist in working tree')
-            warn('deleted files are not considered by pathspecs and must be added explicitly or ignored')
-            usage('git tuck -- PATHSPEC {}'.format(' '.join(not_explicitly_deleted_files)))
-            usage('git tuck --ignore-deleted -- PATHSPEC')
-            sys.exit(1)
+    if files and indexed is None:
+        if not ignore_deleted:
+            deleted_files = _deleted_files()
+            not_explicitly_deleted_files = [f for f in deleted_files if f not in files]
+            if not_explicitly_deleted_files:
+                warn('deleted files exist in working tree')
+                warn('deleted files are not considered by pathspecs and must be added explicitly or ignored')
+                usage('git tuck -- PATHSPEC {}'.format(' '.join(not_explicitly_deleted_files)))
+                usage('git tuck --ignore-deleted -- PATHSPEC')
+                sys.exit(1)
 
-    # resolve the files to be tucked
-    files_to_tuck = check_output(['git', 'diff', '--name-only', '--cached', '--'] + files).splitlines()
-    files_to_tuck += check_output(['git', 'diff', '--name-only', '--'] + files).splitlines()
+        # resolve the files to be tucked
+        files_to_tuck = check_output(['git', 'diff', '--name-only', '--cached', '--'] + files).splitlines()
+        files_to_tuck += check_output(['git', 'diff', '--name-only', '--'] + files).splitlines()
 
-    # resolve new files to be tucked
-    files_to_tuck += check_output(['git', 'ls-files', '--others', '--'] + files).splitlines()
+        # resolve new files to be tucked
+        files_to_tuck += check_output(['git', 'ls-files', '--others', '--'] + files).splitlines()
 
-    files_to_tuck = list(set(files_to_tuck))
+        files_to_tuck = list(set(files_to_tuck))
+    elif not files and indexed is not None and indexed:
+        files_to_tuck = check_output('git diff --name-only --cached'.split()).splitlines()
+    elif not files and indexed is not None and not indexed:
+        files_to_tuck = check_output('git diff --name-only'.split()).splitlines()
+        files_to_tuck += check_output('git ls-files --others'.split()).splitlines()
+    else:
+        raise Exception('specifying files is not compatible with indexing option: index={}'.format(indexed))
 
     if dry_run:
 
@@ -109,7 +117,7 @@ def tuck(files, message=None, quiet=False, ignore_deleted=False, dry_run=False, 
         call(['git', 'reset', '--quiet', '--'] + files_to_tuck)
 
         # checkout will complain about new files so find them and handle them accordingly
-        new_files = check_output(['git', 'ls-files', '--others', '--'] + files).splitlines()
+        new_files = check_output(['git', 'ls-files', '--others', '--'] + files_to_tuck).splitlines()
         if new_files:
             call(['git', 'checkout', '--quiet', '--'] + [x for x in files_to_tuck if x not in new_files])
             call(['git', 'clean', '--quiet', '-d', '--force', '--'] + new_files)

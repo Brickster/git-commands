@@ -44,6 +44,14 @@ class TestGitTuck(unittest.TestCase):
         subprocess.call('git add -- file3.txt'.split())
         subprocess.call('touch file4.txt'.split())
 
+        # MM CHANGELOG.md
+        # M  CONTRIBUTING.md
+        #  M README.md
+        # D  file1.txt
+        #  D file2.txt
+        # A  file3.txt
+        # ?? file4.txt
+
     def test_tuck(self):
         expected = """Saved working directory and index state WIP on master: {commit}
 HEAD is now at {commit}
@@ -487,57 +495,171 @@ Leaving working directory:
 
     def test_tuck_ignoreFlagAndNotIgnoreFlag(self):
 
-        expected = """usage: git tuck [MESSAGE] [-h] [-v] [-i|-I] [-q|-d]
-                [-c [{always,never,auto}]|-C] -- FILE [FILE ...]
-git tuck: error: argument -I/--no-ignore-deleted: not allowed with argument -i/--ignore-deleted
-"""
+        expected = "git tuck: error: argument -I/--no-ignore-deleted: not allowed with argument -i/--ignore-deleted"
 
         # run 1
         stdout, stderr = subprocess.Popen('git tuck --ignore-deleted --no-ignore-deleted -- *.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
         self.assertFalse(stdout)
-        self.assertEquals(stderr, expected)
+        self.assertEquals(stderr.splitlines()[2], expected)
 
         # run 2
         stdout, stderr = subprocess.Popen('git tuck --ignore-deleted -I -- *.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
         self.assertFalse(stdout)
-        self.assertEquals(stderr, expected)
+        self.assertEquals(stderr.splitlines()[2], expected)
 
         # run 3
         stdout, stderr = subprocess.Popen('git tuck -i --no-ignore-deleted -- *.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
         self.assertFalse(stdout)
-        self.assertEquals(stderr, expected)
+        self.assertEquals(stderr.splitlines()[2], expected)
 
         # run 4
         stdout, stderr = subprocess.Popen('git tuck -i -I -- *.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
         self.assertFalse(stdout)
-        self.assertEquals(stderr, expected)
+        self.assertEquals(stderr.splitlines()[2], expected)
 
     def test_tuck_quietAndDryRun(self):
 
-        expected = """usage: git tuck [MESSAGE] [-h] [-v] [-i|-I] [-q|-d]
-                [-c [{always,never,auto}]|-C] -- FILE [FILE ...]
-git tuck: error: argument -d/--dry-run: not allowed with argument -q/--quiet
-"""
+        expected = "git tuck: error: argument -d/--dry-run: not allowed with argument -q/--quiet"
 
         # run 1
         stdout, stderr = subprocess.Popen('git tuck --quiet --dry-run -- *.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
         self.assertFalse(stdout)
-        self.assertEquals(stderr, expected)
+        self.assertEquals(stderr.splitlines()[2], expected)
 
         # run 1
         stdout, stderr = subprocess.Popen('git tuck --quiet -d -- *.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
         self.assertFalse(stdout)
-        self.assertEquals(stderr, expected)
+        self.assertEquals(stderr.splitlines()[2], expected)
 
         # run 1
         stdout, stderr = subprocess.Popen('git tuck -q --dry-run -- *.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
         self.assertFalse(stdout)
-        self.assertEquals(stderr, expected)
+        self.assertEquals(stderr.splitlines()[2], expected)
 
         # run 1
         stdout, stderr = subprocess.Popen('git tuck -q -d -- *.txt'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
         self.assertFalse(stdout)
-        self.assertEquals(stderr, expected)
+        self.assertEquals(stderr.splitlines()[2], expected)
+
+    def test_tuck_indexed(self):
+
+        # run
+        subprocess.check_output('git tuck --quiet --indexed'.split())
+
+        # verify
+        self.assertEqual(
+            subprocess.check_output('git -c color.ui=never status --short'.split()),
+            " M README.md\n D file2.txt\n?? file4.txt\n"
+        )
+
+    def test_tuck_indexed_short(self):
+
+        # run
+        subprocess.call('git tuck --quiet -x'.split())
+
+        # verify
+        self.assertEqual(
+            subprocess.check_output('git -c color.ui=never status --short'.split()),
+            " M README.md\n D file2.txt\n?? file4.txt\n"
+        )
+
+    def test_tuck_indexed_checkStash(self):
+
+        # run
+        subprocess.call('git tuck --indexed --quiet'.split())
+
+        # verify
+        subprocess.call('git reset --quiet --hard'.split())
+        subprocess.call('git clean --quiet -fd'.split())
+        subprocess.call('git stash pop --index --quiet'.split())
+        self.assertEqual(
+            subprocess.check_output('git -c color.ui=never status --short'.split()),
+            "MM CHANGELOG.md\nM  CONTRIBUTING.md\nD  file1.txt\nA  file3.txt\n"
+        )
+
+    def test_tuck_unindexed(self):
+
+        # run
+        subprocess.call('git tuck --quiet --unindexed'.split())
+
+        # verify
+        self.assertEqual(
+            subprocess.check_output('git -c color.ui=never status --short'.split()),
+            "M  CONTRIBUTING.md\nD  file1.txt\nA  file3.txt\n"
+        )
+
+    def test_tuck_unindexed_short(self):
+
+        # run
+        subprocess.call('git tuck --quiet -X'.split())
+
+        # verify
+        self.assertEqual(
+            subprocess.check_output('git -c color.ui=never status --short'.split()),
+            "M  CONTRIBUTING.md\nD  file1.txt\nA  file3.txt\n"
+        )
+
+    def test_tuck_unindexed_checkStash(self):
+
+        # run
+        subprocess.call('git tuck --unindexed --quiet'.split())
+
+        # verify
+        subprocess.call('git reset --quiet --hard'.split())
+        subprocess.call('git clean --quiet -fd'.split())
+        subprocess.call('git stash pop --index --quiet'.split())
+        self.assertEqual(
+            subprocess.check_output('git -c color.ui=never status --short'.split()),
+            "MM CHANGELOG.md\n M README.md\n D file2.txt\n?? file4.txt\n"
+        )
+
+    def test_tuck_indexedWithFiles(self):
+
+        # run
+        stdout, stderr = subprocess.Popen('git tuck --indexed -- README.md'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+
+        # verify
+        self.assertFalse(stdout)
+        self.assertEquals(
+            stderr.splitlines()[2],
+            "git tuck: error: specifying files is not compatible with indexing option: -x|--indexed"
+        )
+
+    def test_tuck_indexedWithFiles_short(self):
+
+        # run
+        stdout, stderr = subprocess.Popen('git tuck -x -- README.md'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+
+        # verify
+        self.assertFalse(stdout)
+        self.assertEquals(
+            stderr.splitlines()[2],
+            "git tuck: error: specifying files is not compatible with indexing option: -x|--indexed"
+        )
+
+    def test_tuck_unindexedWithFiles(self):
+
+        # run
+        stdout, stderr = subprocess.Popen('git tuck --unindexed -- README.md'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+
+        # verify
+        self.assertFalse(stdout)
+        self.assertEquals(
+            stderr.splitlines()[2],
+            "git tuck: error: specifying files is not compatible with indexing option: -X|--unindexed"
+        )
+
+    def test_tuck_unindexedWithFiles_short(self):
+
+        # run
+        stdout, stderr = subprocess.Popen('git tuck -X -- README.md'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+
+        # verify
+        self.assertFalse(stdout)
+        self.assertEquals(
+            stderr.splitlines()[2],
+            "git tuck: error: specifying files is not compatible with indexing option: -X|--unindexed"
+        )
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
