@@ -93,3 +93,104 @@ class TestGitReindex(unittest.TestCase):
         expected = "error: '{}' not a git repository".format('/private' + self.dirpath + '/dir')
         self.assertEqual(expected, stderr.strip())
         self.assertFalse(stdout)
+
+    def test_reindex_deletedFile_unindexed(self):
+
+        # setup:
+        # MM CHANGELOG.md
+        #  D README.md
+        with open('CHANGELOG.md', 'a') as a_file:
+            a_file.write('changelog\n')
+        subprocess.call('git add --all'.split())
+        with open('CHANGELOG.md', 'a') as a_file:
+            a_file.write('changelog2\n')
+        subprocess.call('rm README.md'.split())
+
+        reindex_result = self._reindex()
+
+        self.assertFalse(reindex_result)
+        self.assertEqual("M  CHANGELOG.md\n D README.md\n", self._status())
+
+    def test_reindex_deletedFile_indexed(self):
+
+        # setup:
+        # MM CHANGELOG.md
+        # D  README.md
+        with open('CHANGELOG.md', 'a') as a_file:
+            a_file.write('changelog\n')
+        subprocess.call('git add --all'.split())
+        with open('CHANGELOG.md', 'a') as a_file:
+            a_file.write('changelog2\n')
+        subprocess.call('git rm --quiet README.md'.split())
+
+        reindex_result = self._reindex()
+
+        self.assertFalse(reindex_result)
+        self.assertEqual("M  CHANGELOG.md\nD  README.md\n", self._status())
+
+    def test_reindex_deletedFile_modificationInIndexAndDeleteUnindexed(self):
+
+        # setup:
+        # MD README.md
+        with open('README.md', 'a') as a_file:
+            a_file.write('readme\n')
+        subprocess.call('git add --all'.split())
+        subprocess.call('rm README.md'.split())
+
+        reindex_result = self._reindex()
+
+        self.assertFalse(reindex_result)
+        self.assertEqual("D  README.md\n", self._status())
+
+    def test_reindex_newFile_unindexed(self):
+
+        # setup:
+        # MM CHANGELOG.md
+        # ?? new.txt
+        with open('CHANGELOG.md', 'a') as a_file:
+            a_file.write('changelog\n')
+        subprocess.call('git add --all'.split())
+        with open('CHANGELOG.md', 'a') as a_file:
+            a_file.write('changelog2\n')
+        subprocess.call('touch new.txt'.split())
+
+        reindex_result = self._reindex()
+
+        self.assertFalse(reindex_result)
+        self.assertEqual("M  CHANGELOG.md\n?? new.txt\n", self._status())
+
+    def test_reindex_newFile_indexed(self):
+
+        # setup:
+        # MM CHANGELOG.md
+        # A  new.txt
+        with open('CHANGELOG.md', 'a') as a_file:
+            a_file.write('changelog\n')
+        subprocess.call('touch new.txt'.split())
+        subprocess.call('git add --all'.split())
+        with open('CHANGELOG.md', 'a') as a_file:
+            a_file.write('changelog2\n')
+
+        reindex_result = self._reindex()
+
+        self.assertFalse(reindex_result)
+        self.assertEqual("M  CHANGELOG.md\nA  new.txt\n", self._status())
+
+    def test_reindex_newFile_indexedAndUnindexed(self):
+
+        # setup:
+        # MM CHANGELOG.md
+        # AM new.txt
+        with open('CHANGELOG.md', 'a') as a_file:
+            a_file.write('changelog\n')
+        subprocess.call('touch new.txt'.split())
+        subprocess.call('git add --all'.split())
+        with open('CHANGELOG.md', 'a') as a_file:
+            a_file.write('changelog2\n')
+        with open('new.txt', 'a') as a_file:
+            a_file.write('new\n')
+
+        reindex_result = self._reindex()
+
+        self.assertFalse(reindex_result)
+        self.assertEqual("M  CHANGELOG.md\nA  new.txt\n", self._status())
