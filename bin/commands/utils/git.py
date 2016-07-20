@@ -1,7 +1,8 @@
 """A collection of common git actions."""
 
+import re
 import os
-from subprocess import call, check_output, PIPE, Popen, STDOUT
+from subprocess import call, check_output, PIPE, Popen
 
 
 class GitException(Exception):
@@ -91,3 +92,13 @@ def current_branch():
     """
 
     return check_output(('git', 'rev-parse', '--abbrev-ref', 'HEAD')).strip()
+
+
+def deleted_files():
+    """Get the deleted files in a dirty working tree.
+
+    :return list: a list of deleted file paths
+    """
+
+    all_files = check_output(['git', 'status', '--short', '--porcelain'])
+    return [match.group(1) for match in re.finditer('^(?:D\s|\sD)\s(.*)', all_files, re.MULTILINE)]
