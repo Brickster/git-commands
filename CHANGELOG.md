@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file. This projec
 ## [Unreleased](https://github.com/Brickstertwo/git-commands/compare/v0.5.0...HEAD)
 ### Added
 - `git-tuck` options `--dry-run` and `--color` [#67][]
+- `git-reindex` for re-adding already indexed files to the index
 
 ### Fixed
 - `git-changes` reporting ambiguous refs as not being a valid commit [#58][]
