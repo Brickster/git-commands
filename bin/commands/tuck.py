@@ -6,18 +6,8 @@ import sys
 from subprocess import call, check_output, PIPE, Popen
 
 import snapshot
-from utils import directories
+from utils import directories, git
 from utils.messages import error, info, usage, warn
-
-
-def _deleted_files():
-    """Get the deleted files in a dirty working tree.
-
-    :return list: a list of deleted file paths
-    """
-
-    all_files = check_output(['git', 'status', '--short', '--porcelain'])
-    return [match.group(1) for match in re.finditer('^(?:D\s|\sD)\s(.*)', all_files, re.MULTILINE)]
 
 
 def _status(show_color='auto'):
@@ -38,7 +28,7 @@ def tuck(files, indexed=None, message=None, quiet=False, ignore_deleted=False, d
 
     if files and indexed is None:
         if not ignore_deleted:
-            deleted_files = _deleted_files()
+            deleted_files = git.deleted_files()
             not_explicitly_deleted_files = [f for f in deleted_files if f not in files]
             if not_explicitly_deleted_files:
                 warn('deleted files exist in working tree')
