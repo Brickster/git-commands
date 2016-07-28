@@ -194,7 +194,7 @@ A  file3.txt
         self.assertFalse(stdout)
         self.assertFalse(stderr)
 
-    def test_tuck_nonGitRepository(self):
+    def test_snapshot_nonGitRepository(self):
 
         # setup
         os.mkdir(self.dirpath + '/dir')
@@ -205,6 +205,6 @@ A  file3.txt
         stdout, stderr = p.communicate()
 
         # verify
-        expected = "error: '{}' not a git repository".format('/private' + self.dirpath + '/dir')
+        expected = "error: '{}' not a git repository".format(os.path.realpath(self.dirpath) + '/dir')
         self.assertEqual(expected, stderr.strip())
         self.assertFalse(stdout)
