@@ -1,5 +1,7 @@
 # git-commands
 
+[![Build Status](https://travis-ci.org/Brickstertwo/git-commands.svg?branch=master)](https://travis-ci.org/Brickstertwo/git-commands)
+
 A collection of custom git commands
 
 ## Install
