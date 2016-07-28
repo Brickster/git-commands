@@ -265,6 +265,6 @@ class TestGitAbandon(unittest.TestCase):
         stdout, stderr = p.communicate()
 
         # verify
-        expected = "error: '{}' not a git repository".format('/private' + self.dirpath + '/dir')
+        expected = "error: '{}' not a git repository".format(os.path.realpath(self.dirpath) + '/dir')
         self.assertEqual(expected, stderr.strip())
         self.assertFalse(stdout)
