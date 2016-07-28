@@ -2,4 +2,7 @@ language: python
 python:
   - "2.7"
 install: "pip install -r requirements.txt"
-script: nosetests
+script:
+  - git config --global user.email "Brickstertwo@users.noreply.github.com"
+  - git config --global user.name "Marcus Rosenow"
+  - nosetests
