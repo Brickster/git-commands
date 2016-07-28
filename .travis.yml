@@ -1,8 +1,13 @@
 language: python
 python:
   - "2.7"
+before_install:
+  - sudo add-apt-repository ppa:git-core/ppa -y
+  - sudo apt-get update
+  - sudo apt-get install git
 install: "pip install -r requirements.txt"
 script:
+  - git --version
   - git config --global user.email "Brickstertwo@users.noreply.github.com"
   - git config --global user.name "Marcus Rosenow"
   - export PATH="$PATH:$TRAVIS_BUILD_DIR/bin"
