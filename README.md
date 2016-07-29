@@ -1,6 +1,6 @@
 # git-commands
 
-[![Build Status](https://travis-ci.org/Brickstertwo/git-commands.svg?branch=master)](https://travis-ci.org/Brickstertwo/git-commands)
+[![Build Status](https://travis-ci.org/Brickstertwo/git-commands.svg?branch=master)](https://travis-ci.org/Brickstertwo/git-commands) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5d1b9c705bcf4ff38f1da2d08261dd0d)](https://www.codacy.com/app/Brickstertwo/git-commands?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Brickstertwo/git-commands&amp;utm_campaign=Badge_Grade) [![Dependency Status](https://www.versioneye.com/user/projects/579bb70baa78d5003c173645/badge.svg?style=flat)](https://www.versioneye.com/user/projects/579bb70baa78d5003c173645)
 
 A collection of custom git commands
 
