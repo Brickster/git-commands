@@ -1,7 +1,3 @@
-# if show_branches and (show_only_default_branch or not _only_default_branch()):
-#     branches = check_output(['git', 'branch', '-vv', '--color={}'.format(show_color)])
-#     state += _print_section('branches', branches, format)
-
 import re
 from subprocess import check_output
 
@@ -25,10 +21,7 @@ def _only_default_branch():
         return False
 
     default_branch = settings.get('git-state.branches.default', default='master')
-    if re.match('\* {}'.format(default_branch), branches[0]):
-        return True
-    else:
-        return False
+    return bool(re.match('\* {}'.format(default_branch), branches[0]))
 
 
 def get(**kwargs):
