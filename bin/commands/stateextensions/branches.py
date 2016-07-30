@@ -25,7 +25,7 @@ def _only_default_branch():
         return False
 
     default_branch = settings.get('git-state.branches.default', default='master')
-    if re.match('\* {}'.format(default_branch), branches[0]) is not None:
+    if re.match('\* {}'.format(default_branch), branches[0]):
         return True
     else:
         return False

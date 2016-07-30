@@ -28,34 +28,34 @@ def is_valid_reference(reference):
     return not show_ref_proc.returncode
 
 
-def is_commit(object):
+def is_commit(object_):
     """Determines if an object is a commit.
 
-    :param str object: a git object
+    :param str object_: a git object
 
     :return bool: whether or not the object is a commit object
     """
 
-    assert isinstance(object, str), "'object' must be a str. Given: " + type(object).__name__
+    assert isinstance(object_, str), "'object' must be a str. Given: " + type(object_).__name__
 
     with open(os.devnull, 'w') as dev_null:
-        cat_file_proc = Popen(['git', 'cat-file', '-t', object], stdout=PIPE, stderr=dev_null)
+        cat_file_proc = Popen(['git', 'cat-file', '-t', object_], stdout=PIPE, stderr=dev_null)
         object_type = cat_file_proc.communicate()[0].strip()
         return not cat_file_proc.returncode and object_type == 'commit'
 
 
-def is_ref(object):
+def is_ref(object_):
     """Determines if an object is a ref.
 
-    :param str object: a git object
+    :param str object_: a git object
 
     :return bool: whether or not the object is a ref
     """
 
-    assert isinstance(object, str), "'object' must be a str. Given: " + type(object).__name__
+    assert isinstance(object_, str), "'object' must be a str. Given: " + type(object_).__name__
 
     with open(os.devnull, 'w') as dev_null:
-        return not call(('git', 'show-ref', object), stdout=dev_null, stderr=dev_null)
+        return not call(('git', 'show-ref', object_), stdout=dev_null, stderr=dev_null)
 
 
 def is_ref_ambiguous(ref, limit=None):
