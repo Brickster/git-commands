@@ -48,7 +48,7 @@ class Section(object):
             result += '  ' + str(self.inline_comment)
 
         for value in self.values:
-            if type(value) == Comment:
+            if isinstance(value, Comment):
                 result += os.linesep + '    ' + str(value)
             else:
                 result += os.linesep + str(value)
@@ -59,7 +59,7 @@ class Section(object):
 class Value(object):
     def __init__(self, key, value=True, inline_comment=None, comments=None):
         self.key = key.strip()
-        self.value = value.strip() if type(value) != bool else value
+        self.value = value.strip() if not isinstance(value, bool) else value
         self.inline_comment = inline_comment
         self.comments = comments
 
@@ -68,7 +68,7 @@ class Value(object):
         if self.comments:
             result += '    ' + (os.linesep + '    ').join([str(c) for c in self.comments]) + os.linesep
         result += '    ' + self.key + ' = '
-        if type(self.value) == bool:
+        if isinstance(self.value, bool):
             result += 'true' if self.value else 'false'
         else:
             result += self.value
@@ -299,7 +299,7 @@ def cleanup(file_path=None):
     """
 
     if not os.path.isfile(file_path):
-        error('no such file: {0!r}'.format(file_path), exit=True)
+        error('no such file: {0!r}'.format(file_path), exit_=True)
 
     with open(file_path, 'r') as config_file:
         old_config = config_file.read().splitlines()
@@ -310,7 +310,7 @@ def cleanup(file_path=None):
     visited_sections = {}
     newer_sections = []
     for section in config.sections:
-        if type(section) == Section and section.values:
+        if isinstance(section, Section) and section.values:
             name = section.section + (section.subsection if section.subsection else '')
             if name in visited_sections:
                 # TODO: merge section level comments somehow
@@ -318,7 +318,7 @@ def cleanup(file_path=None):
             else:
                 visited_sections[name] = section
                 newer_sections += [section]
-        elif type(section) != Section:
+        elif not isinstance(section, Section):
             newer_sections += [section]
     config.sections = newer_sections
 

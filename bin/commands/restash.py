@@ -56,7 +56,7 @@ def restash(stash='stash@{0}', quiet=False):
         restash_proc.communicate(input=reverse_patch)
 
         if restash_proc.returncode:
-            error('unable to reverse modifications', exit=True)
+            error('unable to reverse modifications', exit_=True)
 
     # check if we need remove any untracked files. For a stash ref, the third parent contains the untracked files
     parents = _parents(stash)

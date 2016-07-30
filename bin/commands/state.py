@@ -15,7 +15,7 @@ from utils import directories
 from utils.messages import error
 
 
-def _print_section(title, accent=None, text=None, format='compact', show_empty=False):
+def _print_section(title, accent=None, text=None, format_='compact', show_empty=False):
     """Print a section."""
 
     if not show_empty and not text:
@@ -26,20 +26,20 @@ def _print_section(title, accent=None, text=None, format='compact', show_empty=F
     else:
         section = '# {}{}{}'.format(colorama.Fore.GREEN, title, colorama.Fore.RESET) + os.linesep
 
-    if format == 'pretty' and text is not None and len(text) > 0:
+    if format_ == 'pretty' and text is not None and len(text) > 0:
         # pretty print
         section += os.linesep
         text = text.splitlines()
         for line in text:
             section += '    ' + line + os.linesep
         section += os.linesep
-    elif format == 'pretty':
+    elif format_ == 'pretty':
         # there's no text but we still want some nicer formatting
         section += os.linesep
-    elif format == 'compact':
+    elif format_ == 'compact':
         section += text
     else:
-        error("unknown format '{}'".format(format))
+        error("unknown format '{}'".format(format_))
 
     return section
 
@@ -74,35 +74,34 @@ def state(**kwargs):
         as_type=settings.as_bool
     )
 
-    state = ''
-    format = kwargs.get('format')
+    format_ = kwargs.get('format')
     if _is_new_repository():
         status_output = status.get(new_repository=True, **kwargs)
         status_title = status.title()
         status_accent = status.accent(new_repository=True, **kwargs)
-        sections = {status_title: _print_section(status_title, status_accent, status_output, format)}
+        sections = {status_title: _print_section(status_title, status_accent, status_output, format_)}
     else:
         sections = OrderedDict()
         if kwargs.get('show_status'):
             status_output = status.get(**kwargs)
             status_title = status.title()
             status_accent = status.accent(show_color=show_color)
-            sections[status_title] = _print_section(status_title, status_accent, status_output, format, show_empty=True)
+            sections[status_title] = _print_section(status_title, status_accent, status_output, format_, show_empty=True)
 
         if kwargs.get('log_count'):
             log_output = log.get(**kwargs)
             log_title = log.title()
-            sections[log_title] = _print_section(log_title, text=log_output, format=format)
+            sections[log_title] = _print_section(log_title, text=log_output, format_=format_)
 
         if kwargs.get('reflog_count'):
             reflog_output = reflog.get(**kwargs)
             reflog_title = reflog.title()
-            sections[reflog_title] = _print_section(reflog_title, text=reflog_output, format=format)
+            sections[reflog_title] = _print_section(reflog_title, text=reflog_output, format_=format_)
 
         if kwargs.get('show_branches'):
             branches_output = branches.get(**kwargs)
             branches_title = branches.title()
-            sections[branches_title] = _print_section(branches_title, text=branches_output, format=format)
+            sections[branches_title] = _print_section(branches_title, text=branches_output, format_=format_)
 
         if kwargs.get('show_stashes'):
             stashes_output = stashes.get(show_color=show_color)
@@ -110,7 +109,7 @@ def state(**kwargs):
             sections[stashes_title] = _print_section(
                 stashes_title,
                 text=stashes_output,
-                format=format,
+                format_=format_,
                 show_empty=kwargs.get('show_empty')
             )
 
@@ -136,30 +135,30 @@ def state(**kwargs):
             sections[extension_name] = _print_section(
                 title=extension_name,
                 text=extension_out if not extension_proc.returncode else extension_error,
-                format=format,
+                format_=format_,
                 show_empty=kwargs.get('show_empty')
             )
 
-    state = ''
+    state_result = ''
 
     # print sections with a predefined order
     order = kwargs.get('order', settings.get('git-state.order', default=[], as_type=settings.as_delimited_list('|')))
     for section in order:
         if section in sections:
-            state += sections.pop(section)
+            state_result += sections.pop(section)
 
     # print any remaining sections in the order they were defined
     for section_info in sections:
-        state += sections[section_info]
+        state_result += sections[section_info]
 
-    state = state[:-1] # strip the extra trailing newline
-    state_lines = len(state.splitlines())
+    state_result = state_result[:-1] # strip the extra trailing newline
+    state_lines = len(state_result.splitlines())
     terminal_lines = literal_eval(check_output(['tput', 'lines']))
     if terminal_lines >= state_lines + 2: # one for the newline and one for the prompt
         if kwargs.get('clear') and sys.stdout.isatty():
             call('clear')
-        print state
+        print state_result
     else:
-        echo = Popen(['echo', state], stdout=PIPE)
+        echo = Popen(['echo', state_result], stdout=PIPE)
         call(['less', '-r'], stdin=echo.stdout)
         echo.wait()

@@ -1,7 +1,6 @@
 """Stash specific files."""
 
 import os
-import re
 import sys
 from subprocess import call, check_output, PIPE, Popen
 

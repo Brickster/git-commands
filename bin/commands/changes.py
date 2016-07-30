@@ -2,7 +2,7 @@
 
 import os
 import sys
-from subprocess import call, check_output, STDOUT
+from subprocess import call, check_output
 
 from . import settings
 from utils import directories, git

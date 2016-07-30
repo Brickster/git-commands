@@ -25,7 +25,7 @@ def abandon(start, end, dry_run=False, quiet=False):
     elif end < start:
         error('end of range cannot come before the start')
     elif start > stash_count:
-        error('start too high', exit=False)
+        error('start too high', exit_=False)
         error('only {} stashes exist'.format(stash_count))
     elif end > stash_count:
         end = stash_count
