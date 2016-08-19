@@ -1,6 +1,6 @@
 # git-commands
 
-[![Build Status](https://travis-ci.org/Brickstertwo/git-commands.svg?branch=master)](https://travis-ci.org/Brickstertwo/git-commands) [![Dependency Status](https://www.versioneye.com/user/projects/579bb70baa78d5003c173645/badge.svg?style=flat)](https://www.versioneye.com/user/projects/579bb70baa78d5003c173645) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5d1b9c705bcf4ff38f1da2d08261dd0d)](https://www.codacy.com/app/Brickstertwo/git-commands?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Brickstertwo/git-commands&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.org/Brickstertwo/git-commands.svg?branch=master)](https://travis-ci.org/Brickstertwo/git-commands) [![Dependency Status](https://www.versioneye.com/user/projects/57b601e0fc1827003a745620/badge.svg?style=flat)](https://www.versioneye.com/user/projects/57b601e0fc1827003a745620) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5d1b9c705bcf4ff38f1da2d08261dd0d)](https://www.codacy.com/app/Brickstertwo/git-commands?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Brickstertwo/git-commands&amp;utm_campaign=Badge_Grade)
 
 A collection of custom git commands
 
