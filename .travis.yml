@@ -7,8 +7,17 @@ before_install:
   - sudo apt-get install git
 install: "pip install -r requirements-test.txt"
 script:
+  - export PATH="$PATH:$TRAVIS_BUILD_DIR/bin"
+
+  # setup git
   - git --version
   - git config --global user.email "Brickstertwo@users.noreply.github.com"
   - git config --global user.name "Marcus Rosenow"
-  - export PATH="$PATH:$TRAVIS_BUILD_DIR/bin"
-  - nosetests
+
+  # test
+  - nosetests --with-coverage --cover-branches --cover-erase --cover-inclusive
+  - coverage xml --include=bin/* --omit=*/__init__.py,*/utils/* -o coverage.xml
+
+  # upload coverage report
+  # secure environment variables aren't available for PRs from other repositories
+  - if [[ ! -z "$CODACY_PROJECT_TOKEN" ]]; then python-codacy-coverage -r coverage.xml; fi
