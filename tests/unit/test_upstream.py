@@ -2,13 +2,11 @@ import unittest
 import mock
 from subprocess import PIPE
 
+import utils
 from bin.commands import upstream
 
 
 class TestUpstream(unittest.TestCase):
-
-    def and_exit(self):
-        raise Exception('exited')
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.current_branch', return_value='the-branch')
@@ -56,7 +54,7 @@ class TestUpstream(unittest.TestCase):
         mock_popen.assert_called_once_with('git config --local branch.the-branch.merge'.split(), stdout=PIPE)
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
-    @mock.patch('bin.commands.utils.messages.error', side_effect=and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
     @mock.patch('os.getcwd', return_value='working_dir')
     def test_upstream_notAGitRepository(self, mock_getcwd, mock_error, mock_isgitrepository):
 
@@ -64,7 +62,7 @@ class TestUpstream(unittest.TestCase):
         try:
             upstream.upstream()
             self.fail('expected to exit but did not')
-        except Exception:
+        except SystemExit:
             pass
 
         # then
@@ -101,14 +99,14 @@ class TestUpstream(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_valid_reference', return_value=False)
-    @mock.patch('bin.commands.utils.messages.error', side_effect=and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
     def test_upstream_notAValidReference(self, mock_error, mock_isvalidreference, mock_isgitrepository):
 
         # when
         try:
             upstream.upstream(branch='bad-branch')
             self.fail('expected to exit but did not')
-        except Exception:
+        except SystemExit:
             pass
 
         mock_isgitrepository.assert_called_once_with()
