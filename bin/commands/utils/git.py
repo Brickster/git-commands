@@ -102,3 +102,15 @@ def deleted_files():
 
     all_files = check_output(['git', 'status', '--short', '--porcelain'])
     return [match.group(1) for match in re.finditer('^(?:D\s|\sD)\s(.*)', all_files, re.MULTILINE)]
+
+
+def is_empty_repository():
+    """Determines whether a repository is empty.
+
+    :return bool: whether or not the repository is empty
+    """
+
+    with open(os.devnull, 'w') as devnull:
+        log_proc = Popen(['git', 'log', '--oneline', '-1'], stdout=devnull, stderr=devnull)
+        log_proc.wait()
+        return log_proc.returncode != 0
