@@ -1,4 +1,4 @@
-from subprocess import check_output
+import subprocess
 
 
 def title():
@@ -13,4 +13,4 @@ def get(**kwargs):
     """Run stashes"""
 
     show_color = kwargs['show_color']
-    return check_output(['git', 'stash', 'list', '--oneline', '--color={}'.format(show_color)])
+    return subprocess.check_output(['git', 'stash', 'list', '--oneline', '--color={}'.format(show_color)])
