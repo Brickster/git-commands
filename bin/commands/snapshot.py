@@ -1,14 +1,14 @@
 """Create a snapshot of the changes in a dirty working directory."""
 
 import os
-from subprocess import call, check_output, STDOUT
+import subprocess
+from subprocess import STDOUT
 
 import tuck
-from utils import directories
-from utils.messages import error, info
+from utils import directories, messages
 
 
-def snapshot(message, quiet=False, files=None):
+def snapshot(message=None, quiet=False, files=None):
     """Create a snapshot of the working directory and index.
 
     :param str or unicode message: the message to use when creating the underlying stash
@@ -17,22 +17,22 @@ def snapshot(message, quiet=False, files=None):
     """
 
     if not directories.is_git_repository():
-        error('{0!r} not a git repository'.format(os.getcwd()))
+        messages.error('{0!r} not a git repository'.format(os.getcwd()))
 
     status_command = ['git', 'status', '--porcelain']
-    status_output = check_output(status_command).splitlines()
+    status_output = subprocess.check_output(status_command).splitlines()
 
     if len(status_output) > 0:
 
         if files:
             tuck.tuck(files, message, quiet=True)
         else:
-            stash_command = ['git', 'stash', 'save', '-u', '--quiet']
+            stash_command = ['git', 'stash', 'save', '--include-untracked', '--quiet']
             stash_command = stash_command if message is None else stash_command + [message]
-            call(stash_command)
+            subprocess.call(stash_command)
 
         # apply isn't completely quiet when the stash only contains untracked files so swallow all output
         with open(os.devnull, 'w') as devnull:
-            call(['git', 'stash', 'apply', '--quiet', '--index'], stdout=devnull, stderr=STDOUT)
+            subprocess.call(['git', 'stash', 'apply', '--quiet', '--index'], stdout=devnull, stderr=STDOUT)
     else:
-        info('No local changes to save. No snapshot created.', quiet)
+        messages.info('No local changes to save. No snapshot created.', quiet)
