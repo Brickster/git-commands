@@ -21,6 +21,8 @@ def upstream(branch=None, include_remote=False):
 
     if not directories.is_git_repository():
         messages.error('{0!r} not a git repository'.format(os.getcwd()))
+    elif git.is_empty_repository():
+        return None
 
     if not branch:
         branch = git.current_branch()
