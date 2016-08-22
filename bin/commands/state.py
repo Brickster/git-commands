@@ -11,7 +11,7 @@ import colorama
 
 from . import settings
 from stateextensions import branches, log, reflog, stashes, status
-from utils import directories
+from utils import directories, git
 from utils.messages import error
 
 
@@ -44,15 +44,6 @@ def _print_section(title, accent=None, text=None, format_='compact', show_empty=
     return section
 
 
-def _is_new_repository():
-    """Determines whether a repository is empty."""
-
-    with open(os.devnull, 'w') as devnull:
-        log_proc = Popen(['git', 'log', '--oneline', '-1'], stdout=devnull, stderr=devnull)
-        log_proc.wait()
-        return log_proc.returncode != 0
-
-
 def state(**kwargs):
     """Print the state of the working tree."""
 
@@ -75,7 +66,7 @@ def state(**kwargs):
     )
 
     format_ = kwargs.get('format')
-    if _is_new_repository():
+    if git.is_empty_repository():
         status_output = status.get(new_repository=True, **kwargs)
         status_title = status.title()
         status_accent = status.accent(new_repository=True, **kwargs)

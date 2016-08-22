@@ -6,12 +6,13 @@ import utils
 from bin.commands import upstream
 
 
+@mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+@mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
 class TestUpstream(unittest.TestCase):
 
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.current_branch', return_value='the-branch')
     @mock.patch('subprocess.Popen')
-    def test_upstream(self, mock_popen, mock_currentbranch, mock_isgitrepository):
+    def test_upstream(self, mock_popen, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
 
         # setup
         expected_upstream = "the-upstream"
@@ -28,14 +29,14 @@ class TestUpstream(unittest.TestCase):
         self.assertEqual(actual_upstream, expected_upstream)
 
         mock_isgitrepository.assert_called_once_with()
+        mock_isemptyrepository.assert_called_once_with()
         mock_currentbranch.assert_called_once_with()
         mock_process.communicate.assert_called_once_with()
         mock_popen.assert_called_once_with('git config --local branch.the-branch.merge'.split(), stdout=PIPE)
 
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.current_branch', return_value='the-branch')
     @mock.patch('subprocess.Popen')
-    def test_upstream_includeRemote_noUpstream(self, mock_popen, mock_currentbranch, mock_isgitrepository):
+    def test_upstream_includeRemote_noUpstream(self, mock_popen, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
 
         # setup
         mock_process = mock.Mock()
@@ -53,10 +54,12 @@ class TestUpstream(unittest.TestCase):
         mock_process.communicate.assert_called_once_with()
         mock_popen.assert_called_once_with('git config --local branch.the-branch.merge'.split(), stdout=PIPE)
 
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
     @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
     @mock.patch('os.getcwd', return_value='working_dir')
-    def test_upstream_notAGitRepository(self, mock_getcwd, mock_error, mock_isgitrepository):
+    def test_upstream_notAGitRepository(self, mock_getcwd, mock_error, mock_isemptyrepository, mock_isgitrepository):
+
+        # setup
+        mock_isgitrepository.return_value = False
 
         # when
         try:
@@ -70,11 +73,23 @@ class TestUpstream(unittest.TestCase):
         mock_error.assert_called_once_with("'working_dir' not a git repository")
         mock_getcwd.assert_called_once_with()
 
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    def test_upstream_repositoryIsEmpty(self, mock_isemptyrepository, mock_isgitrepository):
+
+        # setup
+        mock_isemptyrepository.return_value = True
+
+        # when
+        upstream_result = upstream.upstream()
+
+        # then
+        self.assertEqual(upstream_result, None)
+        mock_isemptyrepository.assert_called_once_with()
+
+
     @mock.patch('bin.commands.utils.git.current_branch', return_value='the-branch')
     @mock.patch('bin.commands.utils.git.is_valid_reference', return_value=True)
     @mock.patch('subprocess.Popen')
-    def test_upstream_branchIncluded(self, mock_popen, mock_isvalidreference, mock_currentbranch, mock_isgitrepository):
+    def test_upstream_branchIncluded(self, mock_popen, mock_isvalidreference, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
 
         # setup
         branch_name = 'the-branch'
@@ -97,10 +112,9 @@ class TestUpstream(unittest.TestCase):
         mock_process.communicate.assert_called_once_with()
         mock_popen.assert_called_once_with('git config --local branch.the-branch.merge'.split(), stdout=PIPE)
 
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_valid_reference', return_value=False)
     @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
-    def test_upstream_notAValidReference(self, mock_error, mock_isvalidreference, mock_isgitrepository):
+    def test_upstream_notAValidReference(self, mock_error, mock_isvalidreference, mock_isemptyrepository, mock_isgitrepository):
 
         # when
         try:
@@ -113,11 +127,10 @@ class TestUpstream(unittest.TestCase):
         mock_isvalidreference.assert_called_once_with('bad-branch')
         mock_error.assert_called_once_with("'bad-branch' is not a valid branch")
 
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.current_branch', return_value='the-branch')
     @mock.patch('subprocess.Popen')
     @mock.patch('subprocess.check_output', return_value='the-remote')
-    def test_upstream_includeRemote(self, mock_checkoutput, mock_popen, mock_currentbranch, mock_isgitrepository):
+    def test_upstream_includeRemote(self, mock_checkoutput, mock_popen, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
 
         # setup
         expected_upstream = "the-upstream"
