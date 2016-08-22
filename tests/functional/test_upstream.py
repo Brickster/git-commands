@@ -162,6 +162,22 @@ class TestGitUpstream(unittest.TestCase):
         self.assertEqual(expected, stderr.strip())
         self.assertFalse(stdout)
 
+    def test_upstream_emptyRepository(self):
+
+        # setup
+        # create a new repo in a sub-directory (lazy)
+        os.mkdir(self.dirpath + '/dir')
+        os.chdir(self.dirpath + '/dir')
+        subprocess.check_output('git init'.split())
+
+        # when
+        p = subprocess.Popen('git upstream'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = p.communicate()
+
+        # then
+        self.assertFalse(stdout)
+        self.assertFalse(stderr)
+
     def test_upstream_includeRemoteAndNoIncludeRemote(self):
 
         expected = """usage: git upstream [-h] [-v] [-r | -R] [-b BRANCH]
