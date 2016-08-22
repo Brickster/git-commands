@@ -1,5 +1,5 @@
 import re
-from subprocess import check_output
+import subprocess
 
 from .. import settings
 
@@ -15,7 +15,7 @@ def accent():
 def _only_default_branch():
     """Determine whether the branches section only contains the default branch."""
 
-    branches = check_output(['git', 'branch', '--no-color']).splitlines()
+    branches = subprocess.check_output(['git', 'branch', '--no-color']).splitlines()
 
     if len(branches) > 1:
         return False
@@ -35,5 +35,5 @@ def get(**kwargs):
     )
 
     if show_only_default_branch or not _only_default_branch():
-        return check_output(['git', 'branch', '-vv', '--color={}'.format(show_color)])
+        return subprocess.check_output(['git', 'branch', '-vv', '--color={}'.format(show_color)])
     return None

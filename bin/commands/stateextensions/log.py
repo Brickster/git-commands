@@ -1,4 +1,4 @@
-from subprocess import check_output
+import subprocess
 
 
 def title():
@@ -14,4 +14,4 @@ def get(**kwargs):
 
     log_count = kwargs['log_count']
     show_color = kwargs['show_color']
-    return check_output(['git', 'log', '-n', str(log_count), '--oneline', '--color={}'.format(show_color)])
+    return subprocess.check_output(['git', 'log', '-n', str(log_count), '--oneline', '--color={}'.format(show_color)])
