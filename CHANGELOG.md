@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file. This projec
 - `git-tuck` attempting to run in a non-git repository [#66][]
 - `git-snapshot` not preserving restoring index changes [#64][]
 - `git-upstream` not working for empty/new repositories [#72][]
+- `git-restash` printing a misleading message when no stashes exist [#75][]
 - Documentation issues [#59][]
 
 [#58]: https://github.com/Brickstertwo/git-commands/issues/58
@@ -26,6 +27,7 @@ All notable changes to this project will be documented in this file. This projec
 [#66]: https://github.com/Brickstertwo/git-commands/issues/66
 [#67]: https://github.com/Brickstertwo/git-commands/issues/67
 [#72]: https://github.com/Brickstertwo/git-commands/issues/72
+[#75]: https://github.com/Brickstertwo/git-commands/issues/75
 
 ## [v0.5.0][] - 2016-04-14
 ### Added
