@@ -93,15 +93,15 @@ def _parse_config(lines):
         line = line.strip()
 
         # comments
-        m = _COMMENT_PATTERN.match(line)
-        if m:
-            pending_comments += [Comment(comment=m.groupdict()['comment'].strip())]
+        match = _COMMENT_PATTERN.match(line)
+        if match:
+            pending_comments += [Comment(comment=match.groupdict()['comment'].strip())]
             continue
 
         # sections
-        m = _SECTION_PATTERN.match(line)
-        if m:
-            groups = m.groupdict()
+        match = _SECTION_PATTERN.match(line)
+        if match:
+            groups = match.groupdict()
             # TODO: handle inline comments differently than attached
             all_sections += [Section(
                 section=groups['section'],
@@ -113,9 +113,9 @@ def _parse_config(lines):
             continue
 
         # key/values
-        m = _KEY_VALUE_PATTERN.match(line)
-        if m:
-            groups = m.groupdict()
+        match = _KEY_VALUE_PATTERN.match(line)
+        if match:
+            groups = match.groupdict()
             key_value = Value(
                 key=groups['key'],
                 value=groups['value'] if groups['value'] else True,
@@ -226,8 +226,8 @@ def _list(**kwargs):
 def _dry_destroy_section(config, section):
 
     command = ('git', 'settings', 'list', '--format', 'compact', '--{}'.format(config), section)
-    p = Popen(command, stdout=PIPE, stderr=PIPE)
-    list_output = p.communicate()[0][:-1] # just ignore stderr and removing trailing newline
+    proc = Popen(command, stdout=PIPE, stderr=PIPE)
+    list_output = proc.communicate()[0][:-1]  # just ignore stderr and removing trailing newline
 
     for line in list_output.splitlines():
         print 'Would be deleted from {}: {}'.format(config, line)
@@ -279,8 +279,8 @@ def get(key, default=None, config=None, file=None, as_type=str):
     else:
         command = ('git', 'config', '--{}'.format(config), key)
 
-    p = Popen(command, stdout=PIPE, stderr=STDOUT)
-    value = p.communicate()[0].strip()
+    proc = Popen(command, stdout=PIPE, stderr=STDOUT)
+    value = proc.communicate()[0].strip()
 
     if not value:
         return default
