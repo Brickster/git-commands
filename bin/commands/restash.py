@@ -45,7 +45,8 @@ def restash(stash='stash@{0}', quiet=False):
 
     if not directories.is_git_repository():
         messages.error('{0!r} not a git repository'.format(os.getcwd()))
-
+    elif not subprocess.check_output('git stash list'.split()):
+        messages.error('no stashes exist')
     if not _is_valid_stash(stash):
         messages.error('{} is not a valid stash reference'.format(stash))
 
