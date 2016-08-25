@@ -2,11 +2,13 @@
 
 import os
 import sys
-from subprocess import call, check_output
+import subprocess
 
 from . import settings
-from utils import directories, git
-from utils.messages import error, info
+from utils import directories, git, messages
+
+_DETAIL_OPTIONS = ('diff', 'stat', 'count')
+_COLOR_OPTIONS = ('always', 'auto', 'never')
 
 
 def associate(committish, quiet=False):
@@ -17,21 +19,21 @@ def associate(committish, quiet=False):
     """
 
     if not directories.is_git_repository():
-        error('{0!r} not a git repository'.format(os.getcwd()))
+        messages.error('{0!r} not a git repository'.format(os.getcwd()))
 
     current_branch = git.current_branch()
-    call(['git', 'config', '--local', 'git-changes.associations.' + current_branch + '.with', committish])
-    info('{} has been associated with {}'.format(current_branch, committish), quiet)
+    subprocess.call(['git', 'config', '--local', 'git-changes.associations.' + current_branch + '.with', committish])
+    messages.info('{} has been associated with {}'.format(current_branch, committish), quiet)
 
 
 def _prune_associations(cleanup, quiet):
     """Remove associations for branches that no longer exist."""
 
     # get branches
-    current_branches = [ref.split()[1][11:] for ref in check_output(('git', 'show-ref', '--heads')).splitlines()]
+    current_branches = [ref.split()[1][11:] for ref in subprocess.check_output(('git', 'show-ref', '--heads')).splitlines()]
 
     # get associations
-    current_associations = check_output(('git', 'config', '--local', '--name-only', '--get-regexp', 'git-changes.associations')).splitlines()
+    current_associations = subprocess.check_output(('git', 'config', '--local', '--name-only', '--get-regexp', 'git-changes.associations')).splitlines()
     current_associations = [association[25:-5] for association in current_associations]
 
     branches_to_prune = current_associations
@@ -40,7 +42,7 @@ def _prune_associations(cleanup, quiet):
         branches_to_prune = list(set(current_associations) - set(current_branches))
     for to_prune in branches_to_prune:
         unassociate(to_prune)
-        info('Removed association {0!r}'.format(to_prune), quiet)
+        messages.info('Removed association {0!r}'.format(to_prune), quiet)
 
 
 def unassociate(branch=None, cleanup=None, quiet=False):
@@ -53,13 +55,13 @@ def unassociate(branch=None, cleanup=None, quiet=False):
     assert not cleanup or cleanup in ('all', 'prune'), 'cleanup must be one of ' + str(['all', 'prune'])
 
     if not directories.is_git_repository():
-        error('{0!r} not a git repository'.format(os.getcwd()))
+        messages.error('{0!r} not a git repository'.format(os.getcwd()))
 
     if cleanup:
         _prune_associations(cleanup, quiet)
     else:
         branch = branch if branch else git.current_branch()
-        call(['git', 'config', '--local', '--unset', 'git-changes.associations.' + branch + '.with'])
+        subprocess.call(['git', 'config', '--local', '--unset', 'git-changes.associations.' + branch + '.with'])
 
 
 def get_association(branch=None):
@@ -70,7 +72,7 @@ def get_association(branch=None):
     """
 
     if not directories.is_git_repository():
-        error('{0!r} not a git repository'.format(os.getcwd()))
+        messages.error('{0!r} not a git repository'.format(os.getcwd()))
     branch = branch if branch else git.current_branch()
     return settings.get('git-changes.associations.' + branch + '.with', config='local')
 
@@ -83,13 +85,16 @@ def changes(committish, details=None, color_when=None):
     :param str or unicode color_when: when to color output
     """
 
+    assert not details or details in _DETAIL_OPTIONS, 'details must be one of ' + str(_DETAIL_OPTIONS)
+    assert not color_when or color_when in _COLOR_OPTIONS, 'color_when must be one of ' + str(_COLOR_OPTIONS)
+
     if not directories.is_git_repository():
-        error('{0!r} not a git repository'.format(os.getcwd()))
+        messages.error('{0!r} not a git repository'.format(os.getcwd()))
     elif not git.is_commit(committish):
-        error('{0!r} is not a valid commit'.format(committish))
+        messages.error('{0!r} is not a valid commit'.format(committish))
     elif git.is_ref(committish) and git.is_ref_ambiguous(committish, limit=('heads', 'tags')):
-        ref_names = [ref.split(' ')[1] for ref in check_output(('git', 'show-ref', '--tags', '--heads', committish)).splitlines()]
-        error('{0!r} is an ambiguous ref. Use one of:\n{1}'.format(committish, '\n'.join(ref_names)))
+        ref_names = [ref.split(' ')[1] for ref in subprocess.check_output(('git', 'show-ref', '--tags', '--heads', committish)).splitlines()]
+        messages.error('{0!r} is an ambiguous ref. Use one of:\n{1}'.format(committish, '\n'.join(ref_names)))
 
     color_when = color_when.lower() if color_when else settings.get('color.ui', default='auto')
     if color_when == 'never' or (color_when == 'auto' and not sys.stdout.isatty()):
@@ -98,15 +103,15 @@ def changes(committish, details=None, color_when=None):
         color_when = 'always'
 
     if details == 'diff':
-        call(['git', 'diff', '--color={}'.format(color_when), committish + '...HEAD'])
+        subprocess.call(['git', 'diff', '--color={}'.format(color_when), committish + '...HEAD'])
     elif details == 'stat':
-        call(['git', 'diff', '--color={}'.format(color_when), '--stat', committish + '...HEAD'])
+        subprocess.call(['git', 'diff', '--color={}'.format(color_when), '--stat', committish + '...HEAD'])
     else:
         command = ['git', 'log', '--oneline', '{}..HEAD'.format(committish)]
         if details == 'count':
-            log = check_output(command)
+            log = subprocess.check_output(command)
             log = log.splitlines()
-            info(len(log))
+            messages.info(len(log))
         else:
             command += ['--color={}'.format(color_when)]
-            call(command)
+            subprocess.call(command)
