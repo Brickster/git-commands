@@ -84,7 +84,7 @@ class TestReindex(unittest.TestCase):
         # when
         try:
             reindex.reindex()
-            self.fail('expected to exit but did not')
+            self.fail('expected to exit but did not')  # pragma: no cover
         except SystemExit:
             pass
 

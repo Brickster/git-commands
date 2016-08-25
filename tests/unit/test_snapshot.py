@@ -66,7 +66,7 @@ class TestSnapshot(unittest.TestCase):
         # when
         try:
             snapshot.snapshot()
-            self.fail('expected to exit but did not')
+            self.fail('expected to exit but did not')  # pragma: no cover
         except SystemExit:
             pass
 

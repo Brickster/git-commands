@@ -167,7 +167,7 @@ class TestRestash(unittest.TestCase):
         # when
         try:
             restash.restash()
-            self.fail('expected to exit but did not')
+            self.fail('expected to exit but did not')  # pragma: no cover
         except SystemExit:
             pass
 
@@ -188,7 +188,7 @@ class TestRestash(unittest.TestCase):
         # when
         try:
             restash.restash()
-            self.fail('expected to exit but did not')
+            self.fail('expected to exit but did not')  # pragma: no cover
         except SystemExit:
             pass
 
@@ -205,7 +205,7 @@ class TestRestash(unittest.TestCase):
         # when
         try:
             restash.restash()
-            self.fail('expected to exit but did not')
+            self.fail('expected to exit but did not')  # pragma: no cover
         except SystemExit:
             pass
 
@@ -224,7 +224,7 @@ class TestRestash(unittest.TestCase):
         stash = 'stash@{10}'
         try:
             restash.restash(stash)
-            self.fail('expected to exit but did not')
+            self.fail('expected to exit but did not')  # pragma: no cover
         except SystemExit:
             pass
 
