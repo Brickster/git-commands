@@ -64,7 +64,7 @@ class TestUpstream(unittest.TestCase):
         # when
         try:
             upstream.upstream()
-            self.fail('expected to exit but did not')
+            self.fail('expected to exit but did not')  # pragma: no cover
         except SystemExit:
             pass
 
@@ -119,7 +119,7 @@ class TestUpstream(unittest.TestCase):
         # when
         try:
             upstream.upstream(branch='bad-branch')
-            self.fail('expected to exit but did not')
+            self.fail('expected to exit but did not')  # pragma: no cover
         except SystemExit:
             pass
 

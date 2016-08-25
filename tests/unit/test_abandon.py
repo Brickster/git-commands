@@ -78,7 +78,7 @@ class TestAbandon(unittest.TestCase):
         # when
         try:
             abandon.abandon(0, 1)
-            self.fail('expected to exit but did not')
+            self.fail('expected to exit but did not')  # pragma: no cover
         except SystemExit:
             pass
 
@@ -95,7 +95,7 @@ class TestAbandon(unittest.TestCase):
         # when
         try:
             abandon.abandon(0, -1)
-            self.fail('expected to exit but did not')
+            self.fail('expected to exit but did not')  # pragma: no cover
         except SystemExit:
             pass
 
@@ -109,7 +109,7 @@ class TestAbandon(unittest.TestCase):
         # when
         try:
             abandon.abandon(10, 2)
-            self.fail('expected to exit but did not')
+            self.fail('expected to exit but did not')  # pragma: no cover
         except SystemExit:
             pass
 
@@ -123,7 +123,7 @@ class TestAbandon(unittest.TestCase):
         # when
         try:
             abandon.abandon(10, 11)
-            self.fail('expected to exit but did not')
+            self.fail('expected to exit but did not')  # pragma: no cover
         except SystemExit:
             pass
 
