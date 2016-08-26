@@ -2,17 +2,17 @@
 
 import os
 import shlex
+import subprocess
 import sys
 from ast import literal_eval
 from collections import OrderedDict
-from subprocess import call, check_output, PIPE, Popen
+from subprocess import PIPE
 
 import colorama
 
 from . import settings
 from stateextensions import branches, log, reflog, stashes, status
-from utils import directories, git
-from utils.messages import error
+from utils import directories, git, messages
 
 
 def _print_section(title, accent=None, text=None, format_='compact', show_empty=False):
@@ -39,7 +39,7 @@ def _print_section(title, accent=None, text=None, format_='compact', show_empty=
     elif format_ == 'compact':
         section += text
     else:
-        error("unknown format '{}'".format(format_))
+        messages.error("unknown format '{}'".format(format_))
 
     return section
 
@@ -48,13 +48,13 @@ def state(**kwargs):
     """Print the state of the working tree."""
 
     if not directories.is_git_repository():
-        error('{0!r} not a git repository'.format(os.getcwd()))
+        messages.error('{0!r} not a git repository'.format(os.getcwd()))
 
     show_color = kwargs.get('show_color').lower()
     if show_color == 'never' or (show_color == 'auto' and not sys.stdout.isatty()):
         show_color = 'never'
         colorama.init(strip=True)
-    elif show_color == 'auto' and sys.stdout.isatty():
+    else:
         show_color = 'always'
         colorama.init()
 
@@ -119,8 +119,9 @@ def state(**kwargs):
             extension_command = settings.get('git-state.extensions.' + extension)
             extension_name = settings.get('git-state.extensions.' + extension + '.name', extension)
             extension_options = options[extension_name] if extension_name in options else []
+            extension_options = [o for sub in [shlex.split(line) for line in extension_options] for o in sub]
             extension_command = shlex.split(extension_command) + ['--color={}'.format(show_color)] + extension_options
-            extension_proc = Popen(extension_command, stdout=PIPE, stderr=PIPE)
+            extension_proc = subprocess.Popen(extension_command, stdout=PIPE, stderr=PIPE)
             extension_out, extension_error = extension_proc.communicate()
 
             sections[extension_name] = _print_section(
@@ -144,12 +145,12 @@ def state(**kwargs):
 
     state_result = state_result[:-1] # strip the extra trailing newline
     state_lines = len(state_result.splitlines())
-    terminal_lines = literal_eval(check_output(['tput', 'lines']))
+    terminal_lines = literal_eval(subprocess.check_output(['tput', 'lines']))
     if terminal_lines >= state_lines + 2: # one for the newline and one for the prompt
         if kwargs.get('clear') and sys.stdout.isatty():
-            call('clear')
-        print state_result
+            subprocess.call('clear')
+        messages.info(state_result)  # TODO: breaks --no-color
     else:
-        echo = Popen(['echo', state_result], stdout=PIPE)
-        call(['less', '-r'], stdin=echo.stdout)
+        echo = subprocess.Popen(['echo', state_result], stdout=PIPE)
+        subprocess.call(['less', '-r'], stdin=echo.stdout)
         echo.wait()
