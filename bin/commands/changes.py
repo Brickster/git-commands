@@ -61,7 +61,7 @@ def unassociate(branch=None, cleanup=None, quiet=False):
         _prune_associations(cleanup, quiet)
     else:
         branch = branch if branch else git.current_branch()
-        subprocess.call(['git', 'config', '--local', '--unset', 'git-changes.associations.' + branch + '.with'])
+        subprocess.call(['git', 'config', '--local', '--remove-section', 'git-changes.associations.' + branch])
 
 
 def get_association(branch=None):
