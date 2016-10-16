@@ -121,7 +121,7 @@ class TestChangesUnassociate(unittest.TestCase):
         mock_isgitrepository.assert_called_once_with()
         mock_currentbranch.assert_not_called()
         mock_call.assert_called_once_with(
-            ['git', 'config', '--local', '--unset', 'git-changes.associations.' + branch + '.with']
+            ['git', 'config', '--local', '--remove-section', 'git-changes.associations.' + branch]
         )
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
@@ -140,7 +140,7 @@ class TestChangesUnassociate(unittest.TestCase):
         mock_isgitrepository.assert_called_once_with()
         mock_currentbranch.assert_called_once_with()
         mock_call.assert_called_once_with(
-            ['git', 'config', '--local', '--unset', 'git-changes.associations.' + current_branch + '.with']
+            ['git', 'config', '--local', '--remove-section', 'git-changes.associations.' + current_branch]
         )
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
