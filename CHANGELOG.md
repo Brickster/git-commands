@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file. This projec
 - `git-upstream` not working for empty/new repositories [#72][]
 - `git-restash` printing a misleading message when no stashes exist [#75][]
 - `git-changes` leaving empty sections when unassociating [#78][]
+- `git-state` status not respecting color options
 - Documentation issues [#59][]
 
 [#58]: https://github.com/Brickstertwo/git-commands/issues/58

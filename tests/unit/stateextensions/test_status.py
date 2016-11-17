@@ -101,7 +101,7 @@ class TestStatus(unittest.TestCase):
         # then
         self.assertEqual(actual_status, 'the status')
         mock_checkoutput.assert_called_once_with(
-            ['git', '-c', 'color.branch=' + show_color, 'status', '--short', '--untracked-files=all']
+            ['git', '-c', 'color.status=' + show_color, 'status', '--short', '--untracked-files=all']
         )
 
     @mock.patch('subprocess.check_output', return_value='')
@@ -114,7 +114,7 @@ class TestStatus(unittest.TestCase):
         # then
         self.assertEqual(actual_status, 'nothing to commit, working directory is clean' + os.linesep)
         mock_checkoutput.assert_called_once_with(
-            ['git', '-c', 'color.branch=' + show_color, 'status', '--short', '--untracked-files=all']
+            ['git', '-c', 'color.status=' + show_color, 'status', '--short', '--untracked-files=all']
         )
 
     @mock.patch('subprocess.check_output', return_value='')
@@ -127,5 +127,5 @@ class TestStatus(unittest.TestCase):
         # then
         self.assertEqual(actual_status, '')
         mock_checkoutput.assert_called_once_with(
-            ['git', '-c', 'color.branch=' + show_color, 'status', '--short', '--untracked-files=all']
+            ['git', '-c', 'color.status=' + show_color, 'status', '--short', '--untracked-files=all']
         )
