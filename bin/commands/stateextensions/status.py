@@ -38,7 +38,7 @@ def get(**kwargs):
         if not status_output:
             status_output = 'Empty repository'
     else:
-        status_output = subprocess.check_output(['git', '-c', 'color.branch=' + show_color, 'status', '--short', '--untracked-files=all'])
+        status_output = subprocess.check_output(['git', '-c', 'color.status=' + show_color, 'status', '--short', '--untracked-files=all'])
 
     if not status_output and show_clean_message:
         status_output = 'nothing to commit, working directory is clean' + os.linesep
