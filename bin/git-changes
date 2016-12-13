@@ -188,6 +188,8 @@ def main():
             error('{0!r} has no remote branch'.format(git.current_branch()))
         args['committish'] = remote_branch
     elif subcommand == 'view' and not args['committish']:
+        if git.is_empty_repository():
+            sys.exit(0)  # nothing to do
         committish = changes.get_association()
         if not committish:
             committish = settings.get('git-changes.default-commit-ish', default='master')
