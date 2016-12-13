@@ -4,7 +4,7 @@ import os
 import sys
 import subprocess
 
-from . import settings
+from . import settings, upstream
 from utils import directories, git, messages
 
 _DETAIL_OPTIONS = ('diff', 'stat', 'count')
@@ -24,6 +24,22 @@ def associate(committish, quiet=False):
     current_branch = git.current_branch()
     subprocess.call(['git', 'config', '--local', 'git-changes.associations.' + current_branch + '.with', committish])
     messages.info('{} has been associated with {}'.format(current_branch, committish), quiet)
+
+
+def associate_upstream(quiet=False):
+    """Associate the current branch with its upstream branch.
+
+    :param bool quiet: suppress non-error output
+    """
+
+    if not directories.is_git_repository():
+        messages.error('{0!r} not a git repository'.format(os.getcwd()))
+
+    branch = git.current_branch()
+    upstream_branch = upstream.upstream(branch, include_remote=True)
+    if not upstream_branch:
+        messages.error('{} has no upstream branch'.format(branch))
+    associate(upstream_branch, quiet)
 
 
 def _prune_associations(cleanup, quiet):

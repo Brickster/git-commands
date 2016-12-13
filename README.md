@@ -65,7 +65,7 @@ Used to list the commits between this branch and another.
 ```bash
 git changes [view] [(-c|--count)] [(-s|--stat)] [(-d|--diff)]
                    [--color [WHEN]] [--no-color] [COMMIT-ISH]
-git changes associate [(-q|--quiet)] [COMMIT-ISH]
+git changes associate [(-q|--quiet)] [(-u|--upstream)] [COMMIT-ISH]
 git changes unassociate [(-a|--all)] [(-p|--prune)] [(-q|--quiet)]
 git changes (-h|--help)
 git changes (-v|--version)

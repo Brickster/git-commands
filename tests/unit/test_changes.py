@@ -47,6 +47,65 @@ class TestChangesAssociate(unittest.TestCase):
         mock_getcwd.assert_called_once_with()
 
 
+class TestChangesAssociateUpstream(unittest.TestCase):
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.current_branch')
+    @mock.patch('bin.commands.upstream.upstream')
+    @mock.patch('bin.commands.changes.associate')
+    def test_associate_upstream(self, mock_associate, mock_upstream, mock_currentbranch, mock_isgitrepository):
+
+        # given
+        current_branch = 'cur-branch'
+        upstream_branch = 'upstream-branch'
+        quiet = True
+        mock_currentbranch.return_value = current_branch
+        mock_upstream.return_value = upstream_branch
+
+        # when
+        changes.associate_upstream(quiet)
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_currentbranch.assert_called_once_with()
+        mock_upstream.assert_called_once_with(current_branch, include_remote=True)
+        mock_associate.assert_called_once_with(upstream_branch, quiet)
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.current_branch')
+    @mock.patch('bin.commands.upstream.upstream')
+    @mock.patch('bin.commands.utils.messages.error')
+    def test_associate_upstream_noupstream(self, mock_error, mock_upstream, mock_currentbranch, mock_isgitrepository):
+
+        # given
+        branch = 'cur-branch'
+        mock_currentbranch.return_value = branch
+        mock_upstream.return_value = ''
+
+        # when
+        changes.associate_upstream()
+
+        # then
+        mock_error.assert_called_once_with('{} has no upstream branch'.format(branch))
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('os.getcwd', return_value='/working/dir')
+    def test_associate_upstream_notagitrepository(self, mock_getcwd, mock_error, mock_isgitrepository):
+
+        # when
+        try:
+            changes.associate_upstream()
+            self.fail('expected to exit but did not')  # pragma: no cover
+        except SystemExit:
+            pass
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_error.assert_called_once_with("'/working/dir' not a git repository")
+        mock_getcwd.assert_called_once_with()
+
+
 class TestChangesPruneAssociations(unittest.TestCase):
 
     @mock.patch('subprocess.check_output')

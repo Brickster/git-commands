@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This projec
 ### Added
 - `git-tuck` options `--dry-run` and `--color` [#67][]
 - `git-reindex` for re-adding already indexed files to the index
+- `-u|--upstream` option to `changes associate` [#81][]
 
 ### Fixed
 - `git-changes` reporting ambiguous refs as not being a valid commit [#58][]
@@ -31,6 +32,7 @@ All notable changes to this project will be documented in this file. This projec
 [#72]: https://github.com/Brickstertwo/git-commands/issues/72
 [#75]: https://github.com/Brickstertwo/git-commands/issues/75
 [#78]: https://github.com/Brickstertwo/git-commands/issues/78
+[#81]: https://github.com/Brickstertwo/git-commands/issues/81
 
 ## [v0.5.0][] - 2016-04-14
 ### Added
