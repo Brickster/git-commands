@@ -577,7 +577,7 @@ class TestChangesChanges(unittest.TestCase):
         mock_iscommit.assert_called_once_with(committish)
         mock_isref.assert_called_once_with(committish)
         mock_checkoutput.assert_called_once_with(['git', 'log', '--oneline', '{}..HEAD'.format(committish)])
-        mock_info.assert_called_once_with(len(log))
+        mock_info.assert_called_once_with(str(len(log)))
 
     def test_changes_details_invalidoption(self):
 
