@@ -127,7 +127,7 @@ def changes(committish, details=None, color_when=None):
         if details == 'count':
             log = subprocess.check_output(command)
             log = log.splitlines()
-            messages.info(len(log))
+            messages.info(str(len(log)))
         else:
             command += ['--color={}'.format(color_when)]
             subprocess.call(command)

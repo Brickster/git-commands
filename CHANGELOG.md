@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file. This projec
 - `git-restash` printing a misleading message when no stashes exist [#75][]
 - `git-changes` leaving empty sections when unassociating [#78][]
 - `git-state` status not respecting color options
+- `git-changes` not working for `--count` option [#77][]
 - Documentation issues [#59][]
 
 [#58]: https://github.com/Brickstertwo/git-commands/issues/58
@@ -31,6 +32,7 @@ All notable changes to this project will be documented in this file. This projec
 [#67]: https://github.com/Brickstertwo/git-commands/issues/67
 [#72]: https://github.com/Brickstertwo/git-commands/issues/72
 [#75]: https://github.com/Brickstertwo/git-commands/issues/75
+[#77]: https://github.com/Brickstertwo/git-commands/issues/77
 [#78]: https://github.com/Brickstertwo/git-commands/issues/78
 [#81]: https://github.com/Brickstertwo/git-commands/issues/81
 
