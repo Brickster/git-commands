@@ -74,7 +74,7 @@ class TestChangesAssociateUpstream(unittest.TestCase):
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.current_branch')
     @mock.patch('bin.commands.upstream.upstream')
-    @mock.patch('bin.commands.utils.messages.error')
+    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
     def test_associate_upstream_noupstream(self, mock_error, mock_upstream, mock_currentbranch, mock_isgitrepository):
 
         # given
@@ -83,7 +83,11 @@ class TestChangesAssociateUpstream(unittest.TestCase):
         mock_upstream.return_value = ''
 
         # when
-        changes.associate_upstream()
+        try:
+            changes.associate_upstream()
+            self.fail('expected to exit but did not')  # pragma: no cover
+        except SystemExit:
+            pass
 
         # then
         mock_error.assert_called_once_with('{} has no upstream branch'.format(branch))
