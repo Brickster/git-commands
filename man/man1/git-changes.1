@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-CHANGES" "1" "May 2016" "" ""
+.TH "GIT\-CHANGES" "1" "December 2016" "" ""
 .
 .SH "NAME"
 \fBgit\-changes\fR \- lists the commits between this branch and a commit\-ish
@@ -13,7 +13,7 @@
 \~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-color\fR [\fIwhen\fR]] [\fB\-\-no\-color\fR] [\fIcommit\-ish\fR]
 .
 .br
-\fBgit changes associate\fR [(\fB\-q\fR|\fB\-\-quiet\fR)] [\fIcommit\-ish\fR]
+\fBgit changes associate\fR [(\fB\-q\fR|\fB\-\-quiet\fR)] [(\fB\-u\fR|\fB\-\-upstream\fR)] [\fIcommit\-ish\fR]
 .
 .br
 \fBgit changes unassociate\fR [(\fB\-a\fR|\fB\-\-all\fR)] [(\fB\-p\fR|\fB\-\-prune\fR)] [(\fB\-q\fR|\fB\-\-quiet\fR)]
@@ -73,6 +73,10 @@ Print the current association\.
 .TP
 \fIcommit\-ish\fR
 Associate the current branch with a commit\-ish\. Once associated, \fIcommit\-ish\fR can be omitted when using \fBview\fR and the association will be used\.
+.
+.TP
+\fB\-u\fR|\fB\-\-upstream\fR
+Associate the current branch with its upstream branch\.
 .
 .TP
 \fB\-q\fR|\fB\-\-quiet\fR

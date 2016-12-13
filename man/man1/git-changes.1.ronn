@@ -4,7 +4,7 @@
 
 `git changes view` [(`-c`|`--count`)] [(`-s`|`--stat`)] [(`-d`|`--diff`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--color` [<when>]] [`--no-color`] [<commit-ish>]<br>
-`git changes associate` [(`-q`|`--quiet`)] [<commit-ish>]<br>
+`git changes associate` [(`-q`|`--quiet`)] [(`-u`|`--upstream`)] [<commit-ish>]<br>
 `git changes unassociate` [(`-a`|`--all`)] [(`-p`|`--prune`)] [(`-q`|`--quiet`)]<br>
 `git changes` (`-h`|`--help`)<br>
 `git changes` (`-v`|`--version`)
@@ -47,6 +47,9 @@
 
     * <commit-ish>:
         Associate the current branch with a commit-ish. Once associated, <commit-ish> can be omitted when using `view` and the association will be used.
+
+    * `-u`|`--upstream`:
+        Associate the current branch with its upstream branch.
 
     * `-q`|`--quiet`:
         Suppress all non-error output. Cannot be used without <commit-ish>.
