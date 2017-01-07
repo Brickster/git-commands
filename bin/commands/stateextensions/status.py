@@ -34,7 +34,7 @@ def get(**kwargs):
 
     if new_repository:
         # check if status is empty
-        status_output = subprocess.check_output(['git', 'status', '--short'])
+        status_output = subprocess.check_output(['git', '-c', 'color.status=' + show_color, 'status', '--short'])
         if not status_output:
             status_output = 'Empty repository'
     else:
