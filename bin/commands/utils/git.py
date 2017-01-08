@@ -7,7 +7,7 @@ import subprocess
 from subprocess import PIPE
 
 
-class GitException(Exception):
+class GitException(Exception):  # pragma: no cover
     def __init__(self, message):
         self.message = message
 
@@ -77,7 +77,7 @@ def is_ref_ambiguous(ref, limit=None):
         "'limit' may only contain 'heads' and/or 'tags'"
 
     # normalize input
-    if limit and type(limit) is str:
+    if limit and isinstance(limit, str):
         limit = [limit]
 
     if not is_ref(ref):

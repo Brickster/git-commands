@@ -103,7 +103,7 @@ def state(**kwargs):
             extension_options = settings.get(
                 'git-state.extensions.' + extension + '.options',
                 default=[],
-                as_type=(lambda value: [value])
+                as_type=(lambda value: [value])  # pragma: no cover since this call is mocked and the lambda never fires
             )
             extension_options += options[extension_name] if extension_name in options else []
             extension_options = [o for sub in [shlex.split(line) for line in extension_options] for o in sub]

@@ -959,6 +959,66 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.settings.get', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
+    @mock.patch('bin.commands.state._print_section')
+    @mock.patch('bin.commands.settings.list', return_return='')
+    @mock.patch('subprocess.check_output', return_value='100')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    @mock.patch('subprocess.Popen')
+    def test_state_withextensions_butignoresome_viaconfig(
+            self,
+            mock_popen,
+            mock_info,
+            mock_call,
+            mock_checkoutput,
+            mock_list,
+            mock_printsection,
+            mock_isemptyrepository,
+            mock_get,
+            mock_isgitrepository
+    ):
+
+        # setup
+        format_ = 'compact'
+        kwargs = {
+            'show_color': 'never',
+            'format': format_,
+            'show_status': False,
+            'clear': False,
+            'ignore_extensions': [],
+            'options': {}
+        }
+        mock_get.side_effect = [True, False, []]
+        mock_list.return_value = 'changes'
+
+        # when
+        state.state(**kwargs)
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_isemptyrepository.assert_called_once_with()
+        mock_printsection.assert_not_called()
+        mock_get.assert_has_calls([
+            mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
+            mock.call('git-state.extensions.changes.show', default=True, as_type=mock.ANY),
+            mock.call('git-state.order', default=[], as_type=mock.ANY)
+        ])
+        mock_list.assert_called_once_with(
+            section='git-state.extensions',
+            config=None,
+            count=False,
+            keys=True,
+            format=None,
+            file=None
+        )
+        mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_info.assert_called_once_with('')
+        mock_call.assert_not_called()
+        mock_popen.assert_not_called()
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
     @mock.patch('bin.commands.stateextensions.status.title')
     @mock.patch('bin.commands.stateextensions.status.accent')
