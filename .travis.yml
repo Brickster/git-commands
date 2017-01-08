@@ -16,8 +16,8 @@ script:
 
   # test
   - nosetests --with-coverage --cover-branches --cover-erase --cover-inclusive
-  - coverage report --include=bin/* --omit=*/__init__.py,*/utils/*
-  - coverage xml --include=bin/* --omit=*/__init__.py,*/utils/* -o coverage.xml
+  - coverage report --include=bin/* --omit=*/__init__.py
+  - coverage xml --include=bin/* --omit=*/__init__.py -o coverage.xml
 
   # upload coverage report
   # secure environment variables aren't available for PRs from other repositories
