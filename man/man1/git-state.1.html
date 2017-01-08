@@ -178,6 +178,10 @@
 <p>  Default: <var>auto</var></p></dd>
 <dt><code>git-state.extensions.*</code> <var>string</var></dt><dd><p>  A custom command to execute and print as its own section. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
 <dt><code>git-state.extensions.*.name</code> <var>string</var></dt><dd><p>  A custom name for an extension. If not specified, the extension key is used. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
+<dt><code>git-state.extensions.*.options</code> <var>string</var></dt><dd><p>  Options to pass to the extension. These are merged with any command line options for the extension. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
+<dt><code>git-state.extensions.*.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether to show the extension. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p>
+
+<p>  Default: <var>true</var></p></dd>
 <dt><code>git-state.order</code> <var>string</var></dt><dd><p>  Custom order in which to print sections. Multiple section names are separated by a pipe (|) character. Any remaining sections not included are printed in the order they are handled internally. Option <code>-o</code>|<code>--order</code> overrides this value.</p></dd>
 </dl>
 
@@ -227,6 +231,12 @@ $
 
 <p>For instance, say an extension were defined to show changes: <code>git-state.extensions.changes=git changes</code>. It could be toggled to run in stat mode and against develop by using <code>--options changes:develop changes:--stat</code>.</p>
 
+<p>Options can be handled per configuration by setting <code>git-state.extensions.*.options</code>.</p>
+
+<h3 id="Hide-an-Extension">Hide an Extension</h3>
+
+<p>An extension can be hidden by setting <code>git-state.extensions.*.show</code> to <code>false</code>. This is useful for globally defined extensions that aren't needed for all repositories.</p>
+
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
 <p><a class="man-ref" href="http://git-scm.com/docs/git-status">git-status<span class="s">(1)</span></a>, <a class="man-ref" href="http://git-scm.com/docs/git-log">git-log<span class="s">(1)</span></a>, <a class="man-ref" href="http://git-scm.com/docs/git-reflog">git-reflog<span class="s">(1)</span></a>, <a class="man-ref" href="http://git-scm.com/docs/git-branch">git-branch<span class="s">(1)</span></a>, <a class="man-ref" href="http://git-scm.com/docs/git-stash">git-stash<span class="s">(1)</span></a></p>
@@ -234,7 +244,7 @@ $
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>May 2016</li>
+    <li class='tc'>January 2017</li>
     <li class='tr'>git-state(1)</li>
   </ol>
 

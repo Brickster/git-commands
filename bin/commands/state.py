@@ -116,10 +116,23 @@ def state(**kwargs):
         extensions = list(set(extensions) - set(kwargs.get('ignore_extensions')))
         options = kwargs.get('options')
         for extension in extensions or []:
+
+            # skip if we should ignore this extension
+            if not settings.get('git-state.extensions.' + extension + '.show', default=True, as_type=settings.as_bool):
+                continue
+
             extension_command = settings.get('git-state.extensions.' + extension)
-            extension_name = settings.get('git-state.extensions.' + extension + '.name', extension)
-            extension_options = options[extension_name] if extension_name in options else []
+            extension_name = settings.get('git-state.extensions.' + extension + '.name', default=extension)
+
+            # merge config and command line options
+            extension_options = settings.get(
+                'git-state.extensions.' + extension + '.options',
+                default=[],
+                as_type=(lambda value: [value])
+            )
+            extension_options += options[extension_name] if extension_name in options else []
             extension_options = [o for sub in [shlex.split(line) for line in extension_options] for o in sub]
+
             extension_command = shlex.split(extension_command) + ['--color={}'.format(show_color)] + extension_options
             extension_proc = subprocess.Popen(extension_command, stdout=PIPE, stderr=PIPE)
             extension_out, extension_error = extension_proc.communicate()

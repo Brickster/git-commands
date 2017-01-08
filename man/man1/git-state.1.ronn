@@ -176,6 +176,14 @@ Used to see a more concise and comprehensive view of the working directory. The 
 * `git-state.extensions.*.name` <string>:
 	A custom name for an extension. If not specified, the extension key is used. See **[EXTENSIONS][]** section for more detail.
 
+* `git-state.extensions.*.options` <string>:
+	Options to pass to the extension. These are merged with any command line options for the extension. See **[EXTENSIONS][]** section for more detail.
+
+* `git-state.extensions.*.show` <bool>:
+	True or false flag determining whether to show the extension. See **[EXTENSIONS][]** section for more detail.
+
+	Default: <true>
+
 * `git-state.order` <string>:
 	Custom order in which to print sections. Multiple section names are separated by a pipe (|) character. Any remaining sections not included are printed in the order they are handled internally. Option `-o`|`--order` overrides this value.
 
@@ -224,6 +232,11 @@ An extension can be ignored by listing it in `--ignore-extensions` [<extension> 
 Options can be passed to an extension using the `-O|--option` flag and are applied in the order they are received. Values passed this way must be formatted as `<extension_name>:<option>`. The `extension_name` refers to the value used in configuration defining the extension. Not the display name.
 
 For instance, say an extension were defined to show changes: `git-state.extensions.changes=git changes`. It could be toggled to run in stat mode and against develop by using `--options changes:develop changes:--stat`.
+
+Options can be handled per configuration by setting `git-state.extensions.*.options`.
+
+### Hide an Extension
+An extension can be hidden by setting `git-state.extensions.*.show` to `false`. This is useful for globally defined extensions that aren't needed for all repositories.
 
 ## SEE ALSO
 
