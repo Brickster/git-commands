@@ -32,11 +32,7 @@ or
 Used to see a more concise and comprehensive view of the working directory. The output includes results from git status, git log, and git branch.
 
 ```bash
-git state [(-l|--log) COUNT] [(-L|--no-log)] [--full-log]
-          [(-r|--reflog) COUNT] [(-R|--no-reflog)] [--full-reflog]
-          [(-s|--status)] [(-S|--no-status)]
-          [(-b|--branches)] [(-B|--no-branches)]
-          [(-t|--stashes)] [(-T|--no-stashes)]
+git state [(-s|--status)] [(-S|--no-status)]
           [(-e|--show-empty)] [(-E|--no-show-empty)]
           [(-c|--color) [WHEN]] [(-C|--no-color)]
           [(-p|--pretty)] [(-f|--format) FORMAT]

@@ -73,23 +73,23 @@ class TestStatus(unittest.TestCase):
     def test_get_newRepository(self, mock_checkoutput):
 
         # when
-        show_color='always'
+        show_color = 'always'
         actual_status = status.get(new_repository=True, show_color=show_color)
 
         # then
         self.assertEqual(actual_status, 'the status')
-        mock_checkoutput.assert_called_once_with('git status --short'.split())
+        mock_checkoutput.assert_called_once_with(['git', '-c', 'color.status=' + show_color, 'status', '--short'])
 
     @mock.patch('subprocess.check_output', return_value='')
     def test_get_newRepository_repositoryIsEmpty(self, mock_checkoutput):
 
         # when
-        show_color='always'
+        show_color = 'always'
         actual_status = status.get(new_repository=True, show_color=show_color)
 
         # then
         self.assertEqual(actual_status, 'Empty repository')
-        mock_checkoutput.assert_called_once_with('git status --short'.split())
+        mock_checkoutput.assert_called_once_with(['git', '-c', 'color.status=' + show_color, 'status', '--short'])
 
     @mock.patch('subprocess.check_output', return_value='the status')
     def test_get_notNewRepository(self, mock_checkoutput):

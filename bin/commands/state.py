@@ -11,7 +11,7 @@ from subprocess import PIPE
 import colorama
 
 from . import settings
-from stateextensions import branches, log, reflog, stashes, status
+from stateextensions import status
 from utils import directories, git, messages
 
 
@@ -78,31 +78,6 @@ def state(**kwargs):
             status_title = status.title()
             status_accent = status.accent(show_color=show_color)
             sections[status_title] = _print_section(status_title, status_accent, status_output, format_, show_empty=True)
-
-        if kwargs.get('log_count'):
-            log_output = log.get(**kwargs)
-            log_title = log.title()
-            sections[log_title] = _print_section(log_title, text=log_output, format_=format_)
-
-        if kwargs.get('reflog_count'):
-            reflog_output = reflog.get(**kwargs)
-            reflog_title = reflog.title()
-            sections[reflog_title] = _print_section(reflog_title, text=reflog_output, format_=format_)
-
-        if kwargs.get('show_branches'):
-            branches_output = branches.get(**kwargs)
-            branches_title = branches.title()
-            sections[branches_title] = _print_section(branches_title, text=branches_output, format_=format_)
-
-        if kwargs.get('show_stashes'):
-            stashes_output = stashes.get(show_color=show_color)
-            stashes_title = stashes.title()
-            sections[stashes_title] = _print_section(
-                stashes_title,
-                text=stashes_output,
-                format_=format_,
-                show_empty=kwargs.get('show_empty')
-            )
 
         # show any user defined sections
         extensions = settings.list(
