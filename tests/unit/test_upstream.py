@@ -2,7 +2,7 @@ import unittest
 import mock
 from subprocess import PIPE
 
-import utils
+import testutils
 from bin.commands import upstream
 
 
@@ -54,7 +54,7 @@ class TestUpstream(unittest.TestCase):
         mock_process.communicate.assert_called_once_with()
         mock_popen.assert_called_once_with('git config --local branch.the-branch.merge'.split(), stdout=PIPE)
 
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     @mock.patch('os.getcwd', return_value='working_dir')
     def test_upstream_notAGitRepository(self, mock_getcwd, mock_error, mock_isemptyrepository, mock_isgitrepository):
 
@@ -113,7 +113,7 @@ class TestUpstream(unittest.TestCase):
         mock_popen.assert_called_once_with('git config --local branch.the-branch.merge'.split(), stdout=PIPE)
 
     @mock.patch('bin.commands.utils.git.is_valid_reference', return_value=False)
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     def test_upstream_notAValidReference(self, mock_error, mock_isvalidreference, mock_isemptyrepository, mock_isgitrepository):
 
         # when
