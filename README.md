@@ -29,7 +29,7 @@ or
 ## Commands
 ### [state][]
 
-Used to see a more concise and comprehensive view of the working directory. The output includes results from git status, git log, and git branch.
+Used to see a more concise and comprehensive view of the working directory through custom extensions.
 
 ```bash
 git state [(-s|--status)] [(-S|--no-status)]
