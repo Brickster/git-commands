@@ -1,7 +1,7 @@
 import mock
 import unittest
 
-import utils
+import testutils
 from bin.commands import abandon
 
 
@@ -71,7 +71,7 @@ class TestAbandon(unittest.TestCase):
         ])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     @mock.patch('os.getcwd', return_value='/working/dir')
     def test_abandon_notAGitRepository(self, mock_getcwd, mock_error, mock_isgitrepository):
 
@@ -89,7 +89,7 @@ class TestAbandon(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('subprocess.check_output', return_value='1\n2\n3\n')
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     def test_abandon_endLessThanZero(self, mock_error, mock_checkoutput, mock_isgitrepository):
 
         # when
@@ -103,7 +103,7 @@ class TestAbandon(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('subprocess.check_output', return_value='1\n2\n3\n')
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     def test_abandon_endBeforeStart(self, mock_error, mock_checkoutput, mock_isgitrepository):
 
         # when
@@ -117,7 +117,7 @@ class TestAbandon(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('subprocess.check_output', return_value='one\ntwo')
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     def test_abandon_startGreaterThanStashCount(self, mock_error, mock_checkoutput, mock_isgitrepository):
 
         # when

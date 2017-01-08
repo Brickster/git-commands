@@ -5,7 +5,7 @@ import unittest
 
 import colorama
 
-import utils
+import testutils
 from bin.commands import state
 
 
@@ -103,7 +103,7 @@ class TestStatePrintSection(unittest.TestCase):
         # then
         self.assertEqual(section_output, expected_output)
 
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     def test_printsection_unknownformat(self, mock_error):
 
         # when
@@ -247,7 +247,7 @@ class TestStateState(unittest.TestCase):
         mock_call.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     @mock.patch('os.getcwd', return_value='/working/dir')
     def test_state_notagitrepository(self, mock_getcwd, mock_error, mock_isgitrepository):
 

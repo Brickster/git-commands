@@ -1,7 +1,7 @@
 import mock
 import unittest
 
-import utils
+import testutils
 from bin.commands import changes
 
 
@@ -30,7 +30,7 @@ class TestChangesAssociate(unittest.TestCase):
         mock_info.assert_called_once_with('{} has been associated with {}'.format(cur_branch, committish), quiet)
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     @mock.patch('os.getcwd', return_value='/working/dir')
     def test_associate_notagitrepository(self, mock_getcwd, mock_error, mock_isgitrepository):
 
@@ -74,7 +74,7 @@ class TestChangesAssociateUpstream(unittest.TestCase):
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.current_branch')
     @mock.patch('bin.commands.upstream.upstream')
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     def test_associate_upstream_noupstream(self, mock_error, mock_upstream, mock_currentbranch, mock_isgitrepository):
 
         # given
@@ -93,7 +93,7 @@ class TestChangesAssociateUpstream(unittest.TestCase):
         mock_error.assert_called_once_with('{} has no upstream branch'.format(branch))
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     @mock.patch('os.getcwd', return_value='/working/dir')
     def test_associate_upstream_notagitrepository(self, mock_getcwd, mock_error, mock_isgitrepository):
 
@@ -207,7 +207,7 @@ class TestChangesUnassociate(unittest.TestCase):
         )
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     @mock.patch('os.getcwd', return_value='/working/dir')
     def test_unassociate_notagitrepository(self, mock_getcwd, mock_error, mock_isgitrepository):
 
@@ -289,7 +289,7 @@ class TestChangesGetAssociation(unittest.TestCase):
         mock_get.assert_called_once_with('git-changes.associations.' + current_branch + '.with', config='local')
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     @mock.patch('os.getcwd', return_value='/working/dir')
     def test_getassociation_notagitrepository(self, mock_getcwd, mock_error, mock_isgitrepository):
 
@@ -377,7 +377,7 @@ class TestChangesChanges(unittest.TestCase):
         mock_checkoutput.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     @mock.patch('os.getcwd', return_value='/working/dir')
     def test_changes_notagitrepository(self, mock_getcwd, mock_error, mock_isgitrepository):
 
@@ -395,7 +395,7 @@ class TestChangesChanges(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_commit', return_value=False)
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     def test_changes_notacommit(self, mock_error, mock_iscommit, mock_isgitrepository):
 
         # when
@@ -416,7 +416,7 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_ref', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref_ambiguous', return_value=True)
     @mock.patch('subprocess.check_output')
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     def test_changes_isrefandisambiguous(
             self, mock_error, mock_checkoutput, mock_isrefambiguous, mock_isref, mock_iscommit, mock_isgitrepository
     ):

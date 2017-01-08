@@ -3,7 +3,7 @@ import os
 import unittest
 from subprocess import STDOUT
 
-import utils
+import testutils
 from bin.commands import snapshot
 
 
@@ -57,7 +57,7 @@ class TestSnapshot(unittest.TestCase):
         mock_call.assert_called_once_with('git stash apply --quiet --index'.split(), stdout=mock.ANY, stderr=STDOUT)
         self.assertEqual(mock_call.call_args[1]['stdout'].name, os.devnull)
 
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     @mock.patch('os.getcwd', return_value='/working/dir')
     def test_snapshot_notAGitRepository(self, mock_getcwd, mock_error, mock_isgitrepository):
 

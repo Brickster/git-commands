@@ -1,7 +1,7 @@
 import mock
 import unittest
 
-import utils
+import testutils
 from bin.commands import reindex
 
 
@@ -77,7 +77,7 @@ class TestReindex(unittest.TestCase):
         mock_call.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     @mock.patch('os.getcwd', return_value='/working/dir')
     def test_reindex_notAGitRepository(self, mock_getcwd, mock_error, mock_isgitrepository):
 

@@ -3,7 +3,7 @@ import os
 import unittest
 from subprocess import PIPE
 
-import utils
+import testutils
 from bin.commands import restash
 
 
@@ -153,7 +153,7 @@ class TestRestash(unittest.TestCase):
     @mock.patch('bin.commands.restash._is_valid_stash', return_value=True)
     @mock.patch('subprocess.check_output')
     @mock.patch('subprocess.Popen')
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     def test_restash_unableToReverseApplyPath(self, mock_error, mock_popen, mock_checkoutput, mock_isvaidstash, mock_isgitrepository):
 
         # setup
@@ -181,7 +181,7 @@ class TestRestash(unittest.TestCase):
         mock_error.assert_called_once_with('unable to reverse modifications', exit_=True)
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     @mock.patch('os.getcwd', return_value='/working/dir')
     def test_restash_notAGitRepository(self, mock_getcwd, mock_error, mock_isgitrepository):
 
@@ -199,7 +199,7 @@ class TestRestash(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('subprocess.check_output', return_value='')
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     def test_restash_noStashesExist(self, mock_error, mock_checkoutput, mock_isgitrepository):
 
         # when
@@ -217,7 +217,7 @@ class TestRestash(unittest.TestCase):
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('subprocess.check_output', return_value='stash1')
     @mock.patch('bin.commands.restash._is_valid_stash', return_value=False)
-    @mock.patch('bin.commands.utils.messages.error', side_effect=utils.and_exit)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     def test_restash_invalidStash(self, mock_error, mock_isvalidstash, mock_checkoutput, mock_isgitrepository):
 
         # when
