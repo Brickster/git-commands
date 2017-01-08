@@ -2,7 +2,9 @@
 
 import re
 import os
-from subprocess import call, check_output, PIPE, Popen
+
+import subprocess
+from subprocess import PIPE
 
 
 class GitException(Exception):
@@ -23,7 +25,7 @@ def is_valid_reference(reference):
 
     assert isinstance(reference, str), "'reference' must be a str. Given: " + type(reference).__name__
 
-    show_ref_proc = Popen(['git', 'show-ref', '--quiet', reference])
+    show_ref_proc = subprocess.Popen(['git', 'show-ref', '--quiet', reference])
     show_ref_proc.communicate()
     return not show_ref_proc.returncode
 
@@ -39,7 +41,7 @@ def is_commit(object_):
     assert isinstance(object_, str), "'object' must be a str. Given: " + type(object_).__name__
 
     with open(os.devnull, 'w') as dev_null:
-        cat_file_proc = Popen(['git', 'cat-file', '-t', object_], stdout=PIPE, stderr=dev_null)
+        cat_file_proc = subprocess.Popen(['git', 'cat-file', '-t', object_], stdout=PIPE, stderr=dev_null)
         object_type = cat_file_proc.communicate()[0].strip()
         return not cat_file_proc.returncode and object_type == 'commit'
 
@@ -55,7 +57,7 @@ def is_ref(object_):
     assert isinstance(object_, str), "'object' must be a str. Given: " + type(object_).__name__
 
     with open(os.devnull, 'w') as dev_null:
-        return not call(('git', 'show-ref', object_), stdout=dev_null, stderr=dev_null)
+        return not subprocess.call(('git', 'show-ref', object_), stdout=dev_null, stderr=dev_null)
 
 
 def is_ref_ambiguous(ref, limit=None):
@@ -74,14 +76,18 @@ def is_ref_ambiguous(ref, limit=None):
         (isinstance(limit, (tuple, list)) and all([l in ('heads', 'tags') for l in limit])), \
         "'limit' may only contain 'heads' and/or 'tags'"
 
+    # normalize input
+    if limit and type(limit) is str:
+        limit = [limit]
+
     if not is_ref(ref):
         raise GitException('{0!r} is not a ref'.format(ref))
 
     with open(os.devnull, 'w') as dev_null:
         if limit:
-            show_ref_proc = Popen(['git', 'show-ref'] + ['--' + l for l in limit] + [ref], stdout=PIPE, stderr=dev_null)
+            show_ref_proc = subprocess.Popen(['git', 'show-ref'] + ['--' + l for l in limit] + [ref], stdout=PIPE, stderr=dev_null)
         else:
-            show_ref_proc = Popen(('git', 'show-ref', ref), stdout=PIPE, stderr=dev_null)
+            show_ref_proc = subprocess.Popen(('git', 'show-ref', ref), stdout=PIPE, stderr=dev_null)
         return len(show_ref_proc.communicate()[0].splitlines()) > 1
 
 
@@ -91,7 +97,7 @@ def current_branch():
     :return str or unicode: the name of the current branch
     """
 
-    return check_output(('git', 'rev-parse', '--abbrev-ref', 'HEAD')).strip()
+    return subprocess.check_output(('git', 'rev-parse', '--abbrev-ref', 'HEAD')).strip()
 
 
 def deleted_files():
@@ -100,7 +106,7 @@ def deleted_files():
     :return list: a list of deleted file paths
     """
 
-    all_files = check_output(['git', 'status', '--short', '--porcelain'])
+    all_files = subprocess.check_output(['git', 'status', '--short', '--porcelain'])
     return [match.group(1) for match in re.finditer('^(?:D\s|\sD)\s(.*)', all_files, re.MULTILINE)]
 
 
@@ -111,6 +117,6 @@ def is_empty_repository():
     """
 
     with open(os.devnull, 'w') as devnull:
-        log_proc = Popen(['git', 'log', '--oneline', '-1'], stdout=devnull, stderr=devnull)
+        log_proc = subprocess.Popen(['git', 'log', '--oneline', '-1'], stdout=devnull, stderr=devnull)
         log_proc.wait()
         return log_proc.returncode != 0
