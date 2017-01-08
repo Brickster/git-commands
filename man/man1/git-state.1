@@ -4,22 +4,10 @@
 .TH "GIT\-STATE" "1" "January 2017" "" ""
 .
 .SH "NAME"
-\fBgit\-state\fR \- view the state of the working tree
+\fBgit\-state\fR \- a customizable view for the state of a working tree
 .
 .SH "SYNOPSIS"
-\fBgit state\fR [(\fB\-l\fR|\fB\-\-log\fR) \fIcount\fR] [(\fB\-L\fR|\fB\-\-no\-log\fR)] [\fB\-\-full\-log\fR]
-.
-.br
-\~\~\~\~\~\~\~\~\~\~[(\fB\-r\fR|\fB\-\-reflog\fR) \fIcount\fR] [(\fB\-R\fR|\fB\-\-no\-reflog\fR)] [\fB\-\-full\-reflog\fR]
-.
-.br
-\~\~\~\~\~\~\~\~\~\~[(\fB\-s\fR|\fB\-\-status\fR)] [(\fB\-S\fR|\fB\-\-no\-status\fR)]
-.
-.br
-\~\~\~\~\~\~\~\~\~\~[(\fB\-b\fR|\fB\-\-branches\fR)] [(\fB\-B\fR|\fB\-\-no\-branches\fR)]
-.
-.br
-\~\~\~\~\~\~\~\~\~\~[(\fB\-t\fR|\fB\-\-stashes\fR)] [(\fB\-T\fR|\fB\-\-no\-stashes\fR)]
+\fBgit state\fR [(\fB\-s\fR|\fB\-\-status\fR)] [(\fB\-S\fR|\fB\-\-no\-status\fR)]
 .
 .br
 \~\~\~\~\~\~\~\~\~\~[(\fB\-e\fR|\fB\-\-show\-empty\fR)] [(\fB\-E\fR|\fB\-\-no\-show\-empty\fR)]
@@ -49,7 +37,7 @@
 \fBgit state\fR (\fB\-v\fR|\fB\-\-version\fR)
 .
 .SH "DESCRIPTION"
-Used to see a more concise and comprehensive view of the working directory\. The output includes results from git status, git log, git branch, and git stash\.
+Used to see a more concise and comprehensive view of the working directory through custom extensions\.
 .
 .SH "OPTIONS"
 .
@@ -62,52 +50,12 @@ Print a simple help message\.
 Print version\.
 .
 .TP
-\fB\-l\fR|\fB\-\-log\fR \fIcount\fR
-Limits commits in the log section\. If less than 1, the section is skipped\.
-.
-.TP
-\fB\-L\fR|\fB\-\-no\-log\fR
-Don\'t output the log section\. Equivalent to \fB\-l\fR \fI0\fR or \fB\-\-log\fR \fI0\fR\.
-.
-.TP
-\fB\-\-full\-log\fR
-Output the entire log regardless of size\.
-.
-.TP
-\fB\-r\fR|\fB\-\-reflog\fR \fIcount\fR
-Limits actions in the reflog section\. If less than 1, the section is skipped\.
-.
-.TP
-\fB\-R\fR|\fB\-\-no\-reflog\fR
-Don\'t output the reflog section\. Equivalent to \fB\-r\fR \fI0\fR or \fB\-\-reflog\fR \fI0\fR\.
-.
-.TP
-\fB\-\-full\-reflog\fR
-Output the entire reflog regardless of size\.
-.
-.TP
 \fB\-s\fR|\fB\-\-status\fR
 Print the status section\.
 .
 .TP
 \fB\-S\fR|\fB\-\-no\-status\fR
 Don\'t print the status section\.
-.
-.TP
-\fB\-b\fR|\fB\-\-branches\fR
-Print the branches section\.
-.
-.TP
-\fB\-B\fR|\fB\-\-no\-branches\fR
-Don\'t print the branches section\.
-.
-.TP
-\fB\-t\fR|\fB\-\-stashes\fR
-Print the stashes section\.
-.
-.TP
-\fB\-T\fR|\fB\-\-no\-stashes\fR
-Don\'t print the stashes section\.
 .
 .TP
 \fB\-e\fR|\fB\-\-show\-empty\fR
@@ -163,34 +111,6 @@ True or false flag determining whether a message should be printed when the work
 Default: \fItrue\fR
 .
 .TP
-\fBgit\-state\.log\.show\fR \fIbool\fR
-True or false flag determining whether the log section should show when no other related flags are specified\.
-.
-.IP
-Default: \fItrue\fR
-.
-.TP
-\fBgit\-state\.log\.count\fR \fIint\fR
-The default log length\. Can be overridden using the \fB\-l\fR|\fB\-\-log\fR \fIcount\fR option\.
-.
-.IP
-Default: \fI10\fR
-.
-.TP
-\fBgit\-state\.reflog\.show\fR \fIbool\fR
-True or false flag determining whether the reflog section should show when no other related flags are specified\.
-.
-.IP
-Default: \fItrue\fR
-.
-.TP
-\fBgit\-state\.reflog\.count\fR \fIint\fR
-The default reflog length\. Can be overridden using the \fB\-r\fR|\fB\-\-reflog\fR \fIcount\fR option\.
-.
-.IP
-Default: \fI5\fR
-.
-.TP
 \fBgit\-state\.format\fR \fIstring\fR
 The default formatting for git\-state\. Valid options include: \fBpretty\fR and \fBcompact\fR\. If no value is specified or an invalid value is entered, compact is used\. The options \fB\-f\fR|\fB\-\-format\fR \fIformat\fR or \fB\-p\fR|\fB\-\-pretty\fR will override this setting\.
 .
@@ -200,34 +120,6 @@ Default: \fIcompact\fR
 .TP
 \fBgit\-state\.status\.show\fR \fIbool\fR
 True or false flag determining whether the status section should show when no other related flags are specified\. Options (\fB\-s\fR|\fB\-\-status\fR) and (\fB\-S\fR|\fB\-\-no\-status\fR) override this value\.
-.
-.IP
-Default: \fItrue\fR
-.
-.TP
-\fBgit\-state\.branches\.show\fR \fIbool\fR
-True or false flag determining whether the branches section should show when no other related flags are specified\. Options (\fB\-b\fR|\fB\-\-branches\fR) and (\fB\-B\fR|\fB\-\-no\-branches\fR) override this value\.
-.
-.IP
-Default: \fItrue\fR
-.
-.TP
-\fBgit\-state\.branches\.show\-only\-default\fR \fIbool\fR
-True or false flag determining whether the branches section should show when only the default branch is present\. The default branch is determined using the \fBgit\-state\.branches\.default\fR configuration\.
-.
-.IP
-Default: \fItrue\fR
-.
-.TP
-\fBgit\-state\.branches\.default\fR \fIstring\fR
-The default branch for determining if the branches section should be shown\.
-.
-.IP
-Default: \fImaster\fR
-.
-.TP
-\fBgit\-state\.stashes\.show\fR \fIbool\fR
-True or false flag determining whether the stashes section should show when no other related flags are specified\. Options (\fB\-t\fR|\fB\-\-stashes\fR) and (\fB\-T\fR|\fB\-\-no\-stashes\fR) override this value\.
 .
 .IP
 Default: \fItrue\fR
@@ -277,7 +169,7 @@ Default: \fItrue\fR
 Custom order in which to print sections\. Multiple section names are separated by a pipe (|) character\. Any remaining sections not included are printed in the order they are handled internally\. Option \fB\-o\fR|\fB\-\-order\fR overrides this value\.
 .
 .SH "EXTENSIONS"
-Custom sections can be created by setting a config in the following format:
+Out of the box, \fBgit\-state\fR isn\'t that useful\. It simple reformats \fBgit status \-\-short\fR\. That\'s where extensions come in\. Extensions allow you to configure \fBgit\-state\fR to show the information useful to you\. One can be created by setting a config in the following format:
 .
 .IP "" 4
 .
@@ -290,7 +182,7 @@ git\-state\.extensions\.<section\-name>
 .IP "" 0
 .
 .P
-The extension can be any valid script or command but must accept the flag \fB\-\-color=\fR\fIwhen\fR\. \fIwhen\fR will only be one of: \fInever\fR or \fIalways\fR\. Unlike \fBgit state\fR itself, \fIwhen\fR won\'t ever be omitted\. The section name for an extension defaults to the key name but can be overridden by defining \fBgit\-state\.extensions\.<section\-name>\.name\fR\.
+The extension can be any valid script or command but must accept the flag \fB\-\-color=\fR\fIwhen\fR\. \fIwhen\fR will only be one of: \fInever\fR or \fIalways\fR\. Unlike \fBgit state\fR itself, \fIwhen\fR won\'t ever be omitted when an extension is executed\. The section name for an extension defaults to the key name but can be overridden by defining \fBgit\-state\.extensions\.<section\-name>\.name\fR\.
 .
 .IP "" 4
 .
@@ -298,7 +190,7 @@ The extension can be any valid script or command but must accept the flag \fB\-\
 
 $ git alias graph "git log \-\-oneline \-\-graph \-\-all \-\-decorate \-10"
 $ git config git\-state\.extenstions\.graph "git graph"
-$ git state \-LRTB # ignore most sections for brevity
+$ git state
 # status (state\-extensions)
 
      M bin/commands/state\.py
@@ -343,4 +235,4 @@ Options can be handled per configuration by setting \fBgit\-state\.extensions\.*
 An extension can be hidden by setting \fBgit\-state\.extensions\.*\.show\fR to \fBfalse\fR\. This is useful for globally defined extensions that aren\'t needed for all repositories\.
 .
 .SH "SEE ALSO"
-git\-status(1), git\-log(1), git\-reflog(1), git\-branch(1), git\-stash(1)
+git\-status(1), git\-config(1)

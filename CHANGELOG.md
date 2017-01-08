@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file. This projec
 - `git-state` extension configuration for options [#84][]
 - `git-state` extension configuration for showing [#85][]
 
+### Removed
+- The branches, log, reflog, and stashes built-in extensions were removed in favor of defining them using custom extensions [#83][]
+
 ### Fixed
 - `git-changes` reporting ambiguous refs as not being a valid commit [#58][]
 - `git-changes` options `--help` and `--version` not working in non-git repositories [#60][]
@@ -39,6 +42,7 @@ All notable changes to this project will be documented in this file. This projec
 [#77]: https://github.com/Brickstertwo/git-commands/issues/77
 [#78]: https://github.com/Brickstertwo/git-commands/issues/78
 [#81]: https://github.com/Brickstertwo/git-commands/issues/81
+[#83]: https://github.com/Brickstertwo/git-commands/issues/83
 [#84]: https://github.com/Brickstertwo/git-commands/issues/84
 [#85]: https://github.com/Brickstertwo/git-commands/issues/85
 

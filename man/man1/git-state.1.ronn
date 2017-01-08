@@ -1,12 +1,8 @@
-# git-state(1) -- view the state of the working tree
+# git-state(1) -- a customizable view for the state of a working tree
 
 ## SYNOPSIS
 
-`git state` [(`-l`|`--log`) <count>] [(`-L`|`--no-log`)] [`--full-log`]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-r`|`--reflog`) <count>] [(`-R`|`--no-reflog`)] [`--full-reflog`]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-s`|`--status`)] [(`-S`|`--no-status`)]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-b`|`--branches`)] [(`-B`|`--no-branches`)]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-t`|`--stashes`)] [(`-T`|`--no-stashes`)]<br>
+`git state` [(`-s`|`--status`)] [(`-S`|`--no-status`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-c`|`--color`) [<when>]] [(`-C`|`--no-color`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
@@ -19,7 +15,7 @@
 
 ## DESCRIPTION
 
-Used to see a more concise and comprehensive view of the working directory. The output includes results from git status, git log, git branch, and git stash.
+Used to see a more concise and comprehensive view of the working directory through custom extensions.
 
 ## OPTIONS
 
@@ -29,41 +25,11 @@ Used to see a more concise and comprehensive view of the working directory. The 
 * `-v`|`--version`:
 	Print version.
 
-* `-l`|`--log` <count>:
-    Limits commits in the log section. If less than 1, the section is skipped.
-
-* `-L`|`--no-log`:
-    Don't output the log section. Equivalent to `-l` <0> or `--log` <0>.
-
-* `--full-log`:
-    Output the entire log regardless of size.
-
-* `-r`|`--reflog` <count>:
-    Limits actions in the reflog section. If less than 1, the section is skipped.
-
-* `-R`|`--no-reflog`:
-    Don't output the reflog section. Equivalent to `-r` <0> or `--reflog` <0>.
-
-* `--full-reflog`:
-    Output the entire reflog regardless of size.
-
 * `-s`|`--status`:
 	Print the status section.
 
 * `-S`|`--no-status`:
     Don't print the status section.
-
-* `-b`|`--branches`:
-	Print the branches section.
-
-* `-B`|`--no-branches`:
-    Don't print the branches section.
-
-* `-t`|`--stashes`:
-	Print the stashes section.
-
-* `-T`|`--no-stashes`:
-    Don't print the stashes section.
 
 * `-e`|`--show-empty`:
     Show empty sections rather than omitting them.
@@ -105,26 +71,6 @@ Used to see a more concise and comprehensive view of the working directory. The 
 
 	Default: <true>
 
-* `git-state.log.show` <bool>:
-	True or false flag determining whether the log section should show when no other related flags are specified.
-
-	Default: <true>
-
-* `git-state.log.count` <int>:
-	The default log length. Can be overridden using the `-l`|`--log` <count> option.
-
-	Default: <10>
-
-* `git-state.reflog.show` <bool>:
-	True or false flag determining whether the reflog section should show when no other related flags are specified.
-
-	Default: <true>
-
-* `git-state.reflog.count` <int>:
-	The default reflog length. Can be overridden using the `-r`|`--reflog` <count> option.
-
-	Default: <5>
-
 * `git-state.format` <string>:
 	The default formatting for git-state. Valid options include: `pretty` and `compact`. If no value is specified or an invalid value is entered, compact is used. The options `-f`|`--format` <format> or `-p`|`--pretty` will override this setting.
 
@@ -132,26 +78,6 @@ Used to see a more concise and comprehensive view of the working directory. The 
 
 * `git-state.status.show` <bool>:
 	True or false flag determining whether the status section should show when no other related flags are specified. Options (`-s`|`--status`) and (`-S`|`--no-status`) override this value.
-
-	Default: <true>
-
-* `git-state.branches.show` <bool>:
-	True or false flag determining whether the branches section should show when no other related flags are specified. Options (`-b`|`--branches`) and (`-B`|`--no-branches`) override this value.
-
-	Default: <true>
-
-* `git-state.branches.show-only-default` <bool>:
-	True or false flag determining whether the branches section should show when only the default branch is present. The default branch is determined using the `git-state.branches.default` configuration.
-
-	Default: <true>
-
-* `git-state.branches.default` <string>:
-	The default branch for determining if the branches section should be shown.
-
-	Default: <master>
-
-* `git-state.stashes.show` <bool>:
-	True or false flag determining whether the stashes section should show when no other related flags are specified. Options (`-t`|`--stashes`) and (`-T`|`--no-stashes`) override this value.
 
 	Default: <true>
 
@@ -189,18 +115,18 @@ Used to see a more concise and comprehensive view of the working directory. The 
 
 ## EXTENSIONS
 
-Custom sections can be created by setting a config in the following format:
+Out of the box, `git-state` isn't that useful. It simple reformats `git status --short`. That's where extensions come in. Extensions allow you to configure `git-state` to show the information useful to you. One can be created by setting a config in the following format:
 
 ```
 git-state.extensions.<section-name>
 ```
 
-The extension can be any valid script or command but must accept the flag `--color=`<when>. <when> will only be one of: <never> or <always>. Unlike `git state` itself, <when> won't ever be omitted. The section name for an extension defaults to the key name but can be overridden by defining `git-state.extensions.<section-name>.name`.
+The extension can be any valid script or command but must accept the flag `--color=`<when>. <when> will only be one of: <never> or <always>. Unlike `git state` itself, <when> won't ever be omitted when an extension is executed. The section name for an extension defaults to the key name but can be overridden by defining `git-state.extensions.<section-name>.name`.
 
 ```bash
 $ git alias graph "git log --oneline --graph --all --decorate -10"
 $ git config git-state.extenstions.graph "git graph"
-$ git state -LRTB # ignore most sections for brevity
+$ git state
 # status (state-extensions)
 
      M bin/commands/state.py
@@ -240,4 +166,4 @@ An extension can be hidden by setting `git-state.extensions.*.show` to `false`. 
 
 ## SEE ALSO
 
-git-status(1), git-log(1), git-reflog(1), git-branch(1), git-stash(1)
+git-status(1), git-config(1)
