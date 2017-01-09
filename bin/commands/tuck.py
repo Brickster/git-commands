@@ -1,16 +1,113 @@
 """Stash specific files."""
 
 import os
+import subprocess
 import sys
-from subprocess import call, check_output, PIPE, Popen
+from subprocess import PIPE
 
 import snapshot
-from utils import directories, git
-from utils.messages import error, info, usage, warn
+from utils import directories, git, messages
 
 
 def _status(show_color='auto'):
-    return check_output(['git', '-c', 'color.ui=' + show_color, 'status', '--short'])
+    return subprocess.check_output(['git', '-c', 'color.ui=' + show_color, 'status', '--short'])
+
+
+def _resolve_files(files, ignore_deleted, indexed):
+    if files and indexed is None:
+        if not ignore_deleted:
+            deleted_files = git.deleted_files()
+            not_explicitly_deleted_files = [f for f in deleted_files if f not in files]
+            if not_explicitly_deleted_files:
+                messages.warn('deleted files exist in working tree')
+                messages.warn('deleted files are not considered by pathspecs and must be added explicitly or ignored')
+                messages.usage('git tuck -- PATHSPEC {}'.format(' '.join(not_explicitly_deleted_files)))
+                messages.usage('git tuck --ignore-deleted -- PATHSPEC')
+                sys.exit(1)
+
+        # resolve the files to be tucked
+        files_to_tuck = subprocess.check_output(['git', 'diff', '--name-only', '--cached', '--'] + files).splitlines()
+        files_to_tuck += subprocess.check_output(['git', 'diff', '--name-only', '--'] + files).splitlines()
+
+        # resolve new files to be tucked
+        files_to_tuck += subprocess.check_output(['git', 'ls-files', '--others', '--'] + files).splitlines()
+
+        files_to_tuck = list(set(files_to_tuck))
+    elif not files and indexed is not None and indexed:
+        files_to_tuck = subprocess.check_output(('git', 'diff', '--name-only', '--cached')).splitlines()
+    elif not files and indexed is not None and not indexed:
+        files_to_tuck = subprocess.check_output(('git', 'diff', '--name-only')).splitlines()
+        files_to_tuck += subprocess.check_output(('git', 'ls-files', '--others')).splitlines()
+    else:
+        raise Exception('specifying files is not compatible with indexing option: index={}'.format(indexed))
+
+    return files_to_tuck
+
+
+def _run(files_to_tuck, message, quiet):
+
+    if not files_to_tuck:
+        messages.error('no files to tuck')
+
+    snapshot.snapshot(None, False)  # TODO: possibly use `git stash create`?
+
+    # clean the working tree of any files we won't stash
+    ignore_files = [':!{}'.format(f) for f in files_to_tuck]
+    subprocess.call(['git', 'reset', '--quiet', '--', '.'] + ignore_files)  # reset all non-tuck files
+    subprocess.call(['git', 'checkout', '--quiet', '--', '.'] + ignore_files)  # checkout all non-tuck files
+    subprocess.call(['git', 'clean', '--quiet', '-d', '--force', '--', '.'] + ignore_files)  # clean all non-tuck files
+
+    # stash the files
+    stash_command = ['git', 'stash', 'save', '--include-untracked']
+    if message:
+        stash_command += [message]
+    result_message = subprocess.check_output(stash_command)
+
+    # restore the original state then clean the working tree of the files we stashed
+    subprocess.call(['git', 'stash', 'pop', '--quiet', '--index', 'stash@{1}'])
+    subprocess.call(['git', 'reset', '--quiet', '--'] + files_to_tuck)
+
+    # checkout will complain about new files so find them and handle them accordingly
+    new_files = subprocess.check_output(['git', 'ls-files', '--others', '--'] + files_to_tuck).splitlines()
+    if new_files:
+        subprocess.call(['git', 'checkout', '--quiet', '--'] + [x for x in files_to_tuck if x not in new_files])
+        subprocess.call(['git', 'clean', '--quiet', '-d', '--force', '--'] + new_files)
+    else:
+        subprocess.call(['git', 'checkout', '--quiet', '--'] + files_to_tuck)
+
+    messages.info(result_message.strip(), quiet)
+
+
+def _dry_run(files_to_tuck, show_color):
+
+    status_output = _status(show_color)
+    if files_to_tuck:
+        # TODO: shelling out to egrep is unnecessary
+        tucked_output = subprocess.Popen(
+            ('egrep', '|'.join(files_to_tuck)),
+            stdin=PIPE,
+            stdout=PIPE
+        ).communicate(input=status_output)[0]
+        nontucked_output = subprocess.Popen(
+            ('egrep', '--invert-match', '|'.join(files_to_tuck)),
+            stdin=PIPE,
+            stdout=PIPE
+        ).communicate(input=status_output)[0]
+        if not nontucked_output:
+            nontucked_output = 'clean'
+    elif status_output:
+        tucked_output = 'nothing'
+        nontucked_output = status_output
+    else:
+        messages.error('no files to tuck, the working directory is clean')
+
+    newline_indent = os.linesep + ' ' * 4
+    output = 'Would tuck:' + os.linesep
+    output += newline_indent + newline_indent.join(tucked_output.splitlines())
+    output += os.linesep + os.linesep + 'Leaving working directory:' + os.linesep
+    output += newline_indent + newline_indent.join(nontucked_output.splitlines())
+    output += os.linesep
+    messages.info(output)
 
 
 def tuck(files, indexed=None, message=None, quiet=False, ignore_deleted=False, dry_run=False, show_color='auto'):
@@ -23,94 +120,10 @@ def tuck(files, indexed=None, message=None, quiet=False, ignore_deleted=False, d
     """
 
     if not directories.is_git_repository():
-        error('{0!r} not a git repository'.format(os.getcwd()))
+        messages.error('{0!r} not a git repository'.format(os.getcwd()))
 
-    if files and indexed is None:
-        if not ignore_deleted:
-            deleted_files = git.deleted_files()
-            not_explicitly_deleted_files = [f for f in deleted_files if f not in files]
-            if not_explicitly_deleted_files:
-                warn('deleted files exist in working tree')
-                warn('deleted files are not considered by pathspecs and must be added explicitly or ignored')
-                usage('git tuck -- PATHSPEC {}'.format(' '.join(not_explicitly_deleted_files)))
-                usage('git tuck --ignore-deleted -- PATHSPEC')
-                sys.exit(1)
-
-        # resolve the files to be tucked
-        files_to_tuck = check_output(['git', 'diff', '--name-only', '--cached', '--'] + files).splitlines()
-        files_to_tuck += check_output(['git', 'diff', '--name-only', '--'] + files).splitlines()
-
-        # resolve new files to be tucked
-        files_to_tuck += check_output(['git', 'ls-files', '--others', '--'] + files).splitlines()
-
-        files_to_tuck = list(set(files_to_tuck))
-    elif not files and indexed is not None and indexed:
-        files_to_tuck = check_output('git diff --name-only --cached'.split()).splitlines()
-    elif not files and indexed is not None and not indexed:
-        files_to_tuck = check_output('git diff --name-only'.split()).splitlines()
-        files_to_tuck += check_output('git ls-files --others'.split()).splitlines()
-    else:
-        raise Exception('specifying files is not compatible with indexing option: index={}'.format(indexed))
-
+    files_to_tuck = _resolve_files(files, ignore_deleted, indexed)
     if dry_run:
-
-        status_output = _status(show_color)
-        if files_to_tuck:
-            tucked_output = Popen(
-                ('egrep', '|'.join(files_to_tuck)),
-                stdin=PIPE,
-                stdout=PIPE
-            ).communicate(input=status_output)[0]
-            nontucked_output = Popen(
-                ('egrep', '--invert-match', '|'.join(files_to_tuck)),
-                stdin=PIPE,
-                stdout=PIPE
-            ).communicate(input=status_output)[0]
-            if not nontucked_output:
-                nontucked_output = 'clean'
-        elif status_output:
-            tucked_output = 'nothing'
-            nontucked_output = status_output
-        else:
-            error('no files to tuck, the working directory is clean')
-
-        newline_indent = os.linesep + ' ' * 4
-        output = 'Would tuck:' + os.linesep
-        output += newline_indent + newline_indent.join(tucked_output.splitlines())
-        output += os.linesep + os.linesep + 'Leaving working directory:' + os.linesep
-        output += newline_indent + newline_indent.join(nontucked_output.splitlines())
-        output += os.linesep
-        info(output)
-
+        _dry_run(files_to_tuck, show_color)
     else:
-
-        if not files_to_tuck:
-            error("no files to tuck using")
-
-        snapshot.snapshot(None, False)  # TODO: possibly use `git stash create`?
-
-        # clean the working tree of any files we won't stash
-        ignore_files = [':!{}'.format(f) for f in files_to_tuck]
-        call(['git', 'reset', '--quiet', '--', '.'] + ignore_files)                     # reset all non-tuck files
-        call(['git', 'checkout', '--quiet', '--', '.'] + ignore_files)                  # checkout all non-tuck files
-        call(['git', 'clean', '--quiet', '-d', '--force', '--', '.'] + ignore_files)    # clean all non-tuck files
-
-        # stash the files
-        stash_command = ['git', 'stash', 'save', '--include-untracked']
-        if message:
-            stash_command += [message]
-        result_message = check_output(stash_command)
-
-        # restore the original state then clean the working tree of the files we stashed
-        call(['git', 'stash', 'pop', '--quiet', '--index', 'stash@{1}'])
-        call(['git', 'reset', '--quiet', '--'] + files_to_tuck)
-
-        # checkout will complain about new files so find them and handle them accordingly
-        new_files = check_output(['git', 'ls-files', '--others', '--'] + files_to_tuck).splitlines()
-        if new_files:
-            call(['git', 'checkout', '--quiet', '--'] + [x for x in files_to_tuck if x not in new_files])
-            call(['git', 'clean', '--quiet', '-d', '--force', '--'] + new_files)
-        else:
-            call(['git', 'checkout', '--quiet', '--'] + files_to_tuck)
-
-        info(result_message.strip(), quiet)
+        _run(files_to_tuck, message, quiet)
