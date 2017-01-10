@@ -1,6 +1,7 @@
 """Stash specific files."""
 
 import os
+import re
 import subprocess
 import sys
 from subprocess import PIPE
@@ -82,30 +83,27 @@ def _dry_run(files_to_tuck, show_color):
 
     status_output = _status(show_color)
     if files_to_tuck:
-        # TODO: shelling out to egrep is unnecessary
-        tucked_output = subprocess.Popen(
-            ('egrep', '|'.join(files_to_tuck)),
-            stdin=PIPE,
-            stdout=PIPE
-        ).communicate(input=status_output)[0]
-        nontucked_output = subprocess.Popen(
-            ('egrep', '--invert-match', '|'.join(files_to_tuck)),
-            stdin=PIPE,
-            stdout=PIPE
-        ).communicate(input=status_output)[0]
+        pattern = '|'.join(files_to_tuck)
+        tucked_output = []
+        nontucked_output = []
+        for line in status_output.splitlines():
+            if re.search(pattern, line):
+                tucked_output.append(line)
+            else:
+                nontucked_output.append(line)
         if not nontucked_output:
-            nontucked_output = 'clean'
+            nontucked_output.append('clean')
     elif status_output:
-        tucked_output = 'nothing'
-        nontucked_output = status_output
+        tucked_output = ['nothing']
+        nontucked_output = status_output.splitlines()
     else:
         messages.error('no files to tuck, the working directory is clean')
 
     newline_indent = os.linesep + ' ' * 4
     output = 'Would tuck:' + os.linesep
-    output += newline_indent + newline_indent.join(tucked_output.splitlines())
+    output += newline_indent + newline_indent.join(tucked_output)
     output += os.linesep + os.linesep + 'Leaving working directory:' + os.linesep
-    output += newline_indent + newline_indent.join(nontucked_output.splitlines())
+    output += newline_indent + newline_indent.join(nontucked_output)
     output += os.linesep
     messages.info(output)
 
