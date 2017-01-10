@@ -311,25 +311,26 @@ class TestTuck(unittest.TestCase):
         mock_info.assert_called_once_with(stash_message, quiet)
 
     @mock.patch('bin.commands.tuck._status')
-    @mock.patch('subprocess.Popen')
     @mock.patch('bin.commands.utils.messages.info')
-    def test__dryRun(self, mock_info, mock_popen, mock_status):
+    def test__dryRun(self, mock_info, mock_status):
 
         # given
-        files_to_tuck = ['a', 'b']
+        files_to_tuck = ['a', 'd']
         show_color = True
-        mock_proc = mock.Mock()
-        mock_proc.communicate.side_effect = [['a\nb\n'], ['c\n']]
-        mock_popen.side_effect = [mock_proc, mock_proc]
-        status_output = 'status'
+        status_output = """M  a
+?? b
+ A c
+D  d
+"""
         info_message = """Would tuck:
 
-    a
-    b
+    M  a
+    D  d
 
 Leaving working directory:
 
-    c
+    ?? b
+     A c
 """
         mock_status.return_value = status_output
 
@@ -337,32 +338,22 @@ Leaving working directory:
         tuck._dry_run(files_to_tuck, show_color)
 
         # then
-        mock_popen.assert_has_calls([
-            mock.call(('egrep', '|'.join(files_to_tuck)), stdin=PIPE, stdout=PIPE),
-            mock.call(('egrep', '--invert-match', '|'.join(files_to_tuck)), stdin=PIPE, stdout=PIPE)
-        ])
-        mock_proc.communicate.assert_has_calls([
-            mock.call(input=status_output),
-            mock.call(input=status_output)
-        ])
         mock_info.assert_called_once_with(info_message)
 
     @mock.patch('bin.commands.tuck._status')
-    @mock.patch('subprocess.Popen')
     @mock.patch('bin.commands.utils.messages.info')
-    def test__dryRun_withNothingRemaining(self, mock_info, mock_popen, mock_status):
+    def test__dryRun_withNothingRemaining(self, mock_info, mock_status):
 
         # given
         files_to_tuck = ['a', 'b']
         show_color = True
-        mock_proc = mock.Mock()
-        mock_proc.communicate.side_effect = [['a\nb\n'], ['']]
-        mock_popen.side_effect = [mock_proc, mock_proc]
-        status_output = 'status'
+        status_output = """M  a
+?? b
+"""
         info_message = """Would tuck:
 
-    a
-    b
+    M  a
+    ?? b
 
 Leaving working directory:
 
@@ -374,14 +365,6 @@ Leaving working directory:
         tuck._dry_run(files_to_tuck, show_color)
 
         # then
-        mock_popen.assert_has_calls([
-            mock.call(('egrep', '|'.join(files_to_tuck)), stdin=PIPE, stdout=PIPE),
-            mock.call(('egrep', '--invert-match', '|'.join(files_to_tuck)), stdin=PIPE, stdout=PIPE)
-        ])
-        mock_proc.communicate.assert_has_calls([
-            mock.call(input=status_output),
-            mock.call(input=status_output)
-        ])
         mock_info.assert_called_once_with(info_message)
 
     @mock.patch('bin.commands.tuck._status')
