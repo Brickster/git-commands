@@ -33,6 +33,7 @@ Used to see a more concise and comprehensive view of the working directory throu
 
 ```bash
 git state [(-s|--status)] [(-S|--no-status)]
+          [(--show-*|--no-show-*)]  # for each custom extension
           [(-e|--show-empty)] [(-E|--no-show-empty)]
           [(-c|--color) [WHEN]] [(-C|--no-color)]
           [(-p|--pretty)] [(-f|--format) FORMAT]

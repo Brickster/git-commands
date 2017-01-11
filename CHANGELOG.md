@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. This projec
 - `-u|--upstream` option to `changes associate` [#81][]
 - `git-state` extension configuration for options [#84][]
 - `git-state` extension configuration for showing [#85][]
+- `git-state` flags for showing/not showing custom extensions [#87][]
 
 ### Removed
 - The branches, log, reflog, and stashes built-in extensions were removed in favor of defining them using custom extensions [#83][]
@@ -45,6 +46,7 @@ All notable changes to this project will be documented in this file. This projec
 [#83]: https://github.com/Brickstertwo/git-commands/issues/83
 [#84]: https://github.com/Brickstertwo/git-commands/issues/84
 [#85]: https://github.com/Brickstertwo/git-commands/issues/85
+[#87]: https://github.com/Brickstertwo/git-commands/issues/87
 
 ## [v0.5.0][] - 2016-04-14
 ### Added

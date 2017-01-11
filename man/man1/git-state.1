@@ -10,6 +10,9 @@
 \fBgit state\fR [(\fB\-s\fR|\fB\-\-status\fR)] [(\fB\-S\fR|\fB\-\-no\-status\fR)]
 .
 .br
+\~\~\~\~\~\~\~\~\~\~[\fB\-\-show\-*\fR] [\fB\-\-no\-show\-*\fR]
+.
+.br
 \~\~\~\~\~\~\~\~\~\~[(\fB\-e\fR|\fB\-\-show\-empty\fR)] [(\fB\-E\fR|\fB\-\-no\-show\-empty\fR)]
 .
 .br
@@ -56,6 +59,23 @@ Print the status section\.
 .TP
 \fB\-S\fR|\fB\-\-no\-status\fR
 Don\'t print the status section\.
+.
+.TP
+\fB\-\-show\-*\fR
+Show extension *\. Where * is the configuration key value\. For instance, given:
+.
+.IP
+git\-state\.extentions\.last\-ten\-commits=git log \-\-oneline \-10
+.
+.br
+git\-state\.extentions\.last\-ten\-comments\.name=last ten commits
+.
+.IP
+The show flag is \fB\-\-show\-last\-ten\-commits\fR\.
+.
+.TP
+\fB\-\-no\-show\-*\fR
+Hide extension *\.
 .
 .TP
 \fB\-e\fR|\fB\-\-show\-empty\fR
@@ -159,7 +179,7 @@ Options to pass to the extension\. These are merged with any command line option
 .
 .TP
 \fBgit\-state\.extensions\.*\.show\fR \fIbool\fR
-True or false flag determining whether to show the extension\. See \fB\fIEXTENSIONS\fR\fR section for more detail\.
+True or false flag determining whether to show the extension\. Options \fB\-\-show\-*\fR and \fB\-\-no\-show\-*\fR override this value\. See \fB\fIEXTENSIONS\fR\fR section for more detail\.
 .
 .IP
 Default: \fItrue\fR

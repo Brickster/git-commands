@@ -82,6 +82,7 @@
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
 <p><code>git state</code> [(<code>-s</code>|<code>--status</code>)] [(<code>-S</code>|<code>--no-status</code>)]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--show-*</code>] [<code>--no-show-*</code>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-e</code>|<code>--show-empty</code>)] [(<code>-E</code>|<code>--no-show-empty</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-c</code>|<code>--color</code>) [<var>when</var>]] [(<code>-C</code>|<code>--no-color</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-p</code>|<code>--pretty</code>)] [(<code>-f</code>|<code>--format</code>) <var>format</var>]<br />
@@ -103,6 +104,13 @@
 <dt><code>-v</code>|<code>--version</code></dt><dd><p>  Print version.</p></dd>
 <dt><code>-s</code>|<code>--status</code></dt><dd><p>  Print the status section.</p></dd>
 <dt><code>-S</code>|<code>--no-status</code></dt><dd><p>  Don't print the status section.</p></dd>
+<dt><code>--show-*</code></dt><dd><p>  Show extension *. Where * is the configuration key value. For instance, given:</p>
+
+<p>  git-state.extentions.last-ten-commits=git log --oneline -10<br />
+  git-state.extentions.last-ten-comments.name=last ten commits</p>
+
+<p>  The show flag is <code>--show-last-ten-commits</code>.</p></dd>
+<dt><code>--no-show-*</code></dt><dd><p>  Hide extension *.</p></dd>
 <dt><code>-e</code>|<code>--show-empty</code></dt><dd><p>  Show empty sections rather than omitting them.</p></dd>
 <dt><code>-E</code>|<code>--no-show-empty</code></dt><dd><p>  Omit empty sections. This does not apply to the status section.</p></dd>
 <dt><code>-c</code>|<code>--color</code> [<var>when</var>]</dt><dd><p>  Color output. <var>when</var> must be one of <code>always</code>, <code>never</code>, or <code>auto</code>. Defaults to <code>color.ui</code> configuration value or <code>auto</code>.</p></dd>
@@ -141,7 +149,7 @@
 <dt><code>git-state.extensions.*</code> <var>string</var></dt><dd><p>  A custom command to execute and print as its own section. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
 <dt><code>git-state.extensions.*.name</code> <var>string</var></dt><dd><p>  A custom name for an extension. If not specified, the extension key is used. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
 <dt><code>git-state.extensions.*.options</code> <var>string</var></dt><dd><p>  Options to pass to the extension. These are merged with any command line options for the extension. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
-<dt><code>git-state.extensions.*.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether to show the extension. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p>
+<dt><code>git-state.extensions.*.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether to show the extension. Options <code>--show-*</code> and <code>--no-show-*</code> override this value. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p>
 
 <p>  Default: <var>true</var></p></dd>
 <dt><code>git-state.order</code> <var>string</var></dt><dd><p>  Custom order in which to print sections. Multiple section names are separated by a pipe (|) character. Any remaining sections not included are printed in the order they are handled internally. Option <code>-o</code>|<code>--order</code> overrides this value.</p></dd>
