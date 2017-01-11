@@ -15,6 +15,26 @@ def multi_set(**kwargs):
     return MultiSet
 
 
+def append_list(value):
+    """Return an AppendList action with a given value to append.
+
+    :param value: the value to append to the destination list
+    :return: an AppendList
+    """
+
+    class AppendList(argparse.Action):
+        """Appends a value to the destination list.
+
+        This is different action='append' in that the value is not from the command line.
+        """
+
+        def __call__(self, parser, namespace, values, option_string=None):
+            current_values = getattr(namespace, self.dest)
+            current_values.append(value)
+            setattr(namespace, self.dest, current_values)
+    return AppendList
+
+
 def optional_list(const):
     """Return an OptionalList action with a given const value.
 

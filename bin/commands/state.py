@@ -89,11 +89,12 @@ def state(**kwargs):
             file=None
         ).splitlines()
         extensions = list(set(extensions) - set(kwargs.get('ignore_extensions')))
+        show_extensions = kwargs.get('show_extensions', [])
         options = kwargs.get('options')
         for extension in extensions or []:
 
             # skip if we should ignore this extension
-            if not settings.get('git-state.extensions.' + extension + '.show', default=True, as_type=settings.as_bool):
+            if extension not in show_extensions and not settings.get('git-state.extensions.' + extension + '.show', default=True, as_type=settings.as_bool):
                 continue
 
             extension_command = settings.get('git-state.extensions.' + extension)

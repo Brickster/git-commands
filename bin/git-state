@@ -3,7 +3,7 @@
 import argparse
 
 from commands import settings, state
-from commands.utils.parse_actions import dict_set, optional_list
+from commands.utils.parse_actions import append_list, dict_set, optional_list
 
 
 def main():
@@ -29,7 +29,7 @@ def main():
     status_group.add_argument(
         '-s',
         '--status',
-        help='show the status section',
+        help='show status section',
         action='store_true',
         dest='show_status',
         default=default_show_status
@@ -37,10 +37,39 @@ def main():
     status_group.add_argument(
         '-S',
         '--no-status',
-        help="don't show the status section",
+        help='hide status section',
         action='store_false',
         dest='show_status'
     )
+
+    # add --show-/--no-show- flags for custom extensions
+    extensions = settings.list(
+        section='git-state.extensions',
+        config=None,
+        count=False,
+        keys=True,
+        format=None,
+        file=None
+    ).splitlines()
+    for extension in extensions:
+        extension_group = parser.add_mutually_exclusive_group()
+        section_name = settings.get('git-state.extensions.' + extension + '.name', default=extension)
+        extension_group.add_argument(
+            '--show-' + extension,
+            help='show {} extension'.format(section_name),
+            action=append_list(extension),
+            nargs=0,
+            dest='show_extensions',
+            default=[]
+        )
+        extension_group.add_argument(
+            '--no-show-' + extension,
+            help='hide {} extension'.format(section_name),
+            action=append_list(extension),
+            nargs=0,
+            dest='ignore_extensions',
+            default=[]
+        )
 
     # color
     color_group = parser.add_mutually_exclusive_group()

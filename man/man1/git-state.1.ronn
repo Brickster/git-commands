@@ -3,6 +3,7 @@
 ## SYNOPSIS
 
 `git state` [(`-s`|`--status`)] [(`-S`|`--no-status`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--show-*`] [`--no-show-*`]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-c`|`--color`) [<when>]] [(`-C`|`--no-color`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
@@ -30,6 +31,17 @@ Used to see a more concise and comprehensive view of the working directory throu
 
 * `-S`|`--no-status`:
     Don't print the status section.
+
+* `--show-*`:
+    Show extension *. Where * is the configuration key value. For instance, given:
+
+    git-state.extentions.last-ten-commits=git log --oneline -10<br>
+    git-state.extentions.last-ten-comments.name=last ten commits
+
+    The show flag is `--show-last-ten-commits`.
+
+* `--no-show-*`:
+    Hide extension *.
 
 * `-e`|`--show-empty`:
     Show empty sections rather than omitting them.
@@ -106,7 +118,7 @@ Used to see a more concise and comprehensive view of the working directory throu
 	Options to pass to the extension. These are merged with any command line options for the extension. See **[EXTENSIONS][]** section for more detail.
 
 * `git-state.extensions.*.show` <bool>:
-	True or false flag determining whether to show the extension. See **[EXTENSIONS][]** section for more detail.
+	True or false flag determining whether to show the extension. Options `--show-*` and `--no-show-*` override this value. See **[EXTENSIONS][]** section for more detail.
 
 	Default: <true>
 
