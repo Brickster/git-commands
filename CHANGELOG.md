@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. This projec
 - `git-state` extension configuration for showing [#85][]
 - `git-state` flags for showing/not showing custom extensions [#87][]
 - `git-state` extension configuration for coloring [#88][]
+- `git-state` option to never page output [#76][]
 
 ### Removed
 - The branches, log, reflog, and stashes built-in extensions were removed in favor of defining them using custom extensions [#83][]
@@ -41,6 +42,7 @@ All notable changes to this project will be documented in this file. This projec
 [#72]: https://github.com/Brickstertwo/git-commands/issues/72
 [#74]: https://github.com/Brickstertwo/git-commands/issues/74
 [#75]: https://github.com/Brickstertwo/git-commands/issues/75
+[#76]: https://github.com/Brickstertwo/git-commands/issues/76
 [#77]: https://github.com/Brickstertwo/git-commands/issues/77
 [#78]: https://github.com/Brickstertwo/git-commands/issues/78
 [#81]: https://github.com/Brickstertwo/git-commands/issues/81

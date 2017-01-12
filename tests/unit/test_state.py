@@ -1366,7 +1366,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
     @mock.patch('subprocess.Popen')
-    def test_state_outputtoolargeforwindow(
+    def test_state_pageOutput(
             self,
             mock_popen,
             mock_info,
@@ -1432,6 +1432,76 @@ class TestStateState(unittest.TestCase):
         mock_call.assert_called_once_with(['less', '-r'], stdin=mock_echo.stdout)
         mock_popen.assert_called_once_with(['echo', 'status section\ntwo\nthree\nfour\nfive'], stdout=subprocess.PIPE)
         mock_echo.wait.assert_called_once_with()
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
+    @mock.patch('bin.commands.stateextensions.status.get')
+    @mock.patch('bin.commands.stateextensions.status.title')
+    @mock.patch('bin.commands.stateextensions.status.accent')
+    @mock.patch('bin.commands.state._print_section')
+    @mock.patch('bin.commands.settings.list', return_return='')
+    @mock.patch('subprocess.check_output', return_value='1')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_doNotPageOutputEvenIfTooLarge(
+            self,
+            mock_info,
+            mock_checkoutput,
+            mock_list,
+            mock_printsection,
+            mock_statusaccent,
+            mock_statustitle,
+            mock_statusget,
+            mock_isemptyrepository,
+            mock_get,
+            mock_isgitrepository
+    ):
+
+        # setup
+        format_ = 'compact'
+        kwargs = {
+            'show_color': 'never',
+            'format': format_,
+            'show_status': True,
+            'clear': False,
+            'ignore_extensions': [],
+            'page': False
+        }
+
+        mock_statusget.return_value = 'status output'
+        mock_statustitle.return_value = 'status title'
+        mock_statusaccent.return_value = 'status accent'
+        mock_printsection.return_value = 'status section\ntwo\nthree\nfour\nfive\n'
+        mock_get.side_effect = [True, []]
+
+        # when
+        state.state(**kwargs)
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_isemptyrepository.assert_called_once_with()
+        mock_printsection.assert_called_once_with(
+            mock_statustitle.return_value,
+            mock_statusaccent.return_value,
+            mock_statusget.return_value,
+            format_,
+            show_empty=True
+        )
+        mock_get.assert_has_calls([
+            mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
+            mock.call('git-state.order', default=[], as_type=mock.ANY)
+        ])
+        self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        mock_list.assert_called_once_with(
+            section='git-state.extensions',
+            config=None,
+            count=False,
+            keys=True,
+            format=None,
+            file=None
+        )
+        mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_info.assert_called_once_with('status section\ntwo\nthree\nfour\nfive')
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.settings.get', return_value=False)
