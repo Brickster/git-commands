@@ -122,6 +122,11 @@ Used to see a more concise and comprehensive view of the working directory throu
 
 	Default: <true>
 
+* `git-state.extensions.*.color` <bool>:
+	Whether the extension should be called with `--color=<when>`.
+
+	Default: <true>
+
 * `git-state.order` <string>:
 	Custom order in which to print sections. Multiple section names are separated by a pipe (|) character. Any remaining sections not included are printed in the order they are handled internally. Option `-o`|`--order` overrides this value.
 

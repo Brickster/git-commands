@@ -614,7 +614,7 @@ class TestStateState(unittest.TestCase):
         changes_command = 'changes command'
         changes_name = 'changes'
         changes_output = 'the changes'
-        mock_get.side_effect = [True, True, changes_command, changes_name, [], []]
+        mock_get.side_effect = [True, True, changes_command, changes_name, [], True, []]
         mock_list.return_value = 'changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
@@ -640,6 +640,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.extensions.changes'),
             mock.call('git-state.extensions.changes.name', default='changes'),
             mock.call('git-state.extensions.changes.options', default=[], as_type=mock.ANY),
+            mock.call('git-state.extensions.changes.color', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
         mock_list.assert_called_once_with(
@@ -655,6 +656,86 @@ class TestStateState(unittest.TestCase):
         mock_call.assert_not_called()
         mock_popen.assert_called_once_with(
             ['changes', 'command', '--color=never'], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+        mock_proc.communicate.assert_called_once_with()
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
+    @mock.patch('bin.commands.state._print_section')
+    @mock.patch('bin.commands.settings.list', return_return='')
+    @mock.patch('subprocess.check_output', return_value='100')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    @mock.patch('subprocess.Popen')
+    def test_state_withextensions_doesNotSupportColor(
+            self,
+            mock_popen,
+            mock_info,
+            mock_call,
+            mock_checkoutput,
+            mock_list,
+            mock_printsection,
+            mock_isemptyrepository,
+            mock_get,
+            mock_isgitrepository
+    ):
+
+        # setup
+        format_ = 'compact'
+        kwargs = {
+            'show_color': 'never',
+            'format': format_,
+            'show_status': False,
+            'clear': False,
+            'ignore_extensions': [],
+            'options': {}
+        }
+        changes_command = 'changes command'
+        changes_name = 'changes'
+        changes_output = 'the changes'
+        mock_get.side_effect = [True, True, changes_command, changes_name, [], False, []]
+        mock_list.return_value = 'changes'
+        mock_proc = mock.Mock()
+        mock_proc.communicate.return_value = [changes_output, None]
+        mock_proc.returncode = 0
+        mock_popen.return_value = mock_proc
+        mock_printsection.return_value = 'final changes output\n'
+
+        # when
+        state.state(**kwargs)
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_isemptyrepository.assert_called_once_with()
+        mock_printsection.assert_called_once_with(
+            title=changes_name,
+            text=changes_output,
+            format_=format_,
+            show_empty=None
+        )
+        mock_get.assert_has_calls([
+            mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
+            mock.call('git-state.extensions.changes.show', default=True, as_type=mock.ANY),
+            mock.call('git-state.extensions.changes'),
+            mock.call('git-state.extensions.changes.name', default='changes'),
+            mock.call('git-state.extensions.changes.options', default=[], as_type=mock.ANY),
+            mock.call('git-state.extensions.changes.color', default=True, as_type=mock.ANY),
+            mock.call('git-state.order', default=[], as_type=mock.ANY)
+        ])
+        mock_list.assert_called_once_with(
+            section='git-state.extensions',
+            config=None,
+            count=False,
+            keys=True,
+            format=None,
+            file=None
+        )
+        mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_info.assert_called_once_with('final changes output')
+        mock_call.assert_not_called()
+        mock_popen.assert_called_once_with(
+            ['changes', 'command'], stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
         mock_proc.communicate.assert_called_once_with()
 
@@ -693,7 +774,7 @@ class TestStateState(unittest.TestCase):
         changes_command = 'changes command'
         changes_name = 'changes'
         changes_output = 'the changes'
-        mock_get.side_effect = [True, True, changes_command, changes_name, [], []]
+        mock_get.side_effect = [True, True, changes_command, changes_name, [], True, []]
         mock_list.return_value = 'changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
@@ -719,6 +800,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.extensions.changes'),
             mock.call('git-state.extensions.changes.name', default='changes'),
             mock.call('git-state.extensions.changes.options', default=[], as_type=mock.ANY),
+            mock.call('git-state.extensions.changes.color', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
         mock_list.assert_called_once_with(
@@ -733,7 +815,7 @@ class TestStateState(unittest.TestCase):
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
         mock_popen.assert_called_once_with(
-            ['changes', 'command', '--color=never', '--option1', '-o', '1 2'], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            ['changes', 'command', '--option1', '-o', '1 2', '--color=never'], stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
         mock_proc.communicate.assert_called_once_with()
 
@@ -772,7 +854,7 @@ class TestStateState(unittest.TestCase):
         changes_command = 'changes command'
         changes_name = 'changes'
         changes_output = 'the changes'
-        mock_get.side_effect = [True, True, changes_command, changes_name, ['--option1 -o "1 2"'], []]
+        mock_get.side_effect = [True, True, changes_command, changes_name, ['--option1 -o "1 2"'], True, []]
         mock_list.return_value = 'changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
@@ -798,6 +880,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.extensions.changes'),
             mock.call('git-state.extensions.changes.name', default='changes'),
             mock.call('git-state.extensions.changes.options', default=[], as_type=mock.ANY),
+            mock.call('git-state.extensions.changes.color', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
         mock_list.assert_called_once_with(
@@ -812,7 +895,7 @@ class TestStateState(unittest.TestCase):
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
         mock_popen.assert_called_once_with(
-            ['changes', 'command', '--color=never', '--option1', '-o', '1 2'], stdout=subprocess.PIPE,
+            ['changes', 'command', '--option1', '-o', '1 2', '--color=never'], stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
         mock_proc.communicate.assert_called_once_with()
@@ -852,7 +935,7 @@ class TestStateState(unittest.TestCase):
         changes_command = 'changes command'
         changes_name = 'changes'
         changes_output = 'the changes'
-        mock_get.side_effect = [True, True, changes_command, changes_name, ['--option2 true'], []]
+        mock_get.side_effect = [True, True, changes_command, changes_name, ['--option2 true'], True, []]
         mock_list.return_value = 'changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
@@ -878,6 +961,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.extensions.changes'),
             mock.call('git-state.extensions.changes.name', default='changes'),
             mock.call('git-state.extensions.changes.options', default=[], as_type=mock.ANY),
+            mock.call('git-state.extensions.changes.color', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
         mock_list.assert_called_once_with(
@@ -892,7 +976,7 @@ class TestStateState(unittest.TestCase):
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
         mock_popen.assert_called_once_with(
-            ['changes', 'command', '--color=never', '--option2', 'true', '--option1', '-o', '1 2'], stdout=subprocess.PIPE,
+            ['changes', 'command', '--option2', 'true', '--option1', '-o', '1 2', '--color=never'], stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
         mock_proc.communicate.assert_called_once_with()
@@ -1052,7 +1136,7 @@ class TestStateState(unittest.TestCase):
         changes_command = 'changes command'
         changes_name = 'changes'
         changes_output = 'the changes'
-        mock_get.side_effect = [True, changes_command, changes_name, [], []]
+        mock_get.side_effect = [True, changes_command, changes_name, [], True, []]
         mock_list.return_value = 'changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
@@ -1077,6 +1161,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.extensions.changes'),
             mock.call('git-state.extensions.changes.name', default='changes'),
             mock.call('git-state.extensions.changes.options', default=[], as_type=mock.ANY),
+            mock.call('git-state.extensions.changes.color', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
         mock_list.assert_called_once_with(
@@ -1141,7 +1226,7 @@ class TestStateState(unittest.TestCase):
         changes_command = 'changes command'
         changes_name = 'changes'
         changes_output = 'the changes'
-        mock_get.side_effect = [True, True, changes_command, changes_name, [], ['changes', 'status']]
+        mock_get.side_effect = [True, True, changes_command, changes_name, [], True, ['changes', 'status']]
         mock_list.return_value = 'changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
@@ -1175,6 +1260,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.extensions.changes'),
             mock.call('git-state.extensions.changes.name', default='changes'),
             mock.call('git-state.extensions.changes.options', default=[], as_type=mock.ANY),
+            mock.call('git-state.extensions.changes.color', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
         self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
