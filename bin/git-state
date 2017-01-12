@@ -181,6 +181,14 @@ def main():
         metavar='OPTION'
     )
 
+    parser.add_argument(
+        '--no-page',
+        help='do not page output',
+        action='store_false',
+        default=True,
+        dest='page'
+    )
+
     state.state(**vars(parser.parse_args()))
 
 if __name__ == '__main__':

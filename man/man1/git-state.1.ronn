@@ -7,7 +7,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-c`|`--color`) [<when>]] [(`-C`|`--no-color`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--clear`] [`--no-clear`]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--clear`] [`--no-clear`] [`--no-page`]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--ignore-extensions` [<extension> ...]]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--order`) <section> [<section> ...]]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-O`|`--options`) _option_ [_option_ ...]]<br>
@@ -66,6 +66,9 @@ Used to see a more concise and comprehensive view of the working directory throu
 
 * `--no-clear`:
 	Do not clear the screen before printing.
+
+* `--no-page`:
+    Do not page output if it exceeds the terminal window.
 
 * `--ignore-extensions` [<extension> ...]:
 	A list of extensions to ignore when printing. If none are specified, all of them will be ignored. See **[EXTENSIONS][]** section for more detail.
