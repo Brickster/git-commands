@@ -28,7 +28,7 @@ All notable changes to this project will be documented in this file. This projec
 - `git-state` status not respecting color options
 - `git-changes` not working for `--count` option [#77][]
 - `git-changes` not working for empty/new repositories [#74][]
-- Documentation issues [#59][]
+- Documentation issues [#59][] [#86][]
 
 [#58]: https://github.com/Brickstertwo/git-commands/issues/58
 [#59]: https://github.com/Brickstertwo/git-commands/issues/59
@@ -47,6 +47,7 @@ All notable changes to this project will be documented in this file. This projec
 [#83]: https://github.com/Brickstertwo/git-commands/issues/83
 [#84]: https://github.com/Brickstertwo/git-commands/issues/84
 [#85]: https://github.com/Brickstertwo/git-commands/issues/85
+[#86]: https://github.com/Brickstertwo/git-commands/issues/86
 [#87]: https://github.com/Brickstertwo/git-commands/issues/87
 [#88]: https://github.com/Brickstertwo/git-commands/issues/88
 

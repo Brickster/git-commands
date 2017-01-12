@@ -45,7 +45,18 @@ def _print_section(title, accent=None, text=None, format_='compact', show_empty=
 
 
 def state(**kwargs):
-    """Print the state of the working tree."""
+    """Print the state of the working tree.
+
+    :keyword str show_color: color when (always, never, or auto)
+    :keyword str format: format for output (compact or pretty)
+    :keyword bool show_status: show status
+    :keyword list ignore_extensions: extensions to hide even if the configuration is to show
+    :keyword list show_extensions: extensions to show even if the configuration is to hide
+    :keyword dict options: dictionary of extension to option list
+    :keyword bool show_empty: show empty sections
+    :keyword list order: order to print sections in
+    :keyword bool clear: clear terminal before printing
+    """
 
     if not directories.is_git_repository():
         messages.error('{0!r} not a git repository'.format(os.getcwd()))

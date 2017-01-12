@@ -112,9 +112,12 @@ def tuck(files, indexed=None, message=None, quiet=False, ignore_deleted=False, d
     """Stash specific files.
 
     :param list files: the list of pathspecs for files to tuck
+    :param bool indexed: stash indexed or non-indexed files
     :param str or unicode message: the message to use when creating the stash
-    :param bool quiet: suppress output
+    :param bool quiet: suppress non-error output
     :param bool ignore_deleted: suppress deleted file error
+    :param bool dry_run: print the resulting stash and working directory but do not tuck anything
+    :param str show_color: when to color output (always, never, or auto)
     """
 
     if not directories.is_git_repository():
