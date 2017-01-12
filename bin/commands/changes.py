@@ -66,6 +66,7 @@ def unassociate(branch=None, cleanup=None, quiet=False):
 
     :param str or unicode branch: branch to unassociate
     :param str or unicode cleanup: cleanup action (one of: all, prune)
+    :param bool quiet: suppress non-error output
     """
 
     assert not cleanup or cleanup in ('all', 'prune'), 'cleanup must be one of ' + str(['all', 'prune'])
