@@ -109,7 +109,10 @@ def state(**kwargs):
             extension_options += options[extension_name] if extension_name in options else []
             extension_options = [o for sub in [shlex.split(line) for line in extension_options] for o in sub]
 
-            extension_command = shlex.split(extension_command) + ['--color={}'.format(show_color)] + extension_options
+            extension_command = shlex.split(extension_command) + extension_options
+            if settings.get('git-state.extensions.' + extension + '.color', default=True, as_type=settings.as_bool):
+                extension_command += ['--color={}'.format(show_color)]
+
             extension_proc = subprocess.Popen(extension_command, stdout=PIPE, stderr=PIPE)
             extension_out, extension_error = extension_proc.communicate()
 
