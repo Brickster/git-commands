@@ -36,7 +36,7 @@ Used to see a more concise and comprehensive view of the working directory throu
     Show extension *. Where * is the configuration key value. For instance, given:
 
     git-state.extentions.last-ten-commits=git log --oneline -10<br>
-    git-state.extentions.last-ten-comments.name=last ten commits
+    git-state.extentions.last-ten-commits.name=last ten commits
 
     The show flag is `--show-last-ten-commits`.
 
@@ -135,7 +135,7 @@ Used to see a more concise and comprehensive view of the working directory throu
 
 ## EXTENSIONS
 
-Out of the box, `git-state` isn't that useful. It simple reformats `git status --short`. That's where extensions come in. Extensions allow you to configure `git-state` to show the information useful to you. One can be created by setting a config in the following format:
+Out of the box, `git-state` isn't that useful. It simply reformats `git status --short`. That's where extensions come in. Extensions allow you to configure `git-state` to show the information useful to you. One can be created by setting a config in the following format:
 
 ```
 git-state.extensions.<section-name>
