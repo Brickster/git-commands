@@ -274,32 +274,47 @@ class TestGit(unittest.TestCase):
         self.assertEqual(context.exception.message, "'limit' may only contain 'heads' and/or 'tags'")
 
     @mock.patch('subprocess.check_output')
+    def test_symbolicFullName(self, mock_checkoutput):
+
+        # given
+        ref = 'ref123'
+        expected = 'full/ref123'
+        mock_checkoutput.return_value = expected + '\n'
+
+        # when
+        actual = git.symbolic_full_name(ref)
+
+        # then
+        self.assertEqual(actual, expected)
+        mock_checkoutput.assert_called_once_with(('git', 'rev-parse', '--symbolic-full-name', ref))
+
+    @mock.patch('subprocess.check_output')
     def test_currentBranch(self, mock_checkoutput):
 
         # given
         expected_branch = 'the-branch'
-        mock_checkoutput.return_value = expected_branch
+        mock_checkoutput.return_value = 'refs/heads/' + expected_branch
 
         # when
         current_branch = git.current_branch()
 
         # then
         self.assertEqual(current_branch, expected_branch)
-        mock_checkoutput.assert_called_once_with(('git', 'rev-parse', '--abbrev-ref', 'HEAD'))
+        mock_checkoutput.assert_called_once_with(('git', 'symbolic-ref', 'HEAD'))
 
     @mock.patch('subprocess.check_output')
     def test_currentBranch_withTrailingWhitespace(self, mock_checkoutput):
 
         # given
         expected_branch = 'the-branch'
-        mock_checkoutput.return_value = expected_branch + '   '
+        mock_checkoutput.return_value = 'refs/heads/' + expected_branch + '   '
 
         # when
         current_branch = git.current_branch()
 
         # then
         self.assertEqual(current_branch, expected_branch)
-        mock_checkoutput.assert_called_once_with(('git', 'rev-parse', '--abbrev-ref', 'HEAD'))
+        mock_checkoutput.assert_called_once_with(('git', 'symbolic-ref', 'HEAD'))
 
     @mock.patch('subprocess.check_output')
     def test_deletedFiles(self, mock_checkoutput):
@@ -336,3 +351,18 @@ MM modified.txt
         self.assertTrue(is_empty)
         mock_popen.assert_called_once_with(['git', 'log', '--oneline', '-1'], stdout=mock.ANY, stderr=mock.ANY)
         mock_proc.wait.assert_called_once()
+
+    @mock.patch('subprocess.check_output')
+    def test_revolveSha1(self, mock_checkoutput):
+
+        # given
+        revision = 'abc123'
+        expected = revision * 2
+        mock_checkoutput.return_value = expected + '\n'
+
+        # when
+        actual = git.resolve_sha1(revision)
+
+        # then
+        self.assertEqual(actual, expected)
+        mock_checkoutput.assert_called_once_with(('git', 'rev-parse', revision))

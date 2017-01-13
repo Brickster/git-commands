@@ -8,26 +8,117 @@ from bin.commands import changes
 class TestChangesAssociate(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_ref', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_ref_ambiguous', return_value=False)
+    @mock.patch('bin.commands.utils.git.symbolic_full_name')
     @mock.patch('bin.commands.utils.git.current_branch')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_associate(self, mock_info, mock_call, mock_currentbranch, mock_isgitrepository):
+    def test_associate_isRef_notAmbiguous(
+            self,
+            mock_info,
+            mock_call,
+            mock_currentbranch,
+            mock_symbolicfullname,
+            mock_isrefambiguous,
+            mock_isref,
+            mock_isgitrepository
+    ):
 
         # setup
         cur_branch = 'cur-branch'
         mock_currentbranch.return_value = cur_branch
+        fullname = 'fullname'
+        mock_symbolicfullname.return_value = fullname
 
         # when
-        committish = 'HEAD'
+        committish = 'c123'
         quiet = True
         changes.associate(committish, quiet=quiet)
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_isref.assert_called_once_with(committish)
+        mock_isrefambiguous.assert_called_once_with(committish, limit=('heads', 'tags'))
+        mock_symbolicfullname.assert_called_once_with(committish)
+        mock_currentbranch.assert_called_once()
         mock_call.assert_called_once_with(
-            ['git', 'config', '--local', 'git-changes.associations.' + cur_branch + '.with', committish]
+            ['git', 'config', '--local', 'git-changes.associations.' + cur_branch + '.with', fullname]
         )
-        mock_info.assert_called_once_with('{} has been associated with {}'.format(cur_branch, committish), quiet)
+        mock_info.assert_called_once_with('{} has been associated with {}'.format(cur_branch, fullname), quiet)
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_ref', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_ref_ambiguous', return_value=True)
+    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
+    def test_associate_isRef_isAmbiguous(
+            self,
+            mock_error,
+            mock_checkoutput,
+            mock_isrefambiguous,
+            mock_isref,
+            mock_isgitrepository
+    ):
+
+        # given
+        committish = 'abc123'
+        ref_names = ['refs/heads/master', 'refs/tags/master']
+        refs = '\n'.join(['84f9c10be201690f30252c0c6ef1504fad68251d ' + r for r in ref_names]) + '\n'
+        mock_checkoutput.return_value = refs
+
+        # when
+        try:
+            changes.associate(committish, quiet=False)
+            self.fail('expected to exit but did not')  # pragma: no cover
+        except SystemExit:
+            pass
+
+        # then
+        mock_isgitrepository.assert_called_once()
+        mock_isref.assert_called_once_with(committish)
+        mock_isrefambiguous.assert_called_once_with(committish, limit=('heads', 'tags'))
+        mock_checkoutput.assert_called_once_with(('git', 'show-ref', '--tags', '--heads', committish))
+        mock_error.assert_called_once_with(
+            '{0!r} is an ambiguous ref. Use one of:\n{1}'.format(committish, '\n'.join(ref_names))
+        )
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
+    @mock.patch('bin.commands.utils.git.resolve_sha1')
+    @mock.patch('bin.commands.utils.git.current_branch')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_associate_notARef(
+            self,
+            mock_info,
+            mock_call,
+            mock_currentbranch,
+            mock_resolvesha1,
+            mock_isref,
+            mock_isgitrepository
+    ):
+
+        # setup
+        cur_branch = 'cur-branch'
+        mock_currentbranch.return_value = cur_branch
+        resolved_sha1 = 'sha123'
+        mock_resolvesha1.return_value = resolved_sha1
+
+        # when
+        committish = 'c123'
+        quiet = True
+        changes.associate(committish, quiet=quiet)
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_isref.assert_called_once_with(committish)
+        mock_resolvesha1.assert_called_once_with(committish)
+        mock_currentbranch.assert_called_once()
+        mock_call.assert_called_once_with(
+            ['git', 'config', '--local', 'git-changes.associations.' + cur_branch + '.with', resolved_sha1]
+        )
+        mock_info.assert_called_once_with('{} has been associated with {}'.format(cur_branch, resolved_sha1), quiet)
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)

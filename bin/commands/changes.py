@@ -11,6 +11,11 @@ _DETAIL_OPTIONS = ('diff', 'stat', 'count')
 _COLOR_OPTIONS = ('always', 'auto', 'never')
 
 
+def _ambiguous_ref(ref):
+    ref_names = [r.split(' ')[1] for r in subprocess.check_output(('git', 'show-ref', '--tags', '--heads', ref)).splitlines()]
+    messages.error('{0!r} is an ambiguous ref. Use one of:\n{1}'.format(ref, '\n'.join(ref_names)))
+
+
 def associate(committish, quiet=False):
     """Associate the current branch with a commit-ish.
 
@@ -20,6 +25,15 @@ def associate(committish, quiet=False):
 
     if not directories.is_git_repository():
         messages.error('{0!r} not a git repository'.format(os.getcwd()))
+
+    # is it a ref?
+    if git.is_ref(committish):
+        if not git.is_ref_ambiguous(committish, limit=('heads', 'tags')):
+            committish = git.symbolic_full_name(committish)
+        else:
+            _ambiguous_ref(committish)
+    else:
+        committish = git.resolve_sha1(committish)
 
     current_branch = git.current_branch()
     subprocess.call(['git', 'config', '--local', 'git-changes.associations.' + current_branch + '.with', committish])
@@ -110,8 +124,7 @@ def changes(committish, details=None, color_when=None):
     elif not git.is_commit(committish):
         messages.error('{0!r} is not a valid commit'.format(committish))
     elif git.is_ref(committish) and git.is_ref_ambiguous(committish, limit=('heads', 'tags')):
-        ref_names = [ref.split(' ')[1] for ref in subprocess.check_output(('git', 'show-ref', '--tags', '--heads', committish)).splitlines()]
-        messages.error('{0!r} is an ambiguous ref. Use one of:\n{1}'.format(committish, '\n'.join(ref_names)))
+        _ambiguous_ref(committish)
 
     color_when = color_when.lower() if color_when else settings.get('color.ui', default='auto')
     if color_when == 'never' or (color_when == 'auto' and not sys.stdout.isatty()):
