@@ -91,13 +91,24 @@ def is_ref_ambiguous(ref, limit=None):
         return len(show_ref_proc.communicate()[0].splitlines()) > 1
 
 
+def symbolic_full_name(ref):
+    """Determines the symbolic full name for a ref.
+
+    :param str ref: the ref
+
+    :return str: the symbolic full name
+    """
+
+    return subprocess.check_output(('git', 'rev-parse', '--symbolic-full-name', ref)).strip()
+
+
 def current_branch():
     """Returns the current branch.
 
     :return str or unicode: the name of the current branch
     """
 
-    return subprocess.check_output(('git', 'rev-parse', '--abbrev-ref', 'HEAD')).strip()
+    return subprocess.check_output(('git', 'symbolic-ref', 'HEAD')).strip()[11:]  # slice length of "refs/heads/"
 
 
 def deleted_files():
@@ -120,3 +131,14 @@ def is_empty_repository():
         log_proc = subprocess.Popen(['git', 'log', '--oneline', '-1'], stdout=devnull, stderr=devnull)
         log_proc.wait()
         return log_proc.returncode != 0
+
+
+def resolve_sha1(revision):
+    """Resolve the SHA1 from a revision.
+
+    :param str revision: revision to resolve
+
+    :return str: SHA1
+    """
+
+    return subprocess.check_output(('git', 'rev-parse', revision)).strip()
