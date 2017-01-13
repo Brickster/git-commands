@@ -1504,6 +1504,7 @@ class TestStateState(unittest.TestCase):
         mock_info.assert_called_once_with('status section\ntwo\nthree\nfour\nfive')
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('colorama.init')
     @mock.patch('bin.commands.settings.get', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
@@ -1528,6 +1529,7 @@ class TestStateState(unittest.TestCase):
             mock_statusget,
             mock_isemptyrepository,
             mock_get,
+            mock_init,
             mock_isgitrepository
     ):
 
@@ -1553,6 +1555,7 @@ class TestStateState(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_init.assert_called_once_with(strip=True)
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_called_once_with(
             mock_statustitle.return_value,
