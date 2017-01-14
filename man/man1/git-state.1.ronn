@@ -141,7 +141,7 @@ Out of the box, `git-state` isn't that useful. It simply reformats `git status -
 git-state.extensions.<section-name>
 ```
 
-The extension can be any valid script or command but must accept the flag `--color=`<when>. <when> will only be one of: <never> or <always>. Unlike `git state` itself, <when> won't ever be omitted when an extension is executed. The section name for an extension defaults to the key name but can be overridden by defining `git-state.extensions.<section-name>.name`.
+The extension can be any valid script or command.
 
 ```bash
 $ git alias graph "git log --oneline --graph --all --decorate -10"
@@ -172,7 +172,11 @@ $ git state
 $
 ```
 
-An extension can be ignored by listing it in `--ignore-extensions` [<extension> ...].
+### Coloring
+By default, an extension must accept the flag `--color=`<when>. This flag must be respected so coloring options are matched. <when> will only be one of: <never> or <always>. If an extension never colors, set `git-state.extensions.*.color` to `false`.
+
+### Naming
+The section name for an extension defaults to the key name but can be overridden by defining `git-state.extensions.<section-name>.name`.
 
 ### Option Passing
 Options can be passed to an extension using the `-O|--option` flag and are applied in the order they are received. Values passed this way must be formatted as `<extension_name>:<option>`. The `extension_name` refers to the value used in configuration defining the extension. Not the display name.
@@ -183,6 +187,8 @@ Options can be handled per configuration by setting `git-state.extensions.*.opti
 
 ### Hide an Extension
 An extension can be hidden by setting `git-state.extensions.*.show` to `false`. This is useful for globally defined extensions that aren't needed for all repositories.
+
+Alternatively, an extension can be ignored by listing it in `--ignore-extensions` [<extension> ...].
 
 ## SEE ALSO
 
