@@ -4,7 +4,6 @@ import os
 import re
 import subprocess
 import sys
-from subprocess import PIPE
 
 import snapshot
 from utils import directories, git, messages
