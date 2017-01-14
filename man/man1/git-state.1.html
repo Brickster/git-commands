@@ -167,7 +167,7 @@
 <pre><code>git-state.extensions.&lt;section-name>
 </code></pre>
 
-<p>The extension can be any valid script or command but must accept the flag <code>--color=</code><var>when</var>. <var>when</var> will only be one of: <var>never</var> or <var>always</var>. Unlike <code>git state</code> itself, <var>when</var> won't ever be omitted when an extension is executed. The section name for an extension defaults to the key name but can be overridden by defining <code>git-state.extensions.&lt;section-name>.name</code>.</p>
+<p>The extension can be any valid script or command.</p>
 
 <pre><code class="bash">$ git alias graph "git log --oneline --graph --all --decorate -10"
 $ git config git-state.extenstions.graph "git graph"
@@ -197,7 +197,13 @@ $ git state
 $
 </code></pre>
 
-<p>An extension can be ignored by listing it in <code>--ignore-extensions</code> [<var>extension</var> ...].</p>
+<h3 id="Coloring">Coloring</h3>
+
+<p>By default, an extension must accept the flag <code>--color=</code><var>when</var>. This flag must be respected so coloring options are matched. <var>when</var> will only be one of: <var>never</var> or <var>always</var>. If an extension never colors, set <code>git-state.extensions.*.color</code> to <code>false</code>.</p>
+
+<h3 id="Naming">Naming</h3>
+
+<p>The section name for an extension defaults to the key name but can be overridden by defining <code>git-state.extensions.&lt;section-name>.name</code>.</p>
 
 <h3 id="Option-Passing">Option Passing</h3>
 
@@ -210,6 +216,8 @@ $
 <h3 id="Hide-an-Extension">Hide an Extension</h3>
 
 <p>An extension can be hidden by setting <code>git-state.extensions.*.show</code> to <code>false</code>. This is useful for globally defined extensions that aren't needed for all repositories.</p>
+
+<p>Alternatively, an extension can be ignored by listing it in <code>--ignore-extensions</code> [<var>extension</var> ...].</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 

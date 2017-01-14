@@ -213,7 +213,7 @@ git\-state\.extensions\.<section\-name>
 .IP "" 0
 .
 .P
-The extension can be any valid script or command but must accept the flag \fB\-\-color=\fR\fIwhen\fR\. \fIwhen\fR will only be one of: \fInever\fR or \fIalways\fR\. Unlike \fBgit state\fR itself, \fIwhen\fR won\'t ever be omitted when an extension is executed\. The section name for an extension defaults to the key name but can be overridden by defining \fBgit\-state\.extensions\.<section\-name>\.name\fR\.
+The extension can be any valid script or command\.
 .
 .IP "" 4
 .
@@ -250,8 +250,11 @@ $
 .
 .IP "" 0
 .
-.P
-An extension can be ignored by listing it in \fB\-\-ignore\-extensions\fR [\fIextension\fR \.\.\.]\.
+.SS "Coloring"
+By default, an extension must accept the flag \fB\-\-color=\fR\fIwhen\fR\. This flag must be respected so coloring options are matched\. \fIwhen\fR will only be one of: \fInever\fR or \fIalways\fR\. If an extension never colors, set \fBgit\-state\.extensions\.*\.color\fR to \fBfalse\fR\.
+.
+.SS "Naming"
+The section name for an extension defaults to the key name but can be overridden by defining \fBgit\-state\.extensions\.<section\-name>\.name\fR\.
 .
 .SS "Option Passing"
 Options can be passed to an extension using the \fB\-O|\-\-option\fR flag and are applied in the order they are received\. Values passed this way must be formatted as \fB<extension_name>:<option>\fR\. The \fBextension_name\fR refers to the value used in configuration defining the extension\. Not the display name\.
@@ -264,6 +267,9 @@ Options can be handled per configuration by setting \fBgit\-state\.extensions\.*
 .
 .SS "Hide an Extension"
 An extension can be hidden by setting \fBgit\-state\.extensions\.*\.show\fR to \fBfalse\fR\. This is useful for globally defined extensions that aren\'t needed for all repositories\.
+.
+.P
+Alternatively, an extension can be ignored by listing it in \fB\-\-ignore\-extensions\fR [\fIextension\fR \.\.\.]\.
 .
 .SH "SEE ALSO"
 git\-status(1), git\-config(1)
