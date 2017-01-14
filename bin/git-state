@@ -3,19 +3,20 @@
 import argparse
 
 from commands import settings, state
+from commands.utils import parse_string
 from commands.utils.parse_actions import append_list, dict_set, optional_list
 
 
 def main():
 
     # status defaults
-    default_show_status = settings.get('git-state.status.show', default=True, as_type=settings.as_bool)
+    default_show_status = settings.get('git-state.status.show', default=True, as_type=parse_string.as_bool)
 
     # general defaults
-    default_show_empty = settings.get('git-state.show-empty', default=False, as_type=settings.as_bool)
+    default_show_empty = settings.get('git-state.show-empty', default=False, as_type=parse_string.as_bool)
     default_format = settings.get('git-state.format', default='compact')
     default_show_color = settings.get('color.ui', default='auto')
-    default_clear = settings.get('git-state.clear', default=True, as_type=settings.as_bool)
+    default_clear = settings.get('git-state.clear', default=True, as_type=parse_string.as_bool)
 
     parser = argparse.ArgumentParser(
         prog='git state',

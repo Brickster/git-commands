@@ -5,6 +5,7 @@ import os
 import sys
 
 from commands import settings, tuck
+from commands.utils import parse_string
 
 # specific usage message needed to include the '--' part
 _USAGE_MESSAGE = """git tuck [MESSAGE] [-h] [-v] [-i|-I] [-q|-d] [-x|-X]
@@ -48,7 +49,7 @@ ignored_deleted_group.add_argument(
     '--ignore-deleted',
     help="don't print the error message for deleted files not explicitly included",
     action='store_true',
-    default=settings.get('git-tuck.ignore-deleted', default=False, as_type=settings.as_bool)
+    default=settings.get('git-tuck.ignore-deleted', default=False, as_type=parse_string.as_bool)
 )
 ignored_deleted_group.add_argument(
     '-I',

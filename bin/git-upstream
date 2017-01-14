@@ -3,6 +3,7 @@
 import argparse
 
 from commands import settings, upstream
+from commands.utils import parse_string
 
 
 def main():
@@ -23,7 +24,7 @@ def main():
         help='include the remote name',
         action='store_true',
         dest='include_remote',
-        default=settings.get('git-upstream.include-remote', default=False, as_type=settings.as_bool)
+        default=settings.get('git-upstream.include-remote', default=False, as_type=parse_string.as_bool)
     )
 
     # -R|--no-include-remote
