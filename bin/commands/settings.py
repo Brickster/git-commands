@@ -327,36 +327,6 @@ def cleanup(file_path=None):
         config_file.write(os.linesep)
 
 
-def as_bool(value):
-    """Returns whether the input is a string representation of a boolean.
-
-    :param str value: value to convert to a bool
-
-    :return bool: the bool representation
-    """
-
-    if not isinstance(value, str):
-        raise ValueError('{0!r} is not a string, use bool() instead'.format(value))
-
-    if value.lower() in ('true', 't', 'yes', 'y'):
-        return True
-    elif value.lower() in ('false', 'f', 'no', 'n'):
-        return False
-    else:
-        raise ValueError('{0!r} is not a boolean representation'.format(value))
-
-
-def as_delimited_list(delimiter):
-    """Parse a list by a specific delimiter.
-
-    :param str or unicode delimiter: delimiter to split on
-
-    :return lambda: lambda that splits by the delimiter
-    """
-
-    return lambda value: value.split(delimiter) if value else []
-
-
 def _get(**kwargs):
     value = get(**kwargs)
     if value is not None:

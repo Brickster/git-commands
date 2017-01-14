@@ -12,7 +12,7 @@ import colorama
 
 from . import settings
 from stateextensions import status
-from utils import directories, git, messages
+from utils import directories, git, messages, parse_string
 
 
 def _print_section(title, accent=None, text=None, format_='compact', show_empty=False):
@@ -74,7 +74,7 @@ def state(**kwargs):
     kwargs['show_clean_message'] = settings.get(
         'git-state.status.show-clean-message',
         default=True,
-        as_type=settings.as_bool
+        as_type=parse_string.as_bool
     )
 
     format_ = kwargs.get('format')
@@ -106,7 +106,7 @@ def state(**kwargs):
         for extension in extensions or []:
 
             # skip if we should ignore this extension
-            if extension not in show_extensions and not settings.get('git-state.extensions.' + extension + '.show', default=True, as_type=settings.as_bool):
+            if extension not in show_extensions and not settings.get('git-state.extensions.' + extension + '.show', default=True, as_type=parse_string.as_bool):
                 continue
 
             extension_command = settings.get('git-state.extensions.' + extension)
@@ -122,7 +122,7 @@ def state(**kwargs):
             extension_options = [o for sub in [shlex.split(line) for line in extension_options] for o in sub]
 
             extension_command = shlex.split(extension_command) + extension_options
-            if settings.get('git-state.extensions.' + extension + '.color', default=True, as_type=settings.as_bool):
+            if settings.get('git-state.extensions.' + extension + '.color', default=True, as_type=parse_string.as_bool):
                 extension_command += ['--color={}'.format(show_color)]
 
             extension_proc = subprocess.Popen(extension_command, stdout=PIPE, stderr=PIPE)
@@ -138,7 +138,7 @@ def state(**kwargs):
     state_result = ''
 
     # print sections with a predefined order
-    order = kwargs.get('order', settings.get('git-state.order', default=[], as_type=settings.as_delimited_list('|')))
+    order = kwargs.get('order', settings.get('git-state.order', default=[], as_type=parse_string.as_delimited_list('|')))
     for section in order:
         if section in sections:
             state_result += sections.pop(section)
