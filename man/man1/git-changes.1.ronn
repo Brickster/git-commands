@@ -6,6 +6,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--color` [<when>]] [`--no-color`] [<commit-ish>]<br>
 `git changes associate` [(`-q`|`--quiet`)] [(`-u`|`--upstream`)] [<commit-ish>]<br>
 `git changes unassociate` [(`-a`|`--all`)] [(`-p`|`--prune`)] [(`-q`|`--quiet`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-d`|`--dry-run`)]<br>
 `git changes` (`-h`|`--help`)<br>
 `git changes` (`-v`|`--version`)
 
@@ -68,6 +69,9 @@
 
     * `-q`|`--quiet`:
         Suppress all non-error output.
+
+    * `-d`|`--dry-run`:
+        Show the association(s) that would be remove but do nothing.
 
 * `-h`|`--help`:
     Print a simple help message.

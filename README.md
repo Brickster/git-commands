@@ -64,6 +64,7 @@ git changes [view] [(-c|--count)] [(-s|--stat)] [(-d|--diff)]
                    [--color [WHEN]] [--no-color] [COMMIT-ISH]
 git changes associate [(-q|--quiet)] [(-u|--upstream)] [COMMIT-ISH]
 git changes unassociate [(-a|--all)] [(-p|--prune)] [(-q|--quiet)]
+                        [(-d|--dry-run)]
 git changes (-h|--help)
 git changes (-v|--version)
 ```

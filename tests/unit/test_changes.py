@@ -230,6 +230,30 @@ git-changes.associations.master.with
     @mock.patch('subprocess.check_output')
     @mock.patch('bin.commands.changes.unassociate')
     @mock.patch('bin.commands.utils.messages.info')
+    def test_prune_associations_dryRun(self, mock_info, mock_unassociate, mock_checkoutput):
+
+        # setup
+        refs = "84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/master\n"
+        association_keys = """git-changes.associations.develop.with
+git-changes.associations.master.with
+"""
+        mock_checkoutput.side_effect = [refs, association_keys]
+
+        # when
+        quiet = True
+        changes._prune_associations('prune', quiet=quiet, dry_run=True)
+
+        # then
+        mock_checkoutput.assert_has_calls([
+            mock.call(('git', 'show-ref', '--heads')),
+            mock.call(('git', 'config', '--local', '--name-only', '--get-regexp', 'git-changes.associations'))
+        ])
+        mock_unassociate.assert_not_called()
+        mock_info.assert_called_once_with("Would remove association 'develop'", quiet)
+
+    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.changes.unassociate')
+    @mock.patch('bin.commands.utils.messages.info')
     def test_prune_associations_all(self, mock_info, mock_unassociate, mock_checkoutput):
 
         # setup
@@ -262,6 +286,13 @@ git-changes.associations.master.with
 
 class TestChangesUnassociate(unittest.TestCase):
 
+    def setUp(self):
+        # store private methods so they can be restored after tests that mock them
+        self._get_association = changes.get_association
+
+    def tearDown(self):
+        changes.get_association = self._get_association
+
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.current_branch')
     @mock.patch('subprocess.call')
@@ -277,6 +308,28 @@ class TestChangesUnassociate(unittest.TestCase):
         mock_call.assert_called_once_with(
             ['git', 'config', '--local', '--remove-section', 'git-changes.associations.' + branch]
         )
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.current_branch')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    @mock.patch('bin.commands.changes.get_association')
+    def test_unassociate_branch_dryRun(self, mock_getassociation, mock_info, mock_call, mock_currentbranch, mock_isgitrepository):
+
+        # given
+        associated_branch = 'associated-branch'
+        mock_getassociation.return_value = associated_branch
+
+        # when
+        branch = 'the-branch'
+        changes.unassociate(branch=branch, dry_run=True)
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_currentbranch.assert_not_called()
+        mock_call.assert_not_called()
+        mock_info.assert_called_once_with('Would unassociate {0!r} from {1!r}'.format(branch, associated_branch))
+        mock_getassociation.assert_called_once()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.current_branch')
@@ -321,11 +374,12 @@ class TestChangesUnassociate(unittest.TestCase):
         # when
         quiet = True
         cleanup = 'all'
-        changes.unassociate(cleanup=cleanup, quiet=quiet)
+        dry_run = True
+        changes.unassociate(cleanup=cleanup, quiet=quiet, dry_run=dry_run)
 
         # then
         mock_isgitrepository.assert_called_once_with()
-        mock_pruneassociations.assert_called_once_with(cleanup, quiet)
+        mock_pruneassociations.assert_called_once_with(cleanup, quiet, dry_run)
 
     def test_unassociate_cleanup_invalidtype(self):
 

@@ -56,7 +56,7 @@ def associate_upstream(quiet=False):
     associate(upstream_branch, quiet)
 
 
-def _prune_associations(cleanup, quiet):
+def _prune_associations(cleanup, quiet, dry_run=False):
     """Remove associations for branches that no longer exist."""
 
     # get branches
@@ -64,23 +64,27 @@ def _prune_associations(cleanup, quiet):
 
     # get associations
     current_associations = subprocess.check_output(('git', 'config', '--local', '--name-only', '--get-regexp', 'git-changes.associations')).splitlines()
-    current_associations = [association[25:-5] for association in current_associations]
+    current_associations = [association[25:-5] for association in current_associations]  # slice off git-changes.associations. and .with
 
     branches_to_prune = current_associations
     if cleanup == 'prune':
         # remove only stale associations
         branches_to_prune = list(set(current_associations) - set(current_branches))
     for to_prune in branches_to_prune:
-        unassociate(to_prune)
-        messages.info('Removed association {0!r}'.format(to_prune), quiet)
+        if dry_run:
+            messages.info('Would remove association {0!r}'.format(to_prune), quiet)
+        else:
+            unassociate(to_prune)
+            messages.info('Removed association {0!r}'.format(to_prune), quiet)
 
 
-def unassociate(branch=None, cleanup=None, quiet=False):
+def unassociate(branch=None, cleanup=None, quiet=False, dry_run=False):
     """Unassociate a branch.
 
     :param str or unicode branch: branch to unassociate
     :param str or unicode cleanup: cleanup action (one of: all, prune)
     :param bool quiet: suppress non-error output
+    :param bool dry_run: show the association(s) that would be remove but do nothing
     """
 
     assert not cleanup or cleanup in ('all', 'prune'), 'cleanup must be one of ' + str(['all', 'prune'])
@@ -89,10 +93,13 @@ def unassociate(branch=None, cleanup=None, quiet=False):
         messages.error('{0!r} not a git repository'.format(os.getcwd()))
 
     if cleanup:
-        _prune_associations(cleanup, quiet)
+        _prune_associations(cleanup, quiet, dry_run)
     else:
         branch = branch if branch else git.current_branch()
-        subprocess.call(['git', 'config', '--local', '--remove-section', 'git-changes.associations.' + branch])
+        if dry_run:
+            messages.info('Would unassociate {0!r} from {1!r}'.format(branch, get_association(branch)))
+        else:
+            subprocess.call(['git', 'config', '--local', '--remove-section', 'git-changes.associations.' + branch])
 
 
 def get_association(branch=None):
