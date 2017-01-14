@@ -82,11 +82,18 @@ def main():
         dest='cleanup'
     )
 
-    # -q|--quiet
-    unassociate_parser.add_argument(
+    # output: -q|--quiet or -d|--dry-run
+    output_group = unassociate_parser.add_mutually_exclusive_group()
+    output_group.add_argument(
         '-q',
         '--quiet',
         help='suppress all non-error output',
+        action='store_true'
+    )
+    output_group.add_argument(
+        '-d',
+        '--dry-run',
+        help='show the association(s) that would be remove but do nothing',
         action='store_true'
     )
 

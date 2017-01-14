@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file. This projec
 - `git-state` flags for showing/not showing custom extensions [#87][]
 - `git-state` extension configuration for coloring [#88][]
 - `git-state` option to never page output [#76][]
+- `-d|--dry-run` option to `changes unassociate` [#71][]
 
 ### Changed
 - Boolean flags only parse using `git-config` supported values [#90][]
@@ -42,6 +43,7 @@ All notable changes to this project will be documented in this file. This projec
 [#64]: https://github.com/Brickstertwo/git-commands/issues/64
 [#66]: https://github.com/Brickstertwo/git-commands/issues/66
 [#67]: https://github.com/Brickstertwo/git-commands/issues/67
+[#71]: https://github.com/Brickstertwo/git-commands/issues/71
 [#72]: https://github.com/Brickstertwo/git-commands/issues/72
 [#74]: https://github.com/Brickstertwo/git-commands/issues/74
 [#75]: https://github.com/Brickstertwo/git-commands/issues/75
