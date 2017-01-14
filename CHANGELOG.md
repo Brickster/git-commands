@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org).
 
-## [Unreleased](https://github.com/Brickstertwo/git-commands/compare/v0.5.0...HEAD)
+## [v0.6.0][] - 2017-01-14
 ### Added
 - `git-tuck` options `--dry-run` and `--color` [#67][]
 - `git-reindex` for re-adding already indexed files to the index
@@ -144,6 +144,8 @@ All notable changes to this project will be documented in this file. This projec
 ### Added
 - Everything
 
+[Unreleased]: https://github.com/Brickstertwo/git-commands/compare/latest...HEAD
+[v0.6.0]: https://github.com/Brickstertwo/git-commands/compare/v0.5.0...v0.6.0
 [v0.5.0]: https://github.com/Brickstertwo/git-commands/compare/v0.4.0...v0.5.0
 [v0.4.0]: https://github.com/Brickstertwo/git-commands/compare/v0.3.0...v0.4.0
 [v0.3.0]: https://github.com/Brickstertwo/git-commands/compare/v0.2.0...v0.3.0

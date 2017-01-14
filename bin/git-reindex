@@ -6,7 +6,7 @@ from commands import reindex
 
 parser = argparse.ArgumentParser(
     prog='git reindex',
-    version='git-reindex 0.5.0',
+    version='git-reindex 0.6.0',
     description=reindex.__doc__,
     epilog='for more detail, use: git help reindex'
 )
