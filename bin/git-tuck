@@ -13,7 +13,7 @@ _USAGE_MESSAGE = """git tuck [MESSAGE] [-h] [-v] [-i|-I] [-q|-d] [-x|-X]
 
 parser = argparse.ArgumentParser(
     prog='git tuck',
-    version='git-tuck 0.5.0',
+    version='git-tuck 0.6.0',
     usage=_USAGE_MESSAGE,
     description=tuck.__doc__,
     epilog='for more detail, use: git help tuck'
