@@ -35,6 +35,7 @@ def append_list(value):
     return AppendList
 
 
+# TODO: is const necessary? Can self.const be used?
 def optional_list(const):
     """Return an OptionalList action with a given const value.
 
@@ -67,11 +68,10 @@ def dict_set(delimiter):
 
         def __call__(self, parse, namespace, values, option_string=None):
             result = {}
-            for current_value in values:
+            for current_value in values if values else []:
                 key, value = current_value.split(delimiter, 1)
                 if key not in result:
                     result[key] = []
                 result[key] += [value]
-            if result:
-                setattr(namespace, self.dest, result)
+            setattr(namespace, self.dest, result)
     return DictSet
