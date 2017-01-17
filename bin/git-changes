@@ -199,7 +199,7 @@ def main():
             sys.exit(0)  # nothing to do
         committish = changes.get_association()
         if not committish:
-            committish = settings.get('git-changes.default-commit-ish', default='master')
+            committish = settings.get('git-changes.default-commit-ish', default='refs/heads/master')
         args['committish'] = committish
 
     if subcommand == 'associate':

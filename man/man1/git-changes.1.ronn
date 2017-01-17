@@ -84,12 +84,12 @@
 * `git-changes.default-commit-ish` <string>:
     The default commit-ish to use when finding changes. Option <branch> overrides this setting.
 
-    Default: <master>
+    Default: _refs/heads/master_
 
 * `git-changes.associations.*.with` <string>:
     Defines an association between the branch in the key and the value. The value must be a commit-ish. Under normal circumstances, these entries are created/removed automatically.
 
-    Default: <master>
+    Default: _refs/heads/master_
 
 ## SEE ALSO
 
