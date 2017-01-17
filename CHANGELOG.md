@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ## [Unreleased][]
 ### Fixed
+- `git-state` printing header colors in with `--no-color` [#80](https://github.com/Brickstertwo/git-commands/issues/80)
 - `git-changes` defaulting to an ambiguous ref [#92](https://github.com/Brickstertwo/git-commands/issues/92)
 
 ## [v0.6.0][] - 2017-01-14

@@ -31,6 +31,22 @@ class TestMessages(unittest.TestCase):
         mock_print.assert_called_once_with(prefix + ' ' + message, file=file_)
 
     @mock.patch('__builtin__.print')
+    def test__print_noFile(self, mock_print):
+
+        # given
+        message = 'message'
+        prefix = 'a prefix:'
+        quiet = False
+        exit_ = False
+        file_ = None
+
+        # then
+        messages._print(message, prefix, quiet, exit_, file_)
+
+        # then
+        mock_print.assert_called_once_with(prefix + ' ' + message)
+
+    @mock.patch('__builtin__.print')
     def test__print_quiet(self, mock_print):
 
         # given

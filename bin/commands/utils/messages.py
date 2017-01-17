@@ -3,7 +3,7 @@ from __future__ import print_function
 import sys
 
 
-def _print(message, prefix=None, quiet=False, exit_=False, file_=sys.stdout):
+def _print(message, prefix=None, quiet=False, exit_=False, file_=None):
 
     assert isinstance(message, str), "message must be a str"
     assert not prefix or isinstance(prefix, str), "prefix must be a str"
@@ -12,7 +12,10 @@ def _print(message, prefix=None, quiet=False, exit_=False, file_=sys.stdout):
 
     message = prefix + ' ' + message if prefix else message
     if not quiet:
-        print(message, file=file_)
+        if file_:
+            print(message, file=file_)
+        else:
+            print(message)  # defaulting file_ to sys.stdout messes with colorama
     if exit_:
         sys.exit(1)
 
