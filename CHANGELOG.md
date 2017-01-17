@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org).
 
+## [Unreleased][]
+### Fixed
+- `git-changes` defaulting to an ambiguous ref [#92](https://github.com/Brickstertwo/git-commands/issues/92)
+
 ## [v0.6.0][] - 2017-01-14
 ### Added
 - `git-tuck` options `--dry-run` and `--color` [#67][]
