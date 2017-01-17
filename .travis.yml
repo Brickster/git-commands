@@ -19,6 +19,6 @@ script:
   - coverage report --include=bin/* --omit=*/__init__.py
   - coverage xml --include=bin/* --omit=*/__init__.py -o coverage.xml
 
-  # upload coverage report
+  # upload coverage report for pushes to master only
   # secure environment variables aren't available for PRs from other repositories
-  - if [[ ! -z "$CODACY_PROJECT_TOKEN" ]]; then python-codacy-coverage -r coverage.xml; fi
+  - if [[ ! -z "$CODACY_PROJECT_TOKEN" ]] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then python-codacy-coverage -r coverage.xml; fi
