@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org).
 
-## [Unreleased][]
+## [v0.6.1][] - 2017-01-17
 ### Fixed
 - `git-state` printing header colors in with `--no-color` [#80](https://github.com/Brickstertwo/git-commands/issues/80)
 - `git-changes` defaulting to an ambiguous ref [#92](https://github.com/Brickstertwo/git-commands/issues/92)
@@ -150,6 +150,7 @@ All notable changes to this project will be documented in this file. This projec
 - Everything
 
 [Unreleased]: https://github.com/Brickstertwo/git-commands/compare/latest...HEAD
+[v0.6.1]: https://github.com/Brickstertwo/git-commands/compare/v0.6.0...v0.6.1
 [v0.6.0]: https://github.com/Brickstertwo/git-commands/compare/v0.5.0...v0.6.0
 [v0.5.0]: https://github.com/Brickstertwo/git-commands/compare/v0.4.0...v0.5.0
 [v0.4.0]: https://github.com/Brickstertwo/git-commands/compare/v0.3.0...v0.4.0

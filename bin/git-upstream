@@ -10,7 +10,7 @@ def main():
 
     parser = argparse.ArgumentParser(
         prog='git upstream',
-        version='git-upstream 0.6.0',
+        version='git-upstream 0.6.1',
         description=upstream.__doc__,
         epilog='for more detail, use: git help upstream'
     )
