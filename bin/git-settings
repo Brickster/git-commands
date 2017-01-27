@@ -74,7 +74,7 @@ def main():
         '--default',
         help='a default value to return when no setting exists'
     )
-    get_parser.set_defaults(func=settings._get)
+    get_parser.set_defaults(func=settings.get)
 
     # --------------------------------------------
     # list sub-command
@@ -110,7 +110,7 @@ def main():
     )
     list_group.add_argument('-c', '--count', help='print the count of configurations', action='store_true')
     list_group.add_argument('-k', '--keys', help='list the keys for a section', action='store_true')
-    list_parser.set_defaults(func=settings._list)
+    list_parser.set_defaults(func=settings.list)
 
     # --------------------------------------------
     # destroy sub-command
@@ -131,7 +131,9 @@ def main():
 
     args = vars(parser.parse_args())
     func = args.pop('func')
-    func(**args)
+    result = func(**args)
+    if result:
+        print result
 
 if __name__ == '__main__':
     main()
