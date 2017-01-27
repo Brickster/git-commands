@@ -15,7 +15,34 @@ def _validate_config(config=None):
     """
 
     if config == 'local' and not directories.is_git_repository():
-        error('{0!r} is not a git repository so {1!r} does not apply'.format(os.getcwd(), 'local'))
+        error('{0!r} is not a git repository'.format(os.getcwd()), exit_=False)
+        error("'local' does not apply")
+
+
+def _pretty_format_configs(config_map):
+    all_sections_map = {}
+    result = []
+    for key, value in config_map.iteritems():
+        match = re.match('^(.*)\.([-a-zA-Z0-9]+)', key)
+        subkey = match.group(1)
+        key = match.group(2)
+
+        if subkey in all_sections_map:
+            section_map = all_sections_map[subkey]
+        else:
+            section_map = {}
+
+        section_map[key] = value
+        all_sections_map[subkey] = section_map
+    for section, section_map in all_sections_map.iteritems():
+        match = re.match('^([-a-zA-Z0-9]+)\.(.*)$', section)
+        if match is None:
+            result += ['[{}]'.format(section)]
+        else:
+            result += ['[{} "{}"]'.format(match.group(1), match.group(2))]
+        for key, value in section_map.iteritems():
+            result += ['    {} = {}'.format(key, value)]
+    return result
 
 
 def list(section, config, count, keys, format, file=None):
@@ -57,41 +84,13 @@ def list(section, config, count, keys, format, file=None):
     if count:
         result = [str(len(config_map))]
     elif keys:
-        result = [key[key.rfind('.') + 1 :] for key in config_map.keys()]
+        result = [key[key.rfind('.') + 1:] for key in config_map.keys()]
     elif format == 'pretty':
-
-        all_sections_map = {}
-        for key, value in config_map.iteritems():
-            match = re.match('^(.*)\.([-a-zA-Z0-9]+)', key)
-            subkey = match.group(1)
-            key = match.group(2)
-
-            if subkey in all_sections_map:
-                section_map = all_sections_map[subkey]
-            else:
-                section_map = {}
-
-            section_map[key] = value
-            all_sections_map[subkey] = section_map
-
-        for section, section_map in all_sections_map.iteritems():
-            match = re.match('^([-a-zA-Z0-9]+)\.(.*)$', section)
-            if match is None:
-                result += ['[{}]'.format(section)]
-            else:
-                result += ['[{} "{}"]'.format(match.group(1), match.group(2))]
-            for key, value in section_map.iteritems():
-                result += ['    {} = {}'.format(key, value)]
+        result = _pretty_format_configs(config_map)
     else:
         for key, value in config_map.iteritems():
             result += ['{}={}'.format(key, value)]
     return os.linesep.join(result)
-
-
-def _list(**kwargs):
-    list_output = list(**kwargs)
-    if list_output:
-        print list_output
 
 
 def _dry_destroy_section(config, section):
@@ -160,10 +159,3 @@ def get(key, default=None, config=None, file=None, as_type=str):
             return as_type(value)
         except ValueError:
             error('Cannot parse value {0!r} for key {1!r} using format {2!r}'.format(value, key, as_type.__name__))
-            # error('{0!r} cannot be parsed as a {1}'.format(value, as_type.__name__))
-
-
-def _get(**kwargs):
-    value = get(**kwargs)
-    if value is not None:
-        print value
