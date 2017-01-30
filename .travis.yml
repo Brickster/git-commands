@@ -19,6 +19,10 @@ script:
   - coverage report --include=bin/* --omit=*/__init__.py
   - coverage xml --include=bin/* --omit=*/__init__.py -o coverage.xml
 
+  # fail the build if coverage is not 100%
+  - coverage_percent=$(coverage report --include=bin/* --omit=*/__init__.py | egrep "TOTAL" | awk '{print $NF}')
+  - if [[ "$coverage_percent" != "100%" ]]; then exit 1; fi
+
   # upload coverage report for pushes to master only
   # secure environment variables aren't available for PRs from other repositories
   - if [[ ! -z "$CODACY_PROJECT_TOKEN" ]] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then python-codacy-coverage -r coverage.xml; fi
