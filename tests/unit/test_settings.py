@@ -128,7 +128,7 @@ class TestSettingsList(unittest.TestCase):
         mock_checkoutput.return_value = os.linesep.join(config_values)
 
         # when
-        actual_values = settings.list()
+        actual_values = settings.list_()
 
         # then
         self.assertEqual(sorted(actual_values.splitlines()), config_values)
@@ -145,7 +145,7 @@ class TestSettingsList(unittest.TestCase):
         mock_checkoutput.return_value = os.linesep.join(config_values_with_overrides)
 
         # when
-        actual_values = settings.list()
+        actual_values = settings.list_()
 
         # then
         self.assertEqual(sorted(actual_values.splitlines()), config_values)
@@ -162,7 +162,7 @@ class TestSettingsList(unittest.TestCase):
         mock_checkoutput.return_value = os.linesep.join(config_values)
 
         # when
-        actual_values = settings.list(config='file', file=file_path)
+        actual_values = settings.list_(config='file', file=file_path)
 
         # then
         self.assertEqual(sorted(actual_values.splitlines()), config_values)
@@ -178,7 +178,7 @@ class TestSettingsList(unittest.TestCase):
         mock_checkoutput.return_value = os.linesep.join(config_values)
 
         # when
-        actual_values = settings.list(config='global')
+        actual_values = settings.list_(config='global')
 
         # then
         self.assertEqual(sorted(actual_values.splitlines()), config_values)
@@ -194,7 +194,7 @@ class TestSettingsList(unittest.TestCase):
         mock_checkoutput.return_value = os.linesep.join(config_values + ['section2.k=v'])
 
         # when
-        actual_values = settings.list(section='section')
+        actual_values = settings.list_(section='section')
 
         # then
         self.assertEqual(sorted(actual_values.splitlines()), config_values)
@@ -210,7 +210,7 @@ class TestSettingsList(unittest.TestCase):
         mock_checkoutput.return_value = os.linesep.join(config_values)
 
         # when
-        actual_count = settings.list(count=True)
+        actual_count = settings.list_(count=True)
 
         # then
         self.assertEqual(actual_count, '2')
@@ -226,7 +226,7 @@ class TestSettingsList(unittest.TestCase):
         mock_checkoutput.return_value = os.linesep.join(config_values)
 
         # when
-        actual_values = settings.list(keys=True)
+        actual_values = settings.list_(keys=True)
 
         # then
         self.assertEqual(sorted(actual_values.splitlines()), ['key1', 'key2'])
@@ -245,7 +245,7 @@ class TestSettingsList(unittest.TestCase):
         mock_prettyformatconfig.return_value = format_result
 
         # when
-        pretty_output = settings.list(format='pretty')
+        pretty_output = settings.list_(format='pretty')
 
         # then
         self.assertEqual(pretty_output, format_result[0])

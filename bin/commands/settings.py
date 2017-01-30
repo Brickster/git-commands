@@ -45,7 +45,7 @@ def _pretty_format_configs(config_map):
     return result
 
 
-def list(section=None, config=None, count=False, keys=False, format=None, file=None):
+def list_(section=None, config=None, count=False, keys=False, format=None, file=None):
     """List configuration settings respecting override precedence.
 
     :param section: limit to a specific section

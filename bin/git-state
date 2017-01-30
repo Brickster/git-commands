@@ -44,7 +44,7 @@ def main():
     )
 
     # add --show-/--no-show- flags for custom extensions
-    extensions = settings.list(
+    extensions = settings.list_(
         section='git-state.extensions',
         config=None,
         count=False,
@@ -152,7 +152,7 @@ def main():
         '--ignore-extensions',
         help='a list of extensions to ignore',
         nargs='*',
-        action=optional_list(settings.list(
+        action=optional_list(settings.list_(
             'git-state.extensions',
             config=None,
             count=False,
