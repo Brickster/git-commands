@@ -110,7 +110,7 @@ def main():
     )
     list_group.add_argument('-c', '--count', help='print the count of configurations', action='store_true')
     list_group.add_argument('-k', '--keys', help='list the keys for a section', action='store_true')
-    list_parser.set_defaults(func=settings.list)
+    list_parser.set_defaults(func=settings.list_)
 
     # --------------------------------------------
     # destroy sub-command

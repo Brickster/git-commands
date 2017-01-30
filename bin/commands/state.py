@@ -92,7 +92,7 @@ def state(**kwargs):
             sections[status_title] = _print_section(status_title, status_accent, status_output, format_, show_empty=True)
 
         # show any user defined sections
-        extensions = settings.list(
+        extensions = settings.list_(
             section='git-state.extensions',
             config=None,
             count=False,
