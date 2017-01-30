@@ -2,10 +2,10 @@
 
 import os
 import re
-from subprocess import call, check_output, PIPE, Popen, STDOUT
+import subprocess
+from subprocess import PIPE, STDOUT
 
-from utils import directories
-from utils.messages import error
+from utils import directories, messages
 
 
 def _validate_config(config=None):
@@ -15,8 +15,8 @@ def _validate_config(config=None):
     """
 
     if config == 'local' and not directories.is_git_repository():
-        error('{0!r} is not a git repository'.format(os.getcwd()), exit_=False)
-        error("'local' does not apply")
+        messages.error('{0!r} is not a git repository'.format(os.getcwd()), exit_=False)
+        messages.error("'local' does not apply")
 
 
 def _pretty_format_configs(config_map):
@@ -45,7 +45,7 @@ def _pretty_format_configs(config_map):
     return result
 
 
-def list(section, config, count, keys, format, file=None):
+def list(section=None, config=None, count=False, keys=False, format=None, file=None):
     """List configuration settings respecting override precedence.
 
     :param section: limit to a specific section
@@ -62,11 +62,11 @@ def list(section, config, count, keys, format, file=None):
 
     result = []
     if config is None:
-        all_configs = check_output(['git', 'config', '--list']).splitlines()
+        all_configs = subprocess.check_output(['git', 'config', '--list']).splitlines()
     elif file is not None:
-        all_configs = check_output(['git', 'config', '--list', '--file', file]).splitlines()
+        all_configs = subprocess.check_output(['git', 'config', '--list', '--file', file]).splitlines()
     else:
-        all_configs = check_output(['git', 'config', '--list', '--{}'.format(config)]).splitlines()
+        all_configs = subprocess.check_output(['git', 'config', '--list', '--{}'.format(config)]).splitlines()
 
     if section is not None:
         config_section = []
@@ -96,11 +96,11 @@ def list(section, config, count, keys, format, file=None):
 def _dry_destroy_section(config, section):
 
     command = ('git', 'settings', 'list', '--format', 'compact', '--{}'.format(config), section)
-    proc = Popen(command, stdout=PIPE, stderr=PIPE)
+    proc = subprocess.Popen(command, stdout=PIPE, stderr=PIPE)
     list_output = proc.communicate()[0][:-1]  # just ignore stderr and removing trailing newline
 
     for line in list_output.splitlines():
-        print 'Would be deleted from {}: {}'.format(config, line)
+        messages.info('Would be deleted from {}: {}'.format(config, line))
 
 
 def destroy(section, dry_run):
@@ -120,9 +120,9 @@ def destroy(section, dry_run):
     else:
         with open(os.devnull, 'w') as devnull:
             if has_local:
-                call(('git', 'config', '--local', '--remove-section', section), stdout=devnull, stderr=STDOUT)
-            call(('git', 'config', '--global', '--remove-section', section), stdout=devnull, stderr=STDOUT)
-            call(('git', 'config', '--system', '--remove-section', section), stdout=devnull, stderr=STDOUT)
+                subprocess.call(('git', 'config', '--local', '--remove-section', section), stdout=devnull, stderr=STDOUT)
+            subprocess.call(('git', 'config', '--global', '--remove-section', section), stdout=devnull, stderr=STDOUT)
+            subprocess.call(('git', 'config', '--system', '--remove-section', section), stdout=devnull, stderr=STDOUT)
 
 
 def get(key, default=None, config=None, file=None, as_type=str):
@@ -149,13 +149,14 @@ def get(key, default=None, config=None, file=None, as_type=str):
     else:
         command = ('git', 'config', '--{}'.format(config), key)
 
-    proc = Popen(command, stdout=PIPE, stderr=STDOUT)
+    proc = subprocess.Popen(command, stdout=PIPE, stderr=STDOUT)
     value = proc.communicate()[0].strip()
 
     if not value:
         return default
     else:
+        # noinspection PyBroadException
         try:
             return as_type(value)
-        except ValueError:
-            error('Cannot parse value {0!r} for key {1!r} using format {2!r}'.format(value, key, as_type.__name__))
+        except:
+            messages.error('Cannot parse value {0!r} for key {1!r} using format {2!r}'.format(value, key, as_type.__name__))
