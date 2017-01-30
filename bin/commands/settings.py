@@ -155,8 +155,7 @@ def get(key, default=None, config=None, file=None, as_type=str):
     if not value:
         return default
     else:
-        # noinspection PyBroadException
         try:
             return as_type(value)
-        except:
+        except ValueError:
             messages.error('Cannot parse value {0!r} for key {1!r} using format {2!r}'.format(value, key, as_type.__name__))
