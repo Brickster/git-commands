@@ -77,7 +77,7 @@ def state(**kwargs):
         as_type=parse_string.as_bool
     )
 
-    format_ = kwargs.get('format')
+    format_ = kwargs.get('format_')
     if git.is_empty_repository():
         status_output = status.get(new_repository=True, **kwargs)
         status_title = status.title()
@@ -97,8 +97,8 @@ def state(**kwargs):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         ).splitlines()
         extensions = list(set(extensions) - set(kwargs.get('ignore_extensions')))
         show_extensions = kwargs.get('show_extensions', [])

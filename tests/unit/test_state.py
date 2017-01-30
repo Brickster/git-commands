@@ -149,7 +149,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': True,
             'clear': False,
             'ignore_extensions': []
@@ -184,8 +184,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
@@ -215,7 +215,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': False,
             'clear': False,
             'ignore_extensions': []
@@ -239,8 +239,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('')
@@ -293,7 +293,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': True,
             'clear': False,
             'ignore_extensions': []
@@ -311,7 +311,7 @@ class TestStateState(unittest.TestCase):
         # then
         mock_statusget.assert_called_once_with(
             clear=False,
-            format='compact',
+            format_='compact',
             ignore_extensions=[],
             show_clean_message=True,
             show_color='never',
@@ -336,8 +336,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
@@ -377,7 +377,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'auto',
-            'format': format_,
+            'format_': format_,
             'show_status': True,
             'clear': False,
             'ignore_extensions': []
@@ -397,7 +397,7 @@ class TestStateState(unittest.TestCase):
         mock_init.assert_called_once_with(strip=True)
         mock_statusget.assert_called_once_with(
             clear=False,
-            format='compact',
+            format_='compact',
             ignore_extensions=[],
             show_clean_message=True,
             show_color='never',
@@ -422,8 +422,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
@@ -463,7 +463,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'auto',
-            'format': format_,
+            'format_': format_,
             'show_status': True,
             'clear': False,
             'ignore_extensions': []
@@ -483,7 +483,7 @@ class TestStateState(unittest.TestCase):
         mock_init.assert_called_once_with()
         mock_statusget.assert_called_once_with(
             clear=False,
-            format='compact',
+            format_='compact',
             ignore_extensions=[],
             show_clean_message=True,
             show_color='always',
@@ -508,8 +508,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
@@ -546,7 +546,7 @@ class TestStateState(unittest.TestCase):
         show_empty = True
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'clear': False,
             'ignore_extensions': [],
             'show_empty': show_empty
@@ -605,7 +605,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': False,
             'clear': False,
             'ignore_extensions': [],
@@ -648,8 +648,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
@@ -685,7 +685,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': False,
             'clear': False,
             'ignore_extensions': [],
@@ -728,8 +728,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
@@ -765,7 +765,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': False,
             'clear': False,
             'ignore_extensions': [],
@@ -808,8 +808,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
@@ -845,7 +845,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': False,
             'clear': False,
             'ignore_extensions': [],
@@ -888,8 +888,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
@@ -926,7 +926,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': False,
             'clear': False,
             'ignore_extensions': [],
@@ -969,8 +969,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
@@ -1007,7 +1007,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': False,
             'clear': False,
             'ignore_extensions': ['changes'],
@@ -1032,8 +1032,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('')
@@ -1066,7 +1066,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': False,
             'clear': False,
             'ignore_extensions': [],
@@ -1092,8 +1092,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('')
@@ -1126,7 +1126,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': False,
             'clear': False,
             'ignore_extensions': [],
@@ -1169,8 +1169,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
@@ -1212,7 +1212,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': True,
             'clear': False,
             'ignore_extensions': [],
@@ -1269,8 +1269,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('changes section\nstatus section')
@@ -1312,7 +1312,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': True,
             'clear': False,
             'ignore_extensions': []
@@ -1347,8 +1347,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
@@ -1386,7 +1386,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': True,
             'clear': False,
             'ignore_extensions': []
@@ -1424,8 +1424,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_not_called()
@@ -1461,7 +1461,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': True,
             'clear': False,
             'ignore_extensions': [],
@@ -1497,8 +1497,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section\ntwo\nthree\nfour\nfive')
@@ -1537,7 +1537,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': True,
             'clear': False,
             'ignore_extensions': [],
@@ -1574,8 +1574,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
@@ -1613,7 +1613,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': True,
             'clear': False,
             'ignore_extensions': [],
@@ -1649,8 +1649,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
@@ -1686,7 +1686,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         kwargs = {
             'show_color': 'never',
-            'format': format_,
+            'format_': format_,
             'show_status': True,
             'clear': False,
             'ignore_extensions': [],
@@ -1722,8 +1722,8 @@ class TestStateState(unittest.TestCase):
             config=None,
             count=False,
             keys=True,
-            format=None,
-            file=None
+            format_=None,
+            file_=None
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')

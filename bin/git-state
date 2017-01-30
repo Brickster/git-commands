@@ -49,8 +49,8 @@ def main():
         config=None,
         count=False,
         keys=True,
-        format=None,
-        file=None
+        format_=None,
+        file_=None
     ).splitlines()
     for extension in extensions:
         extension_group = parser.add_mutually_exclusive_group()
@@ -101,7 +101,7 @@ def main():
         help='format the each section (choices: compact, pretty)',
         choices=('pretty', 'compact'),
         metavar='FORMAT',
-        dest='format',
+        dest='format_',
         default=default_format
     )
     format_group.add_argument(
@@ -110,7 +110,7 @@ def main():
         help='show in pretty format',
         action='store_const',
         const='pretty',
-        dest='format'
+        dest='format_'
     )
 
     # show empty
@@ -157,7 +157,7 @@ def main():
             config=None,
             count=False,
             keys=True,
-            format=None
+            format_=None
         ).splitlines()),
         default=[],
         metavar='EXTENSION'

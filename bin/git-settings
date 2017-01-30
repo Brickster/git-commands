@@ -44,7 +44,7 @@ def main():
     file_group.add_argument(
         '--file',
         help='limit to a specific config file',
-        action=multi_set(config='file')
+        action=multi_set(config='file_')
     )
 
     parser = argparse.ArgumentParser(
@@ -98,7 +98,7 @@ def main():
         help='print using a specific format (choices: compact, pretty)',
         choices=('compact', 'pretty'),
         default=default_format,
-        dest='format'
+        dest='format_'
     )
     list_group.add_argument(
         '-p',
@@ -106,7 +106,7 @@ def main():
         help='use pretty format',
         action='store_const',
         const='pretty',
-        dest='format'
+        dest='format_'
     )
     list_group.add_argument('-c', '--count', help='print the count of configurations', action='store_true')
     list_group.add_argument('-k', '--keys', help='list the keys for a section', action='store_true')

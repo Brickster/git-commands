@@ -162,7 +162,7 @@ class TestSettingsList(unittest.TestCase):
         mock_checkoutput.return_value = os.linesep.join(config_values)
 
         # when
-        actual_values = settings.list_(config='file', file=file_path)
+        actual_values = settings.list_(config='file', file_=file_path)
 
         # then
         self.assertEqual(sorted(actual_values.splitlines()), config_values)
@@ -245,7 +245,7 @@ class TestSettingsList(unittest.TestCase):
         mock_prettyformatconfig.return_value = format_result
 
         # when
-        pretty_output = settings.list_(format='pretty')
+        pretty_output = settings.list_(format_='pretty')
 
         # then
         self.assertEqual(pretty_output, format_result[0])
@@ -444,7 +444,7 @@ class TestSettingsGet(unittest.TestCase):
         mock_process.communicate.return_value = (value + os.linesep, None)
 
         # when
-        actual_value = settings.get(key, config='file', file=file_path)
+        actual_value = settings.get(key, config='file', file_=file_path)
 
         # then
         self.assertEqual(actual_value, value)
