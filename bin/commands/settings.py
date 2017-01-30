@@ -45,15 +45,15 @@ def _pretty_format_configs(config_map):
     return result
 
 
-def list_(section=None, config=None, count=False, keys=False, format=None, file=None):
+def list_(section=None, config=None, count=False, keys=False, format_=None, file_=None):
     """List configuration settings respecting override precedence.
 
     :param section: limit to a specific section
     :param config: limit to a specific config (local|global|system)
     :param count: return the total configuration values count rather than the configurations themselves
     :param keys: return only the keys
-    :param format: output format (compact|pretty)
-    :param str or unicode file: path to a config file
+    :param format_: output format (compact|pretty)
+    :param str or unicode file_: path to a config file
 
     :return str or unicode: configuration details
     """
@@ -63,8 +63,8 @@ def list_(section=None, config=None, count=False, keys=False, format=None, file=
     result = []
     if config is None:
         all_configs = subprocess.check_output(['git', 'config', '--list']).splitlines()
-    elif file is not None:
-        all_configs = subprocess.check_output(['git', 'config', '--list', '--file', file]).splitlines()
+    elif file_ is not None:
+        all_configs = subprocess.check_output(['git', 'config', '--list', '--file', file_]).splitlines()
     else:
         all_configs = subprocess.check_output(['git', 'config', '--list', '--{}'.format(config)]).splitlines()
 
@@ -85,7 +85,7 @@ def list_(section=None, config=None, count=False, keys=False, format=None, file=
         result = [str(len(config_map))]
     elif keys:
         result = [key[key.rfind('.') + 1:] for key in config_map.keys()]
-    elif format == 'pretty':
+    elif format_ == 'pretty':
         result = _pretty_format_configs(config_map)
     else:
         for key, value in config_map.iteritems():
@@ -125,13 +125,13 @@ def destroy(section, dry_run):
             subprocess.call(('git', 'config', '--system', '--remove-section', section), stdout=devnull, stderr=STDOUT)
 
 
-def get(key, default=None, config=None, file=None, as_type=str):
+def get(key, default=None, config=None, file_=None, as_type=str):
     """Retrieve a configuration value.
 
     :param str or unicode key: the value key
     :param str or unicode default: a default to return if no value is found
     :param str or unicode config: the config to retrieve from
-    :param str or unicode file: path to a config file to retrieve from
+    :param str or unicode file_: path to a config file to retrieve from
     :param callable as_type: a callable, built-in type, or class object used to convert the result
 
     :return: the configuration value
@@ -144,8 +144,8 @@ def get(key, default=None, config=None, file=None, as_type=str):
 
     if config is None:
         command = ('git', 'config', key)
-    elif file is not None:
-        command = ('git', 'config', '--file', file, key)
+    elif file_ is not None:
+        command = ('git', 'config', '--file', file_, key)
     else:
         command = ('git', 'config', '--{}'.format(config), key)
 
