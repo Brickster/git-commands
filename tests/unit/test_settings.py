@@ -61,24 +61,24 @@ class TestSettings(unittest.TestCase):
         ])
         mock_getcwd.assert_called_once()
 
-#     def test__prettyFormatConfigs(self):
-#
-#         # given
-#         config_map = {
-#             'settings.keys.key1': 'value1',
-#             'settings.key2': 'value2',
-#             'settings.key3': 'value3'
-#         }
-#
-#         # when
-#         formatted = settings._pretty_format_configs(config_map)
-#
-#         # then
-#         self.assertEqual(os.linesep.join(formatted), '''[settings "keys"]
-#     key1 = value1
-# [settings]
-#     key3 = value3
-#     key2 = value2''')
+    def test__prettyFormatConfigs(self):
+
+        # given
+        config_map = {
+            'settings.keys.key1': 'value1',
+            'settings.key2': 'value2',
+            'settings.key3': 'value3'
+        }
+
+        # when
+        formatted = settings._pretty_format_configs(config_map)
+
+        # then
+        self.assertEqual(os.linesep.join(formatted), '''[settings "keys"]
+    key1 = value1
+[settings]
+    key3 = value3
+    key2 = value2''')
 
     @mock.patch('subprocess.Popen')
     @mock.patch('bin.commands.utils.messages.info')
