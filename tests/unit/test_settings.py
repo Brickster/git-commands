@@ -81,6 +81,7 @@ class TestSettings(unittest.TestCase):
 #     key2 = value2''')
 #
 #
+#
 
     @mock.patch('subprocess.Popen')
     @mock.patch('bin.commands.utils.messages.info')
