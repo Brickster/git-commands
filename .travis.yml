@@ -15,6 +15,5 @@ script:
   - git config --global user.name "Marcus Rosenow"
 
   # test
-  - nosetests --with-coverage --cover-branches --cover-erase --cover-inclusive
-  - coverage report --include=bin/* --omit=*/__init__.py
-  - ./.travis/upload_coverage_report.sh
+  - nosetests --with-coverage --cover-branches --cover-erase --cover-inclusive --cover-package=bin
+  - codeclimate-test-reporter
