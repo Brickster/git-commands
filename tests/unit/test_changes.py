@@ -295,16 +295,21 @@ class TestChangesUnassociate(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.current_branch')
+    @mock.patch('bin.commands.changes.get_association')
     @mock.patch('subprocess.call')
-    def test_unassociate_branch(self, mock_call, mock_currentbranch, mock_isgitrepository):
+    def test_unassociate_branch(self, mock_call, mock_getassociation, mock_currentbranch, mock_isgitrepository):
+
+        # given
+        branch = 'the-branch'
+        mock_getassociation.return_value = branch
 
         # when
-        branch = 'the-branch'
         changes.unassociate(branch=branch)
 
         # then
         mock_isgitrepository.assert_called_once_with()
         mock_currentbranch.assert_not_called()
+        mock_getassociation.assert_called_once_with(branch)
         mock_call.assert_called_once_with(
             ['git', 'config', '--local', '--remove-section', 'git-changes.associations.' + branch]
         )
@@ -333,12 +338,14 @@ class TestChangesUnassociate(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.current_branch')
+    @mock.patch('bin.commands.changes.get_association')
     @mock.patch('subprocess.call')
-    def test_unassociate_nobranch(self, mock_call, mock_currentbranch, mock_isgitrepository):
+    def test_unassociate_nobranch(self, mock_call, mock_getassociation, mock_currentbranch, mock_isgitrepository):
 
         # setup
         current_branch = 'the-current'
         mock_currentbranch.return_value = current_branch
+        mock_getassociation.return_value = current_branch
 
         # when
         changes.unassociate()
@@ -346,6 +353,7 @@ class TestChangesUnassociate(unittest.TestCase):
         # then
         mock_isgitrepository.assert_called_once_with()
         mock_currentbranch.assert_called_once_with()
+        mock_getassociation.assert_called_once_with(current_branch)
         mock_call.assert_called_once_with(
             ['git', 'config', '--local', '--remove-section', 'git-changes.associations.' + current_branch]
         )
@@ -390,6 +398,25 @@ class TestChangesUnassociate(unittest.TestCase):
         except AssertionError as error:
             # then
             self.assertEqual(error.message, 'cleanup must be one of ' + str(['all', 'prune']))
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.current_branch')
+    @mock.patch('bin.commands.changes.get_association')
+    @mock.patch('subprocess.call')
+    def test_unassociate_noAssociation(self, mock_call, mock_getassociation, mock_currentbranch, mock_isgitrepository):
+
+        # given
+        branch = 'the-branch'
+        mock_getassociation.return_value = None
+
+        # when
+        changes.unassociate(branch=branch)
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_currentbranch.assert_not_called()
+        mock_getassociation.assert_called_once_with(branch)
+        mock_call.assert_not_called()
 
 
 class TestChangesGetAssociation(unittest.TestCase):
