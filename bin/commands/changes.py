@@ -56,6 +56,13 @@ def associate_upstream(quiet=False):
     associate(upstream_branch, quiet)
 
 
+def _get_associated_branches():
+    config_command = ('git', 'config', '--local', '--name-only', '--get-regexp', 'git-changes.associations')
+    config_proc = subprocess.Popen(config_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    current_associations = config_proc.communicate()[0].splitlines()
+    return [association[25:-5] for association in current_associations]  # slice off git-changes.associations. and .with
+
+
 def _prune_associations(cleanup, quiet, dry_run=False):
     """Remove associations for branches that no longer exist."""
 
@@ -63,8 +70,7 @@ def _prune_associations(cleanup, quiet, dry_run=False):
     current_branches = [ref.split()[1][11:] for ref in subprocess.check_output(('git', 'show-ref', '--heads')).splitlines()]
 
     # get associations
-    current_associations = subprocess.check_output(('git', 'config', '--local', '--name-only', '--get-regexp', 'git-changes.associations')).splitlines()
-    current_associations = [association[25:-5] for association in current_associations]  # slice off git-changes.associations. and .with
+    current_associations = _get_associated_branches()
 
     branches_to_prune = current_associations
     if cleanup == 'prune':

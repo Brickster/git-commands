@@ -21,7 +21,6 @@ class TestIssue102(unittest.TestCase):
     """
 
     def setUp(self):
-
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         git.Repo.init(self.dirpath)
@@ -33,3 +32,25 @@ class TestIssue102(unittest.TestCase):
         """Nothing should be returned if no association exists."""
 
         self.assertFalse(subprocess.check_output('git changes unassociate'.split(), stderr=subprocess.STDOUT).strip())
+
+
+class TestIssue103(unittest.TestCase):
+    """`changes unassociate --prune` fails when no association exist for any branch"""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+
+        # initialize repository
+        repo = git.Repo.init(self.dirpath)
+        open('README.md', 'w').close()
+        repo.index.add(['README.md'])
+        repo.index.commit('Initial commit')
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        """Nothing should happen when pruning with no associations at all."""
+
+        self.assertFalse(subprocess.check_output('git changes unassociate --prune'.split(), stderr=subprocess.STDOUT).strip())
