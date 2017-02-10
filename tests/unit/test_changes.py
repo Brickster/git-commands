@@ -241,11 +241,12 @@ class TestChangesPruneAssociations(unittest.TestCase):
         changes.unassociate = self._unassociate
         changes._get_associated_branches = self._get_associated_branches
 
+    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('subprocess.check_output')
     @mock.patch('bin.commands.changes._get_associated_branches')
     @mock.patch('bin.commands.changes.unassociate')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_prune_associations(self, mock_info, mock_unassociate, mock_getassociatedbranches, mock_checkoutput):
+    def test_prune_associations(self, mock_info, mock_unassociate, mock_getassociatedbranches, mock_checkoutput, mock_isemptyrepository):
 
         # setup
         refs = "84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/master\n"
@@ -258,16 +259,18 @@ class TestChangesPruneAssociations(unittest.TestCase):
         changes._prune_associations('prune', quiet=quiet)
 
         # then
+        mock_isemptyrepository.assert_called_once()
         mock_checkoutput.assert_called_once_with(('git', 'show-ref', '--heads'))
         mock_getassociatedbranches.assert_called_once()
         mock_unassociate.assert_called_once_with('develop')
         mock_info.assert_called_once_with("Removed association 'develop'", quiet)
 
+    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('subprocess.check_output')
     @mock.patch('bin.commands.changes._get_associated_branches')
     @mock.patch('bin.commands.changes.unassociate')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_prune_associations_dryRun(self, mock_info, mock_unassociate, mock_getassociatedbranches, mock_checkoutput):
+    def test_prune_associations_dryRun(self, mock_info, mock_unassociate, mock_getassociatedbranches, mock_checkoutput, mock_isemptyrepository):
 
         # setup
         refs = "84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/master\n"
@@ -280,16 +283,18 @@ class TestChangesPruneAssociations(unittest.TestCase):
         changes._prune_associations('prune', quiet=quiet, dry_run=True)
 
         # then
+        mock_isemptyrepository.assert_called_once()
         mock_checkoutput.assert_called_once_with(('git', 'show-ref', '--heads'))
         mock_getassociatedbranches.assert_called_once()
         mock_unassociate.assert_not_called()
         mock_info.assert_called_once_with("Would remove association 'develop'", quiet)
 
+    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('subprocess.check_output')
     @mock.patch('bin.commands.changes._get_associated_branches')
     @mock.patch('bin.commands.changes.unassociate')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_prune_associations_all(self, mock_info, mock_unassociate, mock_getassociatedbranches, mock_checkoutput):
+    def test_prune_associations_all(self, mock_info, mock_unassociate, mock_getassociatedbranches, mock_checkoutput, mock_isemptyrepository):
 
         # setup
         refs = """84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/develop
@@ -304,6 +309,7 @@ class TestChangesPruneAssociations(unittest.TestCase):
         changes._prune_associations('all', quiet=quiet)
 
         # then
+        mock_isemptyrepository.assert_called_once()
         mock_checkoutput.assert_called_once_with(('git', 'show-ref', '--heads'))
         mock_getassociatedbranches.assert_called_once()
         mock_unassociate.assert_has_calls([
@@ -314,6 +320,15 @@ class TestChangesPruneAssociations(unittest.TestCase):
             mock.call("Removed association 'develop'", quiet),
             mock.call("Removed association 'master'", quiet)
         ])
+
+    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=True)
+    def test_pruneAssociations_newRepository(self, mock_isemptyrepository):
+
+        # when
+        changes._prune_associations(None, None)
+
+        # then
+        mock_isemptyrepository.assert_called_once()
 
 
 class TestChangesUnassociate(unittest.TestCase):

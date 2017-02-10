@@ -54,3 +54,20 @@ class TestIssue103(unittest.TestCase):
         """Nothing should happen when pruning with no associations at all."""
 
         self.assertFalse(subprocess.check_output('git changes unassociate --prune'.split(), stderr=subprocess.STDOUT).strip())
+
+class TestIssue104(unittest.TestCase):
+    """`changes unassociate --prune` fails for new repositories"""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+        git.Repo.init(self.dirpath)
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        """Nothing should happen when pruning a new repository."""
+
+        self.assertFalse(
+            subprocess.check_output('git changes unassociate --prune'.split(), stderr=subprocess.STDOUT).strip())
