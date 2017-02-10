@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file. This projec
 - `git-settings` cleanup
 
 ## Fixed
-- `changes unassociate` breaking when no association exists [#102](https://github.com/Brickstertwo/git-commands/issues/102)
+- `changes unassociate` breaking when no association exists for the branch [#102](https://github.com/Brickstertwo/git-commands/issues/102)
+- `changes unassociate --prune` breaking when no associations exist [#103](https://github.com/Brickstertwo/git-commands/issues/103)
 
 ## [v0.6.1][] - 2017-01-17
 ### Fixed

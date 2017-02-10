@@ -1,4 +1,5 @@
 import mock
+import subprocess
 import unittest
 
 import testutils
@@ -201,79 +202,110 @@ class TestChangesAssociateUpstream(unittest.TestCase):
         mock_getcwd.assert_called_once_with()
 
 
-class TestChangesPruneAssociations(unittest.TestCase):
+class TestChangesGetAssociatedBranches(unittest.TestCase):
 
-    @mock.patch('subprocess.check_output')
-    @mock.patch('bin.commands.changes.unassociate')
-    @mock.patch('bin.commands.utils.messages.info')
-    def test_prune_associations(self, mock_info, mock_unassociate, mock_checkoutput):
+    @mock.patch('subprocess.Popen')
+    def test_getAssociatedBranches(self, mock_popen):
 
-        # setup
-        refs = "84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/master\n"
+        # given
         association_keys = """git-changes.associations.develop.with
 git-changes.associations.master.with
 """
-        mock_checkoutput.side_effect = [refs, association_keys]
+
+        mock_proc = mock.Mock()
+        mock_proc.communicate.return_value = [association_keys, None]
+        mock_proc.returncode = 0
+        mock_popen.return_value = mock_proc
+
+        # when
+        actual_associations = changes._get_associated_branches()
+
+        # then
+        self.assertEqual(actual_associations, ['develop', 'master'])
+        mock_popen.assert_called_once_with(
+            ('git', 'config', '--local', '--name-only', '--get-regexp', 'git-changes.associations'),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        mock_proc.communicate.assert_called_once()
+
+
+class TestChangesPruneAssociations(unittest.TestCase):
+
+    def setUp(self):
+        # store private methods so they can be restored after tests that mock them
+        self._unassociate = changes.unassociate
+        self._get_associated_branches = changes._get_associated_branches
+
+    def tearDown(self):
+        changes.unassociate = self._unassociate
+        changes._get_associated_branches = self._get_associated_branches
+
+    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.changes._get_associated_branches')
+    @mock.patch('bin.commands.changes.unassociate')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_prune_associations(self, mock_info, mock_unassociate, mock_getassociatedbranches, mock_checkoutput):
+
+        # setup
+        refs = "84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/master\n"
+        association_keys = ['develop', 'master']
+        mock_checkoutput.return_value = refs
+        mock_getassociatedbranches.return_value = association_keys
 
         # when
         quiet = True
         changes._prune_associations('prune', quiet=quiet)
 
         # then
-        mock_checkoutput.assert_has_calls([
-            mock.call(('git', 'show-ref', '--heads')),
-            mock.call(('git', 'config', '--local', '--name-only', '--get-regexp', 'git-changes.associations'))
-        ])
+        mock_checkoutput.assert_called_once_with(('git', 'show-ref', '--heads'))
+        mock_getassociatedbranches.assert_called_once()
         mock_unassociate.assert_called_once_with('develop')
         mock_info.assert_called_once_with("Removed association 'develop'", quiet)
 
     @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.changes._get_associated_branches')
     @mock.patch('bin.commands.changes.unassociate')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_prune_associations_dryRun(self, mock_info, mock_unassociate, mock_checkoutput):
+    def test_prune_associations_dryRun(self, mock_info, mock_unassociate, mock_getassociatedbranches, mock_checkoutput):
 
         # setup
         refs = "84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/master\n"
-        association_keys = """git-changes.associations.develop.with
-git-changes.associations.master.with
-"""
-        mock_checkoutput.side_effect = [refs, association_keys]
+        association_keys = ['develop', 'master']
+        mock_checkoutput.return_value = refs
+        mock_getassociatedbranches.return_value = association_keys
 
         # when
         quiet = True
         changes._prune_associations('prune', quiet=quiet, dry_run=True)
 
         # then
-        mock_checkoutput.assert_has_calls([
-            mock.call(('git', 'show-ref', '--heads')),
-            mock.call(('git', 'config', '--local', '--name-only', '--get-regexp', 'git-changes.associations'))
-        ])
+        mock_checkoutput.assert_called_once_with(('git', 'show-ref', '--heads'))
+        mock_getassociatedbranches.assert_called_once()
         mock_unassociate.assert_not_called()
         mock_info.assert_called_once_with("Would remove association 'develop'", quiet)
 
     @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.changes._get_associated_branches')
     @mock.patch('bin.commands.changes.unassociate')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_prune_associations_all(self, mock_info, mock_unassociate, mock_checkoutput):
+    def test_prune_associations_all(self, mock_info, mock_unassociate, mock_getassociatedbranches, mock_checkoutput):
 
         # setup
         refs = """84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/develop
 84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/master
 """
-        association_keys = """git-changes.associations.develop.with
-git-changes.associations.master.with
-"""
-        mock_checkoutput.side_effect = [refs, association_keys]
+        association_keys = ['develop', 'master']
+        mock_checkoutput.return_value = refs
+        mock_getassociatedbranches.return_value = association_keys
 
         # when
         quiet = True
         changes._prune_associations('all', quiet=quiet)
 
         # then
-        mock_checkoutput.assert_has_calls([
-            mock.call(('git', 'show-ref', '--heads')),
-            mock.call(('git', 'config', '--local', '--name-only', '--get-regexp', 'git-changes.associations'))
-        ])
+        mock_checkoutput.assert_called_once_with(('git', 'show-ref', '--heads'))
+        mock_getassociatedbranches.assert_called_once()
         mock_unassociate.assert_has_calls([
             mock.call('develop'),
             mock.call('master')
