@@ -2,9 +2,12 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org).
 
-## [Unreleased][] - 2017-01-27
+## [Unreleased][]
 ### Removed
 - `git-settings` cleanup
+
+## Fixed
+- `changes unassociate` breaking when no association exists [#102](https://github.com/Brickstertwo/git-commands/issues/102)
 
 ## [v0.6.1][] - 2017-01-17
 ### Fixed
