@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. This projec
 - `changes unassociate` breaking when no association exists for the branch [#102](https://github.com/Brickstertwo/git-commands/issues/102)
 - `changes unassociate --prune` breaking when no associations exist [#103](https://github.com/Brickstertwo/git-commands/issues/103)
 - `changes unassociate --prune` breaking for new repositories [#104](https://github.com/Brickstertwo/git-commands/issues/104)
+- `changes associate` breaking when using an invalid revision [#107](https://github.com/Brickstertwo/git-commands/issues/107)
 
 ## [v0.6.1][] - 2017-01-17
 ### Fixed

@@ -121,6 +121,33 @@ class TestChangesAssociate(unittest.TestCase):
         )
         mock_info.assert_called_once_with('{} has been associated with {}'.format(cur_branch, resolved_sha1), quiet)
 
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
+    @mock.patch('bin.commands.utils.git.resolve_sha1', return_value=None)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
+    def test_associate_notARef_invalidRevision(
+            self,
+            mock_error,
+            mock_resolvesha1,
+            mock_isref,
+            mock_isgitrepository
+    ):
+
+        # when
+        committish = 'c123'
+        quiet = True
+        try:
+            changes.associate(committish, quiet=quiet)
+            self.fail('expected to exit but did not')  # pragma: no cover
+        except SystemExit:
+            pass
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_isref.assert_called_once_with(committish)
+        mock_resolvesha1.assert_called_once_with(committish)
+        mock_error.assert_called_once_with('{} is not a valid revision'.format(committish))
+
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     @mock.patch('os.getcwd', return_value='/working/dir')

@@ -84,6 +84,7 @@ class TestIssue103(unittest.TestCase):
 
         self.assertFalse(subprocess.check_output('git changes unassociate --prune'.split(), stderr=subprocess.STDOUT).strip())
 
+
 class TestIssue104(unittest.TestCase):
     """`changes unassociate --prune` fails for new repositories"""
 
@@ -100,3 +101,27 @@ class TestIssue104(unittest.TestCase):
 
         self.assertFalse(
             subprocess.check_output('git changes unassociate --prune'.split(), stderr=subprocess.STDOUT).strip())
+
+
+class TestIssue107(unittest.TestCase):
+    """Associate blows up on invalid revision"""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+
+        # initialize repository
+        self.repo = git.Repo.init(self.dirpath)
+        open('README.md', 'w').close()
+        self.repo.index.add(['README.md'])
+        self.repo.index.commit('Initial commit')
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        """Issue 107: an error should be printed when associating with an invalid revision"""
+
+        bad_revision = 'bad_rev'
+        error = subprocess.Popen(['git', 'changes', 'associate', bad_revision], stderr=subprocess.PIPE).communicate()[1].strip()
+        self.assertEqual(error, 'error: {} is not a valid revision'.format(bad_revision))
