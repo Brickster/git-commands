@@ -7,6 +7,35 @@ import unittest
 import git
 
 
+class TestIssue094(unittest.TestCase):
+    """Changes breaks when HEAD is detached"""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+
+        # initialize repository
+        repo = git.Repo.init(self.dirpath)
+        open('README.md', 'w').close()
+        repo.index.add(['README.md'])
+        repo.index.commit('Initial commit')
+        open('CONTRIBUTING.md', 'w').close()
+        repo.index.add(['CONTRIBUTING.md'])
+        repo.index.commit('Add CONTRIBUTING.md')
+
+        # detach head
+        repo.git.changes('associate', 'HEAD~1')
+        repo.git.checkout('HEAD~1')
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        """Issue 094: Changes should be returned even if head is detached"""
+
+        self.assertFalse(subprocess.check_output('git changes'.split(), stderr=subprocess.STDOUT).strip())
+
+
 class TestIssue102(unittest.TestCase):
     """
     `changes unassociate` fails when no association exists
@@ -29,7 +58,7 @@ class TestIssue102(unittest.TestCase):
         shutil.rmtree(self.dirpath)
 
     def test(self):
-        """Nothing should be returned if no association exists."""
+        """Issue 102: Nothing should be returned if no association exists."""
 
         self.assertFalse(subprocess.check_output('git changes unassociate'.split(), stderr=subprocess.STDOUT).strip())
 
@@ -51,7 +80,7 @@ class TestIssue103(unittest.TestCase):
         shutil.rmtree(self.dirpath)
 
     def test(self):
-        """Nothing should happen when pruning with no associations at all."""
+        """Issue 103: Nothing should happen when pruning with no associations at all."""
 
         self.assertFalse(subprocess.check_output('git changes unassociate --prune'.split(), stderr=subprocess.STDOUT).strip())
 
@@ -67,7 +96,7 @@ class TestIssue104(unittest.TestCase):
         shutil.rmtree(self.dirpath)
 
     def test(self):
-        """Nothing should happen when pruning a new repository."""
+        """Issue 104: Nothing should happen when pruning a new repository."""
 
         self.assertFalse(
             subprocess.check_output('git changes unassociate --prune'.split(), stderr=subprocess.STDOUT).strip())

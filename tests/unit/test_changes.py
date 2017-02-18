@@ -507,6 +507,22 @@ class TestChangesGetAssociation(unittest.TestCase):
         mock_currentbranch.assert_called_once_with()
         mock_get.assert_called_once_with('git-changes.associations.' + current_branch + '.with', config='local')
 
+    # the branch will be none for empty repositories
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.current_branch', return_value = None)
+    def test_getassociation_nobranch_none(self, mock_currentbranch, mock_isgitrepository):
+
+        # setup
+        mock_currentbranch.return_value = None
+
+        # when
+        actual_association = changes.get_association()
+
+        # then
+        self.assertFalse(actual_association)
+        mock_isgitrepository.assert_called_once_with()
+        mock_currentbranch.assert_called_once_with()
+
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     @mock.patch('os.getcwd', return_value='/working/dir')

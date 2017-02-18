@@ -108,7 +108,9 @@ def current_branch():
     :return str or unicode: the name of the current branch
     """
 
-    return subprocess.check_output(('git', 'symbolic-ref', 'HEAD')).strip()[11:]  # slice length of "refs/heads/"
+    if not os.listdir('.git/refs/heads'):
+        return None
+    return subprocess.check_output(('git', 'rev-parse', '--abbrev-ref', 'HEAD')).strip()
 
 
 def deleted_files():
