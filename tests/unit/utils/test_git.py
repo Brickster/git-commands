@@ -366,17 +366,38 @@ MM modified.txt
         mock_popen.assert_called_once_with(['git', 'log', '--oneline', '-1'], stdout=mock.ANY, stderr=mock.ANY)
         mock_proc.wait.assert_called_once()
 
-    @mock.patch('subprocess.check_output')
-    def test_revolveSha1(self, mock_checkoutput):
+    @mock.patch('subprocess.Popen')
+    def test_resolveSha1(self, mock_popen):
 
         # given
         revision = 'abc123'
         expected = revision * 2
-        mock_checkoutput.return_value = expected + '\n'
+        mock_proc = mock.Mock()
+        mock_proc.communicate.return_value = [expected + '\n', None]
+        mock_popen.return_value = mock_proc
 
         # when
         actual = git.resolve_sha1(revision)
 
         # then
         self.assertEqual(actual, expected)
-        mock_checkoutput.assert_called_once_with(('git', 'rev-parse', revision))
+        mock_popen.assert_called_once_with(['git', 'rev-parse', '--verify', '--quiet', revision], stdout=PIPE)
+        mock_proc.communicate.assert_called_once()
+
+    @mock.patch('subprocess.Popen')
+    def test_resolvedSha1_invalid(self, mock_popen):
+
+        # given
+        revision = 'abc123'
+        expected = revision * 2
+        mock_proc = mock.Mock()
+        mock_proc.communicate.return_value = ['\n', None]
+        mock_popen.return_value = mock_proc
+
+        # when
+        actual = git.resolve_sha1(revision)
+
+        # then
+        self.assertFalse(actual)
+        mock_popen.assert_called_once_with(['git', 'rev-parse', '--verify', '--quiet', revision], stdout=PIPE)
+        mock_proc.communicate.assert_called_once()

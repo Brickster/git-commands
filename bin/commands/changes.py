@@ -33,7 +33,10 @@ def associate(committish, quiet=False):
         else:
             _ambiguous_ref(committish)
     else:
-        committish = git.resolve_sha1(committish)
+        resolved_committish = git.resolve_sha1(committish)
+        if not resolved_committish:
+            messages.error('{} is not a valid revision'.format(committish))
+        committish = resolved_committish
 
     current_branch = git.current_branch()
     subprocess.call(['git', 'config', '--local', 'git-changes.associations.' + current_branch + '.with', committish])

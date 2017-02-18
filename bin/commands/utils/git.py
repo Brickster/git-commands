@@ -143,4 +143,8 @@ def resolve_sha1(revision):
     :return str: SHA1
     """
 
-    return subprocess.check_output(('git', 'rev-parse', revision)).strip()
+    rev_proc = subprocess.Popen(['git', 'rev-parse', '--verify', '--quiet', revision], stdout=subprocess.PIPE)
+    sha1 = rev_proc.communicate()[0].strip()
+    if not sha1:
+        return None
+    return sha1
