@@ -288,33 +288,47 @@ class TestGit(unittest.TestCase):
         self.assertEqual(actual, expected)
         mock_checkoutput.assert_called_once_with(('git', 'rev-parse', '--symbolic-full-name', ref))
 
+    @mock.patch('os.listdir', return_value=['master'])
     @mock.patch('subprocess.check_output')
-    def test_currentBranch(self, mock_checkoutput):
+    def test_currentBranch(self, mock_checkoutput, mock_listdir):
 
         # given
         expected_branch = 'the-branch'
-        mock_checkoutput.return_value = 'refs/heads/' + expected_branch
+        mock_checkoutput.return_value = expected_branch
 
         # when
         current_branch = git.current_branch()
 
         # then
         self.assertEqual(current_branch, expected_branch)
-        mock_checkoutput.assert_called_once_with(('git', 'symbolic-ref', 'HEAD'))
+        mock_listdir.assert_called_once_with('.git/refs/heads')
+        mock_checkoutput.assert_called_once_with(('git', 'rev-parse', '--abbrev-ref', 'HEAD'))
 
+    @mock.patch('os.listdir', return_value=['master'])
     @mock.patch('subprocess.check_output')
-    def test_currentBranch_withTrailingWhitespace(self, mock_checkoutput):
+    def test_currentBranch_withTrailingWhitespace(self, mock_checkoutput, mock_listdir):
 
         # given
         expected_branch = 'the-branch'
-        mock_checkoutput.return_value = 'refs/heads/' + expected_branch + '   '
+        mock_checkoutput.return_value = expected_branch + '   '
 
         # when
         current_branch = git.current_branch()
 
         # then
         self.assertEqual(current_branch, expected_branch)
-        mock_checkoutput.assert_called_once_with(('git', 'symbolic-ref', 'HEAD'))
+        mock_listdir.assert_called_once_with('.git/refs/heads')
+        mock_checkoutput.assert_called_once_with(('git', 'rev-parse', '--abbrev-ref', 'HEAD'))
+
+    @mock.patch('os.listdir', return_value=[])
+    def test_currentBranch_noHeads(self, mock_listdir):
+
+        # when
+        current_branch = git.current_branch()
+
+        # then
+        self.assertFalse(current_branch)
+        mock_listdir.assert_called_once_with('.git/refs/heads')
 
     @mock.patch('subprocess.check_output')
     def test_deletedFiles(self, mock_checkoutput):

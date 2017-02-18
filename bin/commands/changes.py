@@ -121,6 +121,8 @@ def get_association(branch=None):
     if not directories.is_git_repository():
         messages.error('{0!r} not a git repository'.format(os.getcwd()))
     branch = branch if branch else git.current_branch()
+    if not branch:
+        return None
     return settings.get('git-changes.associations.' + branch + '.with', config='local')
 
 
