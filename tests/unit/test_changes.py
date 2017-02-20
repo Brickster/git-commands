@@ -9,6 +9,7 @@ from bin.commands import changes
 class TestChangesAssociate(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_detached', return_value=False)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref_ambiguous', return_value=False)
     @mock.patch('bin.commands.utils.git.symbolic_full_name')
@@ -23,6 +24,7 @@ class TestChangesAssociate(unittest.TestCase):
             mock_symbolicfullname,
             mock_isrefambiguous,
             mock_isref,
+            mock_isdetached,
             mock_isgitrepository
     ):
 
@@ -38,7 +40,8 @@ class TestChangesAssociate(unittest.TestCase):
         changes.associate(committish, quiet=quiet)
 
         # then
-        mock_isgitrepository.assert_called_once_with()
+        mock_isgitrepository.assert_called_once()
+        mock_isdetached.assert_called_once()
         mock_isref.assert_called_once_with(committish)
         mock_isrefambiguous.assert_called_once_with(committish, limit=('heads', 'tags'))
         mock_symbolicfullname.assert_called_once_with(committish)
@@ -49,6 +52,7 @@ class TestChangesAssociate(unittest.TestCase):
         mock_info.assert_called_once_with('{} has been associated with {}'.format(cur_branch, fullname), quiet)
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_detached', return_value=False)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref_ambiguous', return_value=True)
     @mock.patch('subprocess.check_output')
@@ -59,6 +63,7 @@ class TestChangesAssociate(unittest.TestCase):
             mock_checkoutput,
             mock_isrefambiguous,
             mock_isref,
+            mock_isdetached,
             mock_isgitrepository
     ):
 
@@ -77,6 +82,7 @@ class TestChangesAssociate(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once()
+        mock_isdetached.assert_called_once()
         mock_isref.assert_called_once_with(committish)
         mock_isrefambiguous.assert_called_once_with(committish, limit=('heads', 'tags'))
         mock_checkoutput.assert_called_once_with(('git', 'show-ref', '--tags', '--heads', committish))
@@ -85,6 +91,7 @@ class TestChangesAssociate(unittest.TestCase):
         )
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_detached', return_value=False)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.resolve_sha1')
     @mock.patch('bin.commands.utils.git.current_branch')
@@ -97,6 +104,7 @@ class TestChangesAssociate(unittest.TestCase):
             mock_currentbranch,
             mock_resolvesha1,
             mock_isref,
+            mock_isdetached,
             mock_isgitrepository
     ):
 
@@ -112,7 +120,8 @@ class TestChangesAssociate(unittest.TestCase):
         changes.associate(committish, quiet=quiet)
 
         # then
-        mock_isgitrepository.assert_called_once_with()
+        mock_isgitrepository.assert_called_once()
+        mock_isdetached.assert_called_once()
         mock_isref.assert_called_once_with(committish)
         mock_resolvesha1.assert_called_once_with(committish)
         mock_currentbranch.assert_called_once()
@@ -122,6 +131,7 @@ class TestChangesAssociate(unittest.TestCase):
         mock_info.assert_called_once_with('{} has been associated with {}'.format(cur_branch, resolved_sha1), quiet)
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_detached', return_value=False)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.resolve_sha1', return_value=None)
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
@@ -130,6 +140,7 @@ class TestChangesAssociate(unittest.TestCase):
             mock_error,
             mock_resolvesha1,
             mock_isref,
+            mock_isdetached,
             mock_isgitrepository
     ):
 
@@ -143,7 +154,8 @@ class TestChangesAssociate(unittest.TestCase):
             pass
 
         # then
-        mock_isgitrepository.assert_called_once_with()
+        mock_isgitrepository.assert_called_once()
+        mock_isdetached.assert_called_once()
         mock_isref.assert_called_once_with(committish)
         mock_resolvesha1.assert_called_once_with(committish)
         mock_error.assert_called_once_with('{} is not a valid revision'.format(committish))
@@ -164,6 +176,22 @@ class TestChangesAssociate(unittest.TestCase):
         mock_isgitrepository.assert_called_once_with()
         mock_error.assert_called_once_with("'/working/dir' not a git repository")
         mock_getcwd.assert_called_once_with()
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_detached', return_value=True)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
+    def test_associate_isDetached(self, mock_error, mock_isdetached, mock_isgitrepository):
+
+        # when
+        try:
+            changes.associate('abc123')
+            self.fail('expected to exit but did not')  # pragma: no cover
+        except SystemExit:
+            pass
+
+        # then
+        mock_isgitrepository.assert_called_once()
+        mock_error.assert_called_once_with('cannot associate while HEAD is detached')
 
 
 class TestChangesAssociateUpstream(unittest.TestCase):

@@ -78,13 +78,14 @@ def state(**kwargs):
     )
 
     format_ = kwargs.get('format_')
+    sections = OrderedDict()
     if git.is_empty_repository():
-        status_output = status.get(new_repository=True, **kwargs)
-        status_title = status.title()
-        status_accent = status.accent(new_repository=True, **kwargs)
-        sections = {status_title: _print_section(status_title, status_accent, status_output, format_)}
+        if kwargs.get('show_status'):
+            status_output = status.get(new_repository=True, **kwargs)
+            status_title = status.title()
+            status_accent = status.accent(new_repository=True, **kwargs)
+            sections[status_title] = _print_section(status_title, status_accent, status_output, format_)
     else:
-        sections = OrderedDict()
         if kwargs.get('show_status'):
             status_output = status.get(**kwargs)
             status_title = status.title()
@@ -147,14 +148,15 @@ def state(**kwargs):
     for section_info in sections:
         state_result += sections[section_info]
 
-    state_result = state_result[:-1]  # strip the extra trailing newline
-    state_lines = len(state_result.splitlines())
-    terminal_lines = literal_eval(subprocess.check_output(['tput', 'lines']))
-    if not kwargs.get('page', True) or terminal_lines >= state_lines + 2:  # one for the newline and one for the prompt
-        if kwargs.get('clear') and sys.stdout.isatty():
-            subprocess.call('clear')
-        messages.info(state_result)  # TODO: breaks --no-color
-    else:
-        echo = subprocess.Popen(['echo', state_result], stdout=PIPE)
-        subprocess.call(['less', '-r'], stdin=echo.stdout)
-        echo.wait()
+    if state_result:
+        state_result = state_result[:-1]  # strip the extra trailing newline
+        state_lines = len(state_result.splitlines())
+        terminal_lines = literal_eval(subprocess.check_output(['tput', 'lines']))
+        if not kwargs.get('page', True) or terminal_lines >= state_lines + 2:  # one for the newline and one for the prompt
+            if kwargs.get('clear') and sys.stdout.isatty():
+                subprocess.call('clear')
+            messages.info(state_result)  # TODO: breaks --no-color
+        else:
+            echo = subprocess.Popen(['echo', state_result], stdout=PIPE)
+            subprocess.call(['less', '-r'], stdin=echo.stdout)
+            echo.wait()

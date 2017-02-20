@@ -25,6 +25,8 @@ def associate(committish, quiet=False):
 
     if not directories.is_git_repository():
         messages.error('{0!r} not a git repository'.format(os.getcwd()))
+    elif git.is_detached():
+        messages.error('cannot associate while HEAD is detached')
 
     # is it a ref?
     if git.is_ref(committish):

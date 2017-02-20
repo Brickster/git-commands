@@ -46,6 +46,22 @@ def is_commit(object_):
         return not cat_file_proc.returncode and object_type == 'commit'
 
 
+def is_detached():
+    """Returns whether HEAD is detached."""
+
+    return not bool(symbolic_ref('HEAD'))
+
+
+def symbolic_ref(object_):
+    """Returns symbolic ref"""
+
+    symbolic_proc = subprocess.Popen(['git', 'symbolic-ref', '--quiet', object_], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    revolved_symbolic_ref = symbolic_proc.communicate()[0]
+    if revolved_symbolic_ref:
+        revolved_symbolic_ref = revolved_symbolic_ref.strip()
+    return revolved_symbolic_ref
+
+
 def is_ref(object_):
     """Determines if an object is a ref.
 
