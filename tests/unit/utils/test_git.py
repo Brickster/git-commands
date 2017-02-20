@@ -11,9 +11,11 @@ class TestGit(unittest.TestCase):
     def setUp(self):
         # store private methods so they can be restored after tests that mock them
         self._is_ref = git.is_ref
+        self._symbolic_ref = git.symbolic_ref
 
     def tearDown(self):
         git.is_ref = self._is_ref
+        git.symbolic_ref = self._symbolic_ref
 
     @mock.patch('subprocess.Popen')
     def test_isValidReference(self, mock_popen):
@@ -106,6 +108,54 @@ class TestGit(unittest.TestCase):
 
         # then
         self.assertEqual(context.exception.message, "'object' must be a str. Given: int")
+
+    @mock.patch('bin.commands.utils.git.symbolic_ref')
+    def test_isDetached(self, mock_symbolicref):
+
+        # given
+        mock_symbolicref.return_value = None
+
+        # when
+        is_detached = git.is_detached()
+
+        # then
+        self.assertTrue(is_detached)
+        mock_symbolicref.assert_called_once()
+
+    @mock.patch('subprocess.Popen')
+    def test_symbolicRef(self, mock_popen):
+
+        # given
+        object_ = 'xyz'
+        expected_symbolic_ref = 'abc'
+        mock_proc = mock.Mock()
+        mock_proc.communicate.return_value = [expected_symbolic_ref, None]
+        mock_popen.return_value = mock_proc
+
+        # when
+        actual_symbolic_ref = git.symbolic_ref(object_)
+
+        # then
+        self.assertEqual(actual_symbolic_ref, expected_symbolic_ref)
+        mock_popen.assert_called_once_with(['git', 'symbolic-ref', '--quiet', object_], stdout=PIPE, stderr=PIPE)
+        mock_proc.communicate.assert_called_once()
+
+    @mock.patch('subprocess.Popen')
+    def test_symbolicRef_detachedHead(self, mock_popen):
+
+        # given
+        object_ = 'xyz'
+        mock_proc = mock.Mock()
+        mock_proc.communicate.return_value = [None, None]
+        mock_popen.return_value = mock_proc
+
+        # when
+        actual_symbolic_ref = git.symbolic_ref(object_)
+
+        # then
+        self.assertFalse(actual_symbolic_ref)
+        mock_popen.assert_called_once_with(['git', 'symbolic-ref', '--quiet', object_], stdout=PIPE, stderr=PIPE)
+        mock_proc.communicate.assert_called_once()
 
     @mock.patch('subprocess.call', return_value=0)
     def test_isRef(self, mock_call):

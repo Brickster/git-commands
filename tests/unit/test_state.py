@@ -242,8 +242,8 @@ class TestStateState(unittest.TestCase):
             format_=None,
             file_=None
         )
-        mock_checkoutput.assert_called_once_with('tput lines'.split())
-        mock_info.assert_called_once_with('')
+        mock_checkoutput.assert_not_called()
+        mock_info.assert_not_called()
         mock_call.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
@@ -526,7 +526,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_state_emptyrepository(
+    def test_state_emptyRepository(
             self,
             mock_info,
             mock_call,
@@ -545,6 +545,7 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         show_empty = True
         kwargs = {
+            'show_status': True,
             'show_color': 'never',
             'format_': format_,
             'clear': False,
@@ -577,6 +578,66 @@ class TestStateState(unittest.TestCase):
         mock_list.assert_not_called()
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('section output')
+        mock_call.assert_not_called()
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=True)
+    @mock.patch('bin.commands.stateextensions.status.get')
+    @mock.patch('bin.commands.stateextensions.status.title')
+    @mock.patch('bin.commands.stateextensions.status.accent')
+    @mock.patch('bin.commands.state._print_section')
+    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('subprocess.check_output', return_value='100')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_emptyRepository_noShowStatus(
+            self,
+            mock_info,
+            mock_call,
+            mock_checkoutput,
+            mock_list,
+            mock_printsection,
+            mock_statusaccent,
+            mock_statustitle,
+            mock_statusget,
+            mock_isemptyrepository,
+            mock_get,
+            mock_isgitrepository
+    ):
+
+        # setup
+        format_ = 'compact'
+        show_empty = True
+        kwargs = {
+            'show_status': False,
+            'show_color': 'never',
+            'format_': format_,
+            'clear': False,
+            'ignore_extensions': [],
+            'show_empty': show_empty
+        }
+
+        mock_statusget.return_value = 'status output'
+        mock_statustitle.return_value = 'status title'
+        mock_statusaccent.return_value = 'status accent'
+        mock_printsection.return_value = 'section output\n'
+        mock_get.side_effect = [True, []]
+
+        # when
+        state.state(**kwargs)
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_isemptyrepository.assert_called_once_with()
+        mock_printsection.assert_not_called()
+        mock_get.assert_has_calls([
+            mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
+            mock.call('git-state.order', default=[], as_type=mock.ANY)
+        ])
+        mock_list.assert_not_called()
+        mock_checkoutput.assert_not_called()
+        mock_info.assert_not_called()
         mock_call.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
@@ -1035,8 +1096,8 @@ class TestStateState(unittest.TestCase):
             format_=None,
             file_=None
         )
-        mock_checkoutput.assert_called_once_with('tput lines'.split())
-        mock_info.assert_called_once_with('')
+        mock_checkoutput.assert_not_called()
+        mock_info.assert_not_called()
         mock_call.assert_not_called()
         mock_popen.assert_not_called()
 
@@ -1095,8 +1156,8 @@ class TestStateState(unittest.TestCase):
             format_=None,
             file_=None
         )
-        mock_checkoutput.assert_called_once_with('tput lines'.split())
-        mock_info.assert_called_once_with('')
+        mock_checkoutput.assert_not_called()
+        mock_info.assert_not_called()
         mock_call.assert_not_called()
         mock_popen.assert_not_called()
 
