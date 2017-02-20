@@ -7,6 +7,23 @@ import unittest
 import git
 
 
+class TestIssue093(unittest.TestCase):
+    """State --no-status not respected for new repositories"""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+        self.repo = git.Repo.init(self.dirpath)
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        """Issue 93: --no-status should be respected even for new repositories"""
+
+        self.assertFalse(self.repo.git.state('--no-status'))
+
+
 class TestIssue094(unittest.TestCase):
     """Changes breaks when HEAD is detached"""
 
@@ -14,7 +31,7 @@ class TestIssue094(unittest.TestCase):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
-        # initialize repository
+        # initialize repositorygit stat
         repo = git.Repo.init(self.dirpath)
         open('README.md', 'w').close()
         repo.index.add(['README.md'])
@@ -101,6 +118,38 @@ class TestIssue104(unittest.TestCase):
 
         self.assertFalse(
             subprocess.check_output('git changes unassociate --prune'.split(), stderr=subprocess.STDOUT).strip())
+
+
+class TestIssue106(unittest.TestCase):
+    """Associating when detached uses HEAD as branch"""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+
+        # initialize repositorygit stat
+        repo = git.Repo.init(self.dirpath)
+        open('README.md', 'w').close()
+        repo.index.add(['README.md'])
+        repo.index.commit('Initial commit')
+        open('CONTRIBUTING.md', 'w').close()
+        repo.index.add(['CONTRIBUTING.md'])
+        repo.index.commit('Add CONTRIBUTING.md')
+
+        # detach head
+        repo.git.changes('associate', 'HEAD~1')
+        repo.git.checkout('HEAD~1')
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        """Issue 106: Do not allow associating a detached HEAD"""
+
+        associate_proc = subprocess.Popen(('git', 'changes', 'associate', 'HEAD'), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = associate_proc.communicate()
+        self.assertFalse(stdout)
+        self.assertEqual(stderr.strip(), 'error: cannot associate while HEAD is detached')
 
 
 class TestIssue107(unittest.TestCase):

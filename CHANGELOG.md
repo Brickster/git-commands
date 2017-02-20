@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file. This projec
 - `git-settings` cleanup
 
 ## Fixed
+- `state--no-status` not respected for empty repositories [#93](https://github.com/Brickstertwo/git-commands/issues/93)
 - `changes view` breaking when HEAD is detached [#94](https://github.com/Brickstertwo/git-commands/issues/94)
 - `changes unassociate` breaking when no association exists for the branch [#102](https://github.com/Brickstertwo/git-commands/issues/102)
 - `changes unassociate --prune` breaking when no associations exist [#103](https://github.com/Brickstertwo/git-commands/issues/103)
