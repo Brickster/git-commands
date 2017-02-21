@@ -110,10 +110,12 @@ def unassociate(branch=None, cleanup=None, quiet=False, dry_run=False):
         _prune_associations(cleanup, quiet, dry_run)
     else:
         branch = branch if branch else git.current_branch()
-        if dry_run:
-            messages.info('Would unassociate {0!r} from {1!r}'.format(branch, get_association(branch)))
-        elif get_association(branch):
-            subprocess.call(['git', 'config', '--local', '--remove-section', 'git-changes.associations.' + branch])
+        current_association = get_association(branch)
+        if current_association:
+            if dry_run:
+                messages.info('Would unassociate {0!r} from {1!r}'.format(branch, current_association))
+            else:
+                subprocess.call(['git', 'config', '--local', '--remove-section', 'git-changes.associations.' + branch])
 
 
 def get_association(branch=None):
