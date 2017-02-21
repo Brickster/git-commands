@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file. This projec
 - `changes unassociate --prune` breaking for new repositories [#104](https://github.com/Brickstertwo/git-commands/issues/104)
 - Associating a detached HEAD [#106](https://github.com/Brickstertwo/git-commands/issues/106)
 - `changes associate` breaking when using an invalid revision [#107](https://github.com/Brickstertwo/git-commands/issues/107)
+- `changes unassociate --dry-run` printing a message during a no-op [#108](https://github.com/Brickstertwo/git-commands/issues/108)
 
 ## [v0.6.1][] - 2017-01-17
 ### Fixed

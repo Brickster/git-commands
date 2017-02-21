@@ -440,6 +440,35 @@ class TestChangesUnassociate(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.current_branch')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    @mock.patch('bin.commands.changes.get_association')
+    def test_unassociate_branch_dryRun_noExistingAssociation(
+            self,
+            mock_getassociation,
+            mock_info,
+            mock_call,
+            mock_currentbranch,
+            mock_isgitrepository
+    ):
+
+        # given
+        associated_branch = None
+        mock_getassociation.return_value = associated_branch
+
+        # when
+        branch = 'the-branch'
+        changes.unassociate(branch=branch, dry_run=True)
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_currentbranch.assert_not_called()
+        mock_call.assert_not_called()
+        mock_info.assert_not_called()
+        mock_getassociation.assert_called_once()
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.current_branch')
     @mock.patch('bin.commands.changes.get_association')
     @mock.patch('subprocess.call')
     def test_unassociate_nobranch(self, mock_call, mock_getassociation, mock_currentbranch, mock_isgitrepository):

@@ -174,3 +174,25 @@ class TestIssue107(unittest.TestCase):
         bad_revision = 'bad_rev'
         error = subprocess.Popen(['git', 'changes', 'associate', bad_revision], stderr=subprocess.PIPE).communicate()[1].strip()
         self.assertEqual(error, 'error: {} is not a valid revision'.format(bad_revision))
+
+
+class TestIssue108(unittest.TestCase):
+    """Dry running an unassociate without an association print misleading result"""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+
+        # initialize repository
+        self.repo = git.Repo.init(self.dirpath)
+        open('README.md', 'w').close()
+        self.repo.index.add(['README.md'])
+        self.repo.index.commit('Initial commit')
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        """Issue 108: Dry running an unassociate without an association should print nothing"""
+
+        self.assertFalse(subprocess.check_output('git changes unassociate --dry-run'.split()).strip())
