@@ -45,7 +45,8 @@ def main():
         '--file',
         help='limit to a specific config file',
         action=multi_set(config='file_'),
-        dest='file_'
+        dest='file_',
+        metavar='FILE'
     )
 
     parser = argparse.ArgumentParser(
