@@ -25,7 +25,7 @@ def snapshot(message=None, quiet=False, files=None):
     if len(status_output) > 0:
 
         if files:
-            tuck.tuck(files, message, quiet=True)
+            tuck.tuck(files, message=message, quiet=True)
         else:
             stash_command = ['git', 'stash', 'save', '--include-untracked', '--quiet']
             stash_command = stash_command if message is None else stash_command + [message]
