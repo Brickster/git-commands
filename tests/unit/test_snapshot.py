@@ -18,6 +18,7 @@ class TestSnapshot(unittest.TestCase):
         snapshot.snapshot()
 
         # then
+        mock_isgitrepository.assert_called()
         mock_checkoutput.assert_called_once_with('git status --porcelain'.split())
         mock_call.assert_has_calls([
             mock.call('git stash save --include-untracked --quiet'.split()),
@@ -34,6 +35,7 @@ class TestSnapshot(unittest.TestCase):
         snapshot.snapshot(message)
 
         # then
+        mock_isgitrepository.assert_called()
         mock_checkoutput.assert_called_once_with('git status --porcelain'.split())
         mock_call.assert_has_calls([
             mock.call(['git', 'stash', 'save', '--include-untracked', '--quiet', message]),
@@ -52,8 +54,9 @@ class TestSnapshot(unittest.TestCase):
         snapshot.snapshot(message, files=files)
 
         # then
+        mock_isgitrepository.assert_called()
         mock_checkoutput.assert_called_once_with('git status --porcelain'.split())
-        mock_tuck.assert_called_once_with(files, message, quiet=True)
+        mock_tuck.assert_called_once_with(files, message=message, quiet=True)
         mock_call.assert_called_once_with('git stash apply --quiet --index'.split(), stdout=mock.ANY, stderr=STDOUT)
         self.assertEqual(mock_call.call_args[1]['stdout'].name, os.devnull)
 
@@ -84,5 +87,6 @@ class TestSnapshot(unittest.TestCase):
         snapshot.snapshot(quiet=quiet)
 
         # then
+        mock_isgitrepository.assert_called()
         mock_checkoutput.assert_called_once_with('git status --porcelain'.split())
         mock_info.assert_called_once_with('No local changes to save. No snapshot created.', quiet)

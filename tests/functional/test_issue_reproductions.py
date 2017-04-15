@@ -196,3 +196,30 @@ class TestIssue108(unittest.TestCase):
         """Issue 108: Dry running an unassociate without an association should print nothing"""
 
         self.assertFalse(subprocess.check_output('git changes unassociate --dry-run'.split()).strip())
+
+
+class TestIssue111(unittest.TestCase):
+    """Snapshotting specific files with a message should snapshot successfully"""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+
+        # initialize repository
+        self.repo = git.Repo.init(self.dirpath)
+        open('README.md', 'w').close()
+        self.repo.index.add(['README.md'])
+        self.repo.index.commit('Initial commit')
+
+        # edit a file
+        with open('README.md', 'w') as readme_file:
+            readme_file.write('a')
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        """Issue 111: Unable to include files and message in snapshot"""
+
+        self.assertFalse(subprocess.check_output('git snapshot "md files" -- *.md'.split()).strip())
+        self.assertEqual(1, len(subprocess.check_output('git stash list'.split()).strip().split('\n')))
