@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file. This projec
 ## [v0.6.0][] - 2017-01-14
 ### Added
 - `git-tuck` options `--dry-run` and `--color` [#67][]
+- `git-tuck` options for adding based on index status
 - `git-reindex` for re-adding already indexed files to the index
 - `-u|--upstream` option to `changes associate` [#81][]
 - `git-state` extension configuration for options [#84][]
