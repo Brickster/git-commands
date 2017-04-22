@@ -1,0 +1,3 @@
+# ignore man pages and HTML man pages
+*.1
+*.1.html
