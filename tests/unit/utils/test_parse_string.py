@@ -30,7 +30,7 @@ class TestParseString(unittest.TestCase):
     def test_asBool_error_inputNotAStr(self):
 
         # when
-        with self.assertRaises(ValueError) as context:
+        with self.assertRaises(AssertionError) as context:
             parse_string.as_bool(1)
 
         # then

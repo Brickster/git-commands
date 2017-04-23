@@ -6,8 +6,7 @@ def as_bool(value):
     :return bool: the bool representation
     """
 
-    if not isinstance(value, str):
-        raise ValueError('{0!r} is not a string'.format(value))
+    assert isinstance(value, str), ('{0!r} is not a string'.format(value))
 
     if value.lower() in ('yes', 'on', 'true', '1'):
         return True
