@@ -55,7 +55,7 @@ def associate_upstream(quiet=False):
         messages.error('{0!r} not a git repository'.format(os.getcwd()))
 
     branch = git.current_branch()
-    upstream_branch = upstream.upstream(branch, include_remote=upstream.IncludeRemote.ALWAYS)
+    upstream_branch = upstream.upstream(branch, include_remote=upstream.IncludeRemote.NONE_LOCAL)
     if not upstream_branch:
         messages.error('{} has no upstream branch'.format(branch))
     associate(upstream_branch, quiet)
