@@ -1,6 +1,13 @@
 import unittest
 
+import enum
+
 from bin.commands.utils import parse_string
+
+
+class TestEnum(enum.Enum):
+    A = 1
+    BB = 2
 
 
 class TestParseString(unittest.TestCase):
@@ -44,6 +51,33 @@ class TestParseString(unittest.TestCase):
 
         # then
         self.assertEqual('{0!r} is not a boolean representation'.format('yup'), context.exception.message)
+
+    def test_asEnum(self):
+
+        # when
+        parse_enum = parse_string.as_enum(TestEnum)
+
+        # then
+        self.assertEqual(TestEnum.A, parse_enum('A'))
+        self.assertEqual(TestEnum.BB, parse_enum('BB'))
+
+    def test_asEnum_invalidEnumValue(self):
+
+        # when
+        with self.assertRaises(KeyError) as context:
+            parse_string.as_enum(TestEnum)('Z')
+
+        # then
+        self.assertEqual('Z', context.exception.message)
+
+    def test_asEnum_notAnEnum(self):
+
+        # when
+        with self.assertRaises(AssertionError) as context:
+            parse_string.as_enum(1)
+
+        # then
+        self.assertEqual("'enum_type' must be an {!r}. Given {!r}".format(enum.Enum, int), context.exception.message)
 
     def test_asDelimitedList(self):
 
