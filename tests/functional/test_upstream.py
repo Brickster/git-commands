@@ -35,10 +35,21 @@ class TestGitUpstream(unittest.TestCase):
     def test_upstream_excludeRemote_longOption(self):
         self.assertEqual('master', subprocess.check_output('git upstream --no-include-remote'.split()).strip())
 
-    def test_upstream_showRemotePropertyTrue(self):
+    def test_upstream_showRemoteProperty_never(self):
 
         # setup
-        subprocess.call('git config --local git-upstream.include-remote true'.split())
+        subprocess.call('git config --local git-upstream.include-remote NEVER'.split())
+
+        # run
+        upstream_result = subprocess.check_output('git upstream'.split()).strip()
+
+        # verify
+        self.assertEqual('master', upstream_result)
+
+    def test_upstream_showRemoteProperty_always(self):
+
+        # setup
+        subprocess.call('git config --local git-upstream.include-remote ALWAYS'.split())
 
         # run
         upstream_result = subprocess.check_output('git upstream'.split()).strip()
@@ -46,10 +57,33 @@ class TestGitUpstream(unittest.TestCase):
         # verify
         self.assertEqual('./master', upstream_result)
 
-    def test_upstream_showRemotePropertyTrue_includeRemote_shortOption(self):
+    def test_upstream_showRemoteProperty_noneLocal_isLocal(self):
 
         # setup
-        subprocess.call('git config --local git-upstream.include-remote true'.split())
+        subprocess.call('git config --local branch.develop.remote origin'.split())
+        subprocess.call('git config --local git-upstream.include-remote NONE_LOCAL'.split())
+
+        # run
+        upstream_result = subprocess.check_output('git upstream'.split()).strip()
+
+        # verify
+        self.assertEqual('origin/master', upstream_result)
+
+    def test_upstream_showRemoteProperty_noneLocal_notLocal(self):
+
+        # setup
+        subprocess.call('git config --local git-upstream.include-remote NONE_LOCAL'.split())
+
+        # run
+        upstream_result = subprocess.check_output('git upstream'.split()).strip()
+
+        # verify
+        self.assertEqual('master', upstream_result)
+
+    def test_upstream_ignoreShowRemotePropertyWithFlag_includeRemote_shortOption(self):
+
+        # setup
+        subprocess.call('git config --local git-upstream.include-remote NEVER'.split())
 
         # run
         upstream_result = subprocess.check_output('git upstream -r'.split()).strip()
@@ -57,10 +91,10 @@ class TestGitUpstream(unittest.TestCase):
         # verify
         self.assertEqual('./master', upstream_result)
 
-    def test_upstream_showRemotePropertyTrue_includeRemote_longOption(self):
+    def test_upstream_ignoreShowRemotePropertyWithFlag_includeRemote_longOption(self):
 
         # setup
-        subprocess.call('git config --local git-upstream.include-remote true'.split())
+        subprocess.call('git config --local git-upstream.include-remote NEVER'.split())
 
         # run
         upstream_result = subprocess.check_output('git upstream --include-remote'.split()).strip()
@@ -68,10 +102,10 @@ class TestGitUpstream(unittest.TestCase):
         # verify
         self.assertEqual('./master', upstream_result)
 
-    def test_upstream_showRemotePropertyTrue_excudeRemote_shortOption(self):
+    def test_upstream_ignoreShowRemotePropertyWithFlag_excudeRemote_shortOption(self):
 
         # setup
-        subprocess.call('git config --local git-upstream.include-remote true'.split())
+        subprocess.call('git config --local git-upstream.include-remote ALWAYS'.split())
 
         # run
         upstream_result = subprocess.check_output('git upstream -R'.split()).strip()
@@ -79,10 +113,10 @@ class TestGitUpstream(unittest.TestCase):
         # verify
         self.assertEqual('master', upstream_result)
 
-    def test_upstream_showRemotePropertyTrue_excudeRemote_longOption(self):
+    def test_upstream_ignoreShowRemotePropertyWithFlag_excudeRemote_longOption(self):
 
         # setup
-        subprocess.call('git config --local git-upstream.include-remote true'.split())
+        subprocess.call('git config --local git-upstream.include-remote ALWAYS'.split())
 
         # run
         upstream_result = subprocess.check_output('git upstream --no-include-remote'.split()).strip()
