@@ -1,3 +1,6 @@
+import enum
+
+
 def as_bool(value):
     """Returns whether the input is a string representation of a boolean.
 
@@ -14,6 +17,14 @@ def as_bool(value):
         return False
     else:
         raise ValueError('{0!r} is not a boolean representation'.format(value))
+
+
+def as_enum(enum_type):
+    assert type(enum_type) == enum.EnumMeta, "'enum_type' must be an {!r}. Given {!r}".format(
+        enum.Enum,
+        type(enum_type)
+    )
+    return lambda value: enum_type[value]
 
 
 def as_delimited_list(delimiter):
