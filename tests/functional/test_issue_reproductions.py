@@ -223,3 +223,33 @@ class TestIssue111(unittest.TestCase):
 
         self.assertFalse(subprocess.check_output('git snapshot "md files" -- *.md'.split()).strip())
         self.assertEqual(1, len(subprocess.check_output('git stash list'.split()).strip().split('\n')))
+
+
+class TestIssue112(unittest.TestCase):
+    """Associating with a local upstream should associate with refs/head/<<UPSTREAM>>"""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+
+        # initialize repository
+        self.repo = git.Repo.init(self.dirpath)
+        open('README.md', 'w').close()
+        self.repo.index.add(['README.md'])
+        self.repo.index.commit('Initial commit')
+
+        # checkout new develop branch with master as its upstream
+        self.repo.create_head('develop', 'HEAD')
+        self.repo.heads.develop.checkout()
+        self.repo.git.branch(set_upstream_to='master')
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        """Issue 112: Associate --upstream fails for local upstream"""
+
+        self.assertEqual(
+            subprocess.check_output('git changes associate --upstream'.split()).strip(),
+            'develop has been associated with refs/heads/master'
+        )

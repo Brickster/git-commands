@@ -215,7 +215,7 @@ class TestChangesAssociateUpstream(unittest.TestCase):
         # then
         mock_isgitrepository.assert_called_once_with()
         mock_currentbranch.assert_called_once_with()
-        mock_upstream.assert_called_once_with(current_branch, include_remote=upstream.IncludeRemote.ALWAYS)
+        mock_upstream.assert_called_once_with(current_branch, include_remote=upstream.IncludeRemote.NONE_LOCAL)
         mock_associate.assert_called_once_with(upstream_branch, quiet)
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
