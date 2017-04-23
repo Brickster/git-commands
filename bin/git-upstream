@@ -22,9 +22,14 @@ def main():
         '-r',
         '--include-remote',
         help='include the remote name',
-        action='store_true',
+        action='store_const',
+        const=upstream.IncludeRemote.ALWAYS,
         dest='include_remote',
-        default=settings.get('git-upstream.include-remote', default=False, as_type=parse_string.as_bool)
+        default=settings.get(
+            'git-upstream.include-remote',
+            default=upstream.IncludeRemote.NEVER,
+            as_type=parse_string.as_enum(upstream.IncludeRemote)
+        )
     )
 
     # -R|--no-include-remote
@@ -32,7 +37,8 @@ def main():
         '-R',
         '--no-include-remote',
         help="don't include the remote name",
-        action='store_false',
+        action='store_const',
+        const=upstream.IncludeRemote.NEVER,
         dest='include_remote'
     )
 

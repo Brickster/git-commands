@@ -4,13 +4,24 @@ import os
 import subprocess
 from subprocess import PIPE
 
+from enum import Enum
+
 from utils import directories, git, messages
 
 _MERGE_CONFIG = 'git config --local branch.{}.merge'
 _REMOTE_CONFIG = 'git config --local branch.{}.remote'
+_LOCAL_REMOTE = '.'
 
 
-def upstream(branch=None, include_remote=False):
+class IncludeRemote(Enum):
+    """Specify when to include remote information."""
+
+    NEVER = 'Never include remote information'
+    ALWAYS = 'Always include remote information'
+    NONE_LOCAL = 'Only include remote information when not a local remote'
+
+
+def upstream(branch=None, include_remote=IncludeRemote.NEVER):
     """Get the upstream branch of the current branch.
 
     :param str or unicode branch: the branch whose upstream to find
@@ -18,6 +29,8 @@ def upstream(branch=None, include_remote=False):
 
     :return str or unicode: the upstream branch name or an empty string
     """
+
+    assert type(include_remote) == IncludeRemote, "'include_remote' must be a {!r}. Given {!r}".format(IncludeRemote, type(include_remote))
 
     if not directories.is_git_repository():
         messages.error('{0!r} not a git repository'.format(os.getcwd()))
@@ -35,8 +48,10 @@ def upstream(branch=None, include_remote=False):
     upstream_info = upstream_info.rsplit('/', 1)[-1]
 
     # optionally, get remote name
-    if upstream_info and include_remote:
+    if upstream_info and include_remote != IncludeRemote.NEVER:
         remote_name = subprocess.check_output(_REMOTE_CONFIG.format(branch).split()).strip()
-        upstream_info = remote_name + '/' + upstream_info
+        # only include the remote if it is not local
+        if include_remote == IncludeRemote.ALWAYS or remote_name != _LOCAL_REMOTE:
+            upstream_info = remote_name + '/' + upstream_info
 
     return upstream_info
