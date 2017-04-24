@@ -55,7 +55,7 @@ class TestGitRestash(unittest.TestCase):
         # then
         stash_sha = self.repo.git.rev_parse('stash@{0}')
         self.assertEqual(restash_output, 'Restashed stash@{{0}} ({})'.format(stash_sha))
-        status_output = subprocess.check_output('git status --short'.split()).rstrip()
+        status_output = subprocess.check_output('git -c color.ui=never status --short'.split()).rstrip()
         self.assertEqual(status_output, ' M CHANGELOG.md')
 
     def test_restash_specifyStash(self):
@@ -74,7 +74,7 @@ class TestGitRestash(unittest.TestCase):
         # then
         stash_sha = self.repo.git.rev_parse('stash@{1}')
         self.assertEqual(restash_output, 'Restashed stash@{{1}} ({})'.format(stash_sha))
-        status_output = subprocess.check_output('git status --short'.split()).rstrip()
+        status_output = subprocess.check_output('git -c color.ui=never status --short'.split()).rstrip()
         self.assertEqual(status_output, ' M CHANGELOG.md')
 
     def test_restash_withNewFiles(self):
