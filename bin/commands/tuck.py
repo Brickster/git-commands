@@ -82,7 +82,7 @@ def _dry_run(files_to_tuck, show_color):
 
     status_output = _status(show_color)
     if files_to_tuck:
-        pattern = '|'.join(files_to_tuck)
+        pattern = '.*\s(?:' + '|'.join(files_to_tuck) + ')'
         tucked_output = []
         nontucked_output = []
         for line in status_output.splitlines():

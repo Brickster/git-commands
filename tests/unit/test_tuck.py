@@ -342,6 +342,32 @@ Leaving working directory:
 
     @mock.patch('bin.commands.tuck._status')
     @mock.patch('bin.commands.utils.messages.info')
+    def test__dryRun_withSimilarFileInSubdirectory(self, mock_info, mock_status):
+
+        # given
+        files_to_tuck = ['a']
+        show_color = True
+        status_output = """M  a
+ M sub/a
+"""
+        info_message = """Would tuck:
+
+    M  a
+
+Leaving working directory:
+
+     M sub/a
+"""
+        mock_status.return_value = status_output
+
+        # when
+        tuck._dry_run(files_to_tuck, show_color)
+
+        # then
+        mock_info.assert_called_once_with(info_message)
+
+    @mock.patch('bin.commands.tuck._status')
+    @mock.patch('bin.commands.utils.messages.info')
     def test__dryRun_withNothingRemaining(self, mock_info, mock_status):
 
         # given

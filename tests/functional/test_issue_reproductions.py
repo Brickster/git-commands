@@ -253,3 +253,41 @@ class TestIssue112(unittest.TestCase):
             subprocess.check_output('git changes associate --upstream'.split()).strip(),
             'develop has been associated with refs/heads/master'
         )
+
+
+class TestIssue113(unittest.TestCase):
+    """Dry running a tuck for a commonly named file should only report that file in the dry run."""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+
+        # initialize repository
+        self.repo = git.Repo.init(self.dirpath)
+        open('README.md', 'w').close()
+        os.mkdir(self.dirpath + '/files')
+        open('files/README.md', 'w').close()
+        self.repo.index.add(['README.md', 'files/README.md'])
+        self.repo.index.commit('Initial commit')
+
+        # edit files
+        with open('README.md', 'w') as readme_file:
+            readme_file.write('a')
+        with open('files/README.md', 'w') as readme_file:
+            readme_file.write('a')
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+
+        expected = """Would tuck:
+
+     M README.md
+
+Leaving working directory:
+
+     M files/README.md
+
+"""
+        self.assertEqual(subprocess.check_output('git tuck --dry-run --no-color -- README.md'.split()), expected)

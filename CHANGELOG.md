@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file. This projec
 - `changes unassociate --dry-run` printing a message during a no-op [#108](https://github.com/Brickstertwo/git-commands/issues/108)
 - `tuck` failing when including a message and specific files [#111](https://github.com/Brickstertwo/git-commands/issues/111)
 - `changes associate --upstream` failing with local upstreams [#112](https://github.com/Brickstertwo/git-commands/issues/112)
+- Tuck dry run erroneous reporting similarly named files as candidates for tucking [#113](https://github.com/Brickstertwo/git-commands/issues/113)
 
 ## [v0.6.1][] - 2017-01-17
 ### Fixed
