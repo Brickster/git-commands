@@ -9,6 +9,8 @@ engines:
     enabled: true
   radon:
     enabled: true
+    config:
+      threshold: 'C'
   pep8:
     enabled: true
 ratings:
@@ -16,3 +18,4 @@ ratings:
   - "**.py"
 exclude_paths:
 - tests/
+- .idea/
