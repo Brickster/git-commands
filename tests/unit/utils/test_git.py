@@ -476,3 +476,13 @@ MM modified.txt
         # then
         self.assertEqual(color, 'always')
         mock_isatty.assert_called_once()
+
+    @mock.patch('bin.commands.settings.get', return_value='always')
+    def test_resolveColoring_none(self, mock_get):
+
+        # when
+        color = git.resolve_coloring(None)
+
+        # then
+        self.assertEqual(color, 'always')
+        mock_get.assert_called_once_with('color.ui', default='auto')

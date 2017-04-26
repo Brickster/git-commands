@@ -7,6 +7,8 @@ import sys
 import subprocess
 from subprocess import PIPE
 
+from .. import settings
+
 
 class GitException(Exception):  # pragma: no cover
     def __init__(self, message):
@@ -168,6 +170,7 @@ def resolve_sha1(revision):
 
 
 def resolve_coloring(color):
-    if color == 'auto':
+    color_when = color.lower() if color else settings.get('color.ui', default='auto')
+    if color_when == 'auto':
         return 'always' if sys.stdout.isatty() else 'never'
-    return color
+    return color_when

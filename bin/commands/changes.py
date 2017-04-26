@@ -150,9 +150,7 @@ def changes(committish, details=None, color_when=None):
     elif git.is_ref(committish) and git.is_ref_ambiguous(committish, limit=('heads', 'tags')):
         _ambiguous_ref(committish)
 
-    color_when = color_when.lower() if color_when else settings.get('color.ui', default='auto')
     color_when = git.resolve_coloring(color_when)
-
     if details == 'diff':
         subprocess.call(['git', 'diff', '--color={}'.format(color_when), committish + '...HEAD'])
     elif details == 'stat':

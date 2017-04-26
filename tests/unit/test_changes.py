@@ -804,22 +804,6 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
-    @mock.patch('bin.commands.settings.get', return_value='always')
-    @mock.patch('bin.commands.utils.git.resolve_coloring', return_value='never')
-    @mock.patch('subprocess.call')
-    def test_changes_color_nonespecified(self, mock_call, mock_resolvecoloring, mock_get, mock_isref, mock_iscommit, mock_isgetrepository):
-
-        # when
-        changes.changes('HEAD', color_when=None)
-
-        # then
-        mock_get.assert_called_once_with('color.ui', default='auto')
-        mock_resolvecoloring.assert_called_once_with('always')
-        mock_call.assert_called_once_with(['git', 'log', '--oneline', 'HEAD..HEAD', '--color=never'])
-
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
-    @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.resolve_coloring')
     @mock.patch('subprocess.call')
     def test_changes_details_diff(self, mock_call, mock_resolvecoloring, mock_isref, mock_iscommit, mock_isgitrepository):
