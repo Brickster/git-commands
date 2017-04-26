@@ -435,11 +435,10 @@ MM modified.txt
         mock_proc.communicate.assert_called_once()
 
     @mock.patch('subprocess.Popen')
-    def test_resolvedSha1_invalid(self, mock_popen):
+    def test_resolveSha1_invalid(self, mock_popen):
 
         # given
         revision = 'abc123'
-        expected = revision * 2
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = ['\n', None]
         mock_popen.return_value = mock_proc
@@ -451,3 +450,29 @@ MM modified.txt
         self.assertFalse(actual)
         mock_popen.assert_called_once_with(['git', 'rev-parse', '--verify', '--quiet', revision], stdout=PIPE)
         mock_proc.communicate.assert_called_once()
+
+    def test_resolveColoring_never(self):
+        self.assertEqual(git.resolve_coloring('never'), 'never')
+
+    def test_resolveColoring_always(self):
+        self.assertEqual(git.resolve_coloring('always'), 'always')
+
+    @mock.patch('sys.stdout.isatty', return_value=False)
+    def test_resolveColoring_auto_notTTY(self, mock_isatty):
+
+        # when
+        color = git.resolve_coloring('auto')
+
+        # then
+        self.assertEqual(color, 'never')
+        mock_isatty.assert_called_once()
+
+    @mock.patch('sys.stdout.isatty', return_value=True)
+    def test_resolveColoring_never_isTTY(self, mock_isatty):
+
+        # when
+        color = git.resolve_coloring('auto')
+
+        # then
+        self.assertEqual(color, 'always')
+        mock_isatty.assert_called_once()

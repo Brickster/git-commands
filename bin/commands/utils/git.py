@@ -1,7 +1,8 @@
 """A collection of common git actions."""
 
-import re
 import os
+import re
+import sys
 
 import subprocess
 from subprocess import PIPE
@@ -164,3 +165,9 @@ def resolve_sha1(revision):
     if not sha1:
         return None
     return sha1
+
+
+def resolve_coloring(color):
+    if color == 'auto':
+        return 'always' if sys.stdout.isatty() else 'never'
+    return color
