@@ -7,14 +7,14 @@ A collection of custom git commands
 ## Install
 
 ```bash
+pip install -r requirements.txt
 make [install]
 ```
 or
 ```bash
+pip install -r requirements.txt
 export PATH="$PATH:/path/to/git-commands/repository/bin"
 ```
-
-See the dependencies section for other installation details.
 
 ## Uninstall
 
@@ -138,7 +138,8 @@ git reindex (-v|--version)
 
 ## Dependencies
 
-- [colorama](https://pypi.python.org/pypi/colorama): `$ pip install colorama`
+- [colorama](https://pypi.python.org/pypi/colorama)
+- [enum34](https://pypi.python.org/pypi/enum34)
 
 [state]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-state.1.html
 [snapshot]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-snapshot.1.html
