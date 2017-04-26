@@ -1,7 +1,6 @@
 """List the commits between this branch and another."""
 
 import os
-import sys
 import subprocess
 
 from . import settings, upstream
@@ -152,10 +151,7 @@ def changes(committish, details=None, color_when=None):
         _ambiguous_ref(committish)
 
     color_when = color_when.lower() if color_when else settings.get('color.ui', default='auto')
-    if color_when == 'never' or (color_when == 'auto' and not sys.stdout.isatty()):
-        color_when = 'never'
-    elif color_when == 'auto' and sys.stdout.isatty():
-        color_when = 'always'
+    color_when = git.resolve_coloring(color_when)
 
     if details == 'diff':
         subprocess.call(['git', 'diff', '--color={}'.format(color_when), committish + '...HEAD'])

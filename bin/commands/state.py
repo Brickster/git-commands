@@ -62,13 +62,8 @@ def state(**kwargs):
     if not directories.is_git_repository():
         messages.error('{0!r} not a git repository'.format(os.getcwd()))
 
-    show_color = kwargs.get('show_color').lower()
-    if show_color == 'never' or (show_color == 'auto' and not sys.stdout.isatty()):
-        show_color = 'never'
-        colorama.init(strip=True)
-    else:
-        show_color = 'always'
-        colorama.init()
+    show_color = git.resolve_coloring(kwargs.get('show_color').lower())
+    colorama.init(strip=(show_color == 'never'))
 
     kwargs['show_color'] = show_color
     kwargs['show_clean_message'] = settings.get(

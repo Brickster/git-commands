@@ -264,6 +264,8 @@ class TestStateState(unittest.TestCase):
         mock_getcwd.assert_called_once_with()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.resolve_coloring')
+    @mock.patch('colorama.init')
     @mock.patch('bin.commands.settings.get', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
@@ -286,19 +288,22 @@ class TestStateState(unittest.TestCase):
             mock_statusget,
             mock_isemptyrepository,
             mock_get,
+            mock_init,
+            mock_resolvecoloring,
             mock_isgitrepository
     ):
 
         # setup
         format_ = 'compact'
         kwargs = {
-            'show_color': 'never',
+            'show_color': 'always',
             'format_': format_,
             'show_status': True,
             'clear': False,
             'ignore_extensions': []
         }
 
+        mock_resolvecoloring.return_value = 'never'
         mock_statusget.return_value = 'status output'
         mock_statustitle.return_value = 'status title'
         mock_statusaccent.return_value = 'status accent'
@@ -318,92 +323,8 @@ class TestStateState(unittest.TestCase):
             show_status=True
         )
         mock_isgitrepository.assert_called_once_with()
-        mock_isemptyrepository.assert_called_once_with()
-        mock_printsection.assert_called_once_with(
-            mock_statustitle.return_value,
-            mock_statusaccent.return_value,
-            mock_statusget.return_value,
-            format_,
-            show_empty=True
-        )
-        mock_get.assert_has_calls([
-            mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
-            mock.call('git-state.order', default=[], as_type=mock.ANY)
-        ])
-        self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            keys=True,
-            format_=None,
-            file_=None
-        )
-        mock_checkoutput.assert_called_once_with('tput lines'.split())
-        mock_info.assert_called_once_with('status section')
-        mock_call.assert_not_called()
-
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
-    @mock.patch('sys.stdout.isatty', return_value=False)
-    @mock.patch('colorama.init')
-    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
-    @mock.patch('bin.commands.stateextensions.status.get')
-    @mock.patch('bin.commands.stateextensions.status.title')
-    @mock.patch('bin.commands.stateextensions.status.accent')
-    @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
-    @mock.patch('bin.commands.utils.messages.info')
-    def test_state_showcolor_autoandnotatty(
-            self,
-            mock_info,
-            mock_call,
-            mock_checkoutput,
-            mock_list,
-            mock_printsection,
-            mock_statusaccent,
-            mock_statustitle,
-            mock_statusget,
-            mock_isemptyrepository,
-            mock_init,
-            mock_isatty,
-            mock_get,
-            mock_isgitrepository
-    ):
-
-        # setup
-        format_ = 'compact'
-        kwargs = {
-            'show_color': 'auto',
-            'format_': format_,
-            'show_status': True,
-            'clear': False,
-            'ignore_extensions': []
-        }
-
-        mock_statusget.return_value = 'status output'
-        mock_statustitle.return_value = 'status title'
-        mock_statusaccent.return_value = 'status accent'
-        mock_printsection.return_value = 'status section\n'
-        mock_get.side_effect = [True, []]
-
-        # when
-        state.state(**kwargs)
-
-        # then
-        mock_isatty.assert_called_once_with()
+        mock_resolvecoloring.assert_called_once_with('always')
         mock_init.assert_called_once_with(strip=True)
-        mock_statusget.assert_called_once_with(
-            clear=False,
-            format_='compact',
-            ignore_extensions=[],
-            show_clean_message=True,
-            show_color='never',
-            show_status=True
-        )
-        mock_isgitrepository.assert_called_once_with()
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_called_once_with(
             mock_statustitle.return_value,
@@ -430,9 +351,9 @@ class TestStateState(unittest.TestCase):
         mock_call.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
-    @mock.patch('sys.stdout.isatty', return_value=True)
+    @mock.patch('bin.commands.utils.git.resolve_coloring')
     @mock.patch('colorama.init')
+    @mock.patch('bin.commands.settings.get', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
     @mock.patch('bin.commands.stateextensions.status.title')
@@ -442,7 +363,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_state_showcolor_autoandatty(
+    def test_state_showcolor_always(
             self,
             mock_info,
             mock_call,
@@ -453,9 +374,9 @@ class TestStateState(unittest.TestCase):
             mock_statustitle,
             mock_statusget,
             mock_isemptyrepository,
-            mock_init,
-            mock_isatty,
             mock_get,
+            mock_init,
+            mock_resolvecoloring,
             mock_isgitrepository
     ):
 
@@ -469,6 +390,7 @@ class TestStateState(unittest.TestCase):
             'ignore_extensions': []
         }
 
+        mock_resolvecoloring.return_value = 'always'
         mock_statusget.return_value = 'status output'
         mock_statustitle.return_value = 'status title'
         mock_statusaccent.return_value = 'status accent'
@@ -479,8 +401,6 @@ class TestStateState(unittest.TestCase):
         state.state(**kwargs)
 
         # then
-        mock_isatty.assert_called_once_with()
-        mock_init.assert_called_once_with()
         mock_statusget.assert_called_once_with(
             clear=False,
             format_='compact',
@@ -490,6 +410,8 @@ class TestStateState(unittest.TestCase):
             show_status=True
         )
         mock_isgitrepository.assert_called_once_with()
+        mock_resolvecoloring.assert_called_once_with('auto')
+        mock_init.assert_called_once_with(strip=False)
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_called_once_with(
             mock_statustitle.return_value,

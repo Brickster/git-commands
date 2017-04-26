@@ -627,6 +627,61 @@ class TestChangesGetAssociation(unittest.TestCase):
 
 class TestChangesChanges(unittest.TestCase):
 
+    def test_changes_details_invalidoption(self):
+
+        # when
+        try:
+            changes.changes('HEAD', details='invalid')
+            self.fail('expected AssertionError but found none')  # pragma: no cover
+        except AssertionError as error:
+            # then
+            self.assertEqual(error.message, 'details must be one of ' + str(('diff', 'stat', 'count')))
+
+    def test_changes_color_invalidcolor(self):
+
+        # when
+        try:
+            changes.changes('HEAD', color_when='invalid')
+            self.fail('expected AssertionError but found none')  # pragma: no cover
+        except AssertionError as error:
+            # then
+            self.assertEqual(error.message, 'color_when must be one of ' + str(('always', 'auto', 'never')))
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
+    @mock.patch('os.getcwd', return_value='/working/dir')
+    def test_changes_notagitrepository(self, mock_getcwd, mock_error, mock_isgitrepository):
+
+        # when
+        try:
+            changes.changes('HEAD')
+            self.fail('expected to exit but did not')  # pragma: no cover
+        except SystemExit:
+            pass
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_error.assert_called_once_with("'/working/dir' not a git repository")
+        mock_getcwd.assert_called_once_with()
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_commit', return_value=False)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
+    def test_changes_notacommit(self, mock_error, mock_iscommit, mock_isgitrepository):
+
+        # when
+        committish = 'commit-ish'
+        try:
+            changes.changes(committish)
+            self.fail('expected to exit but did not')  # pragma: no cover
+        except SystemExit:
+            pass
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_iscommit.assert_called_once_with(committish)
+        mock_error.assert_called_once_with('{0!r} is not a valid commit'.format(committish))
+
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
@@ -695,41 +750,6 @@ class TestChangesChanges(unittest.TestCase):
         )
         mock_checkoutput.assert_not_called()
 
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
-    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
-    @mock.patch('os.getcwd', return_value='/working/dir')
-    def test_changes_notagitrepository(self, mock_getcwd, mock_error, mock_isgitrepository):
-
-        # when
-        try:
-            changes.changes('HEAD')
-            self.fail('expected to exit but did not')  # pragma: no cover
-        except SystemExit:
-            pass
-
-        # then
-        mock_isgitrepository.assert_called_once_with()
-        mock_error.assert_called_once_with("'/working/dir' not a git repository")
-        mock_getcwd.assert_called_once_with()
-
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.utils.git.is_commit', return_value=False)
-    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
-    def test_changes_notacommit(self, mock_error, mock_iscommit, mock_isgitrepository):
-
-        # when
-        committish = 'commit-ish'
-        try:
-            changes.changes(committish)
-            self.fail('expected to exit but did not')  # pragma: no cover
-        except SystemExit:
-            pass
-
-        # then
-        mock_isgitrepository.assert_called_once_with()
-        mock_iscommit.assert_called_once_with(committish)
-        mock_error.assert_called_once_with('{0!r} is not a valid commit'.format(committish))
-
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=True)
@@ -766,10 +786,10 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.settings.get')
-    @mock.patch('sys.stdout.isatty')
+    @mock.patch('bin.commands.utils.git.resolve_coloring', return_value='always')
     @mock.patch('subprocess.call')
-    def test_changes_color_never(
-            self, mock_call, mock_isatty, mock_get, mock_isref, mock_iscommit, mock_isgitrepository
+    def test_changes_color(
+            self, mock_call, mock_resolvecoloring, mock_get, mock_isref, mock_iscommit, mock_isgitrepository
     ):
 
         # when
@@ -778,80 +798,38 @@ class TestChangesChanges(unittest.TestCase):
 
         # then
         mock_get.assert_not_called()
-        mock_isatty.assert_not_called()
-        mock_call.assert_called_once_with(['git', 'log', '--oneline', 'HEAD..HEAD', '--color=' + color_when])
-
-    def test_changes_color_invalidcolor(self):
-
-        # when
-        try:
-            changes.changes('HEAD', color_when='invalid')
-            self.fail('expected AssertionError but found none')  # pragma: no cover
-        except AssertionError as error:
-            # then
-            self.assertEqual(error.message, 'color_when must be one of ' + str(('always', 'auto', 'never')))
+        mock_resolvecoloring.assert_called_once_with(color_when)
+        mock_call.assert_called_once_with(['git', 'log', '--oneline', 'HEAD..HEAD', '--color=always'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.settings.get', return_value='always')
+    @mock.patch('bin.commands.utils.git.resolve_coloring', return_value='never')
     @mock.patch('subprocess.call')
-    def test_changes_color_nonespecified(self, mock_call, mock_get, mock_isref, mock_iscommit, mock_isgetrepository):
+    def test_changes_color_nonespecified(self, mock_call, mock_resolvecoloring, mock_get, mock_isref, mock_iscommit, mock_isgetrepository):
 
         # when
         changes.changes('HEAD', color_when=None)
 
         # then
         mock_get.assert_called_once_with('color.ui', default='auto')
-        mock_call.assert_called_once_with(['git', 'log', '--oneline', 'HEAD..HEAD', '--color=always'])
+        mock_resolvecoloring.assert_called_once_with('always')
+        mock_call.assert_called_once_with(['git', 'log', '--oneline', 'HEAD..HEAD', '--color=never'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
-    @mock.patch('bin.commands.settings.get')
-    @mock.patch('sys.stdout.isatty', return_value=False)
+    @mock.patch('bin.commands.utils.git.resolve_coloring')
     @mock.patch('subprocess.call')
-    def test_changes_color_auto_notatty(
-            self, mock_call, mock_isatty, mock_get, mock_isref, mock_iscommit, mock_isgitrepository
-    ):
+    def test_changes_details_diff(self, mock_call, mock_resolvecoloring, mock_isref, mock_iscommit, mock_isgitrepository):
 
-        # when
-        color_when = 'auto'
-        changes.changes('HEAD', color_when=color_when)
-
-        # then
-        mock_get.assert_not_called()
-        mock_isatty.assert_called_once_with()
-        mock_call.assert_called_once_with('git log --oneline HEAD..HEAD --color=never'.split())
-
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
-    @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
-    @mock.patch('bin.commands.settings.get')
-    @mock.patch('sys.stdout.isatty', return_value=True)
-    @mock.patch('subprocess.call')
-    def test_changes_color_auto_isatty(
-            self, mock_call, mock_isatty, mock_get, mock_isref, mock_iscommit, mock_isgitrepository
-    ):
-
-        # when
-        color_when = 'auto'
-        changes.changes('HEAD', color_when=color_when)
-
-        # then
-        mock_get.assert_not_called()
-        mock_isatty.assert_has_calls([mock.call(), mock.call()])
-        mock_call.assert_called_once_with('git log --oneline HEAD..HEAD --color=always'.split())
-
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
-    @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
-    @mock.patch('subprocess.call')
-    def test_changes_details_diff(self, mock_call, mock_isref, mock_iscommit, mock_isgitrepository):
-
-        # when
+        # given
         committish = 'commit-ish'
         color_when = 'never'
+        mock_resolvecoloring.return_value = color_when
+
+        # when
         changes.changes(committish, details='diff', color_when=color_when)
 
         # then
@@ -863,12 +841,16 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
+    @mock.patch('bin.commands.utils.git.resolve_coloring')
     @mock.patch('subprocess.call')
-    def test_changes_details_stat(self, mock_call, mock_isref, mock_iscommit, mock_isgitrepository):
+    def test_changes_details_stat(self, mock_call, mock_resolvecoloring, mock_isref, mock_iscommit, mock_isgitrepository):
 
-        # when
+        # given
         committish = 'commit-ish'
         color_when = 'never'
+        mock_resolvecoloring.return_value = color_when
+
+        # when
         changes.changes(committish, details='stat', color_when=color_when)
 
         # then
@@ -882,17 +864,19 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
+    @mock.patch('bin.commands.utils.git.resolve_coloring')
     @mock.patch('subprocess.check_output')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_changes_details_count(self, mock_info, mock_checkoutput, mock_isref, mock_iscommit, mock_isgitrepository):
+    def test_changes_details_count(self, mock_info, mock_checkoutput, mock_resolvecoloring, mock_isref, mock_iscommit, mock_isgitrepository):
 
-        # setup
-        log = ['one', 'two', 'three']
-        mock_checkoutput.return_value = '\n'.join(log) + '\n'
-
-        # when
+        # given
         committish = 'commit-ish'
         color_when = 'never'
+        log = ['one', 'two', 'three']
+        mock_checkoutput.return_value = '\n'.join(log) + '\n'
+        mock_resolvecoloring.return_value = color_when
+
+        # when
         changes.changes(committish, details='count', color_when=color_when)
 
         # then
@@ -902,12 +886,3 @@ class TestChangesChanges(unittest.TestCase):
         mock_checkoutput.assert_called_once_with(['git', 'log', '--oneline', '{}..HEAD'.format(committish)])
         mock_info.assert_called_once_with(str(len(log)))
 
-    def test_changes_details_invalidoption(self):
-
-        # when
-        try:
-            changes.changes('HEAD', details='invalid')
-            self.fail('expected AssertionError but found none')  # pragma: no cover
-        except AssertionError as error:
-            # then
-            self.assertEqual(error.message, 'details must be one of ' + str(('diff', 'stat', 'count')))
