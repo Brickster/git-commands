@@ -67,7 +67,8 @@ def _run(files_to_tuck, message, quiet):
     result_message = subprocess.check_output(stash_command)
 
     # restore the original state then clean the working tree of the files we stashed
-    subprocess.call(['git', 'stash', 'pop', '--quiet', '--index', 'stash@{1}'])
+    with open(os.devnull, 'w') as dev_null:
+        subprocess.call(['git', 'stash', 'pop', '--quiet', '--index', 'stash@{1}'], stdout=dev_null, stderr=dev_null)
     subprocess.call(['git', 'reset', '--quiet', '--'] + files_to_tuck)
 
     # checkout will complain about new files so find them and handle them accordingly

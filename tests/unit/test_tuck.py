@@ -221,7 +221,7 @@ class TestTuck(unittest.TestCase):
             mock.call(['git', 'reset', '--quiet', '--', '.'] + ignore_files),
             mock.call(['git', 'checkout', '--quiet', '--', '.'] + ignore_files),
             mock.call(['git', 'clean', '--quiet', '-d', '--force', '--', '.'] + ignore_files),
-            mock.call(['git', 'stash', 'pop', '--quiet', '--index', 'stash@{1}']),
+            mock.call(['git', 'stash', 'pop', '--quiet', '--index', 'stash@{1}'], stdout=mock.ANY, stderr=mock.ANY),
             mock.call(['git', 'reset', '--quiet', '--'] + files_to_tuck),
             mock.call(['git', 'checkout', '--quiet', '--'] + files_to_tuck)
         ])
@@ -270,7 +270,7 @@ class TestTuck(unittest.TestCase):
             mock.call(['git', 'reset', '--quiet', '--', '.'] + ignore_files),
             mock.call(['git', 'checkout', '--quiet', '--', '.'] + ignore_files),
             mock.call(['git', 'clean', '--quiet', '-d', '--force', '--', '.'] + ignore_files),
-            mock.call(['git', 'stash', 'pop', '--quiet', '--index', 'stash@{1}']),
+            mock.call(['git', 'stash', 'pop', '--quiet', '--index', 'stash@{1}'], stdout=mock.ANY, stderr=mock.ANY),
             mock.call(['git', 'reset', '--quiet', '--'] + files_to_tuck),
             mock.call(['git', 'checkout', '--quiet', '--', 'a']),
             mock.call(['git', 'clean', '--quiet', '-d', '--force', '--'] + new_files)
@@ -307,7 +307,7 @@ class TestTuck(unittest.TestCase):
             mock.call(['git', 'reset', '--quiet', '--', '.'] + ignore_files),
             mock.call(['git', 'checkout', '--quiet', '--', '.'] + ignore_files),
             mock.call(['git', 'clean', '--quiet', '-d', '--force', '--', '.'] + ignore_files),
-            mock.call(['git', 'stash', 'pop', '--quiet', '--index', 'stash@{1}']),
+            mock.call(['git', 'stash', 'pop', '--quiet', '--index', 'stash@{1}'], stdout=mock.ANY, stderr=mock.ANY),
             mock.call(['git', 'reset', '--quiet', '--'] + files_to_tuck),
             mock.call(['git', 'checkout', '--quiet', '--'] + files_to_tuck)
         ])

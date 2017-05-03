@@ -120,6 +120,41 @@ class TestIssue104(unittest.TestCase):
             subprocess.check_output('git changes unassociate --prune'.split(), stderr=subprocess.STDOUT).strip())
 
 
+class TestIssue105(unittest.TestCase):
+    """
+    Tucking new files occasionally prints an error but ultimately works.
+
+    Due to the nature of this issue the tests are not very efficient. Meaning, they need to run enough times to be
+    confident the issue would occur.
+    """
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+
+        # initialize repository
+        self.repo = git.Repo.init(self.dirpath)
+        open('README.md', 'w').close()
+        self.repo.index.add(['README.md'])
+        self.repo.index.commit('Initial commit')
+
+        # add a new file
+        open('CHANGELOG.md', 'w').close()
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        """Issue 105: tucking new files should never print more detail than a stash would"""
+
+        for i in xrange(5):
+            tuck_output = self.repo.git.tuck('--', 'CHANGELOG.md')
+            self.assertNotIn("error: pathspec 'CONTRIBUTING.md' did not match any file(s) known to git.", tuck_output)
+            self.assertNotIn('Already up-to-date!', tuck_output)
+            self.assertEqual(2, len(tuck_output.splitlines()))
+            self.repo.git.stash('pop')
+
+
 class TestIssue106(unittest.TestCase):
     """Associating when detached uses HEAD as branch"""
 
