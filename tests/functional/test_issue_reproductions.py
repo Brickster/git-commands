@@ -291,3 +291,51 @@ Leaving working directory:
 
 """
         self.assertEqual(subprocess.check_output('git tuck --dry-run --no-color -- README.md'.split()), expected)
+
+
+class TestIssue115(unittest.TestCase):
+    """
+    Tuck occasionally drops unrelated stashes
+
+    Due to the nature of this issue the tests are not very efficient. Meaning, they need to run enough times to be
+    confident the issue would occur.
+    """
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+
+        # initialize repository with a README
+        self.repo = git.Repo.init(self.dirpath)
+        open('README.md', 'w').close()
+        self.repo.index.add(['README.md'])
+        self.repo.index.commit('Initial commit')
+
+        # edit the README and snapshot it
+        with open('README.md', 'w') as readme_file:
+            readme_file.write('a')
+        self.repo.git.stash()
+        self.repo.git.stash('apply')
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test_unnamed(self):
+        """Issue 114: Tuck should never remove previous stashes when unnamed"""
+
+        for i in xrange(5):
+            self.repo.git.tuck('--', 'README.md')
+            self.repo.git.stash('pop')
+
+        stashes = self.repo.git.stash('list').splitlines()
+        self.assertEqual(len(stashes), 1)
+
+    def test_named(self):
+        """Issue 114: Tuck should never remove previous stashes when named"""
+
+        for i in xrange(5):
+            self.repo.git.tuck('snapshot', '--', 'README.md')
+            self.repo.git.stash('pop')
+
+        stashes = self.repo.git.stash('list').splitlines()
+        self.assertEqual(len(stashes), 1)

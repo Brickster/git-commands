@@ -4,6 +4,7 @@ import os
 import re
 import subprocess
 import sys
+import uuid
 
 import snapshot
 from utils import directories, git, messages
@@ -49,7 +50,9 @@ def _run(files_to_tuck, message, quiet):
     if not files_to_tuck:
         messages.error('no files to tuck')
 
-    snapshot.snapshot(None, False)  # TODO: possibly use `git stash create`?
+    # create a snapshot to be used later to restore the untucked files. Named uniquely to guarantee the stash will be
+    # created even if it collides with a previous stash created within the last second.
+    snapshot.snapshot('tuck snapshot ' + str(uuid.uuid4()), False)
 
     # clean the working tree of any files we won't stash
     ignore_files = [':!{}'.format(f) for f in files_to_tuck]

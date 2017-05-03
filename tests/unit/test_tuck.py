@@ -1,5 +1,6 @@
 import mock
 import unittest
+import uuid
 from subprocess import PIPE
 
 import testutils
@@ -194,11 +195,12 @@ class TestTuck(unittest.TestCase):
             'specifying files is not compatible with indexing option: index={}'.format(indexed)
         )
 
+    @mock.patch('uuid.uuid4')
     @mock.patch('bin.commands.snapshot.snapshot')
     @mock.patch('subprocess.call')
     @mock.patch('subprocess.check_output')
     @mock.patch('bin.commands.utils.messages.info')
-    def test__run(self, mock_info, mock_checkoutput, mock_call, mock_snapshot):
+    def test__run(self, mock_info, mock_checkoutput, mock_call, mock_snapshot, mock_uuid4):
 
         # given
         files_to_tuck = ['a', 'b']
@@ -208,12 +210,13 @@ class TestTuck(unittest.TestCase):
         stash_message = 'stash message'
         new_files = ''
         mock_checkoutput.side_effect = [stash_message + '\n', new_files]
+        mock_uuid4.return_value = uuid.UUID(bytes=b'abcdefghijklmnop')  # 61626364-6566-6768-696a-6b6c6d6e6f70
 
         # when
         tuck._run(files_to_tuck, message, quiet)
 
         # then
-        mock_snapshot.assert_called_once_with(None, False)
+        mock_snapshot.assert_called_once_with('tuck snapshot 61626364-6566-6768-696a-6b6c6d6e6f70', False)
         mock_call.assert_has_calls([
             mock.call(['git', 'reset', '--quiet', '--', '.'] + ignore_files),
             mock.call(['git', 'checkout', '--quiet', '--', '.'] + ignore_files),
@@ -241,11 +244,12 @@ class TestTuck(unittest.TestCase):
         # then
         mock_error.assert_called_once_with('no files to tuck')
 
+    @mock.patch('uuid.uuid4')
     @mock.patch('bin.commands.snapshot.snapshot')
     @mock.patch('subprocess.call')
     @mock.patch('subprocess.check_output')
     @mock.patch('bin.commands.utils.messages.info')
-    def test__run_noMessage(self, mock_info, mock_checkoutput, mock_call, mock_snapshot):
+    def test__run_noMessage(self, mock_info, mock_checkoutput, mock_call, mock_snapshot, mock_uuid4):
 
         # given
         files_to_tuck = ['a', 'b']
@@ -255,12 +259,13 @@ class TestTuck(unittest.TestCase):
         stash_message = 'stash message'
         new_files = ['b', 'c']
         mock_checkoutput.side_effect = [stash_message + '\n', '\n'.join(new_files)]
+        mock_uuid4.return_value = uuid.UUID(bytes=b'abcdefghijklmnop')  # 61626364-6566-6768-696a-6b6c6d6e6f70
 
         # when
         tuck._run(files_to_tuck, message, quiet)
 
         # then
-        mock_snapshot.assert_called_once_with(None, False)
+        mock_snapshot.assert_called_once_with('tuck snapshot 61626364-6566-6768-696a-6b6c6d6e6f70', False)
         mock_call.assert_has_calls([
             mock.call(['git', 'reset', '--quiet', '--', '.'] + ignore_files),
             mock.call(['git', 'checkout', '--quiet', '--', '.'] + ignore_files),
@@ -276,11 +281,12 @@ class TestTuck(unittest.TestCase):
         ])
         mock_info.assert_called_once_with(stash_message, quiet)
 
+    @mock.patch('uuid.uuid4')
     @mock.patch('bin.commands.snapshot.snapshot')
     @mock.patch('subprocess.call')
     @mock.patch('subprocess.check_output')
     @mock.patch('bin.commands.utils.messages.info')
-    def test__run_withNewFiles(self, mock_info, mock_checkoutput, mock_call, mock_snapshot):
+    def test__run_withNewFiles(self, mock_info, mock_checkoutput, mock_call, mock_snapshot, mock_uuid4):
 
         # given
         files_to_tuck = ['a', 'b']
@@ -290,12 +296,13 @@ class TestTuck(unittest.TestCase):
         stash_message = 'stash message'
         new_files = ''
         mock_checkoutput.side_effect = [stash_message + '\n', new_files]
+        mock_uuid4.return_value = uuid.UUID(bytes=b'abcdefghijklmnop')  # 61626364-6566-6768-696a-6b6c6d6e6f70
 
         # when
         tuck._run(files_to_tuck, message, quiet)
 
         # then
-        mock_snapshot.assert_called_once_with(None, False)
+        mock_snapshot.assert_called_once_with('tuck snapshot 61626364-6566-6768-696a-6b6c6d6e6f70', False)
         mock_call.assert_has_calls([
             mock.call(['git', 'reset', '--quiet', '--', '.'] + ignore_files),
             mock.call(['git', 'checkout', '--quiet', '--', '.'] + ignore_files),

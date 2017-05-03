@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file. This projec
 - `tuck` failing when including a message and specific files [#111](https://github.com/Brickstertwo/git-commands/issues/111)
 - `changes associate --upstream` failing with local upstreams [#112](https://github.com/Brickstertwo/git-commands/issues/112)
 - Tuck dry run erroneous reporting similarly named files as candidates for tucking [#113](https://github.com/Brickstertwo/git-commands/issues/113)
+- Tuck occasionally dropping the last stash [#115](https://github.com/Brickstertwo/git-commands/issues/115)
 
 ## [v0.6.1][] - 2017-01-17
 ### Fixed
