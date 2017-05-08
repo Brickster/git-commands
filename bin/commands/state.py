@@ -150,7 +150,7 @@ def state(**kwargs):
         if not kwargs.get('page', True) or terminal_lines >= state_lines + 2:  # one for the newline and one for the prompt
             if kwargs.get('clear') and sys.stdout.isatty():
                 subprocess.call('clear')
-            messages.info(state_result)  # TODO: breaks --no-color
+            messages.info(state_result)
         else:
             echo = subprocess.Popen(['echo', state_result], stdout=PIPE)
             subprocess.call(['less', '-r'], stdin=echo.stdout)
