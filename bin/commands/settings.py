@@ -62,23 +62,24 @@ def list_(section=None, config=None, count=False, keys=False, format_=None, file
 
     result = []
     if config is None:
-        all_configs = subprocess.check_output(['git', 'config', '--list']).splitlines()
+        all_configs = subprocess.check_output(['git', 'config', '--list', '--null'])
     elif file_ is not None:
-        all_configs = subprocess.check_output(['git', 'config', '--list', '--file', file_]).splitlines()
+        all_configs = subprocess.check_output(['git', 'config', '--list', '--null', '--file', file_])
     else:
-        all_configs = subprocess.check_output(['git', 'config', '--list', '--{}'.format(config)]).splitlines()
+        all_configs = subprocess.check_output(['git', 'config', '--list', '--null', '--{}'.format(config)])
+    all_configs = all_configs[:-1].split('\x00')  # strip trailing null char and split on null char
 
     if section is not None:
         config_section = []
         for config in all_configs:
-            match = re.match('^({})\.[-a-zA-Z0-9]+=.*$'.format(section), config)
+            match = re.match('^({})\.[-a-zA-Z0-9]+{}.*$'.format(section, os.linesep), config)
             if match is not None:
                 config_section += [config]
         all_configs = config_section
 
     config_map = {}
     for config in all_configs:
-        key, value = config.split('=', 1)
+        key, value = config.split(os.linesep, 1)
         config_map[key] = value
 
     if count:

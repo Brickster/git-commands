@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. This projec
 ## Fixed
 - `state--no-status` not respected for empty repositories [#93](https://github.com/Brickstertwo/git-commands/issues/93)
 - `changes view` breaking when HEAD is detached [#94](https://github.com/Brickstertwo/git-commands/issues/94)
+- `settings list` not handling values with newline characters [#95](https://github.com/Brickstertwo/git-commands/issues/95)
 - `changes unassociate` breaking when no association exists for the branch [#102](https://github.com/Brickstertwo/git-commands/issues/102)
 - `changes unassociate --prune` breaking when no associations exist [#103](https://github.com/Brickstertwo/git-commands/issues/103)
 - `changes unassociate --prune` breaking for new repositories [#104](https://github.com/Brickstertwo/git-commands/issues/104)

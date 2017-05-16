@@ -31,7 +31,7 @@ class TestIssue094(unittest.TestCase):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
-        # initialize repositorygit stat
+        # initialize repository
         repo = git.Repo.init(self.dirpath)
         open('README.md', 'w').close()
         repo.index.add(['README.md'])
@@ -51,6 +51,34 @@ class TestIssue094(unittest.TestCase):
         """Issue 094: Changes should be returned even if head is detached"""
 
         self.assertFalse(subprocess.check_output('git changes'.split(), stderr=subprocess.STDOUT).strip())
+
+
+class TestIssue095(unittest.TestCase):
+    """Settings list fails if a value contains a newline"""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+
+        # initialize repository
+        self.repo = git.Repo.init(self.dirpath)
+        open('README.md', 'w').close()
+        self.repo.index.add(['README.md'])
+        self.repo.index.commit('Initial commit')
+
+        # add config with newline
+        os.remove(self.dirpath + '/.git/config')
+        self.repo.git.config('test.withnewline', """ab
+c""")
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        """Issue 95: settings list should handle values with newlines"""
+
+        self.assertEqual(self.repo.git.settings('list', '--local'), """test.withnewline=ab
+c""")
 
 
 class TestIssue102(unittest.TestCase):

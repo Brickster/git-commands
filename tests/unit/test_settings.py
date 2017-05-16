@@ -125,7 +125,7 @@ class TestSettingsList(unittest.TestCase):
 
         # given
         config_values = ['section.key1=value1', 'section.key2=value2']
-        mock_checkoutput.return_value = os.linesep.join(config_values)
+        mock_checkoutput.return_value = '\x00'.join(config_values).replace('=', os.linesep) + '\x00'
 
         # when
         actual_values = settings.list_()
@@ -133,7 +133,7 @@ class TestSettingsList(unittest.TestCase):
         # then
         self.assertEqual(sorted(actual_values.splitlines()), config_values)
         mock_validateconfig.assert_called_once()
-        mock_checkoutput.assert_called_once_with(['git', 'config', '--list'])
+        mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 
     @mock.patch('bin.commands.settings._validate_config')
     @mock.patch('subprocess.check_output')
@@ -142,7 +142,7 @@ class TestSettingsList(unittest.TestCase):
         # given
         config_values = ['section.key1=override1', 'section.key2=value2']
         config_values_with_overrides = ['section.key1=value1'] + config_values
-        mock_checkoutput.return_value = os.linesep.join(config_values_with_overrides)
+        mock_checkoutput.return_value = '\x00'.join(config_values_with_overrides).replace('=', os.linesep) + '\x00'
 
         # when
         actual_values = settings.list_()
@@ -150,7 +150,7 @@ class TestSettingsList(unittest.TestCase):
         # then
         self.assertEqual(sorted(actual_values.splitlines()), config_values)
         mock_validateconfig.assert_called_once()
-        mock_checkoutput.assert_called_once_with(['git', 'config', '--list'])
+        mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 
     @mock.patch('bin.commands.settings._validate_config')
     @mock.patch('subprocess.check_output')
@@ -159,7 +159,7 @@ class TestSettingsList(unittest.TestCase):
         # given
         file_path = '/file/path'
         config_values = ['section.key1=value1', 'section.key2=value2']
-        mock_checkoutput.return_value = os.linesep.join(config_values)
+        mock_checkoutput.return_value = '\x00'.join(config_values).replace('=', os.linesep) + '\x00'
 
         # when
         actual_values = settings.list_(config='file', file_=file_path)
@@ -167,7 +167,7 @@ class TestSettingsList(unittest.TestCase):
         # then
         self.assertEqual(sorted(actual_values.splitlines()), config_values)
         mock_validateconfig.assert_called_once()
-        mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--file', file_path])
+        mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null', '--file', file_path])
 
     @mock.patch('bin.commands.settings._validate_config')
     @mock.patch('subprocess.check_output')
@@ -175,7 +175,7 @@ class TestSettingsList(unittest.TestCase):
 
         # given
         config_values = ['section.key1=value1', 'section.key2=value2']
-        mock_checkoutput.return_value = os.linesep.join(config_values)
+        mock_checkoutput.return_value = '\x00'.join(config_values).replace('=', os.linesep) + '\x00'
 
         # when
         actual_values = settings.list_(config='global')
@@ -183,7 +183,7 @@ class TestSettingsList(unittest.TestCase):
         # then
         self.assertEqual(sorted(actual_values.splitlines()), config_values)
         mock_validateconfig.assert_called_once()
-        mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--global'])
+        mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null', '--global'])
 
     @mock.patch('bin.commands.settings._validate_config')
     @mock.patch('subprocess.check_output')
@@ -191,7 +191,7 @@ class TestSettingsList(unittest.TestCase):
 
         # given
         config_values = ['section.key1=value1', 'section.key2=value2']
-        mock_checkoutput.return_value = os.linesep.join(config_values + ['section2.k=v'])
+        mock_checkoutput.return_value = '\x00'.join(config_values + ['section2.k=v']).replace('=', os.linesep) + '\x00'
 
         # when
         actual_values = settings.list_(section='section')
@@ -199,7 +199,7 @@ class TestSettingsList(unittest.TestCase):
         # then
         self.assertEqual(sorted(actual_values.splitlines()), config_values)
         mock_validateconfig.assert_called_once()
-        mock_checkoutput.assert_called_once_with(['git', 'config', '--list'])
+        mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 
     @mock.patch('bin.commands.settings._validate_config')
     @mock.patch('subprocess.check_output')
@@ -207,7 +207,7 @@ class TestSettingsList(unittest.TestCase):
 
         # given
         config_values = ['section.key1=value1', 'section.key2=value2']
-        mock_checkoutput.return_value = os.linesep.join(config_values)
+        mock_checkoutput.return_value = '\x00'.join(config_values).replace('=', os.linesep) + '\x00'
 
         # when
         actual_count = settings.list_(count=True)
@@ -215,7 +215,7 @@ class TestSettingsList(unittest.TestCase):
         # then
         self.assertEqual(actual_count, '2')
         mock_validateconfig.assert_called_once()
-        mock_checkoutput.assert_called_once_with(['git', 'config', '--list'])
+        mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 
     @mock.patch('bin.commands.settings._validate_config')
     @mock.patch('subprocess.check_output')
@@ -223,7 +223,7 @@ class TestSettingsList(unittest.TestCase):
 
         # given
         config_values = ['section.key1=value1', 'section.key2=value2']
-        mock_checkoutput.return_value = os.linesep.join(config_values)
+        mock_checkoutput.return_value = '\x00'.join(config_values).replace('=', os.linesep) + '\x00'
 
         # when
         actual_values = settings.list_(keys=True)
@@ -231,7 +231,7 @@ class TestSettingsList(unittest.TestCase):
         # then
         self.assertEqual(sorted(actual_values.splitlines()), ['key1', 'key2'])
         mock_validateconfig.assert_called_once()
-        mock_checkoutput.assert_called_once_with(['git', 'config', '--list'])
+        mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 
     @mock.patch('bin.commands.settings._validate_config')
     @mock.patch('bin.commands.settings._pretty_format_configs')
@@ -240,7 +240,7 @@ class TestSettingsList(unittest.TestCase):
 
         # given
         config_values = ['section.keys.key1=value1', 'section.keys.key2=value2', 'sec.key=value']
-        mock_checkoutput.return_value = os.linesep.join(config_values)
+        mock_checkoutput.return_value = '\x00'.join(config_values).replace('=', os.linesep) + '\x00'
         format_result = ['formatted results']
         mock_prettyformatconfig.return_value = format_result
 
@@ -250,7 +250,7 @@ class TestSettingsList(unittest.TestCase):
         # then
         self.assertEqual(pretty_output, format_result[0])
         mock_validateconfig.assert_called_once()
-        mock_checkoutput.assert_called_once_with(['git', 'config', '--list'])
+        mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 
 
 class TestSettingsDestroy(unittest.TestCase):
