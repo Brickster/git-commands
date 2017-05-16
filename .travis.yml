@@ -16,5 +16,5 @@ script:
   - git config --global user.name "Marcus Rosenow"
 
   # test
-  - nosetests --with-coverage --cover-branches --cover-erase --cover-inclusive --cover-package=bin
+  - nosetests --no-skip --with-coverage --cover-branches --cover-erase --cover-inclusive --cover-package=bin --verbose
   - codeclimate-test-reporter
