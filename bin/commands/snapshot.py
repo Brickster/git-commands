@@ -4,7 +4,6 @@ import os
 import subprocess
 from subprocess import STDOUT
 
-import tuck
 from utils import directories, messages
 
 
@@ -24,12 +23,10 @@ def snapshot(message=None, quiet=False, files=None):
 
     if len(status_output) > 0:
 
-        if files:
-            tuck.tuck(files, message=message, quiet=True)
-        else:
-            stash_command = ['git', 'stash', 'save', '--include-untracked', '--quiet']
-            stash_command = stash_command if message is None else stash_command + [message]
-            subprocess.call(stash_command)
+        stash_command = ['git', 'stash', 'push', '--include-untracked', '--quiet']
+        stash_command = stash_command if message is None else stash_command + ['--message', message]
+        stash_command = stash_command if not files else stash_command + ['--'] + files
+        subprocess.call(stash_command)
 
         # apply isn't completely quiet when the stash only contains untracked files so swallow all output
         with open(os.devnull, 'w') as devnull:

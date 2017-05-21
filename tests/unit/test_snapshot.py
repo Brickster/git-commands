@@ -21,7 +21,7 @@ class TestSnapshot(unittest.TestCase):
         mock_isgitrepository.assert_called()
         mock_checkoutput.assert_called_once_with('git status --porcelain'.split())
         mock_call.assert_has_calls([
-            mock.call('git stash save --include-untracked --quiet'.split()),
+            mock.call('git stash push --include-untracked --quiet'.split()),
             mock.call('git stash apply --quiet --index'.split(), stdout=mock.ANY, stderr=STDOUT)
         ])
         self.assertEqual(mock_call.call_args[1]['stdout'].name, os.devnull)
@@ -38,15 +38,14 @@ class TestSnapshot(unittest.TestCase):
         mock_isgitrepository.assert_called()
         mock_checkoutput.assert_called_once_with('git status --porcelain'.split())
         mock_call.assert_has_calls([
-            mock.call(['git', 'stash', 'save', '--include-untracked', '--quiet', message]),
+            mock.call(['git', 'stash', 'push', '--include-untracked', '--quiet', '--message', message]),
             mock.call('git stash apply --quiet --index'.split(), stdout=mock.ANY, stderr=STDOUT)
         ])
         self.assertEqual(mock_call.call_args[1]['stdout'].name, os.devnull)
 
     @mock.patch('subprocess.check_output', return_value='status\noutput\n')
-    @mock.patch('bin.commands.tuck.tuck')
     @mock.patch('subprocess.call')
-    def test_snapshot_withFiles(self, mock_call, mock_tuck, mock_checkoutput, mock_isgitrepository):
+    def test_snapshot_withFiles(self, mock_call, mock_checkoutput, mock_isgitrepository):
 
         # when
         message = None
@@ -56,8 +55,28 @@ class TestSnapshot(unittest.TestCase):
         # then
         mock_isgitrepository.assert_called()
         mock_checkoutput.assert_called_once_with('git status --porcelain'.split())
-        mock_tuck.assert_called_once_with(files, message=message, quiet=True)
-        mock_call.assert_called_once_with('git stash apply --quiet --index'.split(), stdout=mock.ANY, stderr=STDOUT)
+        mock_call.assert_has_calls([
+            mock.call(['git', 'stash', 'push', '--include-untracked', '--quiet', '--'] + files),
+            mock.call('git stash apply --quiet --index'.split(), stdout=mock.ANY, stderr=STDOUT)
+        ])
+        self.assertEqual(mock_call.call_args[1]['stdout'].name, os.devnull)
+
+    @mock.patch('subprocess.check_output', return_value='status\noutput\n')
+    @mock.patch('subprocess.call')
+    def test_snapshot_withFilesAndMessages(self, mock_call, mock_checkoutput, mock_isgitrepository):
+
+        # when
+        message = 'the message'
+        files = ['file1', 'file2']
+        snapshot.snapshot(message, files=files)
+
+        # then
+        mock_isgitrepository.assert_called()
+        mock_checkoutput.assert_called_once_with('git status --porcelain'.split())
+        mock_call.assert_has_calls([
+            mock.call(['git', 'stash', 'push', '--include-untracked', '--quiet', '--message', message, '--'] + files),
+            mock.call('git stash apply --quiet --index'.split(), stdout=mock.ANY, stderr=STDOUT)
+        ])
         self.assertEqual(mock_call.call_args[1]['stdout'].name, os.devnull)
 
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)

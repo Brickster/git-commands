@@ -114,19 +114,6 @@ git restash (-h|--help)
 git restash (-v|--version)
 ```
 
-### [tuck][]
-
-Used to stash specific files rather than the all-or-nothing style of `git stash`.
-
-```bash
-git tuck [MESSAGE] [(-i|--ignore-deleted)|(-I|--no-ignore-deleted)]
-         [(-c|--color) [WHEN]|(-C|--no-color)]
-         [(-x|--indexed)|(-X|--unindexed)]
-         [(-d|--dry-run)|(-q|--quiet)] -- FILE [FILE ...]
-git tuck (-h|--help)
-git tuck (-v|--version)
-```
-
 ### [reindex][]
 
 Used to re-add already indexed files to the index.
@@ -148,5 +135,4 @@ git reindex (-v|--version)
 [upstream]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-upstream.1.html
 [abandon]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-abandon.1.html
 [restash]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-restash.1.html
-[tuck]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-tuck.1.html
 [reindex]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-reindex.1.html
