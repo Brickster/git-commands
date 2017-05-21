@@ -67,6 +67,9 @@ def list_(section=None, config=None, count=False, keys=False, format_=None, file
         all_configs = subprocess.check_output(['git', 'config', '--list', '--null', '--file', file_])
     else:
         all_configs = subprocess.check_output(['git', 'config', '--list', '--null', '--{}'.format(config)])
+
+    if not all_configs:
+        return None
     all_configs = all_configs[:-1].split('\x00')  # strip trailing null char and split on null char
 
     if section is not None:

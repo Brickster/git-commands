@@ -281,3 +281,25 @@ class TestIssue112(unittest.TestCase):
             subprocess.check_output('git changes associate --upstream'.split()).strip(),
             'develop has been associated with refs/heads/master'
         )
+
+
+class TestIssue121(unittest.TestCase):
+    """Settings list fails when the config file is empty"""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+
+        # initialize repository
+        self.repo = git.Repo.init(self.dirpath)
+        os.remove(self.dirpath + '/.git/config')
+        open(self.dirpath + '/.git/config', 'w').close()
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        """Issue 121: settings list should not fail with blank config files"""
+
+        self.assertFalse(self.repo.git.settings('list', '--local'))
+        self.assertFalse(self.repo.git.settings('list', '--file', self.dirpath + '/.git/config'))

@@ -187,6 +187,21 @@ class TestSettingsList(unittest.TestCase):
 
     @mock.patch('bin.commands.settings._validate_config')
     @mock.patch('subprocess.check_output')
+    def test_list_noConfigsFound(self, mock_checkoutput, mock_validateconfig):
+
+        # given
+        mock_checkoutput.return_value = ''
+
+        # when
+        actual_values = settings.list_(config='system')
+
+        # then
+        self.assertFalse(actual_values)
+        mock_validateconfig.assert_called_once()
+        mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null', '--system'])
+
+    @mock.patch('bin.commands.settings._validate_config')
+    @mock.patch('subprocess.check_output')
     def test_list_withSection(self, mock_checkoutput, mock_validateconfig):
 
         # given
