@@ -153,8 +153,9 @@ class TestSettingsList(unittest.TestCase):
         mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 
     @mock.patch('bin.commands.settings._validate_config')
+    @mock.patch('os.path.exists', return_value=True)
     @mock.patch('subprocess.check_output')
-    def test_list_withFile(self, mock_checkoutput, mock_validateconfig):
+    def test_list_withFile(self, mock_checkoutput, mock_exists, mock_validateconfig):
 
         # given
         file_path = '/file/path'
@@ -167,7 +168,27 @@ class TestSettingsList(unittest.TestCase):
         # then
         self.assertEqual(sorted(actual_values.splitlines()), config_values)
         mock_validateconfig.assert_called_once()
+        mock_exists.assert_called_once_with(file_path)
         mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null', '--file', file_path])
+
+    @mock.patch('bin.commands.settings._validate_config')
+    @mock.patch('os.path.exists', return_value=False)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
+    def test_list_withFile_filesDoesNotExist(self, mock_error, mock_exists, mock_validateconfig):
+
+        # given
+        unknown_file = 'unknown_file'
+
+        # when
+        try:
+            settings.list_(config='file', file_=unknown_file)
+            self.fail('expected to exit but did not')  # pragma: no cover
+        except SystemExit:
+            pass
+
+        # then
+        mock_validateconfig.assert_called_once()
+        mock_error.assert_called_once_with('no such file {!r}'.format(unknown_file))
 
     @mock.patch('bin.commands.settings._validate_config')
     @mock.patch('subprocess.check_output')

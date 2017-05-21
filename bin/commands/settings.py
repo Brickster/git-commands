@@ -64,6 +64,8 @@ def list_(section=None, config=None, count=False, keys=False, format_=None, file
     if config is None:
         all_configs = subprocess.check_output(['git', 'config', '--list', '--null'])
     elif file_ is not None:
+        if not os.path.exists(file_):
+            messages.error('no such file {!r}'.format(file_))
         all_configs = subprocess.check_output(['git', 'config', '--list', '--null', '--file', file_])
     else:
         all_configs = subprocess.check_output(['git', 'config', '--list', '--null', '--{}'.format(config)])
