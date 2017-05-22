@@ -35,12 +35,8 @@ def append_list(value):
     return AppendList
 
 
-# TODO: is const necessary? Can self.const be used?
-def optional_list(const):
-    """Return an OptionalList action with a given const value.
-
-    :param const: constant to use when no values are present
-    """
+def optional_list():
+    """Return an OptionalList action."""
 
     class OptionalList(argparse.Action):
         """An action that supports an optional list of arguments.
@@ -50,7 +46,7 @@ def optional_list(const):
         """
 
         def __call__(self, parser, namespace, values, option_string=None):
-            setattr(namespace, self.dest, values if values else const)
+            setattr(namespace, self.dest, values if values else self.const)
     return OptionalList
 
 

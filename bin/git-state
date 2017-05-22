@@ -152,13 +152,14 @@ def main():
         '--ignore-extensions',
         help='a list of extensions to ignore',
         nargs='*',
-        action=optional_list(settings.list_(
+        action=optional_list(),
+        const=settings.list_(
             'git-state.extensions',
             config=None,
             count=False,
             keys=True,
             format_=None
-        ).splitlines()),
+        ).splitlines(),
         default=[],
         metavar='EXTENSION'
     )

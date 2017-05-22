@@ -79,7 +79,7 @@ class TestOptionalList(unittest.TestCase):
         value = 'v'
         destination = 'd'
         const = 'c'
-        action = parse_actions.optional_list(const)(None, destination)
+        action = parse_actions.optional_list()(None, destination)
         namespace = Namespace()
 
         # when
@@ -93,7 +93,7 @@ class TestOptionalList(unittest.TestCase):
         # given
         destination = 'd'
         const = 'c'
-        action = parse_actions.optional_list(const)(None, destination)
+        action = parse_actions.optional_list()(None, destination, const=const)
         namespace = Namespace()
 
         # when
