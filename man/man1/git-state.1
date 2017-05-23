@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-STATE" "1" "January 2017" "" ""
+.TH "GIT\-STATE" "1" "May 2017" "" ""
 .
 .SH "NAME"
 \fBgit\-state\fR \- a customizable view for the state of a working tree
@@ -11,6 +11,9 @@
 .
 .br
 \~\~\~\~\~\~\~\~\~\~[\fB\-\-show\-*\fR] [\fB\-\-no\-show\-*\fR]
+.
+.br
+\~\~\~\~\~\~\~\~\~\~[\fB\-\-no\-show\-all\fR] [\fB\-\-no\-show\fR [\fIextension\fR \.\.\.]]
 .
 .br
 \~\~\~\~\~\~\~\~\~\~[(\fB\-e\fR|\fB\-\-show\-empty\fR)] [(\fB\-E\fR|\fB\-\-no\-show\-empty\fR)]
@@ -23,9 +26,6 @@
 .
 .br
 \~\~\~\~\~\~\~\~\~\~[\fB\-\-clear\fR] [\fB\-\-no\-clear\fR] [\fB\-\-no\-page\fR]
-.
-.br
-\~\~\~\~\~\~\~\~\~\~[\fB\-\-ignore\-extensions\fR [\fIextension\fR \.\.\.]]
 .
 .br
 \~\~\~\~\~\~\~\~\~\~[(\fB\-o\fR|\fB\-\-order\fR) \fIsection\fR [\fIsection\fR \.\.\.]]
@@ -78,6 +78,14 @@ The show flag is \fB\-\-show\-last\-ten\-commits\fR\.
 Hide extension *\.
 .
 .TP
+\fB\-\-no\-show\-all\fR
+Hide all extensions\.
+.
+.TP
+\fB\-\-no\-show\fR [\fIextension\fR \.\.\.]
+A list of extensions to hide\. If none are specified, all of them will be hidden\. See \fB\fIEXTENSIONS\fR\fR section for more detail\.
+.
+.TP
 \fB\-e\fR|\fB\-\-show\-empty\fR
 Show empty sections rather than omitting them\.
 .
@@ -112,10 +120,6 @@ Do not clear the screen before printing\.
 .TP
 \fB\-\-no\-page\fR
 Do not page output if it exceeds the terminal window\.
-.
-.TP
-\fB\-\-ignore\-extensions\fR [\fIextension\fR \.\.\.]
-A list of extensions to ignore when printing\. If none are specified, all of them will be ignored\. See \fB\fIEXTENSIONS\fR\fR section for more detail\.
 .
 .TP
 \fB\-o\fR|\fB\-\-order\fR \fIsection\fR [\fIsection\fR \.\.\.]
@@ -269,7 +273,7 @@ Options can be handled per configuration by setting \fBgit\-state\.extensions\.*
 An extension can be hidden by setting \fBgit\-state\.extensions\.*\.show\fR to \fBfalse\fR\. This is useful for globally defined extensions that aren\'t needed for all repositories\.
 .
 .P
-Alternatively, an extension can be ignored by listing it in \fB\-\-ignore\-extensions\fR [\fIextension\fR \.\.\.]\.
+Alternatively, an extension can be hidden by listing it in \fB\-\-no\-show\fR [\fIextension\fR \.\.\.] or using the flag \fB\-\-no\-show\-*\fR\.
 .
 .SH "SEE ALSO"
 git\-status(1), git\-config(1)

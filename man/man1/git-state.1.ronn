@@ -4,11 +4,11 @@
 
 `git state` [(`-s`|`--status`)] [(`-S`|`--no-status`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--show-*`] [`--no-show-*`]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--no-show-all`] [`--no-show` [<extension> ...]]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-c`|`--color`) [<when>]] [(`-C`|`--no-color`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--clear`] [`--no-clear`] [`--no-page`]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--ignore-extensions` [<extension> ...]]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--order`) <section> [<section> ...]]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-O`|`--options`) _option_ [_option_ ...]]<br>
 `git state` (`-h`|`--help`)<br>
@@ -43,6 +43,12 @@ Used to see a more concise and comprehensive view of the working directory throu
 * `--no-show-*`:
     Hide extension *.
 
+* `--no-show-all`:
+    Hide all extensions.
+
+* `--no-show` [<extension> ...]:
+	A list of extensions to hide. If none are specified, all of them will be hidden. See **[EXTENSIONS][]** section for more detail.
+
 * `-e`|`--show-empty`:
     Show empty sections rather than omitting them.
 
@@ -69,9 +75,6 @@ Used to see a more concise and comprehensive view of the working directory throu
 
 * `--no-page`:
     Do not page output if it exceeds the terminal window.
-
-* `--ignore-extensions` [<extension> ...]:
-	A list of extensions to ignore when printing. If none are specified, all of them will be ignored. See **[EXTENSIONS][]** section for more detail.
 
 * `-o`|`--order` <section> [<section> ...]:
 	A custom section order.
@@ -188,7 +191,7 @@ Options can be handled per configuration by setting `git-state.extensions.*.opti
 ### Hide an Extension
 An extension can be hidden by setting `git-state.extensions.*.show` to `false`. This is useful for globally defined extensions that aren't needed for all repositories.
 
-Alternatively, an extension can be ignored by listing it in `--ignore-extensions` [<extension> ...].
+Alternatively, an extension can be hidden by listing it in `--no-show` [<extension> ...] or using the flag `--no-show-*`.
 
 ## SEE ALSO
 

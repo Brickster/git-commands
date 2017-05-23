@@ -34,11 +34,11 @@ Used to see a more concise and comprehensive view of the working directory throu
 ```bash
 git state [(-s|--status)] [(-S|--no-status)]
           [--show-*] [--no-show-*]  # for each custom extension
+          [--no-show-all] [--no-show [EXTENSION ...]]
           [(-e|--show-empty)] [(-E|--no-show-empty)]
           [(-c|--color) [WHEN]] [(-C|--no-color)]
           [(-p|--pretty)] [(-f|--format) FORMAT]
           [--clear] [--no-clear] [--no-page]
-          [--ignore-extensions [EXTENSION ...]]
           [(-o|--order) SECTION [SECTION ...]]
           [(-O|--options) OPTION [OPTION ...]]
 git state (-h|--help)

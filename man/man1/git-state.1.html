@@ -83,11 +83,11 @@
 
 <p><code>git state</code> [(<code>-s</code>|<code>--status</code>)] [(<code>-S</code>|<code>--no-status</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--show-*</code>] [<code>--no-show-*</code>]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--no-show-all</code>] [<code>--no-show</code> [<var>extension</var> ...]]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-e</code>|<code>--show-empty</code>)] [(<code>-E</code>|<code>--no-show-empty</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-c</code>|<code>--color</code>) [<var>when</var>]] [(<code>-C</code>|<code>--no-color</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-p</code>|<code>--pretty</code>)] [(<code>-f</code>|<code>--format</code>) <var>format</var>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--clear</code>] [<code>--no-clear</code>] [<code>--no-page</code>]<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--ignore-extensions</code> [<var>extension</var> ...]]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-o</code>|<code>--order</code>) <var>section</var> [<var>section</var> ...]]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-O</code>|<code>--options</code>) <em>option</em> [<em>option</em> ...]]<br />
 <code>git state</code> (<code>-h</code>|<code>--help</code>)<br />
@@ -111,6 +111,8 @@
 
 <p>  The show flag is <code>--show-last-ten-commits</code>.</p></dd>
 <dt><code>--no-show-*</code></dt><dd><p>  Hide extension *.</p></dd>
+<dt><code>--no-show-all</code></dt><dd><p>  Hide all extensions.</p></dd>
+<dt><code>--no-show</code> [<var>extension</var> ...]</dt><dd><p>  A list of extensions to hide. If none are specified, all of them will be hidden. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
 <dt><code>-e</code>|<code>--show-empty</code></dt><dd><p>  Show empty sections rather than omitting them.</p></dd>
 <dt><code>-E</code>|<code>--no-show-empty</code></dt><dd><p>  Omit empty sections. This does not apply to the status section.</p></dd>
 <dt><code>-c</code>|<code>--color</code> [<var>when</var>]</dt><dd><p>  Color output. <var>when</var> must be one of <code>always</code>, <code>never</code>, or <code>auto</code>. Defaults to <code>color.ui</code> configuration value or <code>auto</code>.</p></dd>
@@ -120,7 +122,6 @@
 <dt><code>--clear</code> </dt><dd><p>  Clear the screen before printing.</p></dd>
 <dt><code>--no-clear</code></dt><dd><p>  Do not clear the screen before printing.</p></dd>
 <dt><code>--no-page</code></dt><dd><p>  Do not page output if it exceeds the terminal window.</p></dd>
-<dt><code>--ignore-extensions</code> [<var>extension</var> ...]</dt><dd><p>  A list of extensions to ignore when printing. If none are specified, all of them will be ignored. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
 <dt><code>-o</code>|<code>--order</code> <var>section</var> [<var>section</var> ...]</dt><dd><p>  A custom section order.</p></dd>
 <dt><code>-O</code>|<code>--options</code> <em>option</em> [<em>option</em> ...]</dt><dd><p>  A list of options to pass to an extension. Options are formatted as <code>&lt;extension_name>:&lt;option&gt;</code>. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
 </dl>
@@ -217,7 +218,7 @@ $
 
 <p>An extension can be hidden by setting <code>git-state.extensions.*.show</code> to <code>false</code>. This is useful for globally defined extensions that aren't needed for all repositories.</p>
 
-<p>Alternatively, an extension can be ignored by listing it in <code>--ignore-extensions</code> [<var>extension</var> ...].</p>
+<p>Alternatively, an extension can be hidden by listing it in <code>--no-show</code> [<var>extension</var> ...] or using the flag <code>--no-show-*</code>.</p>
 
 <h2 id="SEE-ALSO">SEE ALSO</h2>
 
@@ -226,7 +227,7 @@ $
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>January 2017</li>
+    <li class='tc'>May 2017</li>
     <li class='tr'>git-state(1)</li>
   </ol>
 

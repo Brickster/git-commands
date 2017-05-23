@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased][]
+### Changed
+- `--ignore-extensions` renamed to `--no-show`[#91](https://github.com/Brickstertwo/git-commands/issues/91)
+
 ### Removed
 - `git-settings` cleanup
 - `git-tuck` [#120](https://github.com/Brickstertwo/git-commands/issues/120)

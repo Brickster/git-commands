@@ -72,6 +72,33 @@ def main():
             default=[]
         )
 
+    # ignore sections
+    all_extensions = settings.list_(
+        'git-state.extensions',
+        config=None,
+        count=False,
+        keys=True,
+        format_=None
+    ).splitlines()
+    no_show_parser = parser.add_mutually_exclusive_group()
+    no_show_parser.add_argument(
+        '--no-show',
+        help='extensions to hide',
+        nargs='*',
+        action=optional_list(),
+        const=all_extensions,
+        default=[],
+        dest='ignore_extensions',
+        metavar='EXTENSION'
+    )
+    no_show_parser.add_argument(
+        '--no-show-all',
+        help='hide all extensions',
+        action='store_const',
+        const=all_extensions,
+        dest='ignore_extensions'
+    )
+
     # color
     color_group = parser.add_mutually_exclusive_group()
     color_group.add_argument(
@@ -145,23 +172,6 @@ def main():
         help='do not clear the screen before printing',
         action='store_false',
         dest='clear'
-    )
-
-    # ignore sections
-    parser.add_argument(
-        '--ignore-extensions',
-        help='a list of extensions to ignore',
-        nargs='*',
-        action=optional_list(),
-        const=settings.list_(
-            'git-state.extensions',
-            config=None,
-            count=False,
-            keys=True,
-            format_=None
-        ).splitlines(),
-        default=[],
-        metavar='EXTENSION'
     )
 
     parser.add_argument(
