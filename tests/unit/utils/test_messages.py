@@ -137,12 +137,13 @@ class TestMessages(unittest.TestCase):
 
         # given
         message = 'the message'
+        quiet = True
 
         # when
-        messages.warn(message)
+        messages.warn(message, quiet)
 
         # then
-        mock_print.assert_called_once_with(message, prefix='warn:')
+        mock_print.assert_called_once_with(message, prefix='warn:', quiet=quiet)
 
     @mock.patch('bin.commands.utils.messages._print')
     def test_usage(self, mock_print):

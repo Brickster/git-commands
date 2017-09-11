@@ -30,12 +30,13 @@ def error(message, prefix='error:', exit_=True):
     _print(message, prefix=prefix, exit_=exit_, file_=sys.stderr)
 
 
-def warn(message):
+def warn(message, quiet=False):
     """Print a simple warning message.
 
     :param str or unicode message: the warning message to print
+    :param bool quiet: suppress message
     """
-    _print(message, prefix='warn:')
+    _print(message, prefix='warn:', quiet=quiet)
 
 
 def usage(message):
