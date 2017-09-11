@@ -2,9 +2,27 @@
 
 import os
 import subprocess
+import time
 from subprocess import STDOUT
 
 from utils import directories, messages
+
+
+def _stash_buffer(quiet):
+    """
+    You cannot create two stashes of the same contents within two seconds of each other. So wait if we've executed too
+    quickly.
+    """
+
+    # TODO: this should check that the stash would be a duplicate first
+    if subprocess.check_output(('git', 'stash', 'list')).strip():
+        last_stash_date = subprocess.check_output(('git', 'show', '-s', '--format=%ci', 'stash@{0}')).rstrip()
+        warned = False
+        while last_stash_date == time.strftime('%Y-%m-%d %H:%M:%S %z'):
+            if not warned:
+                messages.warn('snapshot created too close to last stash', quiet=quiet)
+                warned = True
+            time.sleep(0.1)
 
 
 def snapshot(message=None, quiet=False, files=None):
@@ -26,6 +44,7 @@ def snapshot(message=None, quiet=False, files=None):
         stash_command = ['git', 'stash', 'push', '--include-untracked', '--quiet']
         stash_command = stash_command if message is None else stash_command + ['--message', message]
         stash_command = stash_command if not files else stash_command + ['--'] + files
+        _stash_buffer(quiet)
         subprocess.call(stash_command)
 
         # apply isn't completely quiet when the stash only contains untracked files so swallow all output

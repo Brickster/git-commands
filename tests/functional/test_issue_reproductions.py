@@ -283,6 +283,43 @@ class TestIssue112(unittest.TestCase):
         )
 
 
+class TestIssue114(unittest.TestCase):
+    """Issue 114: Snapshot occasionally does nothing."""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+
+        # initialize repository with a README
+        self.repo = git.Repo.init(self.dirpath)
+        open('README.md', 'w').close()
+        os.mkdir(self.dirpath + '/files')
+        open('files/README.md', 'w').close()
+        self.repo.index.add(['README.md', 'files/README.md'])
+        self.repo.index.commit('Initial commit')
+
+        # edit the README
+        with open('README.md', 'w') as readme_file:
+            readme_file.write('a')
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        """Quickly creating n snapshots should create n stashes."""
+
+        self.repo.git.snapshot()
+        self.repo.git.snapshot()
+        self.repo.git.snapshot()
+        self.repo.git.snapshot()
+        self.repo.git.snapshot()
+        self.repo.git.snapshot()
+        self.repo.git.snapshot()
+
+        stashes = self.repo.git.stash('list').splitlines()
+        self.assertEqual(len(stashes), 7)
+
+
 class TestIssue121(unittest.TestCase):
     """Settings list fails when the config file is empty"""
 
