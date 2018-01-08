@@ -1,6 +1,6 @@
 # git-commands
 
-[![Build Status](https://travis-ci.org/Brickstertwo/git-commands.svg?branch=master)](https://travis-ci.org/Brickstertwo/git-commands) [![Requirements Status](https://requires.io/github/Brickstertwo/git-commands/requirements.svg?branch=master)](https://requires.io/github/Brickstertwo/git-commands/requirements/?branch=master) [![Code Climate](https://codeclimate.com/github/Brickstertwo/git-commands/badges/gpa.svg)](https://codeclimate.com/github/Brickstertwo/git-commands) [![Test Coverage](https://codeclimate.com/github/Brickstertwo/git-commands/badges/coverage.svg)](https://codeclimate.com/github/Brickstertwo/git-commands/coverage)
+[![Build Status](https://travis-ci.org/Brickster/git-commands.svg?branch=master)](https://travis-ci.org/Brickster/git-commands) [![Requirements Status](https://requires.io/github/Brickster/git-commands/requirements.svg?branch=master)](https://requires.io/github/Brickster/git-commands/requirements/?branch=master) [![Code Climate](https://codeclimate.com/github/Brickstertwo/git-commands/badges/gpa.svg)](https://codeclimate.com/github/Brickstertwo/git-commands) [![Test Coverage](https://codeclimate.com/github/Brickstertwo/git-commands/badges/coverage.svg)](https://codeclimate.com/github/Brickstertwo/git-commands/coverage)
 
 A collection of custom git commands
 
