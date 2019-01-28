@@ -299,8 +299,8 @@ class TestSettingsDestroy(unittest.TestCase):
         settings._dry_destroy_section = self._dry_destroy_section
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('subprocess.call')
-    def test_destroy_hasLocal(self, mock_call, mock_isgitrepository):
+    @mock.patch('bin.commands.utils.execute.swallow')
+    def test_destroy_hasLocal(self, mock_swallow, mock_isgitrepository):
 
         # given
         section = 'section_name'
@@ -311,15 +311,15 @@ class TestSettingsDestroy(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once()
-        mock_call.assert_has_calls([
-            mock.call(('git', 'config', '--local', '--remove-section', section), stdout=mock.ANY, stderr=subprocess.STDOUT),
-            mock.call(('git', 'config', '--global', '--remove-section', section), stdout=mock.ANY, stderr=subprocess.STDOUT),
-            mock.call(('git', 'config', '--system', '--remove-section', section), stdout=mock.ANY, stderr=subprocess.STDOUT)
+        mock_swallow.assert_has_calls([
+            mock.call(('git', 'config', '--local', '--remove-section', section)),
+            mock.call(('git', 'config', '--global', '--remove-section', section)),
+            mock.call(('git', 'config', '--system', '--remove-section', section))
         ])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
-    @mock.patch('subprocess.call')
-    def test_destroy_noLocal(self, mock_call, mock_isgitrepository):
+    @mock.patch('bin.commands.utils.execute.swallow')
+    def test_destroy_noLocal(self, mock_swallow, mock_isgitrepository):
 
         # given
         section = 'section_name'
@@ -330,9 +330,9 @@ class TestSettingsDestroy(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once()
-        mock_call.assert_has_calls([
-            mock.call(('git', 'config', '--global', '--remove-section', section), stdout=mock.ANY, stderr=subprocess.STDOUT),
-            mock.call(('git', 'config', '--system', '--remove-section', section), stdout=mock.ANY, stderr=subprocess.STDOUT)
+        mock_swallow.assert_has_calls([
+            mock.call(('git', 'config', '--global', '--remove-section', section)),
+            mock.call(('git', 'config', '--system', '--remove-section', section))
         ])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)

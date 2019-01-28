@@ -8,6 +8,7 @@ import argparse
 import sys
 
 from commands import snapshot
+from commands.utils import directories
 
 # specific usage message needed to include the '--' part
 _USAGE_MESSAGE = 'git snapshot [MESSAGE] [-h] [-v] [-q] [-- FILE [FILE ...]]'
@@ -40,7 +41,9 @@ def main():
 
     args = parser.parse_args(args)
     args.files = file_args
+    directories.exit_if_not_git_repository()
     snapshot.snapshot(**vars(args))
+
 
 if __name__ == '__main__':
     main()

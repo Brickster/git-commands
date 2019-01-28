@@ -3,6 +3,7 @@
 import argparse
 
 from commands import restash
+from commands.utils import directories
 
 
 def main():
@@ -32,7 +33,10 @@ def main():
         default=False
     )
 
-    restash.restash(**vars(parser.parse_args()))
+    args = parser.parse_args()
+    directories.exit_if_not_git_repository()
+    restash.restash(**vars(args))
+
 
 if __name__ == '__main__':
     main()

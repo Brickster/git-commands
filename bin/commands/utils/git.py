@@ -91,9 +91,7 @@ def is_ref_ambiguous(ref, limit=None):
     """
 
     assert isinstance(ref, str), "'ref' must be a str. Given: " + type(ref).__name__
-    assert not limit or (isinstance(limit, str) and limit in ('heads', 'tags')) or \
-        (isinstance(limit, (tuple, list)) and all([l in ('heads', 'tags') for l in limit])), \
-        "'limit' may only contain 'heads' and/or 'tags'"
+    assert not limit or _is_valid_limit(limit), "'limit' may only contain 'heads' and/or 'tags'"
 
     # normalize input
     if limit and isinstance(limit, str):
@@ -103,11 +101,24 @@ def is_ref_ambiguous(ref, limit=None):
         raise GitException('{0!r} is not a ref'.format(ref))
 
     with open(os.devnull, 'w') as dev_null:
+        show_ref_command = ['git', 'show-ref']
         if limit:
-            show_ref_proc = subprocess.Popen(['git', 'show-ref'] + ['--' + l for l in limit] + [ref], stdout=PIPE, stderr=dev_null)
-        else:
-            show_ref_proc = subprocess.Popen(('git', 'show-ref', ref), stdout=PIPE, stderr=dev_null)
+            show_ref_command += ['--' + l for l in limit]
+        show_ref_command += [ref]
+        show_ref_proc = subprocess.Popen(show_ref_command, stdout=PIPE, stderr=dev_null)
         return len(show_ref_proc.communicate()[0].splitlines()) > 1
+
+
+def _is_valid_limit(limit):
+    # check strs
+    if isinstance(limit, str) and limit in ('heads', 'tags'):
+        return True
+
+    # check list types
+    if isinstance(limit, (tuple, list)) and all([l in ('heads', 'tags') for l in limit]):
+        return True
+
+    return False
 
 
 def symbolic_full_name(ref):

@@ -12,12 +12,16 @@ def _print(message, prefix=None, quiet=False, exit_=False, file_=None):
 
     message = prefix + ' ' + message if prefix else message
     if not quiet:
-        if file_:
-            print(message, file=file_)
-        else:
-            print(message)  # defaulting file_ to sys.stdout messes with colorama
+        _print_to_file(message, file_)
     if exit_:
         sys.exit(1)
+
+
+def _print_to_file(message, file_):
+    if file_:
+        print(message, file=file_)
+    else:
+        print(message)  # defaulting file_ to sys.stdout messes with colorama
 
 
 def error(message, prefix='error:', exit_=True):
@@ -30,13 +34,22 @@ def error(message, prefix='error:', exit_=True):
     _print(message, prefix=prefix, exit_=exit_, file_=sys.stderr)
 
 
-def warn(message, quiet=False):
+def warn(message, quiet=False, ignore=False):
     """Print a simple warning message.
+
+    Ignore repeated warnings by feeding warn() back into itself:
+    warned = None
+    for _ in xrange(0, 5):
+        warned = warn(message, ignore=warned)
 
     :param str or unicode message: the warning message to print
     :param bool quiet: suppress message
+    :param ignore: ignore this warning and print nothing
+    :return bool: always returns True to indicate a warning has been issued
     """
-    _print(message, prefix='warn:', quiet=quiet)
+    if not ignore:
+        _print(message, prefix='warn:', quiet=quiet)
+    return True
 
 
 def usage(message):

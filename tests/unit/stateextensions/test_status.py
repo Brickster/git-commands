@@ -88,7 +88,7 @@ class TestStatus(unittest.TestCase):
         actual_status = status.get(new_repository=True, show_color=show_color)
 
         # then
-        self.assertEqual(actual_status, 'Empty repository')
+        self.assertEqual(actual_status, 'nothing to commit, repository is empty' + os.linesep)
         mock_checkoutput.assert_called_once_with(['git', '-c', 'color.status=' + show_color, 'status', '--short'])
 
     @mock.patch('subprocess.check_output', return_value='the status')

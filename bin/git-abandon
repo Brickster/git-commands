@@ -6,6 +6,7 @@
 import argparse
 
 from commands import abandon
+from commands.utils import directories
 
 
 def main():
@@ -54,7 +55,10 @@ def main():
         default=False
     )
 
-    abandon.abandon(**vars(parser.parse_args()))
+    args = parser.parse_args()
+    directories.exit_if_not_git_repository()
+    abandon.abandon(**vars(args))
+
 
 if __name__ == '__main__':
     main()

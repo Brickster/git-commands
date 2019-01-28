@@ -157,3 +157,18 @@ class TestGitRestash(unittest.TestCase):
 
         # then
         self.assertEqual(error_message, 'error: blarg is not a valid stash reference')
+
+    def test_restash_nonGitRepository(self):
+
+        # setup
+        os.mkdir(self.dirpath + '/dir')
+        os.chdir(self.dirpath + '/dir')
+
+        # run
+        p = subprocess.Popen('git restash'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = p.communicate()
+
+        # verify
+        expected = "error: '{}' not a git repository".format(os.path.realpath(self.dirpath) + '/dir')
+        self.assertEqual(expected, stderr.strip())
+        self.assertFalse(stdout)

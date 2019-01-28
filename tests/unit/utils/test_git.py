@@ -196,7 +196,7 @@ class TestGit(unittest.TestCase):
         # then
         self.assertTrue(is_ambiguous)
         mock_isref.assert_called_once_with(ref)
-        mock_popen.assert_called_once_with(('git', 'show-ref', ref), stdout=PIPE, stderr=mock.ANY)
+        mock_popen.assert_called_once_with(['git', 'show-ref', ref], stdout=PIPE, stderr=mock.ANY)
         mock_proc.communicate.assert_called_once()
 
     @mock.patch('bin.commands.utils.git.is_ref', return_value=True)
@@ -216,7 +216,7 @@ class TestGit(unittest.TestCase):
         # then
         self.assertFalse(is_ambiguous)
         mock_isref.assert_called_once_with(ref)
-        mock_popen.assert_called_once_with(('git', 'show-ref', ref), stdout=PIPE, stderr=mock.ANY)
+        mock_popen.assert_called_once_with(['git', 'show-ref', ref], stdout=PIPE, stderr=mock.ANY)
         mock_proc.communicate.assert_called_once()
 
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)

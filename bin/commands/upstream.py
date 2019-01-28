@@ -25,16 +25,14 @@ def upstream(branch=None, include_remote=IncludeRemote.NEVER):
     """Get the upstream branch of the current branch.
 
     :param str or unicode branch: the branch whose upstream to find
-    :param bool include_remote: include the remote name in the response
+    :param IncludeRemote include_remote: include the remote name in the response
 
     :return str or unicode: the upstream branch name or an empty string
     """
 
     assert type(include_remote) == IncludeRemote, "'include_remote' must be a {!r}. Given {!r}".format(IncludeRemote, type(include_remote))
 
-    if not directories.is_git_repository():
-        messages.error('{0!r} not a git repository'.format(os.getcwd()))
-    elif git.is_empty_repository():
+    if git.is_empty_repository():
         return None
 
     if not branch:
@@ -43,15 +41,34 @@ def upstream(branch=None, include_remote=IncludeRemote.NEVER):
         messages.error('{0!r} is not a valid branch'.format(branch))
 
     # get remote branch name
+    remote_branch = _get_remote_branch(branch)
+
+    # get remote name
+    remote_name = None
+    if remote_branch and include_remote != IncludeRemote.NEVER:
+        remote_name = _get_remote_name(branch, include_remote)
+
+    return _upstream_info(remote_name, remote_branch, include_remote)
+
+
+def _get_remote_branch(branch):
     proc = subprocess.Popen(_MERGE_CONFIG.format(branch).split(), stdout=PIPE)
     upstream_info = proc.communicate()[0].strip()
-    upstream_info = upstream_info.rsplit('/', 1)[-1]
+    remote_branch = upstream_info.rsplit('/', 1)[-1]
+    return remote_branch
 
-    # optionally, get remote name
-    if upstream_info and include_remote != IncludeRemote.NEVER:
+
+def _get_remote_name(branch, include_remote):
+    remote_name = None
+    if include_remote != IncludeRemote.NEVER:
         remote_name = subprocess.check_output(_REMOTE_CONFIG.format(branch).split()).strip()
-        # only include the remote if it is not local
-        if include_remote == IncludeRemote.ALWAYS or remote_name != _LOCAL_REMOTE:
-            upstream_info = remote_name + '/' + upstream_info
+    return remote_name
 
-    return upstream_info
+
+def _upstream_info(remote_name, remote_branch, include_remote):
+    if not remote_branch or not remote_name:
+        return remote_branch
+    elif include_remote == IncludeRemote.NONE_LOCAL and remote_name == _LOCAL_REMOTE:
+        return remote_branch
+    else:
+        return remote_name + '/' + remote_branch

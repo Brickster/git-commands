@@ -1,10 +1,9 @@
----
-engines:
-  duplication:
-    enabled: true
+version: '2'
+checks:
+  argument-count:
     config:
-      languages:
-      - python
+      threshold: 5
+plugins:
   fixme:
     enabled: true
   radon:
@@ -13,9 +12,6 @@ engines:
       threshold: 'C'
   pep8:
     enabled: true
-ratings:
-  paths:
-  - "**.py"
-exclude_paths:
+exclude_patterns:
 - tests/
 - .idea/

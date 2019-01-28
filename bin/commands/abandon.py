@@ -1,9 +1,8 @@
 """Drop a count or range of stashes."""
 
-import os
 import subprocess
 
-from utils import directories, messages
+from utils import messages
 
 
 def abandon(start, end, dry_run=False, quiet=False):
@@ -15,9 +14,29 @@ def abandon(start, end, dry_run=False, quiet=False):
     :param bool quiet: suppress all output
     """
 
-    if not directories.is_git_repository():
-        messages.error('{0!r} not a git repository'.format(os.getcwd()))
+    start, end = _validate_bounds(start, end)
+    if dry_run:
+        _dry_run(start, end)
+    else:
+        _run(start, end, quiet)
 
+
+def _dry_run(start, end):
+    for i in range(start, end):
+        stash = 'stash@{{{}}}'.format(i)
+        stash_sha = subprocess.check_output(['git', 'rev-parse', stash]).splitlines()[0]
+        messages.info('Would drop refs/{} ({})'.format(stash, stash_sha))
+
+
+def _run(start, end, quiet):
+    start_stash = 'stash@{{{}}}'.format(start)
+    for i in range(start, end):
+        stash_sha = subprocess.check_output(['git', 'rev-parse', start_stash]).splitlines()[0]
+        subprocess.call(['git', 'stash', 'drop', '--quiet', start_stash])
+        messages.info('Dropped refs/stash@{{{}}} ({})'.format(i, stash_sha), quiet)
+
+
+def _validate_bounds(start, end):
     stash_count = len(subprocess.check_output(['git', 'stash', 'list']).splitlines())
     if end < 0:
         messages.error('end cannot be negative')
@@ -28,15 +47,4 @@ def abandon(start, end, dry_run=False, quiet=False):
         messages.error('only {} stashes exist'.format(stash_count))
     elif end > stash_count:
         end = stash_count
-
-    if dry_run:
-        for i in range(start, end):
-            stash = 'stash@{{{}}}'.format(i)
-            stash_sha = subprocess.check_output(['git', 'rev-parse', stash]).splitlines()[0]
-            messages.info('Would drop refs/{} ({})'.format(stash, stash_sha))
-    else:
-        start_stash = 'stash@{{{}}}'.format(start)
-        for i in range(start, end):
-            stash_sha = subprocess.check_output(['git', 'rev-parse', start_stash]).splitlines()[0]
-            subprocess.call(['git', 'stash', 'drop', '--quiet', start_stash])
-            messages.info('Dropped refs/stash@{{{}}} ({})'.format(i, stash_sha), quiet)
+    return start, end

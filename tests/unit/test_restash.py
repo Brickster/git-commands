@@ -18,13 +18,12 @@ class TestRestash(unittest.TestCase):
         restash._is_valid_stash = self._is_valid_stash
         restash._parents = self._parents
 
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.restash._is_valid_stash', return_value=True)
     @mock.patch('subprocess.check_output')
     @mock.patch('subprocess.Popen')
     @mock.patch('bin.commands.restash._parents', return_value=[1, 2])
     @mock.patch('bin.commands.utils.messages.info')
-    def test_restash_noUntrackedFiles(self, mock_info, mock_parents, mock_popen, mock_checkoutput, mock_isvalidstash, mock_isgitrepository):
+    def test_restash_noUntrackedFiles(self, mock_info, mock_parents, mock_popen, mock_checkoutput, mock_isvalidstash):
 
         # setup
         reverse_patch_output = 'reverse patch'
@@ -48,14 +47,13 @@ class TestRestash(unittest.TestCase):
         mock_parents.assert_called_once_with('stash@{0}')
         mock_info.assert_called_once_with('Restashed stash@{{0}} ({})'.format(stash_sha), False)
 
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.restash._is_valid_stash', return_value=True)
     @mock.patch('subprocess.check_output')
     @mock.patch('subprocess.Popen')
     @mock.patch('bin.commands.restash._parents', return_value=[1, 2, 3])
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_restash_untrackedFiles(self, mock_info, mock_call, mock_parents, mock_popen, mock_checkoutput, mock_isvalidstash, mock_isgitrepository):
+    def test_restash_untrackedFiles(self, mock_info, mock_call, mock_parents, mock_popen, mock_checkoutput, mock_isvalidstash):
 
         # setup
         reverse_patch_output = 'reverse patch'
@@ -82,14 +80,13 @@ class TestRestash(unittest.TestCase):
         mock_call.assert_called_once_with(['git', 'clean', '--force', '--quiet', '--'] + untracked_files)
         mock_info.assert_called_once_with('Restashed stash@{{0}} ({})'.format(stash_sha), False)
 
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.restash._is_valid_stash', return_value=True)
     @mock.patch('subprocess.check_output')
     @mock.patch('subprocess.Popen')
     @mock.patch('bin.commands.restash._parents', return_value=[1, 2, 3])
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_restash_untrackedFiles_butNoneFound(self, mock_info, mock_call, mock_parents, mock_popen, mock_checkoutput, mock_isvalidstash, mock_isgitrepository):
+    def test_restash_untrackedFiles_butNoneFound(self, mock_info, mock_call, mock_parents, mock_popen, mock_checkoutput, mock_isvalidstash):
         """This case is possible if --include-untracked is used when not needed."""
 
         # setup
@@ -116,14 +113,13 @@ class TestRestash(unittest.TestCase):
         mock_call.assert_not_called()
         mock_info.assert_called_once_with('Restashed stash@{{0}} ({})'.format(stash_sha), False)
 
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.restash._is_valid_stash', return_value=True)
     @mock.patch('subprocess.check_output')
     @mock.patch('subprocess.Popen')
     @mock.patch('bin.commands.restash._parents', return_value=[1, 2, 3])
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_restash_untrackedFiles_noPatchToReverce(self, mock_info, mock_call, mock_parents, mock_popen, mock_checkoutput, mock_isvalidstash, mock_isgitrepository):
+    def test_restash_untrackedFiles_noPatchToReverce(self, mock_info, mock_call, mock_parents, mock_popen, mock_checkoutput, mock_isvalidstash):
         """This tests stashes consisting only of untracked files."""
 
         # setup
@@ -149,12 +145,11 @@ class TestRestash(unittest.TestCase):
         mock_call.assert_called_once_with(['git', 'clean', '--force', '--quiet', '--'] + untracked_files)
         mock_info.assert_called_once_with('Restashed stash@{{0}} ({})'.format(stash_sha), False)
 
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.restash._is_valid_stash', return_value=True)
     @mock.patch('subprocess.check_output')
     @mock.patch('subprocess.Popen')
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
-    def test_restash_unableToReverseApplyPath(self, mock_error, mock_popen, mock_checkoutput, mock_isvaidstash, mock_isgitrepository):
+    def test_restash_unableToReverseApplyPath(self, mock_error, mock_popen, mock_checkoutput, mock_isvaidstash):
 
         # setup
         reverse_patch_output = 'reverse patch'
@@ -180,27 +175,9 @@ class TestRestash(unittest.TestCase):
         mock_process.communicate.assert_called_once_with(input=reverse_patch_output)
         mock_error.assert_called_once_with('unable to reverse modifications', exit_=True)
 
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
-    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
-    @mock.patch('os.getcwd', return_value='/working/dir')
-    def test_restash_notAGitRepository(self, mock_getcwd, mock_error, mock_isgitrepository):
-
-        # when
-        try:
-            restash.restash()
-            self.fail('expected to exit but did not')  # pragma: no cover
-        except SystemExit:
-            pass
-
-        # then
-        mock_isgitrepository.assert_called_once_with()
-        mock_error.assert_called_once_with("'/working/dir' not a git repository")
-        mock_getcwd.assert_called_once_with()
-
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('subprocess.check_output', return_value='')
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
-    def test_restash_noStashesExist(self, mock_error, mock_checkoutput, mock_isgitrepository):
+    def test_restash_noStashesExist(self, mock_error, mock_checkoutput):
 
         # when
         try:
@@ -210,15 +187,13 @@ class TestRestash(unittest.TestCase):
             pass
 
         # then
-        mock_isgitrepository.assert_called_once_with()
         mock_checkoutput.assert_called_once_with('git stash list'.split())
         mock_error.assert_called_once_with('no stashes exist')
 
-    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('subprocess.check_output', return_value='stash1')
     @mock.patch('bin.commands.restash._is_valid_stash', return_value=False)
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
-    def test_restash_invalidStash(self, mock_error, mock_isvalidstash, mock_checkoutput, mock_isgitrepository):
+    def test_restash_invalidStash(self, mock_error, mock_isvalidstash, mock_checkoutput):
 
         # when
         stash = 'stash@{10}'
@@ -229,7 +204,6 @@ class TestRestash(unittest.TestCase):
             pass
 
         # then
-        mock_isgitrepository.assert_called_once_with()
         mock_checkoutput.assert_called_once_with('git stash list'.split())
         mock_isvalidstash.assert_called_once_with(stash)
         mock_error.assert_called_once_with('{} is not a valid stash reference'.format(stash))

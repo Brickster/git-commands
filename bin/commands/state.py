@@ -85,6 +85,7 @@ def state(**kwargs):
             status_output = status.get(**kwargs)
             status_title = status.title()
             status_accent = status.accent(show_color=show_color)
+            # TODO: remove restriction that status is always shown
             sections[status_title] = _print_section(status_title, status_accent, status_output, format_, show_empty=True)
 
         # show any user defined sections

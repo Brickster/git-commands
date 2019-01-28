@@ -32,15 +32,15 @@ def get(**kwargs):
     show_color = kwargs.get('show_color', 'always')
     show_clean_message = kwargs.get('show_clean_message', True)
 
+    status_command = ['git', '-c', 'color.status=' + show_color, 'status', '--short']
     if new_repository:
-        # check if status is empty
-        status_output = subprocess.check_output(['git', '-c', 'color.status=' + show_color, 'status', '--short'])
-        if not status_output:
-            status_output = 'Empty repository'
+        no_changes_message = 'repository is empty'
     else:
-        status_output = subprocess.check_output(['git', '-c', 'color.status=' + show_color, 'status', '--short', '--untracked-files=all'])
+        status_command += ['--untracked-files=all']
+        no_changes_message = 'working directory is clean'
 
+    status_output = subprocess.check_output(status_command)
     if not status_output and show_clean_message:
-        status_output = 'nothing to commit, working directory is clean' + os.linesep
+        status_output = 'nothing to commit, ' + no_changes_message + os.linesep
 
     return status_output

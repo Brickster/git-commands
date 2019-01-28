@@ -146,6 +146,20 @@ class TestMessages(unittest.TestCase):
         mock_print.assert_called_once_with(message, prefix='warn:', quiet=quiet)
 
     @mock.patch('bin.commands.utils.messages._print')
+    def test_warn_ignoreIsTrue(self, mock_print):
+
+        # given
+        message = 'the message'
+        quiet = True
+        ignore = True
+
+        # when
+        messages.warn(message, quiet, ignore)
+
+        # then
+        mock_print.assert_not_called()
+
+    @mock.patch('bin.commands.utils.messages._print')
     def test_usage(self, mock_print):
 
         # given
