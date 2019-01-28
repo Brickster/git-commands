@@ -1,6 +1,5 @@
 -r requirements.txt
-codeclimate-test-reporter==0.2.3
-coverage==4.3.4  # rq.filter: !=4.4,!=4.4.1,!=4.4.2
+coverage==4.5.2
 gitpython==2.1.11
 mock==2.0.0
 nose==1.3.7
