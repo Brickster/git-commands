@@ -53,6 +53,10 @@ class TestGitSnapshot(unittest.TestCase):
         call('touch README.md'.split())
         call('touch file1.txt'.split())
         call('touch file2.txt'.split())
+        with open('CONTRIBUTING.md', 'w') as a_file:
+            a_file.write('contributing\n')
+        with open('README.md', 'w') as a_file:
+            a_file.write('readme\n')
         with open('file1.txt', 'w') as a_file:
             a_file.write('file1\n')
         with open('file2.txt', 'w') as a_file:
@@ -66,11 +70,11 @@ class TestGitSnapshot(unittest.TestCase):
         with open('CHANGELOG.md', 'a') as a_file:
             a_file.write('changelog\n')
 
-        with open('CONTRIBUTING.md', 'w') as a_file:
+        with open('CONTRIBUTING.md', 'a') as a_file:
             a_file.write('contributing\n')
         call('git add -- CONTRIBUTING.md'.split())
 
-        with open('README.md', 'w') as a_file:
+        with open('README.md', 'a') as a_file:
             a_file.write('readme\n')
 
         call('git rm --quiet -- file1.txt'.split())
