@@ -29,4 +29,5 @@ script:
 
 after_script:
   # send coverage report to CodeClimate
+  - coverage xml
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
