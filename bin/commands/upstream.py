@@ -46,7 +46,7 @@ def upstream(branch=None, include_remote=IncludeRemote.NEVER):
     # get remote name
     remote_name = None
     if remote_branch and include_remote != IncludeRemote.NEVER:
-        remote_name = _get_remote_name(branch, include_remote)
+        remote_name = subprocess.check_output(_REMOTE_CONFIG.format(branch).split()).strip()
 
     return _upstream_info(remote_name, remote_branch, include_remote)
 
@@ -56,13 +56,6 @@ def _get_remote_branch(branch):
     upstream_info = proc.communicate()[0].strip()
     remote_branch = upstream_info.rsplit('/', 1)[-1]
     return remote_branch
-
-
-def _get_remote_name(branch, include_remote):
-    remote_name = None
-    if include_remote != IncludeRemote.NEVER:
-        remote_name = subprocess.check_output(_REMOTE_CONFIG.format(branch).split()).strip()
-    return remote_name
 
 
 def _upstream_info(remote_name, remote_branch, include_remote):
