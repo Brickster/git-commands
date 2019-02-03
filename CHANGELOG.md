@@ -4,30 +4,48 @@ All notable changes to this project will be documented in this file. This projec
 
 ## [Unreleased][]
 ### Changed
-- `--ignore-extensions` renamed to `--no-show`[#91](https://github.com/Brickstertwo/git-commands/issues/91)
+- `--ignore-extensions` renamed to `--no-show`[#91][]
 
 ### Removed
 - `git-settings` cleanup
-- `git-tuck` [#120](https://github.com/Brickstertwo/git-commands/issues/120)
+- `git-tuck` [#120][]
 
 ## Fixed
-- `state--no-status` not respected for empty repositories [#93](https://github.com/Brickstertwo/git-commands/issues/93)
-- `changes view` breaking when HEAD is detached [#94](https://github.com/Brickstertwo/git-commands/issues/94)
-- `settings list` not handling values with newline characters [#95](https://github.com/Brickstertwo/git-commands/issues/95)
-- `changes unassociate` breaking when no association exists for the branch [#102](https://github.com/Brickstertwo/git-commands/issues/102)
-- `changes unassociate --prune` breaking when no associations exist [#103](https://github.com/Brickstertwo/git-commands/issues/103)
-- `changes unassociate --prune` breaking for new repositories [#104](https://github.com/Brickstertwo/git-commands/issues/104)
-- Associating a detached HEAD [#106](https://github.com/Brickstertwo/git-commands/issues/106)
-- `changes associate` breaking when using an invalid revision [#107](https://github.com/Brickstertwo/git-commands/issues/107)
-- `changes unassociate --dry-run` printing a message during a no-op [#108](https://github.com/Brickstertwo/git-commands/issues/108)
-- `changes associate --upstream` failing with local upstreams [#112](https://github.com/Brickstertwo/git-commands/issues/112)
-- `settings list` failing with empty config files [#121](https://github.com/Brickstertwo/git-commands/issues/121)
-- `settings list` not properly handling unknown files [#122](https://github.com/Brickstertwo/git-commands/issues/122)
+- `state--no-status` not respected for empty repositories [#93][]
+- `changes view` breaking when HEAD is detached [#94][]
+- `settings list` not handling values with newline characters [#95][]
+- `changes unassociate` breaking when no association exists for the branch [#102][]
+- `changes unassociate --prune` breaking when no associations exist [#103][]
+- `changes unassociate --prune` breaking for new repositories [#104][]
+- Associating a detached HEAD [#106][]
+- `changes associate` breaking when using an invalid revision [#107][]
+- `changes unassociate --dry-run` printing a message during a no-op [#108][]
+- `changes associate --upstream` failing with local upstreams [#112][]
+- `settings list` failing with empty config files [#121][]
+- `settings list` not properly handling unknown files [#122][]
+
+[#91]: https://github.com/Brickstertwo/git-commands/issues/91
+[#93]: https://github.com/Brickstertwo/git-commands/issues/93
+[#94]: https://github.com/Brickstertwo/git-commands/issues/94
+[#95]: https://github.com/Brickstertwo/git-commands/issues/95
+[#102]: https://github.com/Brickstertwo/git-commands/issues/102
+[#103]: https://github.com/Brickstertwo/git-commands/issues/103
+[#104]: https://github.com/Brickstertwo/git-commands/issues/104
+[#106]: https://github.com/Brickstertwo/git-commands/issues/106
+[#107]: https://github.com/Brickstertwo/git-commands/issues/107
+[#108]: https://github.com/Brickstertwo/git-commands/issues/108
+[#112]: https://github.com/Brickstertwo/git-commands/issues/112
+[#120]: https://github.com/Brickstertwo/git-commands/issues/120
+[#121]: https://github.com/Brickstertwo/git-commands/issues/121
+[#122]: https://github.com/Brickstertwo/git-commands/issues/122
 
 ## [v0.6.1][] - 2017-01-17
 ### Fixed
-- `git-state` printing header colors in with `--no-color` [#80](https://github.com/Brickstertwo/git-commands/issues/80)
-- `git-changes` defaulting to an ambiguous ref [#92](https://github.com/Brickstertwo/git-commands/issues/92)
+- `git-state` printing header colors in with `--no-color` [#80][]
+- `git-changes` defaulting to an ambiguous ref [#92][]
+
+[#80]: https://github.com/Brickstertwo/git-commands/issues/80
+[#92]: https://github.com/Brickstertwo/git-commands/issues/92
 
 ## [v0.6.0][] - 2017-01-14
 ### Added
@@ -92,8 +110,8 @@ All notable changes to this project will be documented in this file. This projec
 - `-b|--branch` option to `upstream`
 - `git-tuck` for stashing specific files
 - `git-state.status.show-clean-message` configuration toggling a message in the status section when the working directory is clean
-- `-q|--quiet` option to `abandon`, `restash`, and `snapshot` [#30](https://github.com/Brickstertwo/git-commands/issues/30)
-- Snapshots can now be created with a subset of files [#35](https://github.com/Brickstertwo/git-commands/issues/35)
+- `-q|--quiet` option to `abandon`, `restash`, and `snapshot` [#30][]
+- Snapshots can now be created with a subset of files [#35][]
 - Cleanup subcommand to `settings`
 - Associations to `git-changes`
 - Option passing to custom extensions
@@ -103,13 +121,19 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Fixed
 - State not working with new repositories
-- Printing ANCI codes in status when using `--no-color` [#27](https://github.com/Brickstertwo/git-commands/issues/27)
-- Colored output not working on Windows machines [#28](https://github.com/Brickstertwo/git-commands/issues/28)
-- Restash not removing untracked files [#25](https://github.com/Brickstertwo/git-commands/issues/25)
+- Printing ANCI codes in status when using `--no-color` [#27][]
+- Colored output not working on Windows machines [#28][]
+- Restash not removing untracked files [#25][]
 - Documentation typos
 
 ### Removed
 - git-fixup
+
+[#25]: https://github.com/Brickstertwo/git-commands/issues/25
+[#27]: https://github.com/Brickstertwo/git-commands/issues/27
+[#28]: https://github.com/Brickstertwo/git-commands/issues/28
+[#30]: https://github.com/Brickstertwo/git-commands/issues/30
+[#35]: https://github.com/Brickstertwo/git-commands/issues/35
 
 ## [v0.4.0][] - 2015-08-26
 ### Added
@@ -122,44 +146,44 @@ All notable changes to this project will be documented in this file. This projec
 ## [v0.3.0][] - 2015-08-17
 ### Added
 - `changes`
-    - Option to show changes as a stat
-    - Option to show changes as a diff
-    - Option to show changes compared to a known remote branch
+  - Option to show changes as a stat
+  - Option to show changes as a diff
+  - Option to show changes compared to a known remote branch
 - `fixup`
-    - Option to add all files
-    - Option to add only already known files
+  - Option to add all files
+  - Option to add only already known files
 - `settings`
-    - Option to list only the keys for a section
+  - Option to list only the keys for a section
 - `state`
-    - Option to clear the screen (or not) before printing
-    - Ability to specify when to print colors rather than only always or never
-    - Ability to create custom sections
+  - Option to clear the screen (or not) before printing
+  - Ability to specify when to print colors rather than only always or never
+  - Ability to create custom sections
 - Missing documentation in `--help` messages
 
 ### Changed
 - `state`
-    - The status section now prints all untracked files rather than just their directory
-    - The output no longer defaults to colored when piped
+  - The status section now prints all untracked files rather than just their directory
+  - The output no longer defaults to colored when piped
 - Error messages are now printed to standard error
 
 ### Fixed
 - `restash`
-    - Printing a success message even if the reverse patch didn't apply
-    - Error message when an invalid stash was supplied
+  - Printing a success message even if the reverse patch didn't apply
+  - Error message when an invalid stash was supplied
 - `settings`
-    - Printing a blank line when a config had no value
-    - Printing a blank line during a dry destroy
-    - Printing a blank line when list empty sections
+  - Printing a blank line when a config had no value
+  - Printing a blank line during a dry destroy
+  - Printing a blank line when list empty sections
 - `snapshot`
-    - Being overly talkative when the snapshot only contained untracked files
+  - Being overly talkative when the snapshot only contained untracked files
 - `state`
-    - Color codes still being printed even when told not to
-    - Color.status config value getting overridden
-    - Error message when run in a non-Git directory
-    - Extensions not properly handling quoted strings #20
-    - Extensions not printing when empty even if `-e|--show-empty` is included #21
+  - Color codes still being printed even when told not to
+  - Color.status config value getting overridden
+  - Error message when run in a non-Git directory
+  - Extensions not properly handling quoted strings #20
+  - Extensions not printing when empty even if `-e|--show-empty` is included #21
 - `upstream`
-    - Printing a blank line when no upstream branch exists
+  - Printing a blank line when no upstream branch exists
 - Documentation typos
 - Makefile install/uninstall
 

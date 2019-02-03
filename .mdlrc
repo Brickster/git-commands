@@ -1,0 +1,5 @@
+# markdownlint configuration: https://github.com/markdownlint/markdownlint
+rules "~blanks-around-headers",
+      "~no-duplicate-header",
+      "~blanks-around-lists",
+      "~line-length"  # just ignore since configuring the length doesn't work

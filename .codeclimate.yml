@@ -6,12 +6,14 @@ checks:
 plugins:
   fixme:
     enabled: true
+  markdownlint:
+    enabled: true
+  pep8:
+    enabled: true
   radon:
     enabled: true
     config:
       threshold: 'C'
-  pep8:
-    enabled: true
 exclude_patterns:
 - tests/
 - .idea/

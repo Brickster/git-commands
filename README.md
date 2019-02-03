@@ -10,7 +10,9 @@ A collection of custom git commands
 pip install -r requirements.txt
 make [install]
 ```
+
 or
+
 ```bash
 pip install -r requirements.txt
 export PATH="$PATH:/path/to/git-commands/repository/bin"
@@ -21,7 +23,9 @@ export PATH="$PATH:/path/to/git-commands/repository/bin"
 ```bash
 make uninstall
 ```
+
 or
+
 ```bash
 # remove the previously added line
 ```
