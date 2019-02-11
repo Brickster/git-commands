@@ -80,28 +80,23 @@ class TestSettings(unittest.TestCase):
     key3 = value3
     key2 = value2''')
 
-    @mock.patch('subprocess.Popen')
+    @mock.patch('bin.commands.utils.execute.stdout')
     @mock.patch('bin.commands.utils.messages.info')
-    def test__dryDestroySection(self, mock_info, mock_popen):
+    def test__dryDestroySection(self, mock_info, mock_stdout):
 
         # given
         config = 'local'
         section = 'section_name'
         keys = ('test.k1=v1', 'test.k2=v2')
-        mock_process = mock.Mock()
-        mock_popen.return_value = mock_process
-        mock_process.communicate.return_value = [os.linesep.join(keys) + os.linesep]
+        mock_stdout.return_value = os.linesep.join(keys) + os.linesep
 
         # when
         settings._dry_destroy_section(config, section)
 
         # then
-        mock_popen.assert_called_once_with(
-            ('git', 'settings', 'list', '--format', 'compact', '--{}'.format(config), section),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
+        mock_stdout.assert_called_once_with(
+            ('git', 'settings', 'list', '--format', 'compact', '--{}'.format(config), section)
         )
-        mock_process.communicate.assert_called_once()
         mock_info.assert_has_calls([
             mock.call('Would be deleted from {}: {}'.format(config, keys[0])),
             mock.call('Would be deleted from {}: {}'.format(config, keys[1]))
@@ -191,12 +186,12 @@ class TestSettingsList(unittest.TestCase):
         mock_error.assert_called_once_with('no such file {!r}'.format(unknown_file))
 
     @mock.patch('bin.commands.settings._validate_config')
-    @mock.patch('subprocess.check_output')
-    def test_list_withConfig(self, mock_checkoutput, mock_validateconfig):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_list_withConfig(self, mock_stdout, mock_validateconfig):
 
         # given
         config_values = ['section.key1=value1', 'section.key2=value2']
-        mock_checkoutput.return_value = '\x00'.join(config_values).replace('=', os.linesep) + '\x00'
+        mock_stdout.return_value = '\x00'.join(config_values).replace('=', os.linesep) + '\x00'
 
         # when
         actual_values = settings.list_(config='global')
@@ -204,14 +199,14 @@ class TestSettingsList(unittest.TestCase):
         # then
         self.assertEqual(sorted(actual_values.splitlines()), config_values)
         mock_validateconfig.assert_called_once()
-        mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null', '--global'])
+        mock_stdout.assert_called_once_with(['git', 'config', '--list', '--null', '--global'])
 
     @mock.patch('bin.commands.settings._validate_config')
-    @mock.patch('subprocess.check_output')
-    def test_list_noConfigsFound(self, mock_checkoutput, mock_validateconfig):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_list_noConfigsFound(self, mock_stdout, mock_validateconfig):
 
         # given
-        mock_checkoutput.return_value = ''
+        mock_stdout.return_value = ''
 
         # when
         actual_values = settings.list_(config='system')
@@ -219,7 +214,7 @@ class TestSettingsList(unittest.TestCase):
         # then
         self.assertFalse(actual_values)
         mock_validateconfig.assert_called_once()
-        mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null', '--system'])
+        mock_stdout.assert_called_once_with(['git', 'config', '--list', '--null', '--system'])
 
     @mock.patch('bin.commands.settings._validate_config')
     @mock.patch('subprocess.check_output')

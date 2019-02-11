@@ -105,8 +105,44 @@ class TestSettingsList(unittest.TestCase):
         self.assertTrue('git-settings.test.getb=valueb' in actual)
         self.assertTrue('git-settings.test2.getc=valuec' in actual)
 
-    # too dangerous to edit the user's configs for anything more complicated
+    def test_list_local_configFileDoesNotExist(self):
+
+        # given: no local config
+        os.remove(self.dirpath + '/.git/config')
+
+        # when
+        settings_proc = subprocess.Popen(
+            'git settings list --local'.split(),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT
+        )
+        stdout = settings_proc.communicate()[0]
+
+        # then
+        self.assertFalse(stdout)
+
+    # a bit of a hack since --no-skip is a nosetests flag.
+    @unittest.skipIf(
+        '--no-skip' not in sys.argv,
+        'requires editing user config and should only run during non-local builds.'
+    )
     def test_list_global(self):
+
+        # given
+        self.repo.git.config('--global', 'git-settings.test_global.get', 'value')
+
+        # when
+        actual = self.repo.git.settings('list', '--global')
+
+        # then
+        self.assertTrue('git-settings.test_global.get=value' in actual)
+        self.assertTrue('git-settings.test.geta=valuea' not in actual)
+
+        # cleanup
+        self.repo.git.config('--global', '--remove-section', 'git-settings.test_global')
+
+    # too dangerous to edit the user's configs for anything more complicated
+    def test_list_global_safe(self):
 
         # when
         actual = self.repo.git.settings('list', '--global')
@@ -116,8 +152,51 @@ class TestSettingsList(unittest.TestCase):
         self.assertTrue('git-settings.test.getb=valueb' not in actual)
         self.assertTrue('git-settings.test2.getc=valuec' not in actual)
 
-    # too dangerous to edit the user's configs for anything more complicated
+    @unittest.skipIf(
+        '--no-skip' not in sys.argv,
+        'requires editing user config and should only run during non-local builds.'
+    )
+    def test_list_global_configFileDoesNotExist(self):
+
+        # given: no global config
+        if os.path.exists('~/.gitconfig'):
+            os.remove('~/.gitconfig')
+        if os.path.exists('~/.config/git/config'):
+            os.remove('~/.config/git/config')
+
+        # when
+        settings_proc = subprocess.Popen(
+            'git settings list --global'.split(),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT
+        )
+        stdout = settings_proc.communicate()[0]
+
+        # then
+        self.assertFalse(stdout)
+
+    # a bit of a hack since --no-skip is a nosetests flag.
+    @unittest.skipIf(
+        '--no-skip' not in sys.argv,
+        'requires editing user config and should only run during non-local builds.'
+    )
     def test_list_system(self):
+
+        # given
+        self.repo.git.config('--system', 'git-settings.test_system.get', 'value')
+
+        # when
+        actual = self.repo.git.settings('list', '--system')
+
+        # then
+        self.assertTrue('git-settings.test_system.get=value' in actual)
+        self.assertTrue('git-settings.test.geta=valuea' not in actual)
+
+        # cleanup
+        self.repo.git.config('--system', '--remove-section', 'git-settings.test_system')
+
+    # too dangerous to edit the user's configs for anything more complicated
+    def test_list_system_safe(self):
 
         # when
         actual = self.repo.git.settings('list', '--system')
@@ -126,6 +205,29 @@ class TestSettingsList(unittest.TestCase):
         self.assertTrue('git-settings.test.geta=valuea' not in actual)
         self.assertTrue('git-settings.test.getb=valueb' not in actual)
         self.assertTrue('git-settings.test2.getc=valuec' not in actual)
+
+    @unittest.skipIf(
+        '--no-skip' not in sys.argv,
+        'requires editing user config and should only run during non-local builds.'
+    )
+    def test_list_system_configFileDoesNotExist(self):
+
+        # given: no system config
+        if os.path.exists('/etc/gitconfig'):
+            os.remove('/etc/gitconfig')
+        if os.path.exists('/usr/local/etc/gitconfig'):
+            os.remove('/usr/local/etc/gitconfig')
+
+        # when
+        settings_proc = subprocess.Popen(
+            'git settings list --system'.split(),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT
+        )
+        stdout = settings_proc.communicate()[0]
+
+        # then
+        self.assertFalse(stdout)
 
     def test_list_file(self):
 

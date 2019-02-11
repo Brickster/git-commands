@@ -100,7 +100,7 @@ def _get_config_contents(config, file_):
             messages.error('no such file {!r}'.format(file_))
         config_contents = subprocess.check_output(['git', 'config', '--list', '--null', '--file', file_])
     else:
-        config_contents = subprocess.check_output(['git', 'config', '--list', '--null', '--{}'.format(config)])
+        config_contents = execute.stdout(['git', 'config', '--list', '--null', '--{}'.format(config)])
     return config_contents
 
 
@@ -129,10 +129,11 @@ def _get_list_result(count, keys, format_, config_map):
 
 def _dry_destroy_section(config, section):
 
+    # get the current section
     command = ('git', 'settings', 'list', '--format', 'compact', '--{}'.format(config), section)
-    proc = subprocess.Popen(command, stdout=PIPE, stderr=PIPE)
-    list_output = proc.communicate()[0][:-1]  # just ignore stderr and removing trailing newline
+    list_output = execute.stdout(command)
 
+    # print all key/values in the section that would be removed
     for line in list_output.splitlines():
         messages.info('Would be deleted from {}: {}'.format(config, line))
 

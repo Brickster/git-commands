@@ -1,6 +1,7 @@
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -284,7 +285,7 @@ class TestIssue112(unittest.TestCase):
 
 
 class TestIssue114(unittest.TestCase):
-    """Issue 114: Snapshot occasionally does nothing."""
+    """Snapshot occasionally does nothing."""
 
     def setUp(self):
         self.dirpath = tempfile.mkdtemp()
@@ -306,7 +307,7 @@ class TestIssue114(unittest.TestCase):
         shutil.rmtree(self.dirpath)
 
     def test(self):
-        """Quickly creating n snapshots should create n stashes."""
+        """Issue 114: quickly creating n snapshots should create n stashes."""
 
         self.repo.git.snapshot()
         self.repo.git.snapshot()
@@ -366,3 +367,41 @@ class TestIssue122(unittest.TestCase):
         stdout, stderr = associate_proc.communicate()
         self.assertFalse(stdout)
         self.assertEqual(stderr.strip(), "error: no such file 'unknown_file'")
+
+
+@unittest.skipIf(
+    '--no-skip' not in sys.argv,
+    'requires editing user config and should only run during non-local builds.'
+)
+class TestIssue131(unittest.TestCase):
+    """Handle missing system config when using git-settings list"""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+
+        # initialize repository
+        self.repo = git.Repo.init(self.dirpath)
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        """Issue 131: a missing config file should print nothing"""
+
+        # given: no system config
+        if os.path.exists('/etc/gitconfig'):
+            os.remove('/etc/gitconfig')
+        if os.path.exists('/usr/local/etc/gitconfig'):
+            os.remove('/usr/local/etc/gitconfig')
+
+        # when
+        settings_proc = subprocess.Popen(
+            'git settings list --system'.split(),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT
+        )
+        stdout = settings_proc.communicate()[0]
+
+        # then
+        self.assertFalse(stdout)
