@@ -129,7 +129,7 @@ git reindex (-v|--version)
 
 ## Testing and OS Support
 
-`git-commands` has been tested using git 2.13.0 and Python 2.7.12 on macOS Sierra and Ubuntu Trusty Tahr. To confirm on your own system, install the test dependencies and run the test suite.
+`git-commands` has been tested using git 2.20.1 and Python 2.7.15 on macOS Mojave and Ubuntu Trusty Tahr. To confirm on your own system, install the test dependencies and run the test suite.
 
 ```
 pip install requirements-test.txt
