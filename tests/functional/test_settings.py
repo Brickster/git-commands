@@ -72,6 +72,9 @@ class TestSettingsList(unittest.TestCase):
         self.repo.git.config('--local', 'git-settings.test2.getc', 'valuec')
 
     def tearDown(self):
+        # put global configs back since some tests remove them
+        self.repo.git.config('--global', 'user.name', 'Marcus Rosenow')
+        self.repo.git.config('--global', 'user.email', 'Brickstertwo@users.noreply.github.com')
         shutil.rmtree(self.dirpath)
 
     def test_list(self):
