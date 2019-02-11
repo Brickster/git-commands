@@ -92,7 +92,7 @@ class TestIssue102(unittest.TestCase):
     fatal: No such section!
     ```
 
-    https://github.com/Brickstertwo/git-commands/issues/102
+    https://github.com/Brickster/git-commands/issues/102
     """
 
     def setUp(self):

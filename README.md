@@ -141,11 +141,11 @@ nosetests
 - [colorama](https://pypi.python.org/pypi/colorama)
 - [enum34](https://pypi.python.org/pypi/enum34)
 
-[state]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-state.1.html
-[snapshot]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-snapshot.1.html
-[changes]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-changes.1.html
-[settings]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-settings.1.html
-[upstream]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-upstream.1.html
-[abandon]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-abandon.1.html
-[restash]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-restash.1.html
-[reindex]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-reindex.1.html
+[state]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-state.1.html
+[snapshot]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-snapshot.1.html
+[changes]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-changes.1.html
+[settings]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-settings.1.html
+[upstream]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-upstream.1.html
+[abandon]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-abandon.1.html
+[restash]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-restash.1.html
+[reindex]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-reindex.1.html

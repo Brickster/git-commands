@@ -24,28 +24,28 @@ All notable changes to this project will be documented in this file. This projec
 - `settings list` failing with empty config files [#121][]
 - `settings list` not properly handling unknown files [#122][]
 
-[#91]: https://github.com/Brickstertwo/git-commands/issues/91
-[#93]: https://github.com/Brickstertwo/git-commands/issues/93
-[#94]: https://github.com/Brickstertwo/git-commands/issues/94
-[#95]: https://github.com/Brickstertwo/git-commands/issues/95
-[#102]: https://github.com/Brickstertwo/git-commands/issues/102
-[#103]: https://github.com/Brickstertwo/git-commands/issues/103
-[#104]: https://github.com/Brickstertwo/git-commands/issues/104
-[#106]: https://github.com/Brickstertwo/git-commands/issues/106
-[#107]: https://github.com/Brickstertwo/git-commands/issues/107
-[#108]: https://github.com/Brickstertwo/git-commands/issues/108
-[#112]: https://github.com/Brickstertwo/git-commands/issues/112
-[#120]: https://github.com/Brickstertwo/git-commands/issues/120
-[#121]: https://github.com/Brickstertwo/git-commands/issues/121
-[#122]: https://github.com/Brickstertwo/git-commands/issues/122
+[#91]: https://github.com/Brickster/git-commands/issues/91
+[#93]: https://github.com/Brickster/git-commands/issues/93
+[#94]: https://github.com/Brickster/git-commands/issues/94
+[#95]: https://github.com/Brickster/git-commands/issues/95
+[#102]: https://github.com/Brickster/git-commands/issues/102
+[#103]: https://github.com/Brickster/git-commands/issues/103
+[#104]: https://github.com/Brickster/git-commands/issues/104
+[#106]: https://github.com/Brickster/git-commands/issues/106
+[#107]: https://github.com/Brickster/git-commands/issues/107
+[#108]: https://github.com/Brickster/git-commands/issues/108
+[#112]: https://github.com/Brickster/git-commands/issues/112
+[#120]: https://github.com/Brickster/git-commands/issues/120
+[#121]: https://github.com/Brickster/git-commands/issues/121
+[#122]: https://github.com/Brickster/git-commands/issues/122
 
 ## [v0.6.1][] - 2017-01-17
 ### Fixed
 - `git-state` printing header colors in with `--no-color` [#80][]
 - `git-changes` defaulting to an ambiguous ref [#92][]
 
-[#80]: https://github.com/Brickstertwo/git-commands/issues/80
-[#92]: https://github.com/Brickstertwo/git-commands/issues/92
+[#80]: https://github.com/Brickster/git-commands/issues/80
+[#92]: https://github.com/Brickster/git-commands/issues/92
 
 ## [v0.6.0][] - 2017-01-14
 ### Added
@@ -81,29 +81,29 @@ All notable changes to this project will be documented in this file. This projec
 - `git-changes` not working for empty/new repositories [#74][]
 - Documentation issues [#59][] [#86][]
 
-[#58]: https://github.com/Brickstertwo/git-commands/issues/58
-[#59]: https://github.com/Brickstertwo/git-commands/issues/59
-[#60]: https://github.com/Brickstertwo/git-commands/issues/60
-[#61]: https://github.com/Brickstertwo/git-commands/issues/61
-[#62]: https://github.com/Brickstertwo/git-commands/issues/62
-[#64]: https://github.com/Brickstertwo/git-commands/issues/64
-[#66]: https://github.com/Brickstertwo/git-commands/issues/66
-[#67]: https://github.com/Brickstertwo/git-commands/issues/67
-[#71]: https://github.com/Brickstertwo/git-commands/issues/71
-[#72]: https://github.com/Brickstertwo/git-commands/issues/72
-[#74]: https://github.com/Brickstertwo/git-commands/issues/74
-[#75]: https://github.com/Brickstertwo/git-commands/issues/75
-[#76]: https://github.com/Brickstertwo/git-commands/issues/76
-[#77]: https://github.com/Brickstertwo/git-commands/issues/77
-[#78]: https://github.com/Brickstertwo/git-commands/issues/78
-[#81]: https://github.com/Brickstertwo/git-commands/issues/81
-[#83]: https://github.com/Brickstertwo/git-commands/issues/83
-[#84]: https://github.com/Brickstertwo/git-commands/issues/84
-[#85]: https://github.com/Brickstertwo/git-commands/issues/85
-[#86]: https://github.com/Brickstertwo/git-commands/issues/86
-[#87]: https://github.com/Brickstertwo/git-commands/issues/87
-[#88]: https://github.com/Brickstertwo/git-commands/issues/88
-[#90]: https://github.com/Brickstertwo/git-commands/issues/90
+[#58]: https://github.com/Brickster/git-commands/issues/58
+[#59]: https://github.com/Brickster/git-commands/issues/59
+[#60]: https://github.com/Brickster/git-commands/issues/60
+[#61]: https://github.com/Brickster/git-commands/issues/61
+[#62]: https://github.com/Brickster/git-commands/issues/62
+[#64]: https://github.com/Brickster/git-commands/issues/64
+[#66]: https://github.com/Brickster/git-commands/issues/66
+[#67]: https://github.com/Brickster/git-commands/issues/67
+[#71]: https://github.com/Brickster/git-commands/issues/71
+[#72]: https://github.com/Brickster/git-commands/issues/72
+[#74]: https://github.com/Brickster/git-commands/issues/74
+[#75]: https://github.com/Brickster/git-commands/issues/75
+[#76]: https://github.com/Brickster/git-commands/issues/76
+[#77]: https://github.com/Brickster/git-commands/issues/77
+[#78]: https://github.com/Brickster/git-commands/issues/78
+[#81]: https://github.com/Brickster/git-commands/issues/81
+[#83]: https://github.com/Brickster/git-commands/issues/83
+[#84]: https://github.com/Brickster/git-commands/issues/84
+[#85]: https://github.com/Brickster/git-commands/issues/85
+[#86]: https://github.com/Brickster/git-commands/issues/86
+[#87]: https://github.com/Brickster/git-commands/issues/87
+[#88]: https://github.com/Brickster/git-commands/issues/88
+[#90]: https://github.com/Brickster/git-commands/issues/90
 
 ## [v0.5.0][] - 2016-04-14
 ### Added
@@ -129,11 +129,11 @@ All notable changes to this project will be documented in this file. This projec
 ### Removed
 - git-fixup
 
-[#25]: https://github.com/Brickstertwo/git-commands/issues/25
-[#27]: https://github.com/Brickstertwo/git-commands/issues/27
-[#28]: https://github.com/Brickstertwo/git-commands/issues/28
-[#30]: https://github.com/Brickstertwo/git-commands/issues/30
-[#35]: https://github.com/Brickstertwo/git-commands/issues/35
+[#25]: https://github.com/Brickster/git-commands/issues/25
+[#27]: https://github.com/Brickster/git-commands/issues/27
+[#28]: https://github.com/Brickster/git-commands/issues/28
+[#30]: https://github.com/Brickster/git-commands/issues/30
+[#35]: https://github.com/Brickster/git-commands/issues/35
 
 ## [v0.4.0][] - 2015-08-26
 ### Added
@@ -196,11 +196,11 @@ All notable changes to this project will be documented in this file. This projec
 ### Added
 - Everything
 
-[Unreleased]: https://github.com/Brickstertwo/git-commands/compare/latest...HEAD
-[v0.6.1]: https://github.com/Brickstertwo/git-commands/compare/v0.6.0...v0.6.1
-[v0.6.0]: https://github.com/Brickstertwo/git-commands/compare/v0.5.0...v0.6.0
-[v0.5.0]: https://github.com/Brickstertwo/git-commands/compare/v0.4.0...v0.5.0
-[v0.4.0]: https://github.com/Brickstertwo/git-commands/compare/v0.3.0...v0.4.0
-[v0.3.0]: https://github.com/Brickstertwo/git-commands/compare/v0.2.0...v0.3.0
-[v0.2.0]: https://github.com/Brickstertwo/git-commands/compare/v0.1.0...v0.2.0
-[v0.1.0]: https://github.com/Brickstertwo/git-commands/compare/4a8227e7ea81bcc641a142078c59cbc71f6aa4dc...v0.1.0
+[Unreleased]: https://github.com/Brickster/git-commands/compare/latest...HEAD
+[v0.6.1]: https://github.com/Brickster/git-commands/compare/v0.6.0...v0.6.1
+[v0.6.0]: https://github.com/Brickster/git-commands/compare/v0.5.0...v0.6.0
+[v0.5.0]: https://github.com/Brickster/git-commands/compare/v0.4.0...v0.5.0
+[v0.4.0]: https://github.com/Brickster/git-commands/compare/v0.3.0...v0.4.0
+[v0.3.0]: https://github.com/Brickster/git-commands/compare/v0.2.0...v0.3.0
+[v0.2.0]: https://github.com/Brickster/git-commands/compare/v0.1.0...v0.2.0
+[v0.1.0]: https://github.com/Brickster/git-commands/compare/4a8227e7ea81bcc641a142078c59cbc71f6aa4dc...v0.1.0

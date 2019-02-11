@@ -12,12 +12,12 @@ git-branch(1)   http://git-scm.com/docs/git-branch
 gitglossary(7)  http://git-scm.com/docs/gitglossary.html
 
 # HTML man pages
-git-state(1)    http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-state.1.html
-git-snapshot(1) http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-snapshot.1.html
-git-changes(1)  http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-changes.1.html
-git-settings(1) http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-settings.1.html
-git-upstream(1) http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-upstream.1.html
-git-fixup(1)    http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-fixup.1.html
-git-abandon(1)  http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-abandon.1.html
-git-restash(1)  http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-restash.1.html
-git-reindex(1)  http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickstertwo/git-commands/master/man/man1/git-reindex.1.html
+git-state(1)    http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-state.1.html
+git-snapshot(1) http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-snapshot.1.html
+git-changes(1)  http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-changes.1.html
+git-settings(1) http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-settings.1.html
+git-upstream(1) http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-upstream.1.html
+git-fixup(1)    http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-fixup.1.html
+git-abandon(1)  http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-abandon.1.html
+git-restash(1)  http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-restash.1.html
+git-reindex(1)  http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-reindex.1.html
