@@ -123,7 +123,7 @@
 <dt><code>-a</code>|<code>--all</code></dt><dd><p>  Unassociate all branches.</p></dd>
 <dt><code>-p</code>|<code>--prune</code></dt><dd><p>  Unassociate branches that no longer exist.</p></dd>
 <dt><code>-q</code>|<code>--quiet</code></dt><dd><p>  Suppress all non-error output.</p></dd>
-<dt><code>-d</code>|<code>--dry-run</code></dt><dd><p>  Show the association(s) that would be remove but do nothing.</p></dd>
+<dt><code>-d</code>|<code>--dry-run</code></dt><dd><p>  Show the association(s) that would be removed but do nothing.</p></dd>
 </dl>
 </dd>
 <dt><code>-h</code>|<code>--help</code></dt><dd><p>  Print a simple help message.</p></dd>
@@ -134,7 +134,7 @@
 <h2 id="CONFIGURATION">CONFIGURATION</h2>
 
 <dl>
-<dt><code>git-changes.default-commit-ish</code> <var>string</var></dt><dd><p>  The default commit-ish to use when finding changes. Option <var>branch</var> overrides this setting.</p>
+<dt><code>git-changes.default-commit-ish</code> <var>string</var></dt><dd><p>  The default commit-ish to use when finding changes. Both <code>view</code> option <var>commit-ish</var> and configuration <code>git-changes.associations.&lt;branch>.with</code> override this setting.</p>
 
 <p>  Default: <em>refs/heads/master</em></p></dd>
 <dt><code>git-changes.associations.*.with</code> <var>string</var></dt><dd><p>  Defines an association between the branch in the key and the value. The value must be a commit-ish. Under normal circumstances, these entries are created/removed automatically.</p>
@@ -150,7 +150,7 @@
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>January 2017</li>
+    <li class='tc'>February 2019</li>
     <li class='tr'>git-changes(1)</li>
   </ol>
 

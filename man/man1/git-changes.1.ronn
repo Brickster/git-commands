@@ -71,7 +71,7 @@
         Suppress all non-error output.
 
     * `-d`|`--dry-run`:
-        Show the association(s) that would be remove but do nothing.
+        Show the association(s) that would be removed but do nothing.
 
 * `-h`|`--help`:
     Print a simple help message.
@@ -82,7 +82,7 @@
 ## CONFIGURATION
 
 * `git-changes.default-commit-ish` <string>:
-    The default commit-ish to use when finding changes. Option <branch> overrides this setting.
+    The default commit-ish to use when finding changes. Both `view` option <commit-ish> and configuration `git-changes.associations.<branch>.with` override this setting.
 
     Default: _refs/heads/master_
 

@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-CHANGES" "1" "January 2017" "" ""
+.TH "GIT\-CHANGES" "1" "February 2019" "" ""
 .
 .SH "NAME"
 \fBgit\-changes\fR \- lists the commits between this branch and a commit\-ish
@@ -108,7 +108,7 @@ Suppress all non\-error output\.
 .
 .TP
 \fB\-d\fR|\fB\-\-dry\-run\fR
-Show the association(s) that would be remove but do nothing\.
+Show the association(s) that would be removed but do nothing\.
 
 .
 .TP
@@ -123,7 +123,7 @@ Print version\.
 .
 .TP
 \fBgit\-changes\.default\-commit\-ish\fR \fIstring\fR
-The default commit\-ish to use when finding changes\. Option \fIbranch\fR overrides this setting\.
+The default commit\-ish to use when finding changes\. Both \fBview\fR option \fIcommit\-ish\fR and configuration \fBgit\-changes\.associations\.<branch>\.with\fR override this setting\.
 .
 .IP
 Default: \fIrefs/heads/master\fR
