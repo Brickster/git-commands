@@ -19,3 +19,5 @@ plugins:
 exclude_patterns:
 - tests/
 - .idea/
+- bin/__init__.py
+- bin/commands/__init__.py
