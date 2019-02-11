@@ -44,7 +44,7 @@ def warn(message, quiet=False, ignore=False):
 
     :param str or unicode message: the warning message to print
     :param bool quiet: suppress message
-    :param ignore: ignore this warning and print nothing
+    :param bool ignore: ignore this warning and print nothing
     :return bool: always returns True to indicate a warning has been issued
     """
     if not ignore:
