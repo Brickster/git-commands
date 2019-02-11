@@ -159,10 +159,10 @@ class TestSettingsList(unittest.TestCase):
     def test_list_global_configFileDoesNotExist(self):
 
         # given: no global config
-        if os.path.exists('~/.gitconfig'):
-            os.remove('~/.gitconfig')
-        if os.path.exists('~/.config/git/config'):
-            os.remove('~/.config/git/config')
+        if os.path.exists(os.path.expanduser('~/.gitconfig')):
+            os.remove(os.path.expanduser('~/.gitconfig'))
+        if os.path.exists(os.path.expanduser('~/.config/git/config')):
+            os.remove(os.path.expanduser('~/.config/git/config'))
 
         # when
         settings_proc = subprocess.Popen(
