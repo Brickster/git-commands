@@ -4,7 +4,8 @@
 
 `git changes view` [(`-c`|`--count`)] [(`-s`|`--stat`)] [(`-d`|`--diff`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--color` [<when>]] [`--no-color`] [<commit-ish>]<br>
-`git changes associate` [(`-q`|`--quiet`)] [(`-u`|`--upstream`)] [<commit-ish>]<br>
+`git changes associate` [(`-q`|`--quiet`)] [(`-u`|`--upstream`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-V`|`--verbose`)] [<commit-ish>]<br>
 `git changes unassociate` [(`-a`|`--all`)] [(`-p`|`--prune`)] [(`-q`|`--quiet`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-d`|`--dry-run`)]<br>
 `git changes` (`-h`|`--help`)<br>
@@ -54,6 +55,9 @@
 
     * `-q`|`--quiet`:
         Suppress all non-error output. Cannot be used without <commit-ish>.
+
+    * `-V`|`--verbose`:
+        If none exist when printing the current association, print `git-changes.default-commit-ish`.
 
 * `unassociate`:
     Remove associations.

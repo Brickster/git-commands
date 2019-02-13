@@ -24,6 +24,8 @@ def associate(committish, quiet=False):
 
     if not directories.is_git_repository():
         messages.error('{0!r} not a git repository'.format(os.getcwd()))
+    elif git.is_empty_repository():
+        messages.error('cannot associate while empty')
     elif git.is_detached():
         messages.error('cannot associate while HEAD is detached')
 
@@ -117,19 +119,30 @@ def unassociate(branch=None, cleanup=None, quiet=False, dry_run=False):
                 subprocess.call(['git', 'config', '--local', '--remove-section', 'git-changes.associations.' + branch])
 
 
-def get_association(branch=None):
+def get_association(branch=None, verbose=False):
     """Return the associated commit-ish.
 
     :param str or unicode branch: the branch whose association should be returned
+    :param bool verbose: print default association when none exist
     :return str or unicode: the associated commit-ish or None
     """
 
     if not directories.is_git_repository():
         messages.error('{0!r} not a git repository'.format(os.getcwd()))
-    branch = branch if branch else git.current_branch()
-    if not branch:
+    elif git.is_empty_repository():
+        messages.warn('repository is empty')
         return None
-    return settings.get('git-changes.associations.' + branch + '.with', config='local')
+
+    branch = branch if branch else git.current_branch()
+    default_branch = settings.get('git-changes.default-commit-ish', default='refs/heads/master')
+    if branch == 'HEAD' or not branch:
+        associated_branch = None
+    else:
+        associated_branch = settings.get('git-changes.associations.' + branch + '.with', config='local')
+
+    if not associated_branch and verbose:
+        return default_branch
+    return associated_branch
 
 
 def changes(committish, details=None, color_when=None):

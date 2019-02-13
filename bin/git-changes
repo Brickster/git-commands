@@ -25,7 +25,7 @@ def main():
         'associate',
         help='associate a branch',
         description='associate a branch',
-        usage='git changes associate [-h] [COMMIT-ISH [-q]]'
+        usage='git changes associate [-h] [-u] [-V] [COMMIT-ISH [-q]]'
     )
     associate_parser.set_defaults(func=changes.associate)
 
@@ -46,10 +46,19 @@ def main():
         default=argparse.SUPPRESS
     )
 
+    # -u|--upstream
     associate_parser.add_argument(
         '-u',
         '--upstream',
         help='associate the current branch with its upstream branch',
+        action='store_true'
+    )
+
+    # -V|--verbose
+    associate_parser.add_argument(
+        '-V',
+        '--verbose',
+        help='print the default association when an explicit one does not exist',
         action='store_true'
     )
 
@@ -184,9 +193,15 @@ def main():
             error('argument -q/--quiet: not allowed without positional argument committish or option -r/--remote', prefix='git changes: error:')
         args['func'] = changes.get_association
         del args['committish']
+        del args['upstream']
     elif subcommand == 'associate' and args['upstream']:
         args['func'] = changes.associate_upstream
         del args['committish']
+        del args['verbose']
+        del args['upstream']
+    elif subcommand == 'associate':
+        del args['verbose']
+        del args['upstream']
     elif subcommand == 'view' and 'remote' in args:
         # -r|--remote doesn't work with dest='committish' when committish is positional
         del args['remote']
@@ -201,9 +216,6 @@ def main():
         if not committish:
             committish = settings.get('git-changes.default-commit-ish', default='refs/heads/master')
         args['committish'] = committish
-
-    if subcommand == 'associate':
-        del args['upstream']
 
     func = args.pop('func')
     result = func(**args)

@@ -98,7 +98,10 @@ class TestIssue102(unittest.TestCase):
     def setUp(self):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
-        git.Repo.init(self.dirpath)
+        repo = git.Repo.init(self.dirpath)
+        open('README.md', 'w').close()
+        repo.index.add(['README.md'])
+        repo.index.commit('Initial commit')
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)

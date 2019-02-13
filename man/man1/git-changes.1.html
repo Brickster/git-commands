@@ -82,7 +82,8 @@
 
 <p><code>git changes view</code> [(<code>-c</code>|<code>--count</code>)] [(<code>-s</code>|<code>--stat</code>)] [(<code>-d</code>|<code>--diff</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--color</code> [<var>when</var>]] [<code>--no-color</code>] [<var>commit-ish</var>]<br />
-<code>git changes associate</code> [(<code>-q</code>|<code>--quiet</code>)] [(<code>-u</code>|<code>--upstream</code>)] [<var>commit-ish</var>]<br />
+<code>git changes associate</code> [(<code>-q</code>|<code>--quiet</code>)] [(<code>-u</code>|<code>--upstream</code>)]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-V</code>|<code>--verbose</code>)] [<var>commit-ish</var>]<br />
 <code>git changes unassociate</code> [(<code>-a</code>|<code>--all</code>)] [(<code>-p</code>|<code>--prune</code>)] [(<code>-q</code>|<code>--quiet</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-d</code>|<code>--dry-run</code>)]<br />
 <code>git changes</code> (<code>-h</code>|<code>--help</code>)<br />
@@ -114,6 +115,7 @@
 <dt><var>commit-ish</var></dt><dd><p>  Associate the current branch with a commit-ish. Once associated, <var>commit-ish</var> can be omitted when using <code>view</code> and the association will be used.</p></dd>
 <dt><code>-u</code>|<code>--upstream</code></dt><dd><p>  Associate the current branch with its upstream branch.</p></dd>
 <dt><code>-q</code>|<code>--quiet</code></dt><dd><p>  Suppress all non-error output. Cannot be used without <var>commit-ish</var>.</p></dd>
+<dt><code>-V</code>|<code>--verbose</code></dt><dd><p>  If none exist when printing the current association, print <code>git-changes.default-commit-ish</code>.</p></dd>
 </dl>
 </dd>
 <dt><code>unassociate</code></dt><dd><p>  Remove associations.</p>

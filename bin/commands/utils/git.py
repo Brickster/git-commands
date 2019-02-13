@@ -133,7 +133,7 @@ def symbolic_full_name(ref):
 
 
 def current_branch():
-    """Returns the current branch.
+    """Returns the current branch. 'HEAD' is returned if detached.
 
     :return str or unicode: the name of the current branch
     """

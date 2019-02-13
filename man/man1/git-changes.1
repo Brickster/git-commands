@@ -13,7 +13,10 @@
 \~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-color\fR [\fIwhen\fR]] [\fB\-\-no\-color\fR] [\fIcommit\-ish\fR]
 .
 .br
-\fBgit changes associate\fR [(\fB\-q\fR|\fB\-\-quiet\fR)] [(\fB\-u\fR|\fB\-\-upstream\fR)] [\fIcommit\-ish\fR]
+\fBgit changes associate\fR [(\fB\-q\fR|\fB\-\-quiet\fR)] [(\fB\-u\fR|\fB\-\-upstream\fR)]
+.
+.br
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-V\fR|\fB\-\-verbose\fR)] [\fIcommit\-ish\fR]
 .
 .br
 \fBgit changes unassociate\fR [(\fB\-a\fR|\fB\-\-all\fR)] [(\fB\-p\fR|\fB\-\-prune\fR)] [(\fB\-q\fR|\fB\-\-quiet\fR)]
@@ -84,6 +87,10 @@ Associate the current branch with its upstream branch\.
 .TP
 \fB\-q\fR|\fB\-\-quiet\fR
 Suppress all non\-error output\. Cannot be used without \fIcommit\-ish\fR\.
+.
+.TP
+\fB\-V\fR|\fB\-\-verbose\fR
+If none exist when printing the current association, print \fBgit\-changes\.default\-commit\-ish\fR\.
 
 .
 .TP
