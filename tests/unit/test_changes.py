@@ -190,6 +190,23 @@ class TestChangesAssociate(unittest.TestCase):
         mock_getcwd.assert_called_once_with()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=True)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
+    def test_associate_repositoryisempty(self, mock_error, mock_isemptyrepository, mock_isgitrepository):
+
+        # when
+        try:
+            changes.associate('HEAD')
+            self.fail('expected to exit but did not')  # pragma: no cover
+        except SystemExit:
+            pass
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_isemptyrepository.assert_called_once_with()
+        mock_error.assert_called_once_with('cannot associate while empty')
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.utils.git.is_detached', return_value=True)
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
