@@ -270,7 +270,6 @@ git-settings.test.getb=valueb""")
     geta = valuea
     getb = valueb""")
 
-
     def test_list_pretty(self):
 
         # when
@@ -296,6 +295,16 @@ git-settings.test.getb=valueb""")
 
         # then
         self.assertEqual(keys, ['geta', 'getb'])
+
+    def test_test_keysOptionRequiresASection(self):
+
+        # run
+        p = subprocess.Popen('git settings list --keys'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = p.communicate()
+
+        # verify
+        self.assertFalse(stdout)
+        self.assertEqual('error: argument -k/--key: not allowed without positional argument section', stderr.strip())
 
 
 # a bit of a hack since --no-skip is a nosetests flag.

@@ -47,10 +47,10 @@
         The section is printed in the specified format. Valid values include: <compact> and <pretty>.
 
     * `-c`|`--count`:
-        The count of keys in a given section is printed rather than the section itself.
+        Print the count of values in a given section/file.
 
     * `-k`|`--keys`:
-        List only the keys for the section.
+        List only the keys for the section. Requires positional argument <section>.
 
 * `-h`|`--help`:
     Print a simple help message.

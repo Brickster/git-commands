@@ -324,6 +324,30 @@ class TestIssue114(unittest.TestCase):
         self.assertEqual(len(stashes), 7)
 
 
+class TestIssue119(unittest.TestCase):
+    """Limiting settings to keys should require a section"""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+
+        # initialize repository
+        self.repo = git.Repo.init(self.dirpath)
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        settings_proc = subprocess.Popen(
+            'git settings list --keys'.split(),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        stdout, stderr = settings_proc.communicate()
+        self.assertFalse(stdout)
+        self.assertEqual(stderr.strip(), 'error: argument -k/--key: not allowed without positional argument section')
+
+
 class TestIssue121(unittest.TestCase):
     """Settings list fails when the config file is empty"""
 
@@ -362,12 +386,12 @@ class TestIssue122(unittest.TestCase):
     def test(self):
         """Issue 122: settings list should gracefully print unknown file errors"""
 
-        associate_proc = subprocess.Popen(
+        settings_proc = subprocess.Popen(
             'git settings list --file unknown_file'.split(),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
-        stdout, stderr = associate_proc.communicate()
+        stdout, stderr = settings_proc.communicate()
         self.assertFalse(stdout)
         self.assertEqual(stderr.strip(), "error: no such file 'unknown_file'")
 

@@ -3,6 +3,7 @@
 import argparse
 
 from commands import settings
+from commands.utils import messages
 from commands.utils.parse_actions import multi_set
 
 
@@ -55,7 +56,7 @@ def main():
         epilog='for more detail, use: git help settings'
     )
     parser.add_argument('-v', '--version', action='version', help='show version and exit', version='git-settings 0.6.1')
-    subparsers = parser.add_subparsers(help='sub-command help')
+    subparsers = parser.add_subparsers(help='sub-command help', dest='subcommand')
 
     # --------------------------------------------
     # get sub-command
@@ -132,6 +133,11 @@ def main():
     destroy_parser.set_defaults(func=settings.destroy)
 
     args = vars(parser.parse_args())
+
+    subcommand = args.pop('subcommand')
+    if subcommand == 'list' and not args['section'] and args['keys']:
+        messages.error('argument -k/--key: not allowed without positional argument section')
+
     func = args.pop('func')
     result = func(**args)
     if result:
