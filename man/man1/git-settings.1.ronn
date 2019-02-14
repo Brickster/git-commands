@@ -32,7 +32,7 @@
         Don't destroy anything but show which configurations would be removed.
 
 * `list`:
-    List all configuration settings respecting override precedence. If any options are specified, `list` switches to section mode.
+    List all configuration settings respecting override precedence.
 
     * <section> :
         Limit the output to a given section.
