@@ -1,6 +1,6 @@
 # git-commands
 
-[![Build Status](https://travis-ci.org/Brickster/git-commands.svg?branch=master)](https://travis-ci.org/Brickster/git-commands) [![Requirements Status](https://requires.io/github/Brickster/git-commands/requirements.svg?branch=master)](https://requires.io/github/Brickster/git-commands/requirements/?branch=master) [![Code Climate](https://codeclimate.com/github/Brickstertwo/git-commands/badges/gpa.svg)](https://codeclimate.com/github/Brickstertwo/git-commands) [![Test Coverage](https://codeclimate.com/github/Brickstertwo/git-commands/badges/coverage.svg)](https://codeclimate.com/github/Brickstertwo/git-commands/coverage)
+[![Build Status](https://travis-ci.org/Brickster/git-commands.svg?branch=master)](https://travis-ci.org/Brickster/git-commands) [![Requirements Status](https://requires.io/github/Brickster/git-commands/requirements.svg?branch=master)](https://requires.io/github/Brickster/git-commands/requirements/?branch=master) [![Maintainability](https://api.codeclimate.com/v1/badges/2528d2fb9bba901acf6d/maintainability)](https://codeclimate.com/github/Brickster/git-commands/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/2528d2fb9bba901acf6d/test_coverage)](https://codeclimate.com/github/Brickster/git-commands/test_coverage)
 
 A collection of custom git commands
 
