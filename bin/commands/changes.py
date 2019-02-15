@@ -72,13 +72,8 @@ def _get_associated_branches():
 def _prune_associations(cleanup, quiet, dry_run=False):
     """Remove associations for branches that no longer exist."""
 
-    if git.is_empty_repository():
-        return
-
-    # get branches
+    # get branches and associations
     current_branches = [ref.split()[1][11:] for ref in subprocess.check_output(('git', 'show-ref', '--heads')).splitlines()]
-
-    # get associations
     current_associations = _get_associated_branches()
 
     branches_to_prune = current_associations
@@ -106,6 +101,8 @@ def unassociate(branch=None, cleanup=None, quiet=False, dry_run=False):
 
     if not directories.is_git_repository():
         messages.error('{0!r} not a git repository'.format(os.getcwd()))
+    elif git.is_empty_repository():
+        return
 
     if cleanup:
         _prune_associations(cleanup, quiet, dry_run)
