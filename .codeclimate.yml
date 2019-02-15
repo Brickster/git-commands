@@ -19,5 +19,6 @@ plugins:
 exclude_patterns:
 - tests/
 - .idea/
+- htmlcov/
 - bin/__init__.py
 - bin/commands/__init__.py
