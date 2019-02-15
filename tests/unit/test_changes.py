@@ -328,12 +328,11 @@ class TestChangesPruneAssociations(unittest.TestCase):
         changes.unassociate = self._unassociate
         changes._get_associated_branches = self._get_associated_branches
 
-    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('subprocess.check_output')
     @mock.patch('bin.commands.changes._get_associated_branches')
     @mock.patch('bin.commands.changes.unassociate')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_prune_associations(self, mock_info, mock_unassociate, mock_getassociatedbranches, mock_checkoutput, mock_isemptyrepository):
+    def test_prune_associations(self, mock_info, mock_unassociate, mock_getassociatedbranches, mock_checkoutput):
 
         # setup
         refs = "84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/master\n"
@@ -346,18 +345,16 @@ class TestChangesPruneAssociations(unittest.TestCase):
         changes._prune_associations('prune', quiet=quiet)
 
         # then
-        mock_isemptyrepository.assert_called_once()
         mock_checkoutput.assert_called_once_with(('git', 'show-ref', '--heads'))
         mock_getassociatedbranches.assert_called_once()
         mock_unassociate.assert_called_once_with('develop')
         mock_info.assert_called_once_with("Removed association 'develop'", quiet)
 
-    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('subprocess.check_output')
     @mock.patch('bin.commands.changes._get_associated_branches')
     @mock.patch('bin.commands.changes.unassociate')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_prune_associations_dryRun(self, mock_info, mock_unassociate, mock_getassociatedbranches, mock_checkoutput, mock_isemptyrepository):
+    def test_prune_associations_dryRun(self, mock_info, mock_unassociate, mock_getassociatedbranches, mock_checkoutput):
 
         # setup
         refs = "84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/master\n"
@@ -370,18 +367,16 @@ class TestChangesPruneAssociations(unittest.TestCase):
         changes._prune_associations('prune', quiet=quiet, dry_run=True)
 
         # then
-        mock_isemptyrepository.assert_called_once()
         mock_checkoutput.assert_called_once_with(('git', 'show-ref', '--heads'))
         mock_getassociatedbranches.assert_called_once()
         mock_unassociate.assert_not_called()
         mock_info.assert_called_once_with("Would remove association 'develop'", quiet)
 
-    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('subprocess.check_output')
     @mock.patch('bin.commands.changes._get_associated_branches')
     @mock.patch('bin.commands.changes.unassociate')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_prune_associations_all(self, mock_info, mock_unassociate, mock_getassociatedbranches, mock_checkoutput, mock_isemptyrepository):
+    def test_prune_associations_all(self, mock_info, mock_unassociate, mock_getassociatedbranches, mock_checkoutput):
 
         # setup
         refs = """84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/develop
@@ -396,7 +391,6 @@ class TestChangesPruneAssociations(unittest.TestCase):
         changes._prune_associations('all', quiet=quiet)
 
         # then
-        mock_isemptyrepository.assert_called_once()
         mock_checkoutput.assert_called_once_with(('git', 'show-ref', '--heads'))
         mock_getassociatedbranches.assert_called_once()
         mock_unassociate.assert_has_calls([
@@ -407,15 +401,6 @@ class TestChangesPruneAssociations(unittest.TestCase):
             mock.call("Removed association 'develop'", quiet),
             mock.call("Removed association 'master'", quiet)
         ])
-
-    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=True)
-    def test_pruneAssociations_newRepository(self, mock_isemptyrepository):
-
-        # when
-        changes._prune_associations(None, None)
-
-        # then
-        mock_isemptyrepository.assert_called_once()
 
 
 class TestChangesUnassociate(unittest.TestCase):
@@ -428,10 +413,11 @@ class TestChangesUnassociate(unittest.TestCase):
         changes.get_association = self._get_association
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.utils.git.current_branch')
     @mock.patch('bin.commands.changes.get_association')
     @mock.patch('subprocess.call')
-    def test_unassociate_branch(self, mock_call, mock_getassociation, mock_currentbranch, mock_isgitrepository):
+    def test_unassociate_branch(self, mock_call, mock_getassociation, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
 
         # given
         branch = 'the-branch'
@@ -442,6 +428,7 @@ class TestChangesUnassociate(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_isemptyrepository.assert_called_once_with()
         mock_currentbranch.assert_not_called()
         mock_getassociation.assert_called_once_with(branch)
         mock_call.assert_called_once_with(
@@ -449,11 +436,12 @@ class TestChangesUnassociate(unittest.TestCase):
         )
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.utils.git.current_branch')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
     @mock.patch('bin.commands.changes.get_association')
-    def test_unassociate_branch_dryRun(self, mock_getassociation, mock_info, mock_call, mock_currentbranch, mock_isgitrepository):
+    def test_unassociate_branch_dryRun(self, mock_getassociation, mock_info, mock_call, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
 
         # given
         associated_branch = 'associated-branch'
@@ -465,12 +453,14 @@ class TestChangesUnassociate(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_isemptyrepository.assert_called_once_with()
         mock_currentbranch.assert_not_called()
         mock_call.assert_not_called()
         mock_info.assert_called_once_with('Would unassociate {0!r} from {1!r}'.format(branch, associated_branch))
         mock_getassociation.assert_called_once()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.utils.git.current_branch')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -481,6 +471,7 @@ class TestChangesUnassociate(unittest.TestCase):
             mock_info,
             mock_call,
             mock_currentbranch,
+            mock_isemptyrepository,
             mock_isgitrepository
     ):
 
@@ -494,16 +485,18 @@ class TestChangesUnassociate(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_isemptyrepository.assert_called_once_with()
         mock_currentbranch.assert_not_called()
         mock_call.assert_not_called()
         mock_info.assert_not_called()
         mock_getassociation.assert_called_once()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.utils.git.current_branch')
     @mock.patch('bin.commands.changes.get_association')
     @mock.patch('subprocess.call')
-    def test_unassociate_nobranch(self, mock_call, mock_getassociation, mock_currentbranch, mock_isgitrepository):
+    def test_unassociate_nobranch(self, mock_call, mock_getassociation, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
 
         # setup
         current_branch = 'the-current'
@@ -515,6 +508,7 @@ class TestChangesUnassociate(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_isemptyrepository.assert_called_once_with()
         mock_currentbranch.assert_called_once_with()
         mock_getassociation.assert_called_once_with(current_branch)
         mock_call.assert_called_once_with(
@@ -539,8 +533,26 @@ class TestChangesUnassociate(unittest.TestCase):
         mock_getcwd.assert_called_once_with()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.current_branch')
+    @mock.patch('bin.commands.changes.get_association')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_unassociate_emptyrepository(self, mock_info, mock_getassociation, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
+
+        # when
+        changes.unassociate(branch=None, dry_run=True)
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_isemptyrepository.assert_called_once_with()
+        mock_currentbranch.assert_not_called()
+        mock_getassociation.assert_not_called()
+        mock_info.assert_not_called()
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.changes._prune_associations')
-    def test_unassociate_cleanup(self, mock_pruneassociations, mock_isgitrepository):
+    def test_unassociate_cleanup(self, mock_pruneassociations, mock_isemptyrepository, mock_isgitrepository):
 
         # when
         quiet = True
@@ -550,6 +562,7 @@ class TestChangesUnassociate(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_isemptyrepository.assert_called_once_with()
         mock_pruneassociations.assert_called_once_with(cleanup, quiet, dry_run)
 
     def test_unassociate_cleanup_invalidtype(self):
@@ -563,10 +576,11 @@ class TestChangesUnassociate(unittest.TestCase):
             self.assertEqual(error.message, 'cleanup must be one of ' + str(['all', 'prune']))
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.utils.git.current_branch')
     @mock.patch('bin.commands.changes.get_association')
     @mock.patch('subprocess.call')
-    def test_unassociate_noAssociation(self, mock_call, mock_getassociation, mock_currentbranch, mock_isgitrepository):
+    def test_unassociate_noAssociation(self, mock_call, mock_getassociation, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
 
         # given
         branch = 'the-branch'
@@ -577,6 +591,7 @@ class TestChangesUnassociate(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_isemptyrepository.assert_called_once_with()
         mock_currentbranch.assert_not_called()
         mock_getassociation.assert_called_once_with(branch)
         mock_call.assert_not_called()
