@@ -33,6 +33,24 @@ class TestDirectories(unittest.TestCase):
         self.assertTrue(actual)
         mock_exists.assert_called_once_with(directory + '/.git')
 
+    @mock.patch('os.getcwd')
+    @mock.patch('bin.commands.utils.directories.is_git_repository')
+    @mock.patch('bin.commands.utils.messages.error')
+    def test_exitIfNotGitRepository_noDirectoryGiven(self, mock_error, mock_is_git_repository, mock_getcwd):
+
+        # given
+        directory = '/repo/path'
+        mock_getcwd.return_value = directory
+        mock_is_git_repository.return_value = True
+
+        # when
+        directories.exit_if_not_git_repository()
+
+        # then
+        mock_getcwd.assert_called_once_with()
+        mock_is_git_repository.assert_called_once_with(directory)
+        mock_error.assert_not_called()
+
     @mock.patch('bin.commands.utils.directories.is_git_repository')
     @mock.patch('bin.commands.utils.messages.error')
     def test_exitIfNotGitRepository_isGitRepository(self, mock_error, mock_is_git_repository):
