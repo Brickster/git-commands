@@ -25,7 +25,7 @@ script:
   - git config --global user.name "Marcus Rosenow"
 
   # test
-  - nosetests --no-skip --with-coverage --cover-branches --cover-erase --cover-inclusive --cover-package=bin --verbose
+  - nosetests --with-coverage --cover-branches --cover-erase --cover-inclusive --cover-package=bin --verbose --no-skip
 
 after_script:
   # send coverage report to CodeClimate

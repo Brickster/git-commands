@@ -42,6 +42,7 @@ class TestChangesView(unittest.TestCase):
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-15T00:00:00Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-15T00:00:00Z'
         subprocess.call(['git', 'commit', '--quiet', '-m', 'Initial commit'], env=pyenv)
+        self.commit0_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' Initial commit'
 
         # edit readme
         with open('README.md', 'a') as a_file:
@@ -49,6 +50,7 @@ class TestChangesView(unittest.TestCase):
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-16T00:00:00Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-16T00:00:00Z'
         subprocess.call(['git', 'commit', '--quiet', '-a', '-m', 'edit readme'], env=pyenv)
+        self.commit1_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' edit readme'
 
         # add changelog
         subprocess.call('touch CHANGELOG.md'.split())
@@ -56,6 +58,7 @@ class TestChangesView(unittest.TestCase):
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-17T00:00:00Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-17T00:00:00Z'
         subprocess.call(['git', 'commit', '--quiet', '-m', 'add changelog'], env=pyenv)
+        self.commit2_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' add changelog'
 
         # edit changelog
         with open('CHANGELOG.md', 'w') as a_file:
@@ -63,6 +66,7 @@ class TestChangesView(unittest.TestCase):
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-18T00:00:00Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-18T00:00:00Z'
         subprocess.call(['git', 'commit', '--quiet', '-a', '-m', 'edit changelog'], env=pyenv)
+        self.commit3_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' edit changelog'
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
@@ -79,18 +83,18 @@ class TestChangesView(unittest.TestCase):
         self.repo.git.config('git-changes.default-commit-ish', str(self.repo.rev_parse('HEAD^')))
 
         # expect: no changes when there are none
-        self.assertEqual('5a9ef14 edit changelog', self.repo.git.changes())
-        self.assertEqual('5a9ef14 edit changelog', self.repo.git.changes('view'))
+        self.assertEqual(self.commit3_log, self.repo.git.changes())
+        self.assertEqual(self.commit3_log, self.repo.git.changes('view'))
 
     def test_view_withCommittish(self):
 
         # expect: changes when viewing with a commit-ish
         self.assertFalse(self.repo.git.changes('HEAD'))
         self.assertFalse(self.repo.git.changes('view', 'HEAD'))
-        self.assertEqual('5a9ef14 edit changelog', self.repo.git.changes('HEAD^'))
-        self.assertEqual('5a9ef14 edit changelog', self.repo.git.changes('view', 'HEAD^'))
-        self.assertEqual('5a9ef14 edit changelog\nfb334a4 add changelog', self.repo.git.changes('HEAD^^'))
-        self.assertEqual('5a9ef14 edit changelog\nfb334a4 add changelog', self.repo.git.changes('view', 'HEAD^^'))
+        self.assertEqual(self.commit3_log, self.repo.git.changes('HEAD^'))
+        self.assertEqual(self.commit3_log, self.repo.git.changes('view', 'HEAD^'))
+        self.assertEqual(os.linesep.join([self.commit3_log, self.commit2_log]), self.repo.git.changes('HEAD^^'))
+        self.assertEqual(os.linesep.join([self.commit3_log, self.commit2_log]), self.repo.git.changes('view', 'HEAD^^'))
 
     def test_view_remote(self):
 
@@ -102,8 +106,8 @@ class TestChangesView(unittest.TestCase):
         self.repo.git.config('git-changes.associations.master.with', self.repo.rev_parse('HEAD^^'))
 
         # expect
-        self.assertEqual('5a9ef14 edit changelog', self.repo.git.changes('-r'))
-        self.assertEqual('5a9ef14 edit changelog', self.repo.git.changes('--remote'))
+        self.assertEqual(self.commit3_log, self.repo.git.changes('-r'))
+        self.assertEqual(self.commit3_log, self.repo.git.changes('--remote'))
         self.assertNotEqual(self.repo.git.changes(), self.repo.git.changes('--remote'))
 
     def test_view_count(self):
@@ -136,8 +140,8 @@ class TestChangesView(unittest.TestCase):
         self.repo.git.config('git-changes.associations.master.with', self.repo.rev_parse('HEAD^'))
 
         # expect
-        self.assertEqual('5a9ef14 edit changelog', self.repo.git.changes())
-        self.assertEqual('5a9ef14 edit changelog', self.repo.git.changes('view'))
+        self.assertEqual(self.commit3_log, self.repo.git.changes())
+        self.assertEqual(self.commit3_log, self.repo.git.changes('view'))
 
     def test_view_useAssociation_noChangesExist(self):
 
