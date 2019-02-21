@@ -8,6 +8,25 @@ import unittest
 import git
 
 
+class TestSettings(unittest.TestCase):
+
+    def _output(self, command):
+        proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        return proc.communicate()[0].strip()
+
+    def test_settings_version(self):
+
+        # expect
+        self.assertRegexpMatches(self._output('git settings -v'.split()), 'git-settings \\d+\\.\\d+\\.\\d+')
+        self.assertRegexpMatches(self._output('git settings --version'.split()), 'git-settings \\d+\\.\\d+\\.\\d+')
+
+    def test_settings_help(self):
+
+        # expect
+        self.assertTrue(self._output('git settings -h'.split()))
+        self.assertTrue(self._output('git settings --help'.split()))
+
+
 class TestSettingsGet(unittest.TestCase):
 
     def setUp(self):

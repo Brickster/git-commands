@@ -9,6 +9,10 @@ import git
 
 class TestGitRestash(unittest.TestCase):
 
+    def _output(self, command):
+        proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        return proc.communicate()[0].strip()
+
     def setUp(self):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
@@ -172,3 +176,15 @@ class TestGitRestash(unittest.TestCase):
         expected = "error: '{}' not a git repository".format(os.path.realpath(self.dirpath) + '/dir')
         self.assertEqual(expected, stderr.strip())
         self.assertFalse(stdout)
+
+    def test_restash_version(self):
+
+        # expect
+        self.assertRegexpMatches(self._output('git restash -v'.split()), 'git-restash \\d+\\.\\d+\\.\\d+')
+        self.assertRegexpMatches(self._output('git restash --version'.split()), 'git-restash \\d+\\.\\d+\\.\\d+')
+
+    def test_restash_help(self):
+
+        # expect
+        self.assertTrue(self._output('git restash -h'.split()))
+        self.assertTrue(self._output('git restash --help'.split()))

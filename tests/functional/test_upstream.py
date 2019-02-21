@@ -7,6 +7,10 @@ import unittest
 
 class TestGitUpstream(unittest.TestCase):
 
+    def _output(self, command):
+        proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        return proc.communicate()[0].strip()
+
     def setUp(self):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
@@ -237,3 +241,15 @@ git upstream: error: argument -R/--no-include-remote: not allowed with argument 
         stdout, stderr = subprocess.Popen('git upstream -r -R'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
         self.assertFalse(stdout)
         self.assertEqual(stderr, expected)
+
+    def test_upstream_version(self):
+
+        # expect
+        self.assertRegexpMatches(self._output('git upstream -v'.split()), 'git-upstream \\d+\\.\\d+\\.\\d+')
+        self.assertRegexpMatches(self._output('git upstream --version'.split()), 'git-upstream \\d+\\.\\d+\\.\\d+')
+
+    def test_upstream_help(self):
+
+        # expect
+        self.assertTrue(self._output('git upstream -h'.split()))
+        self.assertTrue(self._output('git upstream --help'.split()))

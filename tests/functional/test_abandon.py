@@ -14,6 +14,10 @@ class TestGitAbandon(unittest.TestCase):
     def _stashes(self):
         return subprocess.check_output(('git', 'stash', 'list', '--oneline', '--no-color'))
 
+    def _output(self, command):
+        proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        return proc.communicate()[0].strip()
+
     def setUp(self):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
@@ -268,3 +272,15 @@ class TestGitAbandon(unittest.TestCase):
         expected = "error: '{}' not a git repository".format(os.path.realpath(self.dirpath) + '/dir')
         self.assertEqual(expected, stderr.strip())
         self.assertFalse(stdout)
+
+    def test_abandon_version(self):
+
+        # expect
+        self.assertRegexpMatches(self._output('git abandon -v'.split()), 'git-abandon \\d+\\.\\d+\\.\\d+')
+        self.assertRegexpMatches(self._output('git abandon --version'.split()), 'git-abandon \\d+\\.\\d+\\.\\d+')
+
+    def test_abandon_help(self):
+
+        # expect
+        self.assertTrue(self._output('git abandon -h'.split()))
+        self.assertTrue(self._output('git abandon --help'.split()))

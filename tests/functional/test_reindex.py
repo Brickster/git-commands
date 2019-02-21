@@ -13,6 +13,10 @@ class TestGitReindex(unittest.TestCase):
     def _status(self):
         return subprocess.check_output(('git', '-c', 'color.ui=never', 'status', '--short'))
 
+    def _output(self, command):
+        proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        return proc.communicate()[0].strip()
+
     def setUp(self):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
@@ -194,3 +198,15 @@ class TestGitReindex(unittest.TestCase):
 
         self.assertFalse(reindex_result)
         self.assertEqual("M  CHANGELOG.md\nA  new.txt\n", self._status())
+
+    def test_reindex_version(self):
+
+        # expect
+        self.assertRegexpMatches(self._output('git reindex -v'.split()), 'git-reindex \\d+\\.\\d+\\.\\d+')
+        self.assertRegexpMatches(self._output('git reindex --version'.split()), 'git-reindex \\d+\\.\\d+\\.\\d+')
+
+    def test_reindex_help(self):
+
+        # expect
+        self.assertTrue(self._output('git reindex -h'.split()))
+        self.assertTrue(self._output('git reindex --help'.split()))

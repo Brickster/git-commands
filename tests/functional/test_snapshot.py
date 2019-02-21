@@ -2,7 +2,7 @@ import os
 import shutil
 import tempfile
 import unittest
-from subprocess import call, check_output, PIPE, Popen
+from subprocess import call, check_output, PIPE, Popen, STDOUT
 
 
 class TestGitSnapshot(unittest.TestCase):
@@ -12,6 +12,10 @@ class TestGitSnapshot(unittest.TestCase):
 
     def _stashes(self):
         return check_output(('git', 'stash', 'list')).splitlines()
+
+    def _output(self, command):
+        proc = Popen(command, stdout=PIPE, stderr=STDOUT)
+        return proc.communicate()[0].strip()
 
     def setUp(self):
 
@@ -212,3 +216,15 @@ A  file3.txt
         expected = "error: '{}' not a git repository".format(os.path.realpath(self.dirpath) + '/dir')
         self.assertEqual(expected, stderr.strip())
         self.assertFalse(stdout)
+
+    def test_snapshot_version(self):
+
+        # expect
+        self.assertRegexpMatches(self._output('git snapshot -v'.split()), 'git-snapshot \\d+\\.\\d+\\.\\d+')
+        self.assertRegexpMatches(self._output('git snapshot --version'.split()), 'git-snapshot \\d+\\.\\d+\\.\\d+')
+
+    def test_snapshot_help(self):
+
+        # expect
+        self.assertTrue(self._output('git snapshot -h'.split()))
+        self.assertTrue(self._output('git snapshot --help'.split()))
