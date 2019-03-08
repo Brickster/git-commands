@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file. This projec
 - `git-tuck` [#120][]
 
 ## Fixed
-- `state--no-status` not respected for empty repositories [#93][]
+- `state --no-status` not respected for empty repositories [#93][]
 - `changes view` breaking when HEAD is detached [#94][]
 - `settings list` not handling values with newline characters [#95][]
 - `changes unassociate` breaking when no association exists for the branch [#102][]
@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file. This projec
 - `changes associate` breaking when using an invalid revision [#107][]
 - `changes unassociate --dry-run` printing a message during a no-op [#108][]
 - `changes associate --upstream` failing with local upstreams [#112][]
+- `state` printing header colors in some colorless scenarios [#117][]
 - `settings list` failing with empty config files [#121][]
 - `settings list` not properly handling unknown files [#122][]
 
@@ -35,6 +36,7 @@ All notable changes to this project will be documented in this file. This projec
 [#107]: https://github.com/Brickster/git-commands/issues/107
 [#108]: https://github.com/Brickster/git-commands/issues/108
 [#112]: https://github.com/Brickster/git-commands/issues/112
+[#117]: https://github.com/Brickster/git-commands/issues/117
 [#120]: https://github.com/Brickster/git-commands/issues/120
 [#121]: https://github.com/Brickster/git-commands/issues/121
 [#122]: https://github.com/Brickster/git-commands/issues/122

@@ -20,7 +20,7 @@ class TestStatePrintSection(unittest.TestCase):
         expected_output = '# ' + colorama.Fore.GREEN + title + ' ' + accent + colorama.Fore.RESET + os.linesep + text
 
         # when
-        section_output = state._print_section(title, accent=accent, text=text)
+        section_output = state._print_section(title, accent=accent, text=text, color='always')
 
         # then
         self.assertEqual(section_output, expected_output)
@@ -33,7 +33,7 @@ class TestStatePrintSection(unittest.TestCase):
         expected_output = '# ' + colorama.Fore.GREEN + title + colorama.Fore.RESET + os.linesep + text
 
         # when
-        section_output = state._print_section(title, accent=None, text=text)
+        section_output = state._print_section(title, accent=None, text=text, color='always')
 
         # then
         self.assertEqual(section_output, expected_output)
@@ -41,7 +41,7 @@ class TestStatePrintSection(unittest.TestCase):
     def test_printsection_donotshowempty_notext(self):
 
         # when
-        section_output = state._print_section('title', text=None, show_empty=False)
+        section_output = state._print_section('title', text=None, show_empty=False, color='always')
 
         # then
         self.assertEqual(section_output, '')
@@ -54,7 +54,18 @@ class TestStatePrintSection(unittest.TestCase):
         expected_output = '# ' + colorama.Fore.GREEN + title + colorama.Fore.RESET + os.linesep + text
 
         # when
-        section_output = state._print_section(title, accent=None, text=text, show_empty=False)
+        section_output = state._print_section(title, accent=None, text=text, show_empty=False, color='always')
+
+        # then
+        self.assertEqual(section_output, expected_output)
+
+    def test_printsection_showempty_notext(self):
+
+        # given
+        expected_output = '# ' + colorama.Fore.GREEN + 'title' + colorama.Fore.RESET + os.linesep
+
+        # when
+        section_output = state._print_section('title', text=None, show_empty=True, color='always')
 
         # then
         self.assertEqual(section_output, expected_output)
@@ -72,7 +83,7 @@ class TestStatePrintSection(unittest.TestCase):
 """.format(colorama.Fore.GREEN, title, colorama.Fore.RESET)
 
         # when
-        section_output = state._print_section(title, text=text, format_='pretty')
+        section_output = state._print_section(title, text=text, format_='pretty', color='always')
 
         # then
         self.assertEqual(section_output, expected_output)
@@ -80,12 +91,11 @@ class TestStatePrintSection(unittest.TestCase):
     def test_printsection_prettyandnotext(self):
 
         # setup
-        text = 'the text\nhere\n'
         title = 'the title'
         expected_output = "# {}{}{}".format(colorama.Fore.GREEN, title, colorama.Fore.RESET) + os.linesep + os.linesep
 
         # when
-        section_output = state._print_section(title, text=None, format_='pretty', show_empty=True)
+        section_output = state._print_section(title, text=None, format_='pretty', show_empty=True, color='always')
 
         # then
         self.assertEqual(section_output, expected_output)
@@ -98,7 +108,7 @@ class TestStatePrintSection(unittest.TestCase):
         expected_output = '# ' + colorama.Fore.GREEN + title + colorama.Fore.RESET + os.linesep + text
 
         # when
-        section_output = state._print_section(title, text=text)
+        section_output = state._print_section(title, text=text, color='always')
 
         # then
         self.assertEqual(section_output, expected_output)
@@ -108,13 +118,52 @@ class TestStatePrintSection(unittest.TestCase):
 
         # when
         try:
-            state._print_section('title', text='text', format_='invalid')
+            state._print_section('title', text='text', format_='invalid', color='always')
             self.fail('expected to exit but did not')  # pragma: no cover
         except SystemExit:
             pass
 
         # then
         mock_error.assert_called_once_with("unknown format 'invalid'")
+
+    @mock.patch('sys.stdout.isatty', return_value=True)
+    def test_printsection_color_auto_isatty(self, mock_isatty):
+
+        # given
+        expected_output = '# ' + colorama.Fore.GREEN + 'title' + colorama.Fore.RESET + os.linesep
+
+        # when
+        section_output = state._print_section('title', text=None, show_empty=True, color='auto')
+
+        # then
+        self.assertEqual(section_output, expected_output)
+
+        mock_isatty.assert_called_once_with()
+
+    @mock.patch('sys.stdout.isatty', return_value=False)
+    def test_printsection_color_auto_isnotatty(self, mock_isatty):
+
+        # given
+        expected_output = '# ' + colorama.Fore.RESET + 'title' + colorama.Fore.RESET + os.linesep
+
+        # when
+        section_output = state._print_section('title', text=None, show_empty=True, color='auto')
+
+        # then
+        self.assertEqual(section_output, expected_output)
+
+        mock_isatty.assert_called_once_with()
+
+    def test_printsection_color_never(self):
+
+        # given
+        expected_output = '# ' + colorama.Fore.RESET + 'title' + colorama.Fore.RESET + os.linesep
+
+        # when
+        section_output = state._print_section('title', text=None, show_empty=True, color='never')
+
+        # then
+        self.assertEqual(section_output, expected_output)
 
 
 class TestStateState(unittest.TestCase):
@@ -172,7 +221,8 @@ class TestStateState(unittest.TestCase):
             mock_statusaccent.return_value,
             mock_statusget.return_value,
             format_,
-            show_empty=True
+            show_empty=True,
+            color='never'
         )
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
@@ -331,7 +381,8 @@ class TestStateState(unittest.TestCase):
             mock_statusaccent.return_value,
             mock_statusget.return_value,
             format_,
-            show_empty=True
+            show_empty=True,
+            color='never'
         )
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
@@ -418,7 +469,8 @@ class TestStateState(unittest.TestCase):
             mock_statusaccent.return_value,
             mock_statusget.return_value,
             format_,
-            show_empty=True
+            show_empty=True,
+            color='always'
         )
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
@@ -491,7 +543,8 @@ class TestStateState(unittest.TestCase):
             mock_statustitle.return_value,
             mock_statusaccent.return_value,
             mock_statusget.return_value,
-            format_
+            format_,
+            color='never'
         )
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
@@ -615,7 +668,8 @@ class TestStateState(unittest.TestCase):
             title=changes_name,
             text=changes_output,
             format_=format_,
-            show_empty=None
+            show_empty=None,
+            color='never'
         )
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
@@ -695,7 +749,8 @@ class TestStateState(unittest.TestCase):
             title=changes_name,
             text=changes_output,
             format_=format_,
-            show_empty=None
+            show_empty=None,
+            color='never'
         )
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
@@ -775,7 +830,8 @@ class TestStateState(unittest.TestCase):
             title=changes_name,
             text=changes_output,
             format_=format_,
-            show_empty=None
+            show_empty=None,
+            color='never'
         )
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
@@ -855,7 +911,8 @@ class TestStateState(unittest.TestCase):
             title=changes_name,
             text=changes_output,
             format_=format_,
-            show_empty=None
+            show_empty=None,
+            color='never'
         )
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
@@ -936,7 +993,8 @@ class TestStateState(unittest.TestCase):
             title=changes_name,
             text=changes_output,
             format_=format_,
-            show_empty=None
+            show_empty=None,
+            color='never'
         )
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
@@ -1137,7 +1195,8 @@ class TestStateState(unittest.TestCase):
             title=changes_name,
             text=changes_output,
             format_=format_,
-            show_empty=None
+            show_empty=None,
+            color='never'
         )
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
@@ -1228,13 +1287,15 @@ class TestStateState(unittest.TestCase):
                 mock_statusaccent.return_value,
                 mock_statusget.return_value,
                 format_,
-                show_empty=True
+                show_empty=True,
+                color='never'
             ),
             mock.call(
                 title=changes_name,
                 text=changes_output,
                 format_=format_,
-                show_empty=None
+                show_empty=None,
+                color='never'
             )
         ])
         mock_get.assert_has_calls([
@@ -1318,7 +1379,8 @@ class TestStateState(unittest.TestCase):
             mock_statusaccent.return_value,
             mock_statusget.return_value,
             format_,
-            show_empty=True
+            show_empty=True,
+            color='never'
         )
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
@@ -1395,7 +1457,8 @@ class TestStateState(unittest.TestCase):
             mock_statusaccent.return_value,
             mock_statusget.return_value,
             format_,
-            show_empty=True
+            show_empty=True,
+            color='never'
         )
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
@@ -1468,7 +1531,8 @@ class TestStateState(unittest.TestCase):
             mock_statusaccent.return_value,
             mock_statusget.return_value,
             format_,
-            show_empty=True
+            show_empty=True,
+            color='never'
         )
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
@@ -1545,7 +1609,8 @@ class TestStateState(unittest.TestCase):
             mock_statusaccent.return_value,
             mock_statusget.return_value,
             format_,
-            show_empty=True
+            show_empty=True,
+            color='never'
         )
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
@@ -1620,7 +1685,8 @@ class TestStateState(unittest.TestCase):
             mock_statusaccent.return_value,
             mock_statusget.return_value,
             format_,
-            show_empty=True
+            show_empty=True,
+            color='never'
         )
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
@@ -1693,7 +1759,8 @@ class TestStateState(unittest.TestCase):
             mock_statusaccent.return_value,
             mock_statusget.return_value,
             format_,
-            show_empty=True
+            show_empty=True,
+            color='never'
         )
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),

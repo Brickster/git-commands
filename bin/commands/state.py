@@ -15,16 +15,22 @@ from stateextensions import status
 from utils import directories, git, messages, parse_string
 
 
-def _print_section(title, accent=None, text=None, format_='compact', show_empty=False):
+def _print_section(title, accent=None, text=None, format_='compact', show_empty=False, color='auto'):
     """Print a section."""
 
     if not show_empty and not text:
         return ""
 
+    header_color = colorama.Fore.RESET
+    if color == 'auto' and sys.stdout.isatty():
+        header_color = colorama.Fore.GREEN
+    elif color == 'always':
+        header_color = colorama.Fore.GREEN
+
     if accent:
-        section = '# {}{} {}{}'.format(colorama.Fore.GREEN, title, accent, colorama.Fore.RESET) + os.linesep
+        section = '# {}{} {}{}'.format(header_color, title, accent, colorama.Fore.RESET) + os.linesep
     else:
-        section = '# {}{}{}'.format(colorama.Fore.GREEN, title, colorama.Fore.RESET) + os.linesep
+        section = '# {}{}{}'.format(header_color, title, colorama.Fore.RESET) + os.linesep
 
     if format_ == 'pretty' and text is not None and len(text) > 0:
         # pretty print
@@ -37,7 +43,8 @@ def _print_section(title, accent=None, text=None, format_='compact', show_empty=
         # there's no text but we still want some nicer formatting
         section += os.linesep
     elif format_ == 'compact':
-        section += text
+        if text is not None:
+            section += text
     else:
         messages.error("unknown format '{}'".format(format_))
 
@@ -79,14 +86,14 @@ def state(**kwargs):
             status_output = status.get(new_repository=True, **kwargs)
             status_title = status.title()
             status_accent = status.accent(new_repository=True, **kwargs)
-            sections[status_title] = _print_section(status_title, status_accent, status_output, format_)
+            sections[status_title] = _print_section(status_title, status_accent, status_output, format_, color=show_color)
     else:
         if kwargs.get('show_status'):
             status_output = status.get(**kwargs)
             status_title = status.title()
             status_accent = status.accent(show_color=show_color)
             # TODO: remove restriction that status is always shown
-            sections[status_title] = _print_section(status_title, status_accent, status_output, format_, show_empty=True)
+            sections[status_title] = _print_section(status_title, status_accent, status_output, format_, show_empty=True, color=show_color)
 
         # show any user defined sections
         extensions = settings.list_(
@@ -129,7 +136,8 @@ def state(**kwargs):
                 title=extension_name,
                 text=extension_out if not extension_proc.returncode else extension_error,
                 format_=format_,
-                show_empty=kwargs.get('show_empty')
+                show_empty=kwargs.get('show_empty'),
+                color=show_color
             )
 
     state_result = ''
