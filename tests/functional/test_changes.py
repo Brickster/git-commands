@@ -68,6 +68,9 @@ class TestChangesView(unittest.TestCase):
         subprocess.call(['git', 'commit', '--quiet', '-a', '-m', 'edit changelog'], env=pyenv)
         self.commit3_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' edit changelog'
 
+        # make sure coloring isn't enabled
+        subprocess.call(['git', 'config', '--local', 'color.ui', 'never'])
+
     def tearDown(self):
         shutil.rmtree(self.dirpath)
 
