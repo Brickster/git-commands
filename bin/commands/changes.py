@@ -166,7 +166,7 @@ def changes(committish, details=None, color_when=None):
     elif details == 'stat':
         subprocess.call(['git', 'diff', '--color={}'.format(color_when), '--stat', committish + '...HEAD'])
     else:
-        command = ['git', 'log', '--oneline', '{}..HEAD'.format(committish)]
+        command = ['git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish)]
         if details == 'count':
             log = subprocess.check_output(command)
             log = log.splitlines()

@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file. This projec
 - `state` printing header colors in some colorless scenarios [#117][]
 - `settings list` failing with empty config files [#121][]
 - `settings list` not properly handling unknown files [#122][]
+- `changes view` not decorating when printing to a non-TTY [#124][]
 
 [#91]: https://github.com/Brickster/git-commands/issues/91
 [#93]: https://github.com/Brickster/git-commands/issues/93
@@ -40,6 +41,7 @@ All notable changes to this project will be documented in this file. This projec
 [#120]: https://github.com/Brickster/git-commands/issues/120
 [#121]: https://github.com/Brickster/git-commands/issues/121
 [#122]: https://github.com/Brickster/git-commands/issues/122
+[#124]: https://github.com/Brickster/git-commands/issues/124
 
 ## [v0.6.1][] - 2017-01-17
 ### Fixed

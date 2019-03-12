@@ -861,7 +861,7 @@ class TestChangesChanges(unittest.TestCase):
         mock_isrefambiguous.assert_not_called()
         mock_get.assert_not_called()
         mock_call.assert_called_once_with(
-            ['git', 'log', '--oneline', '{}..HEAD'.format(committish), '--color=' + color_when]
+            ['git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish), '--color=' + color_when]
         )
         mock_checkoutput.assert_not_called()
 
@@ -895,7 +895,7 @@ class TestChangesChanges(unittest.TestCase):
         mock_isrefambiguous.assert_called_once_with(committish, limit=('heads', 'tags'))
         mock_get.assert_not_called()
         mock_call.assert_called_once_with(
-            ['git', 'log', '--oneline', '{}..HEAD'.format(committish), '--color=' + color_when]
+            ['git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish), '--color=' + color_when]
         )
         mock_checkoutput.assert_not_called()
 
@@ -948,7 +948,7 @@ class TestChangesChanges(unittest.TestCase):
         # then
         mock_get.assert_not_called()
         mock_resolvecoloring.assert_called_once_with(color_when)
-        mock_call.assert_called_once_with(['git', 'log', '--oneline', 'HEAD..HEAD', '--color=always'])
+        mock_call.assert_called_once_with(['git', 'log', '--no-decorate', '--oneline', 'HEAD..HEAD', '--color=always'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
@@ -1016,6 +1016,6 @@ class TestChangesChanges(unittest.TestCase):
         mock_isgitrepository.assert_called_once_with()
         mock_iscommit.assert_called_once_with(committish)
         mock_isref.assert_called_once_with(committish)
-        mock_checkoutput.assert_called_once_with(['git', 'log', '--oneline', '{}..HEAD'.format(committish)])
+        mock_checkoutput.assert_called_once_with(['git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish)])
         mock_info.assert_called_once_with(str(len(log)))
 

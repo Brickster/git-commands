@@ -396,6 +396,38 @@ class TestIssue122(unittest.TestCase):
         self.assertEqual(stderr.strip(), "error: no such file 'unknown_file'")
 
 
+class TestIssue124(unittest.TestCase):
+    """`git changes` decoration differs when printing to a terminal"""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+
+        # initialize repository with a README
+        self.repo = git.Repo.init(self.dirpath)
+        open('README.md', 'w').close()
+        self.repo.index.add(['README.md'])
+        self.repo.index.commit('Initial commit')
+
+        # make changes
+        with open('README.md', 'w') as readme_file:
+            readme_file.write('readme')
+        self.repo.index.add(['README.md'])
+        self.repo.index.commit('Edit readme')
+        self.commit0_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' Edit readme'
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        """Issue 124: git-changes should not decorate when printing to a TTY"""
+
+        # NOTE: this test never failed since stdout is not a TTY and I couldn't figure out how to fake it. I'm leaving
+        # this here anyway.
+        # expect
+        self.assertEqual(self.commit0_log, self.repo.git.changes('HEAD^'))
+
+
 @unittest.skipIf(
     '--no-skip' not in sys.argv,
     'requires editing user config and should only run during non-local builds.'
