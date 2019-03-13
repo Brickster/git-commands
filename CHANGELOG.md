@@ -3,14 +3,15 @@
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased][]
-### Changed
+### Features
+- **Changes**: verbose option to print default when unassociated #129
 - `--ignore-extensions` renamed to `--no-show`[#91][]
 
-### Removed
+### Removals
 - `git-settings` cleanup
 - `git-tuck` [#120][]
 
-## Fixed
+## Fixes
 - `state --no-status` not respected for empty repositories [#93][]
 - `changes view` breaking when HEAD is detached [#94][]
 - `settings list` not handling values with newline characters [#95][]
@@ -21,10 +22,18 @@ All notable changes to this project will be documented in this file. This projec
 - `changes associate` breaking when using an invalid revision [#107][]
 - `changes unassociate --dry-run` printing a message during a no-op [#108][]
 - `changes associate --upstream` failing with local upstreams [#112][]
+- **Snapshot**: silently not creating a stash if created too quickly #114
 - `state` printing header colors in some colorless scenarios [#117][]
+- **Settings**: listing keys without a section #119
 - `settings list` failing with empty config files [#121][]
 - `settings list` not properly handling unknown files [#122][]
 - `changes view` not decorating when printing to a non-TTY [#124][]
+- **Settings**: not handling missing system git configs #131
+
+## Documentation
+- **Changes**: fix dry run description typo #132
+- **Settings**: remove list restriction when using options #136
+- **Changes**: add remote option to synopsis #139
 
 [#91]: https://github.com/Brickster/git-commands/issues/91
 [#93]: https://github.com/Brickster/git-commands/issues/93
