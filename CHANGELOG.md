@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ## [Unreleased][]
 ### Features
-- **Changes**: verbose option to print default when unassociated #129
+- **Changes**: verbose option to print default when unassociated [#129][]
 - `--ignore-extensions` renamed to `--no-show`[#91][]
 
 ### Removals
@@ -22,18 +22,18 @@ All notable changes to this project will be documented in this file. This projec
 - `changes associate` breaking when using an invalid revision [#107][]
 - `changes unassociate --dry-run` printing a message during a no-op [#108][]
 - `changes associate --upstream` failing with local upstreams [#112][]
-- **Snapshot**: silently not creating a stash if created too quickly #114
+- **Snapshot**: silently not creating a stash if created too quickly [#114][]
 - `state` printing header colors in some colorless scenarios [#117][]
-- **Settings**: listing keys without a section #119
+- **Settings**: listing keys without a section [#119][]
 - `settings list` failing with empty config files [#121][]
 - `settings list` not properly handling unknown files [#122][]
 - `changes view` not decorating when printing to a non-TTY [#124][]
-- **Settings**: not handling missing system git configs #131
+- **Settings**: not handling missing system git configs [#131][]
 
 ## Documentation
-- **Changes**: fix dry run description typo #132
-- **Settings**: remove list restriction when using options #136
-- **Changes**: add remote option to synopsis #139
+- **Changes**: fix dry run description typo [#132][]
+- **Settings**: remove list restriction when using options [#136][]
+- **Changes**: add remote option to synopsis [#139][]
 
 [#91]: https://github.com/Brickster/git-commands/issues/91
 [#93]: https://github.com/Brickster/git-commands/issues/93
@@ -46,11 +46,18 @@ All notable changes to this project will be documented in this file. This projec
 [#107]: https://github.com/Brickster/git-commands/issues/107
 [#108]: https://github.com/Brickster/git-commands/issues/108
 [#112]: https://github.com/Brickster/git-commands/issues/112
+[#114]: https://github.com/Brickster/git-commands/issues/114
 [#117]: https://github.com/Brickster/git-commands/issues/117
+[#119]: https://github.com/Brickster/git-commands/issues/119
 [#120]: https://github.com/Brickster/git-commands/issues/120
 [#121]: https://github.com/Brickster/git-commands/issues/121
 [#122]: https://github.com/Brickster/git-commands/issues/122
 [#124]: https://github.com/Brickster/git-commands/issues/124
+[#129]: https://github.com/Brickster/git-commands/issues/129
+[#131]: https://github.com/Brickster/git-commands/issues/131
+[#132]: https://github.com/Brickster/git-commands/issues/132
+[#136]: https://github.com/Brickster/git-commands/issues/136
+[#139]: https://github.com/Brickster/git-commands/issues/139
 
 ## [v0.6.1][] - 2017-01-17
 ### Fixed
