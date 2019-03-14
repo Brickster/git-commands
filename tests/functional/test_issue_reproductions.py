@@ -416,6 +416,9 @@ class TestIssue124(unittest.TestCase):
         self.repo.index.commit('Edit readme')
         self.commit0_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' Edit readme'
 
+        # make sure coloring isn't enabled
+        subprocess.call(['git', 'config', '--local', 'color.ui', 'auto'])
+
     def tearDown(self):
         shutil.rmtree(self.dirpath)
 
