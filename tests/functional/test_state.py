@@ -31,7 +31,7 @@ class TestState(unittest.TestCase):
 
         # expect
         self.assertRegexpMatches(self._output('git state -h'), '^usage: git state')
-        self.assertRegexpMatches(self._output('git state --help'), '^GIT-STATE\\(1\\)')
+        self.assertRegexpMatches(self._output('git state --help'), 'GIT-STATE\\(1\\)')
 
 
 class TestStateNoExtension(unittest.TestCase):
