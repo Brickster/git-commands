@@ -7,12 +7,15 @@ All notable changes to this project will be documented in this file. This projec
 - **Changes**: verbose option to print default when unassociated [#129][]
 - `--ignore-extensions` renamed to `--no-show`[#91][]
 
+### Changes
+- **State**: standardize status show/no-show options [#130][]
+
 ### Removals
 - `git-settings` cleanup
 - `git-tuck` [#120][]
 
-## Fixes
-- `state --no-status` not respected for empty repositories [#93][]
+### Fixes
+- `state --no-show-status` not respected for empty repositories [#93][]
 - `changes view` breaking when HEAD is detached [#94][]
 - `settings list` not handling values with newline characters [#95][]
 - `changes unassociate` breaking when no association exists for the branch [#102][]
@@ -30,7 +33,7 @@ All notable changes to this project will be documented in this file. This projec
 - `changes view` not decorating when printing to a non-TTY [#124][]
 - **Settings**: not handling missing system git configs [#131][]
 
-## Documentation
+### Documentation
 - **Changes**: fix dry run description typo [#132][]
 - **Settings**: remove list restriction when using options [#136][]
 - **Changes**: add remote option to synopsis [#139][]
@@ -54,6 +57,7 @@ All notable changes to this project will be documented in this file. This projec
 [#122]: https://github.com/Brickster/git-commands/issues/122
 [#124]: https://github.com/Brickster/git-commands/issues/124
 [#129]: https://github.com/Brickster/git-commands/issues/129
+[#130]: https://github.com/Brickster/git-commands/issues/130
 [#131]: https://github.com/Brickster/git-commands/issues/131
 [#132]: https://github.com/Brickster/git-commands/issues/132
 [#136]: https://github.com/Brickster/git-commands/issues/136

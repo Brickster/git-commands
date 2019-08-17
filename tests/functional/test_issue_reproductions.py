@@ -22,7 +22,7 @@ class TestIssue093(unittest.TestCase):
     def test(self):
         """Issue 93: --no-status should be respected even for new repositories"""
 
-        self.assertFalse(self.repo.git.state('--no-status'))
+        self.assertFalse(self.repo.git.state('--no-show-status'))
 
 
 class TestIssue094(unittest.TestCase):

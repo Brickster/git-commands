@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git state` [(`-s`|`--status`)] [(`-S`|`--no-status`)]<br>
+`git state` [`--show-status`] [`--no-show-status`]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--show-*`] [`--no-show-*`]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--no-show-all`] [`--no-show` [<extension> ...]]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)]<br>
@@ -26,10 +26,10 @@ Used to see a more concise and comprehensive view of the working directory throu
 * `-v`|`--version`:
 	Print version.
 
-* `-s`|`--status`:
+* `--show-status`:
 	Print the status section.
 
-* `-S`|`--no-status`:
+* `--no-show-status`:
     Don't print the status section.
 
 * `--show-*`:
@@ -53,7 +53,7 @@ Used to see a more concise and comprehensive view of the working directory throu
     Show empty sections rather than omitting them.
 
 * `-E`|`--no-show-empty`:
-	Omit empty sections. This does not apply to the status section.
+	Omit empty sections. This only applies to the status section when no clean message is used.
 
 * `-c`|`--color` [<when>]:
     Color output. <when> must be one of `always`, `never`, or `auto`. Defaults to `color.ui` configuration value or `auto`.
@@ -93,11 +93,6 @@ Used to see a more concise and comprehensive view of the working directory throu
 	The default formatting for git-state. Valid options include: `pretty` and `compact`. If no value is specified or an invalid value is entered, compact is used. The options `-f`|`--format` <format> or `-p`|`--pretty` will override this setting.
 
 	Default: <compact>
-
-* `git-state.status.show` <bool>:
-	True or false flag determining whether the status section should show when no other related flags are specified. Options (`-s`|`--status`) and (`-S`|`--no-status`) override this value.
-
-	Default: <true>
 
 * `git-state.show-empty` <bool>:
 	True or false flag determining whether empty sections should be shown. Options (`-e`|`--show-empty`) and (`-E`|`--no-show-empty`) override this value.

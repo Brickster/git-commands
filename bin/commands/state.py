@@ -56,7 +56,6 @@ def state(**kwargs):
 
     :keyword str show_color: color when (always, never, or auto)
     :keyword str format: format for output (compact or pretty)
-    :keyword bool show_status: show status
     :keyword list ignore_extensions: extensions to hide even if the configuration is to show
     :keyword list show_extensions: extensions to show even if the configuration is to hide
     :keyword dict options: dictionary of extension to option list
@@ -80,21 +79,16 @@ def state(**kwargs):
     )
 
     format_ = kwargs.get('format_')
+    show_empty = kwargs.get('show_empty')
+    ignore_extensions = kwargs.get('ignore_extensions')
     sections = OrderedDict()
     if git.is_empty_repository():
-        if kwargs.get('show_status'):
+        if 'status' not in ignore_extensions:
             status_output = status.get(new_repository=True, **kwargs)
             status_title = status.title()
             status_accent = status.accent(new_repository=True, **kwargs)
-            sections[status_title] = _print_section(status_title, status_accent, status_output, format_, color=show_color)
+            sections[status_title] = _print_section(status_title, status_accent, status_output, format_, show_empty=show_empty, color=show_color)
     else:
-        if kwargs.get('show_status'):
-            status_output = status.get(**kwargs)
-            status_title = status.title()
-            status_accent = status.accent(show_color=show_color)
-            # TODO: remove restriction that status is always shown
-            sections[status_title] = _print_section(status_title, status_accent, status_output, format_, show_empty=True, color=show_color)
-
         # show any user defined sections
         extensions = settings.list_(
             section='git-state.extensions',
@@ -104,9 +98,16 @@ def state(**kwargs):
             format_=None,
             file_=None
         ).splitlines()
-        extensions = list(set(extensions) - set(kwargs.get('ignore_extensions')))
+        extensions = list(set(extensions) - set(ignore_extensions))
         show_extensions = kwargs.get('show_extensions', [])
         options = kwargs.get('options')
+
+        if 'status' not in ignore_extensions:
+            status_output = status.get(**kwargs)
+            status_title = status.title()
+            status_accent = status.accent(show_color=show_color)
+            sections[status_title] = _print_section(status_title, status_accent, status_output, format_, show_empty=show_empty, color=show_color)
+
         for extension in extensions or []:
 
             # skip if we should ignore this extension
@@ -136,7 +137,7 @@ def state(**kwargs):
                 title=extension_name,
                 text=extension_out if not extension_proc.returncode else extension_error,
                 format_=format_,
-                show_empty=kwargs.get('show_empty'),
+                show_empty=show_empty,
                 color=show_color
             )
 

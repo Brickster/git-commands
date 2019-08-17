@@ -81,7 +81,7 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>git state</code> [(<code>-s</code>|<code>--status</code>)] [(<code>-S</code>|<code>--no-status</code>)]<br />
+<p><code>git state</code> [<code>--show-status</code>] [<code>--no-show-status</code>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--show-*</code>] [<code>--no-show-*</code>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--no-show-all</code>] [<code>--no-show</code> [<var>extension</var> ...]]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-e</code>|<code>--show-empty</code>)] [(<code>-E</code>|<code>--no-show-empty</code>)]<br />
@@ -102,8 +102,8 @@
 <dl>
 <dt><code>-h</code>|<code>--help</code></dt><dd><p>  Print a simple help message.</p></dd>
 <dt><code>-v</code>|<code>--version</code></dt><dd><p>  Print version.</p></dd>
-<dt><code>-s</code>|<code>--status</code></dt><dd><p>  Print the status section.</p></dd>
-<dt><code>-S</code>|<code>--no-status</code></dt><dd><p>  Don't print the status section.</p></dd>
+<dt><code>--show-status</code></dt><dd><p>  Print the status section.</p></dd>
+<dt><code>--no-show-status</code></dt><dd><p>  Don't print the status section.</p></dd>
 <dt><code>--show-*</code></dt><dd><p>  Show extension *. Where * is the configuration key value. For instance, given:</p>
 
 <p>  git-state.extentions.last-ten-commits=git log --oneline -10<br />
@@ -114,7 +114,7 @@
 <dt><code>--no-show-all</code></dt><dd><p>  Hide all extensions.</p></dd>
 <dt><code>--no-show</code> [<var>extension</var> ...]</dt><dd><p>  A list of extensions to hide. If none are specified, all of them will be hidden. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
 <dt><code>-e</code>|<code>--show-empty</code></dt><dd><p>  Show empty sections rather than omitting them.</p></dd>
-<dt><code>-E</code>|<code>--no-show-empty</code></dt><dd><p>  Omit empty sections. This does not apply to the status section.</p></dd>
+<dt><code>-E</code>|<code>--no-show-empty</code></dt><dd><p>  Omit empty sections. This only applies to the status section when no clean message is used.</p></dd>
 <dt><code>-c</code>|<code>--color</code> [<var>when</var>]</dt><dd><p>  Color output. <var>when</var> must be one of <code>always</code>, <code>never</code>, or <code>auto</code>. Defaults to <code>color.ui</code> configuration value or <code>auto</code>.</p></dd>
 <dt><code>-C</code>|<code>--no-color</code></dt><dd><p>  Never color output. Same as <code>--color=never</code>.</p></dd>
 <dt><code>-p</code>|<code>--pretty</code></dt><dd><p>  Display in pretty format. This is equivalent to <code>-f</code>|<code>--format</code> <var>pretty</var>.</p></dd>
@@ -136,9 +136,6 @@
 <dt><code>git-state.format</code> <var>string</var></dt><dd><p>  The default formatting for git-state. Valid options include: <code>pretty</code> and <code>compact</code>. If no value is specified or an invalid value is entered, compact is used. The options <code>-f</code>|<code>--format</code> <var>format</var> or <code>-p</code>|<code>--pretty</code> will override this setting.</p>
 
 <p>  Default: <var>compact</var></p></dd>
-<dt><code>git-state.status.show</code> <var>bool</var></dt><dd><p>  True or false flag determining whether the status section should show when no other related flags are specified. Options (<code>-s</code>|<code>--status</code>) and (<code>-S</code>|<code>--no-status</code>) override this value.</p>
-
-<p>  Default: <var>true</var></p></dd>
 <dt><code>git-state.show-empty</code> <var>bool</var></dt><dd><p>  True or false flag determining whether empty sections should be shown. Options (<code>-e</code>|<code>--show-empty</code>) and (<code>-E</code>|<code>--no-show-empty</code>) override this value.</p>
 
 <p>  Default: <var>false</var></p></dd>
@@ -227,7 +224,7 @@ $
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>May 2017</li>
+    <li class='tc'>August 2019</li>
     <li class='tr'>git-state(1)</li>
   </ol>
 

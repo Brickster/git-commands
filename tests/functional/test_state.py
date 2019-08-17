@@ -59,6 +59,10 @@ class TestStateNoExtension(unittest.TestCase):
 nothing to commit, repository is empty
 ''')
 
+    def test_state_cleanAndEmptyRepository_noShowStatus(self):
+        # expect
+        self.assertFalse(self._output('git state --no-show-status'))
+
     def test_state_workingDirectoryIsClean(self):
 
         # given: an initial commit
@@ -81,6 +85,27 @@ nothing to commit, working directory is clean
         # expect
         self.assertFalse(self._output('git state'))
 
+    def test_state_doNotShowStatusCleanMessage_whenRepositoryIsEmpty_withFlagToShowEmpty(self):
+
+        # given
+        self._output('git config git-state.status.show-clean-message False')
+        expected = '''# status (master)
+'''
+
+        # expect
+        self.assertEqual(self._output('git state --show-empty'), expected)
+        self.assertEqual(self._output('git state -e'), expected)
+
+    def test_state_doNotShowStatusCleanMessage_whenRepositoryIsEmpty_withConfigToShowEmpty(self):
+        # given
+        self._output('git config git-state.status.show-clean-message false')
+        self._output('git config git-state.show-empty true')
+        expected = '''# status (master)
+'''
+
+        # expect
+        self.assertEqual(self._output('git state'), expected)
+
     def test_state_doNotShowStatusCleanMessage_whenWorkingDirectoryIsClean(self):
 
         # given: an initial commit
@@ -92,7 +117,36 @@ nothing to commit, working directory is clean
         self._output('git config git-state.status.show-clean-message False')
 
         # expect
-        self.assertEqual(self._output('git state'), '# status (master)\n')
+        self.assertFalse(self._output('git state'))
+
+    def test_state_doNotShowStatusCleanMessage_whenWorkingDirectoryIsClean_withFlagToNotShowEmpty(self):
+
+        # given: an initial commit
+        subprocess.call('touch README.md'.split())
+        with open('README.md', 'w') as a_file:
+            a_file.write('readme\n')
+        subprocess.call('git add -A'.split())
+        subprocess.call(['git', 'commit', '--quiet', '-m', 'Initial commit'])
+        self._output('git config git-state.status.show-clean-message false')
+        self._output('git config git-state.show-empty true')
+
+        # expect
+        self.assertFalse(self._output('git state --no-show-empty'))
+        self.assertFalse(self._output('git state -E'))
+
+    def test_state_doNotShowStatusCleanMessage_whenWorkingDirectoryIsClean_withConfigToNotShowEmpty(self):
+
+        # given: an initial commit
+        subprocess.call('touch README.md'.split())
+        with open('README.md', 'w') as a_file:
+            a_file.write('readme\n')
+        subprocess.call('git add -A'.split())
+        subprocess.call(['git', 'commit', '--quiet', '-m', 'Initial commit'])
+        self._output('git config git-state.status.show-clean-message false')
+        self._output('git config git-state.show-empty false')
+
+        # expect
+        self.assertFalse(self._output('git state'))
 
     def test_state_showStatus(self):
 
@@ -103,8 +157,7 @@ nothing to commit, repository is empty
 '''
 
         # expect
-        self.assertEqual(self._output('git state --status'), expected)
-        self.assertEqual(self._output('git state -s'), expected)
+        self.assertEqual(self._output('git state --show-status'), expected)
 
     def test_state_noShowStatus(self):
 
@@ -112,8 +165,8 @@ nothing to commit, repository is empty
         self._output('git config git-state.status.show true')
 
         # expect
-        self.assertFalse(self._output('git state --no-status'))
-        self.assertFalse(self._output('git state -S'))
+        self.assertFalse(self._output('git state --no-show-status'))
+        self.assertFalse(self._output('git state --no-show status'))
 
 
 class TestStateWithExtension(unittest.TestCase):

@@ -199,9 +199,9 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'never',
             'format_': format_,
-            'show_status': True,
             'clear': False,
-            'ignore_extensions': []
+            'ignore_extensions': [],
+            'show_empty': True
         }
 
         mock_statusget.return_value = 'status output'
@@ -266,9 +266,9 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'never',
             'format_': format_,
-            'show_status': False,
             'clear': False,
-            'ignore_extensions': []
+            'ignore_extensions': ['status'],
+            'show_empty': True
         }
 
         mock_get.side_effect = [True, []]
@@ -348,9 +348,9 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'always',
             'format_': format_,
-            'show_status': True,
             'clear': False,
-            'ignore_extensions': []
+            'ignore_extensions': [],
+            'show_empty': True
         }
 
         mock_resolvecoloring.return_value = 'never'
@@ -370,7 +370,7 @@ class TestStateState(unittest.TestCase):
             ignore_extensions=[],
             show_clean_message=True,
             show_color='never',
-            show_status=True
+            show_empty=True
         )
         mock_isgitrepository.assert_called_once_with()
         mock_resolvecoloring.assert_called_once_with('always')
@@ -436,9 +436,9 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'auto',
             'format_': format_,
-            'show_status': True,
             'clear': False,
-            'ignore_extensions': []
+            'ignore_extensions': [],
+            'show_empty': True
         }
 
         mock_resolvecoloring.return_value = 'always'
@@ -458,7 +458,7 @@ class TestStateState(unittest.TestCase):
             ignore_extensions=[],
             show_clean_message=True,
             show_color='always',
-            show_status=True
+            show_empty=True
         )
         mock_isgitrepository.assert_called_once_with()
         mock_resolvecoloring.assert_called_once_with('auto')
@@ -519,7 +519,6 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         show_empty = True
         kwargs = {
-            'show_status': True,
             'show_color': 'never',
             'format_': format_,
             'clear': False,
@@ -544,6 +543,7 @@ class TestStateState(unittest.TestCase):
             mock_statusaccent.return_value,
             mock_statusget.return_value,
             format_,
+            show_empty=True,
             color='never'
         )
         mock_get.assert_has_calls([
@@ -585,11 +585,10 @@ class TestStateState(unittest.TestCase):
         format_ = 'compact'
         show_empty = True
         kwargs = {
-            'show_status': False,
             'show_color': 'never',
             'format_': format_,
             'clear': False,
-            'ignore_extensions': [],
+            'ignore_extensions': ['status'],
             'show_empty': show_empty
         }
 
@@ -642,9 +641,8 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'never',
             'format_': format_,
-            'show_status': False,
             'clear': False,
-            'ignore_extensions': [],
+            'ignore_extensions': ['status'],
             'options': {}
         }
         changes_command = 'changes command'
@@ -723,9 +721,8 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'never',
             'format_': format_,
-            'show_status': False,
             'clear': False,
-            'ignore_extensions': [],
+            'ignore_extensions': ['status'],
             'options': {}
         }
         changes_command = 'changes command'
@@ -804,9 +801,8 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'never',
             'format_': format_,
-            'show_status': False,
             'clear': False,
-            'ignore_extensions': [],
+            'ignore_extensions': ['status'],
             'options': {'changes': ['--option1', '-o "1 2"']}
         }
         changes_command = 'changes command'
@@ -885,9 +881,8 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'never',
             'format_': format_,
-            'show_status': False,
             'clear': False,
-            'ignore_extensions': [],
+            'ignore_extensions': ['status'],
             'options': {}
         }
         changes_command = 'changes command'
@@ -967,9 +962,8 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'never',
             'format_': format_,
-            'show_status': False,
             'clear': False,
-            'ignore_extensions': [],
+            'ignore_extensions': ['status'],
             'options': {'changes': ['--option1', '-o "1 2"']}
         }
         changes_command = 'changes command'
@@ -1049,9 +1043,8 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'never',
             'format_': format_,
-            'show_status': False,
             'clear': False,
-            'ignore_extensions': ['changes'],
+            'ignore_extensions': ['changes', 'status'],
             'options': {}
         }
         mock_get.side_effect = [True, []]
@@ -1108,9 +1101,8 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'never',
             'format_': format_,
-            'show_status': False,
             'clear': False,
-            'ignore_extensions': [],
+            'ignore_extensions': ['status'],
             'options': {}
         }
         mock_get.side_effect = [True, False, []]
@@ -1168,9 +1160,8 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'never',
             'format_': format_,
-            'show_status': False,
             'clear': False,
-            'ignore_extensions': [],
+            'ignore_extensions': ['status'],
             'show_extensions': ['changes'],
             'options': {}
         }
@@ -1255,10 +1246,10 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'never',
             'format_': format_,
-            'show_status': True,
             'clear': False,
             'ignore_extensions': [],
-            'options': {}
+            'options': {},
+            'show_empty': True
         }
 
         mock_statusget.return_value = 'status output'
@@ -1294,7 +1285,7 @@ class TestStateState(unittest.TestCase):
                 title=changes_name,
                 text=changes_output,
                 format_=format_,
-                show_empty=None,
+                show_empty=True,
                 color='never'
             )
         ])
@@ -1357,9 +1348,9 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'never',
             'format_': format_,
-            'show_status': True,
             'clear': False,
-            'ignore_extensions': []
+            'ignore_extensions': [],
+            'show_empty': True
         }
 
         mock_statusget.return_value = 'status output'
@@ -1432,9 +1423,9 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'never',
             'format_': format_,
-            'show_status': True,
             'clear': False,
-            'ignore_extensions': []
+            'ignore_extensions': [],
+            'show_empty': True
         }
 
         mock_statusget.return_value = 'status output'
@@ -1508,10 +1499,10 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'never',
             'format_': format_,
-            'show_status': True,
             'clear': False,
             'ignore_extensions': [],
-            'page': False
+            'page': False,
+            'show_empty': True
         }
 
         mock_statusget.return_value = 'status output'
@@ -1585,10 +1576,9 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'never',
             'format_': format_,
-            'show_status': True,
-            'clear': False,
             'ignore_extensions': [],
-            'clear': True
+            'clear': True,
+            'show_empty': True
         }
 
         mock_statusget.return_value = 'status output'
@@ -1662,10 +1652,9 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'never',
             'format_': format_,
-            'show_status': True,
-            'clear': False,
             'ignore_extensions': [],
-            'clear': True
+            'clear': True,
+            'show_empty': True
         }
 
         mock_statusget.return_value = 'status output'
@@ -1736,10 +1725,9 @@ class TestStateState(unittest.TestCase):
         kwargs = {
             'show_color': 'never',
             'format_': format_,
-            'show_status': True,
-            'clear': False,
             'ignore_extensions': [],
-            'clear': False
+            'clear': False,
+            'show_empty': True
         }
 
         mock_statusget.return_value = 'status output'

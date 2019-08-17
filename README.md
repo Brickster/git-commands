@@ -36,7 +36,7 @@ or
 Used to see a more concise and comprehensive view of the working directory through custom extensions.
 
 ```bash
-git state [(-s|--status)] [(-S|--no-status)]
+git state [--show-status)] [--no-show-status]
           [--show-*] [--no-show-*]  # for each custom extension
           [--no-show-all] [--no-show [EXTENSION ...]]
           [(-e|--show-empty)] [(-E|--no-show-empty)]
