@@ -867,6 +867,41 @@ class TestChangesChanges(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
+    @mock.patch('bin.commands.utils.git.is_ref_ambiguous')
+    @mock.patch('bin.commands.settings.get')
+    @mock.patch('subprocess.check_output')
+    @mock.patch('subprocess.call')
+    def test_changes_isnotref_withFiles(
+            self,
+            mock_call,
+            mock_checkoutput,
+            mock_get,
+            mock_isrefambiguous,
+            mock_isref,
+            mock_iscommit,
+            mock_isgitrepository
+    ):
+
+        # when
+        committish = 'commit-ish'
+        color_when = 'never'
+        files = ['*md', '*txt']
+        changes.changes(committish, color_when=color_when, files=files)
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_iscommit.assert_called_once_with(committish)
+        mock_isref.assert_called_once_with(committish)
+        mock_isrefambiguous.assert_not_called()
+        mock_get.assert_not_called()
+        mock_call.assert_called_once_with(
+            ['git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish), '--color=' + color_when, '--', ' '.join(files)]
+        )
+        mock_checkoutput.assert_not_called()
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref_ambiguous', return_value=False)
     @mock.patch('bin.commands.settings.get')
@@ -976,6 +1011,29 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.resolve_coloring')
     @mock.patch('subprocess.call')
+    def test_changes_details_diff_withFiles(self, mock_call, mock_resolvecoloring, mock_isref, mock_iscommit,
+                                  mock_isgitrepository):
+
+        # given
+        committish = 'commit-ish'
+        color_when = 'never'
+        files = ['*txt', '*md']
+        mock_resolvecoloring.return_value = color_when
+
+        # when
+        changes.changes(committish, details='diff', color_when=color_when, files=files)
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_iscommit.assert_called_once_with(committish)
+        mock_isref.assert_called_once_with(committish)
+        mock_call.assert_called_once_with(['git', 'diff', '--color={}'.format(color_when), committish + '...HEAD', '--', ' '.join(files)])
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
+    @mock.patch('bin.commands.utils.git.resolve_coloring')
+    @mock.patch('subprocess.call')
     def test_changes_details_stat(self, mock_call, mock_resolvecoloring, mock_isref, mock_iscommit, mock_isgitrepository):
 
         # given
@@ -992,6 +1050,30 @@ class TestChangesChanges(unittest.TestCase):
         mock_isref.assert_called_once_with(committish)
         mock_call.assert_called_once_with(
             ['git', 'diff', '--color={}'.format(color_when), '--stat', committish + '...HEAD']
+        )
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
+    @mock.patch('bin.commands.utils.git.resolve_coloring')
+    @mock.patch('subprocess.call')
+    def test_changes_details_stat_withFiles(self, mock_call, mock_resolvecoloring, mock_isref, mock_iscommit, mock_isgitrepository):
+
+        # given
+        committish = 'commit-ish'
+        color_when = 'never'
+        files = ['*txt', '*md']
+        mock_resolvecoloring.return_value = color_when
+
+        # when
+        changes.changes(committish, details='stat', color_when=color_when, files=files)
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_iscommit.assert_called_once_with(committish)
+        mock_isref.assert_called_once_with(committish)
+        mock_call.assert_called_once_with(
+            ['git', 'diff', '--color={}'.format(color_when), '--stat', committish + '...HEAD', '--', ' '.join(files)]
         )
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
@@ -1017,5 +1099,32 @@ class TestChangesChanges(unittest.TestCase):
         mock_iscommit.assert_called_once_with(committish)
         mock_isref.assert_called_once_with(committish)
         mock_checkoutput.assert_called_once_with(['git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish)])
+        mock_info.assert_called_once_with(str(len(log)))
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
+    @mock.patch('bin.commands.utils.git.resolve_coloring')
+    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_changes_details_count_withFiles(self, mock_info, mock_checkoutput, mock_resolvecoloring, mock_isref, mock_iscommit, mock_isgitrepository):
+
+        # given
+        committish = 'commit-ish'
+        color_when = 'never'
+        files = ['*txt', '*md']
+        log = ['one', 'two', 'three']
+        mock_checkoutput.return_value = '\n'.join(log) + '\n'
+        mock_resolvecoloring.return_value = color_when
+
+        # when
+        changes.changes(committish, details='count', color_when=color_when, files=files)
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_iscommit.assert_called_once_with(committish)
+        mock_isref.assert_called_once_with(committish)
+        mock_checkoutput.assert_called_once_with(
+            ['git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish), '--', ' '.join(files)])
         mock_info.assert_called_once_with(str(len(log)))
 

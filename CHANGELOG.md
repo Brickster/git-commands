@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ## [Unreleased][]
 ### Features
+- **Changes**: view changes with pathspecs [#128][]
 - **Changes**: verbose option to print default when unassociated [#129][]
 - `--ignore-extensions` renamed to `--no-show`[#91][]
 
@@ -56,6 +57,7 @@ All notable changes to this project will be documented in this file. This projec
 [#121]: https://github.com/Brickster/git-commands/issues/121
 [#122]: https://github.com/Brickster/git-commands/issues/122
 [#124]: https://github.com/Brickster/git-commands/issues/124
+[#128]: https://github.com/Brickster/git-commands/issues/128
 [#129]: https://github.com/Brickster/git-commands/issues/129
 [#130]: https://github.com/Brickster/git-commands/issues/130
 [#131]: https://github.com/Brickster/git-commands/issues/131

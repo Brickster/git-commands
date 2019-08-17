@@ -96,6 +96,8 @@ class TestChangesView(unittest.TestCase):
         self.assertFalse(self.repo.git.changes('view', 'HEAD'))
         self.assertEqual(self.commit3_log, self.repo.git.changes('HEAD^'))
         self.assertEqual(self.commit3_log, self.repo.git.changes('view', 'HEAD^'))
+        self.assertEqual(self.commit3_log, self.repo.git.changes('view', 'HEAD^', '--', '*md'))
+        self.assertFalse(self.repo.git.changes('view', 'HEAD^', '--', '*py'))
         self.assertEqual(os.linesep.join([self.commit3_log, self.commit2_log]), self.repo.git.changes('HEAD^^'))
         self.assertEqual(os.linesep.join([self.commit3_log, self.commit2_log]), self.repo.git.changes('view', 'HEAD^^'))
 
@@ -116,10 +118,14 @@ class TestChangesView(unittest.TestCase):
     def test_view_count(self):
 
         # expect:
+        self.assertEqual('0', self.repo.git.changes('view', '-c'))
+        self.assertEqual('0', self.repo.git.changes('view', '--count'))
         self.assertEqual('1', self.repo.git.changes('HEAD^', '-c'))
         self.assertEqual('1', self.repo.git.changes('view', 'HEAD^', '-c'))
         self.assertEqual('1', self.repo.git.changes('HEAD^', '--count'))
         self.assertEqual('1', self.repo.git.changes('view', 'HEAD^', '--count'))
+        self.assertEqual('1', self.repo.git.changes('view', 'HEAD^', '--count', '--', '*md'))
+        self.assertEqual('0', self.repo.git.changes('view', 'HEAD^', '--count', '--', '*py'))
 
     def test_view_stat(self):
 
@@ -128,6 +134,9 @@ class TestChangesView(unittest.TestCase):
         self.assertIn('1 insertion', self.repo.git.changes('view', 'HEAD^', '-s'))
         self.assertIn('1 insertion', self.repo.git.changes('HEAD^', '--stat'))
         self.assertIn('1 insertion', self.repo.git.changes('view', 'HEAD^', '--stat'))
+        self.assertIn('1 insertion', self.repo.git.changes('view', 'HEAD^', '--stat', '--', '*md'))
+        self.assertFalse(self.repo.git.changes('view', '--stat'))
+        self.assertFalse(self.repo.git.changes('view', 'HEAD^', '--stat', '--', '*py'))
 
     def test_view_diff(self):
 
@@ -136,6 +145,9 @@ class TestChangesView(unittest.TestCase):
         self.assertIn('diff --git a/CHANGELOG.md b/CHANGELOG.md', self.repo.git.changes('view', 'HEAD^', '-d'))
         self.assertIn('diff --git a/CHANGELOG.md b/CHANGELOG.md', self.repo.git.changes('HEAD^', '--diff'))
         self.assertIn('diff --git a/CHANGELOG.md b/CHANGELOG.md', self.repo.git.changes('view', 'HEAD^', '--diff'))
+        self.assertIn('diff --git a/CHANGELOG.md b/CHANGELOG.md', self.repo.git.changes('view', 'HEAD^', '--diff', '--', '*md'))
+        self.assertFalse(self.repo.git.changes('view', '--diff'))
+        self.assertFalse(self.repo.git.changes('view', 'HEAD^', '--diff', '--', '*py'))
 
     def test_view_useAssociation_changesExist(self):
 
@@ -277,6 +289,19 @@ class TestChangesAssociate(unittest.TestCase):
         self.assertEqual('git changes: error: argument -q/--quiet: not allowed without positional argument committish '
                          'or option -r/--remote\n', output[1])
 
+    def test_associate_filesNotSupported(self):
+
+        # when
+        output = subprocess.Popen(
+            'git changes associate -- file.txt'.split(),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        ).communicate()
+
+        # then
+        self.assertEqual('usage: git changes associate [-h] [-u] [-V] [COMMIT-ISH [-q]]\n', output[0])
+        self.assertEqual('git changes: error: argument FILES: only supported for view sub-command\n', output[1])
+
 
 class TestChangesUnassociate(unittest.TestCase):
 
@@ -413,3 +438,16 @@ Would remove association 'stale-branch'""", self.repo.git.changes('unassociate',
         self.assertEqual("""usage: git changes unassociate [-h] [-a | -p] [-q | -d]
 git changes unassociate: error: argument -q/--quiet: not allowed with argument -d/--dry-run
 """, output[1])
+
+    def test_unassociate_filesNotSupported(self):
+
+        # when
+        output = subprocess.Popen(
+            'git changes unassociate -- file.txt'.split(),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        ).communicate()
+
+        # then
+        self.assertEqual('usage: git changes unassociate [-h] [-a | -p] [-q | -d]\n', output[0])
+        self.assertEqual('git changes: error: argument FILES: only supported for view sub-command\n', output[1])

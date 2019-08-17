@@ -4,7 +4,7 @@
 
 `git changes view` [(`-c`|`--count`)] [(`-s`|`--stat`)] [(`-d`|`--diff`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-r`|`--remote`)] [`--color` [<when>]] [`--no-color`]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<commit-ish>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<commit-ish>] [-- FILE [FILE ...]]<br>
 `git changes associate` [(`-q`|`--quiet`)] [(`-u`|`--upstream`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-V`|`--verbose`)] [<commit-ish>]<br>
 `git changes unassociate` [(`-a`|`--all`)] [(`-p`|`--prune`)] [(`-q`|`--quiet`)]<br>
@@ -41,6 +41,12 @@
 
     * `--no-color`:
         Never color output. Same as `--color=never`.
+
+    * --:
+        Do not interpret any more arguments as options.
+
+    * <file> ...:
+        View changes to specific files. The files can be absolute or specified using pathspecs.
 
 * `associate`:
     View/update the current association.

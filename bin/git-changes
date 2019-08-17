@@ -112,6 +112,9 @@ def main():
     view_parser = subparsers.add_parser(
         'view',
         help='view changes (default when omitted)',
+        usage="""git changes view [-h] [-r] [-c | -s | -d]
+                        [--color [{always,never,auto}] | --no-color]
+                        [COMMIT-ISH] [-- FILE [FILE ...]]""",
         description='view changes'
     )
     view_parser.set_defaults(func=changes.changes)
@@ -179,29 +182,46 @@ def main():
         dest='color_when'
     )
 
+    # -- <files> ...
+    # NOTE: this is so the files argument is listed in the argparse output. All file arguments are handled manually.
+    view_parser.add_argument('files', help='view changes to specific files', nargs='?', metavar='FILE')
+
     # default to view mode
     if len(sys.argv) == 1 or sys.argv[1] not in ('view', 'associate', 'unassociate') and not any(
             [opt in sys.argv for opt in ('-h', '--help', '-v', '--version')]):
         sys.argv.insert(1, 'view')
 
-    args = vars(parser.parse_args())
+    # check for file arguments
+    args = sys.argv[1:]
+    file_args = []
+    if '--' in args:
+        delimiter_index = args.index('--') if '--' in args else len(args)
+        file_args = args[delimiter_index + 1:]
+        args = args[:delimiter_index]
+
+    args = vars(parser.parse_args(args))
     subcommand = args.pop('subcommand')
     if subcommand == 'associate' and not args['committish'] and not args['upstream']:
         # suppressing output on retrieval makes no sense
         if 'quiet' in args:
             associate_parser.print_usage()
             error('argument -q/--quiet: not allowed without positional argument committish or option -r/--remote', prefix='git changes: error:')
+        _error_if_files_supplied(associate_parser, file_args)
         args['func'] = changes.get_association
         del args['committish']
         del args['upstream']
     elif subcommand == 'associate' and args['upstream']:
+        _error_if_files_supplied(associate_parser, file_args)
         args['func'] = changes.associate_upstream
         del args['committish']
         del args['verbose']
         del args['upstream']
     elif subcommand == 'associate':
+        _error_if_files_supplied(associate_parser, file_args)
         del args['verbose']
         del args['upstream']
+    elif subcommand == 'unassociate':
+        _error_if_files_supplied(unassociate_parser, file_args)
     elif subcommand == 'view' and 'remote' in args:
         # -r|--remote doesn't work with dest='committish' when committish is positional
         del args['remote']
@@ -209,6 +229,7 @@ def main():
         if not remote_branch:
             error('{0!r} has no remote branch'.format(git.current_branch()))
         args['committish'] = remote_branch
+        args['files'] = file_args
     elif subcommand == 'view' and not args['committish']:
         if git.is_empty_repository():
             sys.exit(0)  # nothing to do
@@ -216,11 +237,20 @@ def main():
         if not committish:
             committish = settings.get('git-changes.default-commit-ish', default='refs/heads/master')
         args['committish'] = committish
+        args['files'] = file_args
+    elif subcommand == 'view':
+        args['files'] = file_args
 
     func = args.pop('func')
     result = func(**args)
     if result:
         print result
+
+
+def _error_if_files_supplied(parser, file_args):
+    if file_args:
+        parser.print_usage()
+        error('argument FILES: only supported for view sub-command', prefix='git changes: error:')
 
 if __name__ == '__main__':
     main()

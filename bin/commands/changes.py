@@ -142,12 +142,13 @@ def get_association(branch=None, verbose=False):
     return associated_branch
 
 
-def changes(committish, details=None, color_when=None):
+def changes(committish, details=None, color_when=None, files=None):
     """Print the changes between a given branch and HEAD.
 
     :param str or unicode committish: commit-ish to view changes from
     :param str or unicode details: the level of details to show (diff, stat, or None)
     :param str or unicode color_when: when to color output
+    :param list files: a list of pathspecs to specific files
     """
 
     assert not details or details in _DETAIL_OPTIONS, 'details must be one of ' + str(_DETAIL_OPTIONS)
@@ -162,15 +163,24 @@ def changes(committish, details=None, color_when=None):
 
     color_when = git.resolve_coloring(color_when)
     if details == 'diff':
-        subprocess.call(['git', 'diff', '--color={}'.format(color_when), committish + '...HEAD'])
+        command = ['git', 'diff', '--color={}'.format(color_when), committish + '...HEAD']
+        subprocess.call(_append_any_file_args(command, files))
     elif details == 'stat':
-        subprocess.call(['git', 'diff', '--color={}'.format(color_when), '--stat', committish + '...HEAD'])
-    else:
+        command = ['git', 'diff', '--color={}'.format(color_when), '--stat', committish + '...HEAD']
+        subprocess.call(_append_any_file_args(command, files))
+    elif details == 'count':
         command = ['git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish)]
-        if details == 'count':
-            log = subprocess.check_output(command)
-            log = log.splitlines()
-            messages.info(str(len(log)))
-        else:
-            command += ['--color={}'.format(color_when)]
-            subprocess.call(command)
+        log = subprocess.check_output(_append_any_file_args(command, files))
+        log = log.splitlines()
+        messages.info(str(len(log)))
+    else:
+        command = [
+            'git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish), '--color={}'.format(color_when)
+        ]
+        subprocess.call(_append_any_file_args(command, files))
+
+
+def _append_any_file_args(command, files):
+    if files:
+        command += ['--', ' '.join(files)]
+    return command
