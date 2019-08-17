@@ -20,6 +20,9 @@ script:
   # set up path
   - export PATH="$PATH:$TRAVIS_BUILD_DIR/bin"
   - echo "$PATH"
+  - echo "$MANPATH"
+  - export MANPATH="$MANPATH:$TRAVIS_BUILD_DIR/bin"
+  - echo "$MANPATH"
   - man --path
 
   # set up git
