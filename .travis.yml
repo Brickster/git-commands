@@ -17,9 +17,12 @@ before_script:
   # notify CodeClimate of this build
   - ./cc-test-reporter before-build
 script:
+  # set up path
   - export PATH="$PATH:$TRAVIS_BUILD_DIR/bin"
+  - echo "$PATH"
+  - man --path
 
-  # setup git
+  # set up git
   - git --version
   - git config --global user.email "Brickstertwo@users.noreply.github.com"
   - git config --global user.name "Marcus Rosenow"
