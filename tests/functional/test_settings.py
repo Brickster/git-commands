@@ -323,7 +323,7 @@ git-settings.test.getb=valueb""")
 
         # verify
         self.assertFalse(stdout)
-        self.assertEqual('error: argument -k/--key: not allowed without positional argument section', stderr.strip())
+        self.assertEqual('error: argument -k/--keys: not allowed without positional argument section', stderr.strip())
 
 
 # a bit of a hack since --no-skip is a nosetests flag.

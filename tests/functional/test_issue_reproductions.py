@@ -345,7 +345,7 @@ class TestIssue119(unittest.TestCase):
         )
         stdout, stderr = settings_proc.communicate()
         self.assertFalse(stdout)
-        self.assertEqual(stderr.strip(), 'error: argument -k/--key: not allowed without positional argument section')
+        self.assertEqual(stderr.strip(), 'error: argument -k/--keys: not allowed without positional argument section')
 
 
 class TestIssue121(unittest.TestCase):

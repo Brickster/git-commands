@@ -136,12 +136,13 @@ def main():
 
     subcommand = args.pop('subcommand')
     if subcommand == 'list' and not args['section'] and args['keys']:
-        messages.error('argument -k/--key: not allowed without positional argument section')
+        messages.error('argument -k/--keys: not allowed without positional argument section')
 
     func = args.pop('func')
     result = func(**args)
     if result:
         print result
+
 
 if __name__ == '__main__':
     main()
