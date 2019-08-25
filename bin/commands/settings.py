@@ -58,13 +58,13 @@ def _append_section_keys(result, section_map):
         result += ['    {} = {}'.format(key, value)]
 
 
-def list_(section=None, config=None, count=False, keys=False, format_=None, file_=None):
+def list_(section=None, config=None, count=False, limit_to=None, format_=None, file_=None):
     """List configuration settings respecting override precedence.
 
     :param section: limit to a specific section
     :param config: limit to a specific config (local|global|system)
     :param count: return the total configuration values count rather than the configurations themselves
-    :param keys: return only the keys
+    :param limit_to: limit to a specific config part (keys/sections/None)
     :param format_: output format (compact|pretty)
     :param str or unicode file_: path to a config file
 
@@ -88,7 +88,7 @@ def list_(section=None, config=None, count=False, keys=False, format_=None, file
         key, value = config.split(os.linesep, 1)
         config_map[key] = value
 
-    result = _get_list_result(count, keys, format_, config_map)
+    result = _get_list_result(count, limit_to, format_, config_map)
     return os.linesep.join(result)
 
 
@@ -113,11 +113,13 @@ def _limit_config_to_section(config_contents, section):
     return config_section
 
 
-def _get_list_result(count, keys, format_, config_map):
+def _get_list_result(count, limit_to, format_, config_map):
     if count:
         return [str(len(config_map))]
-    elif keys:
+    elif limit_to == 'keys':
         return [key[key.rfind('.') + 1:] for key in config_map.keys()]
+    elif limit_to == 'sections':
+        return list(set([key[0:key.rfind('.')] for key in config_map.keys()]))
     elif format_ == 'pretty':
         return _pretty_format_configs(config_map)
 

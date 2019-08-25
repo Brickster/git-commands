@@ -233,7 +233,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -288,7 +288,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -393,7 +393,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -481,7 +481,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -682,7 +682,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -762,7 +762,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -842,7 +842,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -922,7 +922,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -1003,7 +1003,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -1065,7 +1065,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -1124,7 +1124,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -1201,7 +1201,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -1303,7 +1303,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -1382,7 +1382,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -1460,7 +1460,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -1534,7 +1534,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -1611,7 +1611,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -1686,7 +1686,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )
@@ -1759,7 +1759,7 @@ class TestStateState(unittest.TestCase):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         )

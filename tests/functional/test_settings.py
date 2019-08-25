@@ -315,6 +315,17 @@ git-settings.test.getb=valueb""")
         # then
         self.assertEqual(keys, ['geta', 'getb'])
 
+    def test_list_sections(self):
+
+        import sys
+        print 'args:', sys.argv
+
+        # when
+        sections = self.repo.git.settings('list', '--local', '--sections').splitlines()
+
+        # then
+        self.assertEqual(sorted(sections), ['git-settings.test', 'git-settings.test2'])
+
     def test_test_keysOptionRequiresASection(self):
 
         # run

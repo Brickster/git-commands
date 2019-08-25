@@ -27,7 +27,7 @@ def main():
         section='git-state.extensions',
         config=None,
         count=False,
-        keys=True,
+        limit_to='keys',
         format_=None,
         file_=None
     ).splitlines()
@@ -72,7 +72,7 @@ def main():
         'git-state.extensions',
         config=None,
         count=False,
-        keys=True,
+        limit_to='keys',
         format_=None
     ).splitlines()
     no_show_parser = parser.add_mutually_exclusive_group()

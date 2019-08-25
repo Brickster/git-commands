@@ -257,10 +257,26 @@ class TestSettingsList(unittest.TestCase):
         mock_checkoutput.return_value = '\x00'.join(config_values).replace('=', os.linesep) + '\x00'
 
         # when
-        actual_values = settings.list_(keys=True)
+        actual_values = settings.list_(limit_to='keys')
 
         # then
         self.assertEqual(sorted(actual_values.splitlines()), ['key1', 'key2'])
+        mock_validateconfig.assert_called_once()
+        mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
+
+    @mock.patch('bin.commands.settings._validate_config')
+    @mock.patch('subprocess.check_output')
+    def test_list_sectionsOnly(self, mock_checkoutput, mock_validateconfig):
+
+        # given
+        config_values = ['section.key1=value1', 'section.key2=value2', 'section2.key1=value1']
+        mock_checkoutput.return_value = '\x00'.join(config_values).replace('=', os.linesep) + '\x00'
+
+        # when
+        actual_values = settings.list_(limit_to='sections')
+
+        # then
+        self.assertEqual(sorted(actual_values.splitlines()), ['section', 'section2'])
         mock_validateconfig.assert_called_once()
         mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 

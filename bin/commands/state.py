@@ -94,7 +94,7 @@ def state(**kwargs):
             section='git-state.extensions',
             config=None,
             count=False,
-            keys=True,
+            limit_to='keys',
             format_=None,
             file_=None
         ).splitlines()

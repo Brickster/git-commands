@@ -112,7 +112,8 @@ def main():
         dest='format_'
     )
     list_group.add_argument('-c', '--count', help='print the count of configurations', action='store_true')
-    list_group.add_argument('-k', '--keys', help='list the keys for a section', action='store_true')
+    list_group.add_argument('-k', '--keys', help='list the keys for a section', action='store_const', const='keys', dest='limit_to')
+    list_group.add_argument('-s', '--sections', help='list only section names', action='store_const', const='sections', dest='limit_to')
     list_parser.set_defaults(func=settings.list_)
 
     # --------------------------------------------
@@ -135,7 +136,7 @@ def main():
     args = vars(parser.parse_args())
 
     subcommand = args.pop('subcommand')
-    if subcommand == 'list' and not args['section'] and args['keys']:
+    if subcommand == 'list' and not args['section'] and args['limit_to'] and args['limit_to'] == 'keys':
         messages.error('argument -k/--keys: not allowed without positional argument section')
 
     func = args.pop('func')

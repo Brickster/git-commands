@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file. This projec
 - **Changes**: view changes with pathspecs [#128][]
 - **Changes**: verbose option to print default when unassociated [#129][]
 - `--ignore-extensions` renamed to `--no-show`[#91][]
+- **Settings**: limit listing to section names
 
 ### Changes
 - **State**: standardize status show/no-show options [#130][]

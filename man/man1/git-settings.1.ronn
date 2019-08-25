@@ -6,7 +6,7 @@
 `git settings destroy` [(`-d`|`--dry-run`)] <section><br>
 `git settings list` [<file-option>] [(`-p`|`--pretty`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-f`|`--format`) <format>] [(`-c`|`--count`)]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-k`|`--keys`)] [<section>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-s`|`--sections`)] [(`-k`|`--keys`)] [<section>]<br>
 `git settings` (`-h`|`--help`)<br>
 `git settings` (`-v`|`--version`)
 
@@ -50,7 +50,10 @@
         Print the count of values in a given section/file.
 
     * `-k`|`--keys`:
-        List only the keys for the section. Requires positional argument <section>.
+        Only list the key names for a section. Requires positional argument <section>.
+
+    * `-s`|`--sections`:
+        Only list the unique section names.
 
 * `-h`|`--help`:
     Print a simple help message.
