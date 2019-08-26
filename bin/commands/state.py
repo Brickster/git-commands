@@ -161,7 +161,7 @@ def delete_extension(extension):
     # TODO: where to delete from?
     # TODO: quiet
     if _extension_exists(extension):
-        subprocess.call('git config --local --remove-section git-state.extensions.{}'.format(extension).split())
+        subprocess.call(['git', 'config', '--local', '--remove-section', 'git-state.extensions.{}'.format(extension)])
         messages.info('Extension {} deleted'.format(extension))
 
 

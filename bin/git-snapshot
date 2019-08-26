@@ -18,7 +18,7 @@ def main():
 
     parser = argparse.ArgumentParser(
         prog='git snapshot',
-        version='git-snapshot 0.6.1',
+        version='git-snapshot 0.7.0',
         usage=_USAGE_MESSAGE,
         description=snapshot.__doc__,
         epilog='for more detail, use: git help snapshot'

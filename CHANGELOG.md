@@ -2,7 +2,9 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org).
 
-## [Unreleased][]
+<!-- ## [Unreleased][] -->
+
+## [v0.7.0][] - 2019-08-26
 ### Features
 - **State**: extension management sub-command [#89][]
 - **State**: `--ignore-extensions` renamed to `--no-show`[#91][]
@@ -226,6 +228,7 @@ All notable changes to this project will be documented in this file. This projec
 - Everything
 
 [Unreleased]: https://github.com/Brickster/git-commands/compare/latest...HEAD
+[v0.7.0]: https://github.com/Brickster/git-commands/compare/v0.6.1...v0.7.0
 [v0.6.1]: https://github.com/Brickster/git-commands/compare/v0.6.0...v0.6.1
 [v0.6.0]: https://github.com/Brickster/git-commands/compare/v0.5.0...v0.6.0
 [v0.5.0]: https://github.com/Brickster/git-commands/compare/v0.4.0...v0.5.0
