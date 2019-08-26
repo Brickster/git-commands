@@ -2,9 +2,10 @@
 
 ## SYNOPSIS
 
-`git changes view` [(`-c`|`--count`)] [(`-s`|`--stat`)] [(`-d`|`--diff`)]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-r`|`--remote`)] [`--color` [<when>]] [`--no-color`]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<commit-ish>] [-- FILE [FILE ...]]<br>
+`git changes view` [(`-l`|`--log`)] [(`-i`|`--inverse`)] [(`-c`|`--count`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-s`|`--stat`)] [(`-d`|`--diff`)] [(`-r`|`--remote`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--color` [<when>]] [`--no-color`] [<commit-ish>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[-- FILE [FILE ...]]<br>
 `git changes associate` [(`-q`|`--quiet`)] [(`-u`|`--upstream`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-V`|`--verbose`)] [<commit-ish>]<br>
 `git changes unassociate` [(`-a`|`--all`)] [(`-p`|`--prune`)] [(`-q`|`--quiet`)]<br>
@@ -26,6 +27,12 @@
 
     * `-r`|`--remote`:
         Show the commits between the local and remote head.
+
+    * `-l`|`--log`:
+        Show changes as log entries.
+
+    * `-i`|`--inverse`:
+        Inverse of `--log` so only common commits are printed.
 
     * `-c`|`--count`:
         Show as a count of changes.
@@ -96,6 +103,11 @@
     The default commit-ish to use when finding changes. Both `view` option <commit-ish> and configuration `git-changes.associations.<branch>.with` override this setting.
 
     Default: _refs/heads/master_
+
+* `git-changes.default-view` <string>:
+    The default view mode to use when not specified. Options are: log, inverse, count, stat, or diff
+
+    Default: _log_
 
 * `git-changes.associations.*.with` <string>:
     Defines an association between the branch in the key and the value. The value must be a commit-ish. Under normal circumstances, these entries are created/removed automatically.

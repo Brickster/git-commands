@@ -74,9 +74,10 @@ git snapshot (-v|--version)
 Used to list the commits between this branch and another.
 
 ```bash
-git changes [view] [(-c|--count)] [(-s|--stat)] [(-d|--diff)]
-                   [(-r|--remote)] [--color [WHEN]] [--no-color]
-                   [COMMIT-ISH] [-- FILE [FILE ...]]
+git changes [view] [(-l|--log)] [(-i|--inverse)] [(-c|--count)]
+                   [(-s|--stat)] [(-d|--diff)] [(-r|--remote)]
+                   [--color [WHEN]] [--no-color] [COMMIT-ISH]
+                   [-- FILE [FILE ...]]
 git changes associate [(-q|--quiet)] [(-u|--upstream)] [COMMIT-ISH]
 git changes unassociate [(-a|--all)] [(-p|--prune)] [(-q|--quiet)]
                         [(-d|--dry-run)]

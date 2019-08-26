@@ -140,6 +140,23 @@ def main():
     # details
     details_group = view_parser.add_mutually_exclusive_group()
     details_group.add_argument(
+        '--log',
+        '-l',
+        help='show commits from an association or committish to HEAD',
+        action='store_const',
+        const='log',
+        dest='details',
+        default=settings.get('git-changes.default-view', default='log')
+    )
+    details_group.add_argument(
+        '--inverse',
+        '-i',
+        help='show commits up to an association or committish',
+        action='store_const',
+        const='inverse_log',
+        dest='details'
+    )
+    details_group.add_argument(
         '-c',
         '--count',
         help='show as a count of changes',

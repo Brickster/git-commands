@@ -6,7 +6,7 @@ import subprocess
 from . import settings, upstream
 from utils import directories, git, messages
 
-_DETAIL_OPTIONS = ('diff', 'stat', 'count')
+_DETAIL_OPTIONS = ('log', 'inverse_log', 'diff', 'stat', 'count')
 _COLOR_OPTIONS = ('always', 'auto', 'never')
 
 
@@ -173,6 +173,11 @@ def changes(committish, details=None, color_when=None, files=None):
         log = subprocess.check_output(_append_any_file_args(command, files))
         log = log.splitlines()
         messages.info(str(len(log)))
+    elif details == 'inverse_log':
+        merge_base = subprocess.check_output(['git', 'merge-base', committish, 'HEAD']).strip()
+        # TODO: make length configurable
+        command = ['git', 'log', '--no-decorate', '--oneline', '-10', merge_base, '--color={}'.format(color_when)]
+        subprocess.call(_append_any_file_args(command, files))
     else:
         command = [
             'git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish), '--color={}'.format(color_when)

@@ -78,16 +78,24 @@ class TestChangesView(unittest.TestCase):
 
         # expect: no changes when there are none
         self.assertFalse(self.repo.git.changes())
+        self.assertFalse(self.repo.git.changes('--log'))
+        self.assertFalse(self.repo.git.changes('-l'))
         self.assertFalse(self.repo.git.changes('view'))
+        self.assertFalse(self.repo.git.changes('view', '--log'))
+        self.assertFalse(self.repo.git.changes('view', '-l'))
 
     def test_view_noAssociation_defaultOverridden(self):
 
         # given
         self.repo.git.config('git-changes.default-commit-ish', str(self.repo.rev_parse('HEAD^')))
 
-        # expect: no changes when there are none
+        # expect
         self.assertEqual(self.commit3_log, self.repo.git.changes())
+        self.assertEqual(self.commit3_log, self.repo.git.changes('--log'))
+        self.assertEqual(self.commit3_log, self.repo.git.changes('-l'))
         self.assertEqual(self.commit3_log, self.repo.git.changes('view'))
+        self.assertEqual(self.commit3_log, self.repo.git.changes('view', '--log'))
+        self.assertEqual(self.commit3_log, self.repo.git.changes('view', '-l'))
 
     def test_view_withCommittish(self):
 
@@ -149,6 +157,17 @@ class TestChangesView(unittest.TestCase):
         self.assertFalse(self.repo.git.changes('view', '--diff'))
         self.assertFalse(self.repo.git.changes('view', 'HEAD^', '--diff', '--', '*py'))
 
+    def test_view_inverse(self):
+
+        # given
+        self.repo.git.config('git-changes.default-commit-ish', str(self.repo.rev_parse('HEAD^')))
+
+        # expect
+        expected = os.linesep.join([self.commit2_log, self.commit1_log, self.commit0_log])
+        self.assertEqual(expected, self.repo.git.changes('view', '--inverse'))
+        self.assertEqual(expected, self.repo.git.changes('view', '-i'))
+        self.assertEqual(self.commit0_log, self.repo.git.changes('view', '-i', 'HEAD^^^'))
+
     def test_view_useAssociation_changesExist(self):
 
         # given
@@ -166,6 +185,15 @@ class TestChangesView(unittest.TestCase):
         # expect
         self.assertFalse(self.repo.git.changes())
         self.assertFalse(self.repo.git.changes('view'))
+
+    def test_view_overrideDefaultView(self):
+
+        # given:
+        self.repo.git.config('git-changes.default-view', 'count')
+
+        # expect:
+        self.assertEqual('0', self.repo.git.changes('view'))
+        self.assertEqual('1', self.repo.git.changes('HEAD^', '-c'))
 
 
 class TestChangesAssociate(unittest.TestCase):

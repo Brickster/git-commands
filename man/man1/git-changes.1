@@ -7,13 +7,16 @@
 \fBgit\-changes\fR \- lists the commits between this branch and a commit\-ish
 .
 .SH "SYNOPSIS"
-\fBgit changes view\fR [(\fB\-c\fR|\fB\-\-count\fR)] [(\fB\-s\fR|\fB\-\-stat\fR)] [(\fB\-d\fR|\fB\-\-diff\fR)]
+\fBgit changes view\fR [(\fB\-l\fR|\fB\-\-log\fR)] [(\fB\-i\fR|\fB\-\-inverse\fR)] [(\fB\-c\fR|\fB\-\-count\fR)]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-r\fR|\fB\-\-remote\fR)] [\fB\-\-color\fR [\fIwhen\fR]] [\fB\-\-no\-color\fR]
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-s\fR|\fB\-\-stat\fR)] [(\fB\-d\fR|\fB\-\-diff\fR)] [(\fB\-r\fR|\fB\-\-remote\fR)]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fIcommit\-ish\fR] [\-\- FILE [FILE \.\.\.]]
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-color\fR [\fIwhen\fR]] [\fB\-\-no\-color\fR] [\fIcommit\-ish\fR]
+.
+.br
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\-\- FILE [FILE \.\.\.]]
 .
 .br
 \fBgit changes associate\fR [(\fB\-q\fR|\fB\-\-quiet\fR)] [(\fB\-u\fR|\fB\-\-upstream\fR)]
@@ -49,6 +52,14 @@ Show the commits between HEAD and the specified commit\-ish\. If not specified, 
 .TP
 \fB\-r\fR|\fB\-\-remote\fR
 Show the commits between the local and remote head\.
+.
+.TP
+\fB\-l\fR|\fB\-\-log\fR
+Show changes as log entries\.
+.
+.TP
+\fB\-i\fR|\fB\-\-inverse\fR
+Inverse of \fB\-\-log\fR so only common commits are printed\.
 .
 .TP
 \fB\-c\fR|\fB\-\-count\fR
@@ -145,6 +156,13 @@ The default commit\-ish to use when finding changes\. Both \fBview\fR option \fI
 .
 .IP
 Default: \fIrefs/heads/master\fR
+.
+.TP
+\fBgit\-changes\.default\-view\fR \fIstring\fR
+The default view mode to use when not specified\. Options are: log, inverse, count, stat, or diff
+.
+.IP
+Default: \fIlog\fR
 .
 .TP
 \fBgit\-changes\.associations\.*\.with\fR \fIstring\fR
