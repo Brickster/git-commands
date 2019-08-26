@@ -36,15 +36,25 @@ or
 Used to see a more concise and comprehensive view of the working directory through custom extensions.
 
 ```bash
-git state [--show-status)] [--no-show-status]
-          [--show-*] [--no-show-*]  # for each custom extension
-          [--no-show-all] [--no-show [EXTENSION ...]]
-          [(-e|--show-empty)] [(-E|--no-show-empty)]
-          [(-c|--color) [WHEN]] [(-C|--no-color)]
-          [(-p|--pretty)] [(-f|--format) FORMAT]
-          [--clear] [--no-clear] [--no-page]
-          [(-o|--order) SECTION [SECTION ...]]
-          [(-O|--options) OPTION [OPTION ...]]
+git state [view] [--show-status)] [--no-show-status]
+                 [--show-*] [--no-show-*]  # for each custom extension
+                 [--no-show-all] [--no-show [EXTENSION ...]]
+                 [(-e|--show-empty)] [(-E|--no-show-empty)]
+                 [(-c|--color) [WHEN]] [(-C|--no-color)]
+                 [(-p|--pretty)] [(-f|--format) FORMAT]
+                 [--clear] [--no-clear] [--no-page]
+                 [(-o|--order) SECTION [SECTION ...]]
+                 [(-O|--options) OPTION [OPTION ...]]
+git state extensions create (-c|--command) COMMAND [(-n|--name) NAME]
+                            [(-o|--options) OPTIONS] [--no-show]
+                            [--no-color] EXTENSION
+git state extensions edit [(-c|--command) COMMAND] [(-n|--name) NAME]
+                          [(-o|--options) OPTIONS] [--no-show]
+                          [--no-color] EXTENSION
+git state extensions delete EXTENSION
+git state extensions config EXTENSION
+git state extensions list
+git state extensions run EXTENSION
 git state (-h|--help)
 git state (-v|--version)
 ```

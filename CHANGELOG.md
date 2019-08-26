@@ -4,9 +4,10 @@ All notable changes to this project will be documented in this file. This projec
 
 ## [Unreleased][]
 ### Features
+- **State**: extension management sub-command [#89][]
+- **State**: `--ignore-extensions` renamed to `--no-show`[#91][]
 - **Changes**: view changes with pathspecs [#128][]
 - **Changes**: verbose option to print default when unassociated [#129][]
-- `--ignore-extensions` renamed to `--no-show`[#91][]
 - **Settings**: limit listing to section names
 
 ### Changes
@@ -40,6 +41,7 @@ All notable changes to this project will be documented in this file. This projec
 - **Settings**: remove list restriction when using options [#136][]
 - **Changes**: add remote option to synopsis [#139][]
 
+[#89]: https://github.com/Brickster/git-commands/issues/89
 [#91]: https://github.com/Brickster/git-commands/issues/91
 [#93]: https://github.com/Brickster/git-commands/issues/93
 [#94]: https://github.com/Brickster/git-commands/issues/94

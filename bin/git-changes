@@ -252,5 +252,6 @@ def _error_if_files_supplied(parser, file_args):
         parser.print_usage()
         error('argument FILES: only supported for view sub-command', prefix='git changes: error:')
 
+
 if __name__ == '__main__':
     main()

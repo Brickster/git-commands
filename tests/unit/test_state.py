@@ -175,7 +175,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.title')
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -209,6 +209,7 @@ class TestStateState(unittest.TestCase):
         mock_statusaccent.return_value = 'status accent'
         mock_printsection.return_value = 'status section\n'
         mock_get.side_effect = [True, []]
+        mock_list.return_value = ''
 
         # when
         state.state(**kwargs)
@@ -229,14 +230,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
         self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
         mock_call.assert_not_called()
@@ -245,7 +239,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.settings.get', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -272,6 +266,7 @@ class TestStateState(unittest.TestCase):
         }
 
         mock_get.side_effect = [True, []]
+        mock_list.return_value = ''
 
         # when
         state.state(**kwargs)
@@ -284,14 +279,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_not_called()
         mock_info.assert_not_called()
         mock_call.assert_not_called()
@@ -322,7 +310,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.title')
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -359,6 +347,7 @@ class TestStateState(unittest.TestCase):
         mock_statusaccent.return_value = 'status accent'
         mock_printsection.return_value = 'status section\n'
         mock_get.side_effect = [True, []]
+        mock_list.return_value = ''
 
         # when
         state.state(**kwargs)
@@ -376,6 +365,7 @@ class TestStateState(unittest.TestCase):
         mock_resolvecoloring.assert_called_once_with('always')
         mock_init.assert_called_once_with(strip=True)
         mock_isemptyrepository.assert_called_once_with()
+        mock_list.return_value = ''
         mock_printsection.assert_called_once_with(
             mock_statustitle.return_value,
             mock_statusaccent.return_value,
@@ -389,14 +379,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
         self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
         mock_call.assert_not_called()
@@ -410,7 +393,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.title')
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -441,6 +424,7 @@ class TestStateState(unittest.TestCase):
             'show_empty': True
         }
 
+        mock_list.return_value = ''
         mock_resolvecoloring.return_value = 'always'
         mock_statusget.return_value = 'status output'
         mock_statustitle.return_value = 'status title'
@@ -477,14 +461,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
         self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
         mock_call.assert_not_called()
@@ -618,7 +595,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.settings.get', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -649,7 +626,7 @@ class TestStateState(unittest.TestCase):
         changes_name = 'changes'
         changes_output = 'the changes'
         mock_get.side_effect = [True, True, changes_command, changes_name, [], True, []]
-        mock_list.return_value = 'changes'
+        mock_list.return_value = 'git-state.extensions.changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
         mock_proc.returncode = 0
@@ -672,20 +649,13 @@ class TestStateState(unittest.TestCase):
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.show', default=True, as_type=mock.ANY),
-            mock.call('git-state.extensions.changes'),
+            mock.call('git-state.extensions.changes.command'),
             mock.call('git-state.extensions.changes.name', default='changes'),
             mock.call('git-state.extensions.changes.options', default=[], as_type=mock.ANY),
             mock.call('git-state.extensions.changes.color', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
@@ -698,7 +668,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.settings.get', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -729,7 +699,7 @@ class TestStateState(unittest.TestCase):
         changes_name = 'changes'
         changes_output = 'the changes'
         mock_get.side_effect = [True, True, changes_command, changes_name, [], False, []]
-        mock_list.return_value = 'changes'
+        mock_list.return_value = 'git-state.extensions.changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
         mock_proc.returncode = 0
@@ -752,20 +722,13 @@ class TestStateState(unittest.TestCase):
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.show', default=True, as_type=mock.ANY),
-            mock.call('git-state.extensions.changes'),
+            mock.call('git-state.extensions.changes.command'),
             mock.call('git-state.extensions.changes.name', default='changes'),
             mock.call('git-state.extensions.changes.options', default=[], as_type=mock.ANY),
             mock.call('git-state.extensions.changes.color', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
@@ -778,7 +741,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.settings.get', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -809,7 +772,7 @@ class TestStateState(unittest.TestCase):
         changes_name = 'changes'
         changes_output = 'the changes'
         mock_get.side_effect = [True, True, changes_command, changes_name, [], True, []]
-        mock_list.return_value = 'changes'
+        mock_list.return_value = 'git-state.extensions.changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
         mock_proc.returncode = 0
@@ -832,20 +795,13 @@ class TestStateState(unittest.TestCase):
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.show', default=True, as_type=mock.ANY),
-            mock.call('git-state.extensions.changes'),
+            mock.call('git-state.extensions.changes.command'),
             mock.call('git-state.extensions.changes.name', default='changes'),
             mock.call('git-state.extensions.changes.options', default=[], as_type=mock.ANY),
             mock.call('git-state.extensions.changes.color', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
@@ -858,7 +814,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.settings.get', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -889,7 +845,7 @@ class TestStateState(unittest.TestCase):
         changes_name = 'changes'
         changes_output = 'the changes'
         mock_get.side_effect = [True, True, changes_command, changes_name, ['--option1 -o "1 2"'], True, []]
-        mock_list.return_value = 'changes'
+        mock_list.return_value = 'git-state.extensions.changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
         mock_proc.returncode = 0
@@ -912,20 +868,13 @@ class TestStateState(unittest.TestCase):
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.show', default=True, as_type=mock.ANY),
-            mock.call('git-state.extensions.changes'),
+            mock.call('git-state.extensions.changes.command'),
             mock.call('git-state.extensions.changes.name', default='changes'),
             mock.call('git-state.extensions.changes.options', default=[], as_type=mock.ANY),
             mock.call('git-state.extensions.changes.color', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
@@ -939,7 +888,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.settings.get', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -970,7 +919,7 @@ class TestStateState(unittest.TestCase):
         changes_name = 'changes'
         changes_output = 'the changes'
         mock_get.side_effect = [True, True, changes_command, changes_name, ['--option2 true'], True, []]
-        mock_list.return_value = 'changes'
+        mock_list.return_value = 'git-state.extensions.changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
         mock_proc.returncode = 0
@@ -993,20 +942,13 @@ class TestStateState(unittest.TestCase):
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.show', default=True, as_type=mock.ANY),
-            mock.call('git-state.extensions.changes'),
+            mock.call('git-state.extensions.changes.command'),
             mock.call('git-state.extensions.changes.name', default='changes'),
             mock.call('git-state.extensions.changes.options', default=[], as_type=mock.ANY),
             mock.call('git-state.extensions.changes.color', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
@@ -1020,7 +962,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.settings.get', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -1048,7 +990,7 @@ class TestStateState(unittest.TestCase):
             'options': {}
         }
         mock_get.side_effect = [True, []]
-        mock_list.return_value = 'changes'
+        mock_list.return_value = 'git-state.extentions.changes'
 
         # when
         state.state(**kwargs)
@@ -1061,14 +1003,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_not_called()
         mock_info.assert_not_called()
         mock_call.assert_not_called()
@@ -1078,7 +1013,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.settings.get', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -1106,7 +1041,7 @@ class TestStateState(unittest.TestCase):
             'options': {}
         }
         mock_get.side_effect = [True, False, []]
-        mock_list.return_value = 'changes'
+        mock_list.return_value = 'git-state.extensions.changes'
 
         # when
         state.state(**kwargs)
@@ -1120,14 +1055,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.extensions.changes.show', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_not_called()
         mock_info.assert_not_called()
         mock_call.assert_not_called()
@@ -1137,7 +1065,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.settings.get', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -1169,7 +1097,7 @@ class TestStateState(unittest.TestCase):
         changes_name = 'changes'
         changes_output = 'the changes'
         mock_get.side_effect = [True, changes_command, changes_name, [], True, []]
-        mock_list.return_value = 'changes'
+        mock_list.return_value = 'git-state.extensions.changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
         mock_proc.returncode = 0
@@ -1191,20 +1119,13 @@ class TestStateState(unittest.TestCase):
         )
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
-            mock.call('git-state.extensions.changes'),
+            mock.call('git-state.extensions.changes.command'),
             mock.call('git-state.extensions.changes.name', default='changes'),
             mock.call('git-state.extensions.changes.options', default=[], as_type=mock.ANY),
             mock.call('git-state.extensions.changes.color', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
@@ -1220,7 +1141,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.title')
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -1260,7 +1181,7 @@ class TestStateState(unittest.TestCase):
         changes_name = 'changes'
         changes_output = 'the changes'
         mock_get.side_effect = [True, True, changes_command, changes_name, [], True, ['changes', 'status']]
-        mock_list.return_value = 'changes'
+        mock_list.return_value = 'git-state.extensions.changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
         mock_proc.returncode = 0
@@ -1292,21 +1213,14 @@ class TestStateState(unittest.TestCase):
         mock_get.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.show', default=True, as_type=mock.ANY),
-            mock.call('git-state.extensions.changes'),
+            mock.call('git-state.extensions.changes.command'),
             mock.call('git-state.extensions.changes.name', default='changes'),
             mock.call('git-state.extensions.changes.options', default=[], as_type=mock.ANY),
             mock.call('git-state.extensions.changes.color', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
         self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('changes section\nstatus section')
         mock_call.assert_not_called()
@@ -1324,7 +1238,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.title')
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -1358,6 +1272,7 @@ class TestStateState(unittest.TestCase):
         mock_statusaccent.return_value = 'status accent'
         mock_printsection.side_effect = ['status section\n']
         mock_get.side_effect = [True, ['status', 'unknown']]
+        mock_list.return_value = ''
 
         # when
         state.state(**kwargs)
@@ -1378,14 +1293,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
         self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
         mock_call.assert_not_called()
@@ -1397,7 +1305,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.title')
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='1')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -1428,6 +1336,7 @@ class TestStateState(unittest.TestCase):
             'show_empty': True
         }
 
+        mock_list.return_value = ''
         mock_statusget.return_value = 'status output'
         mock_statustitle.return_value = 'status title'
         mock_statusaccent.return_value = 'status accent'
@@ -1456,14 +1365,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
         self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_not_called()
         mock_call.assert_called_once_with(['less', '-r'], stdin=mock_echo.stdout)
@@ -1477,7 +1379,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.title')
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='1')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_doNotPageOutputEvenIfTooLarge(
@@ -1505,6 +1407,7 @@ class TestStateState(unittest.TestCase):
             'show_empty': True
         }
 
+        mock_list.return_value = ''
         mock_statusget.return_value = 'status output'
         mock_statustitle.return_value = 'status title'
         mock_statusaccent.return_value = 'status accent'
@@ -1530,14 +1433,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
         self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section\ntwo\nthree\nfour\nfive')
 
@@ -1549,7 +1445,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.title')
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -1581,6 +1477,7 @@ class TestStateState(unittest.TestCase):
             'show_empty': True
         }
 
+        mock_list.return_value = ''
         mock_statusget.return_value = 'status output'
         mock_statustitle.return_value = 'status title'
         mock_statusaccent.return_value = 'status accent'
@@ -1607,14 +1504,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
         self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
         mock_call.assert_called_once_with('clear')
@@ -1626,7 +1516,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.title')
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -1657,6 +1547,7 @@ class TestStateState(unittest.TestCase):
             'show_empty': True
         }
 
+        mock_list.return_value = ''
         mock_statusget.return_value = 'status output'
         mock_statustitle.return_value = 'status title'
         mock_statusaccent.return_value = 'status accent'
@@ -1682,13 +1573,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
         self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
+        mock_list.assert_called_once_with(limit_to='sections'
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
@@ -1701,7 +1586,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.title')
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
-    @mock.patch('bin.commands.settings.list_', return_return='')
+    @mock.patch('bin.commands.settings.list_')
     @mock.patch('subprocess.check_output', return_value='100')
     @mock.patch('subprocess.call')
     @mock.patch('bin.commands.utils.messages.info')
@@ -1730,6 +1615,7 @@ class TestStateState(unittest.TestCase):
             'show_empty': True
         }
 
+        mock_list.return_value = ''
         mock_statusget.return_value = 'status output'
         mock_statustitle.return_value = 'status title'
         mock_statusaccent.return_value = 'status accent'
@@ -1755,14 +1641,329 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
         self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
-        mock_list.assert_called_once_with(
-            section='git-state.extensions',
-            config=None,
-            count=False,
-            limit_to='keys',
-            format_=None,
-            file_=None
-        )
+        mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
         mock_call.assert_not_called()
+
+
+class TestStateExtensionExists(unittest.TestCase):
+
+    @mock.patch('bin.commands.settings.list_')
+    def test_state_extensionExists(self, mock_list):
+
+        # given
+        mock_list.return_value = '1'
+
+        # when
+        exists = state._extension_exists('log')
+
+        # then
+        mock_list.assert_called_once_with('git-state.extensions.log', count=True)
+        self.assertTrue(exists)
+
+
+class TestStateEditExtension(unittest.TestCase):
+
+    @mock.patch('bin.commands.state._extension_exists')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_editExtension_created(self, mock_info, mock_call, mock_extension_exists):
+
+        # given
+        mock_extension_exists.return_value = False
+
+        # when
+        state.edit_extension('log', command='git log', name='the log', options='-10', show=True, color=False)
+
+        # then
+        mock_extension_exists.assert_called_once_with('log')
+        mock_call.assert_has_calls([
+            mock.call(['git', 'config', '--local', 'git-state.extensions.log.command', 'git log']),
+            mock.call(['git', 'config', '--local', 'git-state.extensions.log.name', 'the log']),
+            mock.call(['git', 'config', '--local', 'git-state.extensions.log.options', '-10']),
+            mock.call(['git', 'config', '--local', 'git-state.extensions.log.show', 'True']),
+            mock.call(['git', 'config', '--local', 'git-state.extensions.log.color', 'False'])
+        ])
+        mock_info.assert_called_once_with('Extension log created')
+
+    @mock.patch('bin.commands.state._extension_exists')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_editExtension_edited(self, mock_info, mock_call, mock_extension_exists):
+
+        # given
+        mock_extension_exists.return_value = True
+
+        # when
+        state.edit_extension('log', command='git log', name='the log', options='-10', show=True, color=False)
+
+        # then
+        mock_extension_exists.assert_called_once_with('log')
+        mock_call.assert_has_calls([
+            mock.call(['git', 'config', '--local', 'git-state.extensions.log.command', 'git log']),
+            mock.call(['git', 'config', '--local', 'git-state.extensions.log.name', 'the log']),
+            mock.call(['git', 'config', '--local', 'git-state.extensions.log.options', '-10']),
+            mock.call(['git', 'config', '--local', 'git-state.extensions.log.show', 'True']),
+            mock.call(['git', 'config', '--local', 'git-state.extensions.log.color', 'False'])
+        ])
+        mock_info.assert_called_once_with('Extension log updated')
+
+    @mock.patch('bin.commands.state._extension_exists')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_editExtension_onlyCommand(self, mock_info, mock_call, mock_extension_exists):
+
+        # given
+        mock_extension_exists.return_value = True
+
+        # when
+        state.edit_extension('log', command='git log', color=None)
+
+        # then
+        mock_extension_exists.assert_called_once_with('log')
+        mock_call.assert_called_once_with(['git', 'config', '--local', 'git-state.extensions.log.command', 'git log'])
+        mock_info.assert_called_once_with('Extension log updated')
+
+    @mock.patch('bin.commands.state._extension_exists')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_editExtension_onlyName(self, mock_info, mock_call, mock_extension_exists):
+
+        # given
+        mock_extension_exists.return_value = True
+
+        # when
+        state.edit_extension('log', name='the log', color=None)
+
+        # then
+        mock_extension_exists.assert_called_once_with('log')
+        mock_call.assert_called_once_with(['git', 'config', '--local', 'git-state.extensions.log.name', 'the log'])
+        mock_info.assert_called_once_with('Extension log updated')
+
+    @mock.patch('bin.commands.state._extension_exists')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_editExtension_onlyOptions(self, mock_info, mock_call, mock_extension_exists):
+
+        # given
+        mock_extension_exists.return_value = True
+
+        # when
+        state.edit_extension('log', options='-10', color=None)
+
+        # then
+        mock_extension_exists.assert_called_once_with('log')
+        mock_call.assert_called_once_with(['git', 'config', '--local', 'git-state.extensions.log.options', '-10'])
+        mock_info.assert_called_once_with('Extension log updated')
+
+    @mock.patch('bin.commands.state._extension_exists')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_editExtension_onlyShow(self, mock_info, mock_call, mock_extension_exists):
+
+        # given
+        mock_extension_exists.return_value = True
+
+        # when
+        state.edit_extension('log', show=False, color=None)
+
+        # then
+        mock_extension_exists.assert_called_once_with('log')
+        mock_call.assert_called_once_with(['git', 'config', '--local', 'git-state.extensions.log.show', 'False'])
+        mock_info.assert_called_once_with('Extension log updated')
+
+    @mock.patch('bin.commands.state._extension_exists')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_editExtension_onlyColor(self, mock_info, mock_call, mock_extension_exists):
+
+        # given
+        mock_extension_exists.return_value = True
+
+        # when
+        state.edit_extension('log', color=True)
+
+        # then
+        mock_extension_exists.assert_called_once_with('log')
+        mock_call.assert_called_once_with(['git', 'config', '--local', 'git-state.extensions.log.color', 'True'])
+        mock_info.assert_called_once_with('Extension log updated')
+
+
+class TestStateGetExtensions(unittest.TestCase):
+
+    @mock.patch('bin.commands.settings.list_')
+    def test_state_getExtensions(self, mock_list):
+
+        # given
+        mock_list.return_value = '''git-state.extensions.log
+git-state.extensions.changes'''
+
+        # when
+        extensions = state.get_extensions()
+
+        # then
+        mock_list.assert_called_once_with(limit_to='sections')
+
+        self.assertEqual(extensions, ['log', 'changes'])
+
+    @mock.patch('bin.commands.settings.list_')
+    def test_state_getExtensions_noExtensionsExist(self, mock_list):
+
+        # given
+        mock_list.return_value = ''
+
+        # when
+        extensions = state.get_extensions()
+
+        # then
+        mock_list.assert_called_once_with(limit_to='sections')
+
+        self.assertEqual(extensions, [])
+
+
+class TestStatePrintExtensions(unittest.TestCase):
+
+    @mock.patch('bin.commands.state.get_extensions')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_printExtensions(self, mock_info, mock_get_extensions):
+
+        # given
+        mock_get_extensions.return_value = ['log', 'changes', 'stashes']
+
+        # when
+        state.print_extensions()
+
+        # then
+        mock_get_extensions.assert_called_once()
+        mock_info.assert_called_once_with('''changes
+log
+stashes''')
+
+    @mock.patch('bin.commands.state.get_extensions')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_printExtensions_noExtensionsExist(self, mock_info, mock_get_extensions):
+
+        # given
+        mock_get_extensions.return_value = []
+
+        # when
+        state.print_extensions()
+
+        # then
+        mock_get_extensions.assert_called_once()
+        mock_info.assert_not_called()
+
+
+class TestStatePrintExtensionConfig(unittest.TestCase):
+
+    @mock.patch('bin.commands.settings.list_')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_printExtensionConfig(self, mock_info, mock_list):
+
+        # given
+        mock_list.return_value = 'config'
+
+        # when
+        state.print_extension_config('log')
+
+        # then
+        mock_list.assert_called_once_with(section='git-state.extensions.log', format_='pretty')
+        mock_info.assert_called_once_with('config')
+
+    @mock.patch('bin.commands.settings.list_')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_printExtensionConfig_extensionDoesNotExist(self, mock_info, mock_list):
+
+        # given
+        mock_list.return_value = ''
+
+        # when
+        state.print_extension_config('log')
+
+        # then
+        mock_list.assert_called_once_with(section='git-state.extensions.log', format_='pretty')
+        mock_info.assert_not_called()
+
+
+class TestStateRunExtension(unittest.TestCase):
+
+    @mock.patch('colorama.init')
+    @mock.patch('bin.commands.state._extension_exists')
+    @mock.patch('bin.commands.state._run_extension')
+    @mock.patch('bin.commands.state._print_section')
+    @mock.patch('bin.commands.state._print_sections')
+    def test_state_runExtension(self, mock_print_sections, mock_print_section, mock_run_extension, mock_extension_exists, mock_init):
+
+        # given
+        mock_extension_exists.return_value = True
+        log_name = 'the log'
+        log_text = 'log text'
+        mock_run_extension.return_value = (log_name, log_text)
+        section_text = 'section text'
+        mock_print_section.return_value = section_text
+
+        # when
+        state.run_extension('log')
+
+        # then
+        mock_init.assert_called_once_with(strip=True)
+        mock_extension_exists.assert_called_once_with('log')
+        mock_run_extension.assert_called_once_with('log', {}, 'never')
+        mock_print_section.assert_called_once_with(log_name, text=log_text, show_empty=True, color='never')
+        mock_print_sections.assert_called_once_with({log_name: section_text})
+
+    @mock.patch('colorama.init')
+    @mock.patch('bin.commands.state._extension_exists')
+    @mock.patch('bin.commands.state._run_extension')
+    @mock.patch('bin.commands.state._print_section')
+    @mock.patch('bin.commands.state._print_sections')
+    def test_state_runExtension_extensionDoesNotExist(self, mock_print_sections, mock_print_section, mock_run_extension, mock_extension_exists, mock_init):
+
+        # given
+        mock_extension_exists.return_value = False
+
+        # when
+        state.run_extension('log')
+
+        # then
+        mock_init.assert_called_once_with(strip=True)
+        mock_extension_exists.assert_called_once_with('log')
+        mock_run_extension.assert_not_called()
+        mock_print_section.assert_not_called()
+        mock_print_sections.assert_not_called()
+
+
+class TestStateDeleteExtension(unittest.TestCase):
+
+    @mock.patch('bin.commands.state._extension_exists')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_deleteExtension(self, mock_info, mock_call, mock_extension_exists):
+
+        # given
+        mock_extension_exists.return_value = True
+
+        # when
+        state.delete_extension('log')
+
+        # then
+        mock_extension_exists.assert_called_once_with('log')
+        mock_call.assert_called_once_with('git config --local --remove-section git-state.extensions.log'.split())
+        mock_info.assert_called_once_with('Extension log deleted')
+
+    @mock.patch('bin.commands.state._extension_exists')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_deleteExtension_extensionDoesNotExist(elf, mock_info, mock_call, mock_extension_exists):
+
+        # given
+        mock_extension_exists.return_value = False
+
+        # when
+        state.delete_extension('log')
+
+        # then
+        mock_extension_exists.assert_called_once_with('log')
+        mock_call.assert_not_called()
+        mock_info.assert_not_called()

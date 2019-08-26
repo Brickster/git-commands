@@ -2,15 +2,25 @@
 
 ## SYNOPSIS
 
-`git state` [`--show-status`] [`--no-show-status`]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--show-*`] [`--no-show-*`]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--no-show-all`] [`--no-show` [<extension> ...]]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-c`|`--color`) [<when>]] [(`-C`|`--no-color`)]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--clear`] [`--no-clear`] [`--no-page`]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--order`) <section> [<section> ...]]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-O`|`--options`) _option_ [_option_ ...]]<br>
+`git state` [`view`] [`--show-status`] [`--no-show-status`]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--show-*`] [`--no-show-*`]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--no-show-all`] [`--no-show` [<extension> ...]]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-c`|`--color`) [<when>]] [(`-C`|`--no-color`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--clear`] [`--no-clear`] [`--no-page`]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--order`) <section> [<section> ...]]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-O`|`--options`) _option_ [_option_ ...]]<br>
+`git state create` (`-c`|`--command`) <command> [(`-n`|`--name`) <name>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--options`) <options>] [`--no-show`] [`--no-color`]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<extension><br>
+`git state edit` [(`-c`|`--command`) <command>] [(`-n`|`--name`) <name>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--options`) <options>] [`--no-show`] [`--no-color`]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<extension><br>
+`git state delete` <extension><br>
+`git state config` <extension><br>
+`git state list`<br>
+`git state run` <extension><br>
 `git state` (`-h`|`--help`)<br>
 `git state` (`-v`|`--version`)
 
@@ -20,67 +30,133 @@ Used to see a more concise and comprehensive view of the working directory throu
 
 ## OPTIONS
 
-* `-h`|`--help`:
-	Print a simple help message.
+* `view`:
+    View the current state of a repository.
 
-* `-v`|`--version`:
-	Print version.
+    * `-h`|`--help`:
+        Print a simple help message.
 
-* `--show-status`:
-	Print the status section.
+    * `-v`|`--version`:
+        Print version.
 
-* `--no-show-status`:
-    Don't print the status section.
+    * `--show-status`:
+        Print the status section.
 
-* `--show-*`:
-    Show extension *. Where * is the configuration key value. For instance, given:
+    * `--no-show-status`:
+        Don't print the status section.
 
-    git-state.extentions.last-ten-commits=git log --oneline -10<br>
-    git-state.extentions.last-ten-commits.name=last ten commits
+    * `--show-*`:
+        Show extension *. Where * is the configuration key value. For instance, given:
 
-    The show flag is `--show-last-ten-commits`.
+        git-state.extentions.last-ten-commits=git log --oneline -10<br>
+        git-state.extentions.last-ten-commits.name=last ten commits
 
-* `--no-show-*`:
-    Hide extension *.
+        The show flag is `--show-last-ten-commits`.
 
-* `--no-show-all`:
-    Hide all extensions.
+    * `--no-show-*`:
+        Hide extension *.
 
-* `--no-show` [<extension> ...]:
-	A list of extensions to hide. If none are specified, all of them will be hidden. See **[EXTENSIONS][]** section for more detail.
+    * `--no-show-all`:
+        Hide all extensions.
 
-* `-e`|`--show-empty`:
-    Show empty sections rather than omitting them.
+    * `--no-show` [<extension> ...]:
+        A list of extensions to hide. If none are specified, all of them will be hidden. See **[EXTENSIONS][]** section for more detail.
 
-* `-E`|`--no-show-empty`:
-	Omit empty sections. This only applies to the status section when no clean message is used.
+    * `-e`|`--show-empty`:
+        Show empty sections rather than omitting them.
 
-* `-c`|`--color` [<when>]:
-    Color output. <when> must be one of `always`, `never`, or `auto`. Defaults to `color.ui` configuration value or `auto`.
+    * `-E`|`--no-show-empty`:
+        Omit empty sections. This only applies to the status section when no clean message is used.
 
-* `-C`|`--no-color`:
-    Never color output. Same as `--color=never`.
+    * `-c`|`--color` [<when>]:
+        Color output. <when> must be one of `always`, `never`, or `auto`. Defaults to `color.ui` configuration value or `auto`.
 
-* `-p`|`--pretty`:
-	Display in pretty format. This is equivalent to `-f`|`--format` <pretty>.
+    * `-C`|`--no-color`:
+        Never color output. Same as `--color=never`.
 
-* `-f`|`--format` <format>:
-	The format used to print each section. Valid values include: <compact> and <pretty>.
+    * `-p`|`--pretty`:
+        Display in pretty format. This is equivalent to `-f`|`--format` <pretty>.
 
-* `--clear` :
-	Clear the screen before printing.
+    * `-f`|`--format` <format>:
+        The format used to print each section. Valid values include: <compact> and <pretty>.
 
-* `--no-clear`:
-	Do not clear the screen before printing.
+    * `--clear` :
+        Clear the screen before printing.
 
-* `--no-page`:
-    Do not page output if it exceeds the terminal window.
+    * `--no-clear`:
+        Do not clear the screen before printing.
 
-* `-o`|`--order` <section> [<section> ...]:
-	A custom section order.
+    * `--no-page`:
+        Do not page output if it exceeds the terminal window.
 
-* `-O`|`--options` _option_ [_option_ ...]:
-    A list of options to pass to an extension. Options are formatted as `<extension_name>:<option>`. See **[EXTENSIONS][]** section for more detail.
+    * `-o`|`--order` <section> [<section> ...]:
+        A custom section order.
+
+    * `-O`|`--options` _option_ [_option_ ...]:
+        A list of options to pass to an extension. Options are formatted as `<extension_name>:<option>`. See **[EXTENSIONS][]** section for more detail.
+
+* `create`:
+    Create an extension.
+
+    * `extension`:
+        Name of the extension. Must be a valid `git-config` sub-section name.
+
+    * `-c`|`--command` <command>:
+        The command to execute.
+
+    * `-n`|`--name` <name>:
+        The section name to use when printing the extension alongside others.
+
+    * `-o`|`--options` <options>:
+        Any other options to include when running the extension command.
+
+    * `--no-show`:
+        Set the extension to not show by default. `--show-*` will override this setting at execution time.
+
+    * `--no-color`:
+        Do no include coloring option `--color=<when>` when executing the command.
+
+* `edit`:
+    Edit an extension.
+
+    * `extension`:
+        Name of the extension. Must be a valid `git-config` sub-section name.
+
+    * `-c`|`--command` <command>:
+        The command to execute.
+
+    * `-n`|`--name` <name>:
+        The section name to use when printing the extension alongside others.
+
+    * `-o`|`--options` <options>:
+        Any other options to include when running the extension command.
+
+    * `--no-show`:
+        Set the extension to not show by default. `--show-*` will override this setting at execution time.
+
+    * `--no-color`:
+        Do no include coloring option `--color=<when>` when executing the command.
+
+* `delete`:
+    Delete an extension.
+
+    * `extension`:
+        The name of an extension.
+
+* `config`:
+    View the configuration of an extension.
+
+    * `extension`:
+        The name of an extension.
+
+* `list`:
+    List the names of all extensions. This command has no options.
+
+* `run`:
+    Run an extension. This command overrides any option that would otherwise hide the extension.
+
+    * `extension`:
+        The name of an extension.
 
 ## CONFIGURATION
 
@@ -109,7 +185,7 @@ Used to see a more concise and comprehensive view of the working directory throu
 
 	Default: <auto>
 
-* `git-state.extensions.*` <string>:
+* `git-state.extensions.*.command` <string>:
 	A custom command to execute and print as its own section. See **[EXTENSIONS][]** section for more detail.
 
 * `git-state.extensions.*.name` <string>:
@@ -133,17 +209,17 @@ Used to see a more concise and comprehensive view of the working directory throu
 
 ## EXTENSIONS
 
-Out of the box, `git-state` isn't that useful. It simply reformats `git status --short`. That's where extensions come in. Extensions allow you to configure `git-state` to show the information useful to you. One can be created by setting a config in the following format:
+Out of the box, `git-state` isn't that useful. It simply reformats `git status --short`. That's where extensions come in. Extensions allow you to configure `git-state` to show the information useful to you. One can be created by running the `extension create` command:
 
 ```
-git-state.extensions.<section-name>
+git state extension create log --command 'git log --oneline -10'
 ```
 
 The extension can be any valid script or command.
 
 ```bash
 $ git alias graph "git log --oneline --graph --all --decorate -10"
-$ git config git-state.extenstions.graph "git graph"
+$ git state extensions create graph --command "git graph"
 $ git state
 # status (state-extensions)
 
@@ -170,21 +246,23 @@ $ git state
 $
 ```
 
+Extension settings are stored in config files like all other git configurations. They can be edited manually but it is highly discouraged unless you are create global extensions. This is due to a limitation of the `extensions` command that only modifies local configuration files. However, `git-state` will inspect non-local files.
+
 ### Coloring
-By default, an extension must accept the flag `--color=`<when>. This flag must be respected so coloring options are matched. <when> will only be one of: <never> or <always>. If an extension never colors, set `git-state.extensions.*.color` to `false`.
+By default, an extension must accept the flag `--color=`<when>. This flag must be respected so coloring options are matched. <when> will only be one of: <never> or <always>. If an extension never colors, include `--no-color` when creating the extension.
 
 ### Naming
-The section name for an extension defaults to the key name but can be overridden by defining `git-state.extensions.<section-name>.name`.
+The section name for an extension defaults to the key name but can be overridden by including `--name <name>`.
 
 ### Option Passing
 Options can be passed to an extension using the `-O|--option` flag and are applied in the order they are received. Values passed this way must be formatted as `<extension_name>:<option>`. The `extension_name` refers to the value used in configuration defining the extension. Not the display name.
 
-For instance, say an extension were defined to show changes: `git-state.extensions.changes=git changes`. It could be toggled to run in stat mode and against develop by using `--options changes:develop changes:--stat`.
+For instance, say an extension were defined to show changes: `git state extensions create changes --command 'git changes'`. It could be toggled to run in stat mode and against develop by using `--options changes:develop changes:--stat`.
 
-Options can be handled per configuration by setting `git-state.extensions.*.options`.
+Options can be handled per configuration by setting `--options <options>`.
 
 ### Hide an Extension
-An extension can be hidden by setting `git-state.extensions.*.show` to `false`. This is useful for globally defined extensions that aren't needed for all repositories.
+An extension can be hidden by setting `--no-show`. This is useful for globally defined extensions that aren't needed for all repositories.
 
 Alternatively, an extension can be hidden by listing it in `--no-show` [<extension> ...] or using the flag `--no-show-*`.
 

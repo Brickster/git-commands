@@ -7,31 +7,61 @@
 \fBgit\-state\fR \- a customizable view for the state of a working tree
 .
 .SH "SYNOPSIS"
-\fBgit state\fR [\fB\-\-show\-status\fR] [\fB\-\-no\-show\-status\fR]
+\fBgit state\fR [\fBview\fR] [\fB\-\-show\-status\fR] [\fB\-\-no\-show\-status\fR]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~[\fB\-\-show\-*\fR] [\fB\-\-no\-show\-*\fR]
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-show\-*\fR] [\fB\-\-no\-show\-*\fR]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~[\fB\-\-no\-show\-all\fR] [\fB\-\-no\-show\fR [\fIextension\fR \.\.\.]]
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-no\-show\-all\fR] [\fB\-\-no\-show\fR [\fIextension\fR \.\.\.]]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~[(\fB\-e\fR|\fB\-\-show\-empty\fR)] [(\fB\-E\fR|\fB\-\-no\-show\-empty\fR)]
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-e\fR|\fB\-\-show\-empty\fR)] [(\fB\-E\fR|\fB\-\-no\-show\-empty\fR)]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~[(\fB\-c\fR|\fB\-\-color\fR) [\fIwhen\fR]] [(\fB\-C\fR|\fB\-\-no\-color\fR)]
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-c\fR|\fB\-\-color\fR) [\fIwhen\fR]] [(\fB\-C\fR|\fB\-\-no\-color\fR)]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~[(\fB\-p\fR|\fB\-\-pretty\fR)] [(\fB\-f\fR|\fB\-\-format\fR) \fIformat\fR]
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-p\fR|\fB\-\-pretty\fR)] [(\fB\-f\fR|\fB\-\-format\fR) \fIformat\fR]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~[\fB\-\-clear\fR] [\fB\-\-no\-clear\fR] [\fB\-\-no\-page\fR]
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-clear\fR] [\fB\-\-no\-clear\fR] [\fB\-\-no\-page\fR]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~[(\fB\-o\fR|\fB\-\-order\fR) \fIsection\fR [\fIsection\fR \.\.\.]]
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-o\fR|\fB\-\-order\fR) \fIsection\fR [\fIsection\fR \.\.\.]]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~[(\fB\-O\fR|\fB\-\-options\fR) \fIoption\fR [\fIoption\fR \.\.\.]]
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-O\fR|\fB\-\-options\fR) \fIoption\fR [\fIoption\fR \.\.\.]]
+.
+.br
+\fBgit state create\fR (\fB\-c\fR|\fB\-\-command\fR) \fIcommand\fR [(\fB\-n\fR|\fB\-\-name\fR) \fIname\fR]
+.
+.br
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-o\fR|\fB\-\-options\fR) \fIoptions\fR] [\fB\-\-no\-show\fR] [\fB\-\-no\-color\fR]
+.
+.br
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\fIextension\fR
+.
+.br
+\fBgit state edit\fR [(\fB\-c\fR|\fB\-\-command\fR) \fIcommand\fR] [(\fB\-n\fR|\fB\-\-name\fR) \fIname\fR]
+.
+.br
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-o\fR|\fB\-\-options\fR) \fIoptions\fR] [\fB\-\-no\-show\fR] [\fB\-\-no\-color\fR]
+.
+.br
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\fIextension\fR
+.
+.br
+\fBgit state delete\fR \fIextension\fR
+.
+.br
+\fBgit state config\fR \fIextension\fR
+.
+.br
+\fBgit state list\fR
+.
+.br
+\fBgit state run\fR \fIextension\fR
 .
 .br
 \fBgit state\fR (\fB\-h\fR|\fB\-\-help\fR)
@@ -43,6 +73,10 @@
 Used to see a more concise and comprehensive view of the working directory through custom extensions\.
 .
 .SH "OPTIONS"
+.
+.TP
+\fBview\fR
+View the current state of a repository\.
 .
 .TP
 \fB\-h\fR|\fB\-\-help\fR
@@ -128,6 +162,96 @@ A custom section order\.
 .TP
 \fB\-O\fR|\fB\-\-options\fR \fIoption\fR [\fIoption\fR \.\.\.]
 A list of options to pass to an extension\. Options are formatted as \fB<extension_name>:<option>\fR\. See \fB\fIEXTENSIONS\fR\fR section for more detail\.
+
+.
+.TP
+\fBcreate\fR
+Create an extension\.
+.
+.TP
+\fBextension\fR
+Name of the extension\. Must be a valid \fBgit\-config\fR sub\-section name\.
+.
+.TP
+\fB\-c\fR|\fB\-\-command\fR \fIcommand\fR
+The command to execute\.
+.
+.TP
+\fB\-n\fR|\fB\-\-name\fR \fIname\fR
+The section name to use when printing the extension alongside others\.
+.
+.TP
+\fB\-o\fR|\fB\-\-options\fR \fIoptions\fR
+Any other options to include when running the extension command\.
+.
+.TP
+\fB\-\-no\-show\fR
+Set the extension to not show by default\. \fB\-\-show\-*\fR will override this setting at execution time\.
+.
+.TP
+\fB\-\-no\-color\fR
+Do no include coloring option \fB\-\-color=<when>\fR when executing the command\.
+
+.
+.TP
+\fBedit\fR
+Edit an extension\.
+.
+.TP
+\fBextension\fR
+Name of the extension\. Must be a valid \fBgit\-config\fR sub\-section name\.
+.
+.TP
+\fB\-c\fR|\fB\-\-command\fR \fIcommand\fR
+The command to execute\.
+.
+.TP
+\fB\-n\fR|\fB\-\-name\fR \fIname\fR
+The section name to use when printing the extension alongside others\.
+.
+.TP
+\fB\-o\fR|\fB\-\-options\fR \fIoptions\fR
+Any other options to include when running the extension command\.
+.
+.TP
+\fB\-\-no\-show\fR
+Set the extension to not show by default\. \fB\-\-show\-*\fR will override this setting at execution time\.
+.
+.TP
+\fB\-\-no\-color\fR
+Do no include coloring option \fB\-\-color=<when>\fR when executing the command\.
+
+.
+.TP
+\fBdelete\fR
+Delete an extension\.
+.
+.TP
+\fBextension\fR
+The name of an extension\.
+
+.
+.TP
+\fBconfig\fR
+View the configuration of an extension\.
+.
+.TP
+\fBextension\fR
+The name of an extension\.
+
+.
+.TP
+\fBlist\fR
+List the names of all extensions\. This command has no options\.
+.
+.TP
+\fBrun\fR
+Run an extension\. This command overrides any option that would otherwise hide the extension\.
+.
+.TP
+\fBextension\fR
+The name of an extension\.
+
 .
 .SH "CONFIGURATION"
 .
@@ -167,7 +291,7 @@ Determines whether or not colors are printed in the output\. Options \fB\-\-colo
 Default: \fIauto\fR
 .
 .TP
-\fBgit\-state\.extensions\.*\fR \fIstring\fR
+\fBgit\-state\.extensions\.*\.command\fR \fIstring\fR
 A custom command to execute and print as its own section\. See \fB\fIEXTENSIONS\fR\fR section for more detail\.
 .
 .TP
@@ -197,13 +321,13 @@ Default: \fItrue\fR
 Custom order in which to print sections\. Multiple section names are separated by a pipe (|) character\. Any remaining sections not included are printed in the order they are handled internally\. Option \fB\-o\fR|\fB\-\-order\fR overrides this value\.
 .
 .SH "EXTENSIONS"
-Out of the box, \fBgit\-state\fR isn\'t that useful\. It simply reformats \fBgit status \-\-short\fR\. That\'s where extensions come in\. Extensions allow you to configure \fBgit\-state\fR to show the information useful to you\. One can be created by setting a config in the following format:
+Out of the box, \fBgit\-state\fR isn\'t that useful\. It simply reformats \fBgit status \-\-short\fR\. That\'s where extensions come in\. Extensions allow you to configure \fBgit\-state\fR to show the information useful to you\. One can be created by running the \fBextension create\fR command:
 .
 .IP "" 4
 .
 .nf
 
-git\-state\.extensions\.<section\-name>
+git state extension create log \-\-command \'git log \-\-oneline \-10\'
 .
 .fi
 .
@@ -217,7 +341,7 @@ The extension can be any valid script or command\.
 .nf
 
 $ git alias graph "git log \-\-oneline \-\-graph \-\-all \-\-decorate \-10"
-$ git config git\-state\.extenstions\.graph "git graph"
+$ git state extensions create graph \-\-command "git graph"
 $ git state
 # status (state\-extensions)
 
@@ -247,23 +371,26 @@ $
 .
 .IP "" 0
 .
+.P
+Extension settings are stored in config files like all other git configurations\. They can be edited manually but it is highly discouraged unless you are create global extensions\. This is due to a limitation of the \fBextensions\fR command that only modifies local configuration files\. However, \fBgit\-state\fR will inspect non\-local files\.
+.
 .SS "Coloring"
-By default, an extension must accept the flag \fB\-\-color=\fR\fIwhen\fR\. This flag must be respected so coloring options are matched\. \fIwhen\fR will only be one of: \fInever\fR or \fIalways\fR\. If an extension never colors, set \fBgit\-state\.extensions\.*\.color\fR to \fBfalse\fR\.
+By default, an extension must accept the flag \fB\-\-color=\fR\fIwhen\fR\. This flag must be respected so coloring options are matched\. \fIwhen\fR will only be one of: \fInever\fR or \fIalways\fR\. If an extension never colors, include \fB\-\-no\-color\fR when creating the extension\.
 .
 .SS "Naming"
-The section name for an extension defaults to the key name but can be overridden by defining \fBgit\-state\.extensions\.<section\-name>\.name\fR\.
+The section name for an extension defaults to the key name but can be overridden by including \fB\-\-name <name>\fR\.
 .
 .SS "Option Passing"
 Options can be passed to an extension using the \fB\-O|\-\-option\fR flag and are applied in the order they are received\. Values passed this way must be formatted as \fB<extension_name>:<option>\fR\. The \fBextension_name\fR refers to the value used in configuration defining the extension\. Not the display name\.
 .
 .P
-For instance, say an extension were defined to show changes: \fBgit\-state\.extensions\.changes=git changes\fR\. It could be toggled to run in stat mode and against develop by using \fB\-\-options changes:develop changes:\-\-stat\fR\.
+For instance, say an extension were defined to show changes: \fBgit state extensions create changes \-\-command \'git changes\'\fR\. It could be toggled to run in stat mode and against develop by using \fB\-\-options changes:develop changes:\-\-stat\fR\.
 .
 .P
-Options can be handled per configuration by setting \fBgit\-state\.extensions\.*\.options\fR\.
+Options can be handled per configuration by setting \fB\-\-options <options>\fR\.
 .
 .SS "Hide an Extension"
-An extension can be hidden by setting \fBgit\-state\.extensions\.*\.show\fR to \fBfalse\fR\. This is useful for globally defined extensions that aren\'t needed for all repositories\.
+An extension can be hidden by setting \fB\-\-no\-show\fR\. This is useful for globally defined extensions that aren\'t needed for all repositories\.
 .
 .P
 Alternatively, an extension can be hidden by listing it in \fB\-\-no\-show\fR [\fIextension\fR \.\.\.] or using the flag \fB\-\-no\-show\-*\fR\.

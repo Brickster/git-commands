@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import argparse
+import sys
 
 from commands import settings, state
 from commands.utils import parse_string
@@ -9,28 +10,174 @@ from commands.utils.parse_actions import append_list, dict_set, optional_list
 
 def main():
 
-    # general defaults
-    default_show_empty = settings.get('git-state.show-empty', default=False, as_type=parse_string.as_bool)
-    default_format = settings.get('git-state.format', default='compact')
-    default_show_color = settings.get('color.ui', default='auto')
-    default_clear = settings.get('git-state.clear', default=True, as_type=parse_string.as_bool)
-
     parser = argparse.ArgumentParser(
         prog='git state',
         version='git-state 0.6.1',
         description=state.__doc__,
         epilog='for more detail, use: git help state'
     )
+    subparsers = parser.add_subparsers(help='sub-command help', dest='subcommand')
+
+    _view_subcommand(subparsers)
+    _extensions_subcommand(subparsers)
+
+    # default to view mode
+    if len(sys.argv) == 1 or sys.argv[1] not in ('view', 'extensions') and not _is_info_usage():
+        sys.argv.insert(1, 'view')
+
+    # print parser.parse_args()
+    parsed_args = vars(parser.parse_args())
+    func = parsed_args.pop('func')
+
+    # remove any subcommand args
+    parsed_args.pop('subcommand', None)
+    parsed_args.pop('extensions_subcommand', None)
+
+    func(**parsed_args)
+
+
+def _add_color_argument(parser, default_show_color):
+    color_group = parser.add_mutually_exclusive_group()
+    color_group.add_argument(
+        '-c',
+        '--color',
+        help='color output',
+        const='always',
+        dest='show_color',
+        nargs='?',
+        choices=('always', 'never', 'auto'),
+        default=default_show_color
+    )
+    color_group.add_argument(
+        '-C',
+        '--no-color',
+        help='never color output',
+        action='store_const',
+        const='never',
+        dest='show_color'
+    )
+
+
+def _extensions_subcommand(subparsers):
+
+    # general defaults
+    default_show_color = settings.get('color.ui', default='auto')
+
+    parser = subparsers.add_parser(
+        'extensions',
+        help='manage extensions',
+        description='manage extensions'
+    )
+
+    extensions_subparsers = parser.add_subparsers(help='extensions sub-command help', dest='extensions_subcommand')
+    create_parser = extensions_subparsers.add_parser(
+        'create',
+        help='create an extension',
+        description='create an extension',
+        usage='''git state extensions create [-h] --command COMMAND [--name NAME]
+                                   [-o OPTIONS] [--no-show] [--no-color]
+                                   EXTENSION'''
+    )
+    create_parser.set_defaults(func=state.edit_extension)
+    create_parser.add_argument('extension', help='name of the extension')
+    create_parser.add_argument('--command', '-c', help='command to execute', required=True)
+    create_parser.add_argument('--name', '-n', help='section name to print')
+    create_parser.add_argument('-o', '--options', help='other options for the command')
+    create_parser.add_argument(
+        '--no-show',
+        help='do not show the extension',
+        action='store_false',
+        dest='show',
+        default=True
+    )
+    create_parser.add_argument(
+        '--no-color',
+        '-C',
+        help='never color output',
+        action='store_false',
+        dest='color',
+        default=True
+    )
+
+    edit_parser = extensions_subparsers.add_parser(
+        'edit',
+        help='edit an extension',
+        description='edit an extension',
+        usage='''git state extensions edit [-h] [--command COMMAND] [--name NAME]
+                                 [--options OPTIONS] [--no-show] [--no-color]
+                                 EXTENSION'''
+    )
+    edit_parser.set_defaults(func=state.edit_extension)
+    edit_parser.add_argument('extension', help='name of the extension')
+    edit_parser.add_argument('--command', '-c', help='command to execute')
+    edit_parser.add_argument('--name', '-n', help='section name to print')
+    edit_parser.add_argument('--options', '-o', help='other options for the command')
+    edit_parser.add_argument(
+        '--no-show',
+        help='do not show the extension',
+        action='store_false',
+        dest='show',
+        default=True
+    )
+    edit_parser.add_argument(
+        '--no-color',
+        '-C',
+        help='never color output',
+        action='store_false',
+        dest='color',
+        default=True
+    )
+
+    delete_parser = extensions_subparsers.add_parser(
+        'delete',
+        help='delete an extension',
+        description='delete an extension',
+        usage='git state extensions delete [-h] EXTENSION'
+    )
+    delete_parser.set_defaults(func=state.delete_extension)
+    delete_parser.add_argument('extension', help='extension to delete')
+
+    config_parser = extensions_subparsers.add_parser(
+        'config',
+        help='show extension config',
+        description='show extension config',
+        usage='git state extensions config [-h] EXTENSION'
+    )
+    config_parser.set_defaults(func=state.print_extension_config)
+    config_parser.add_argument('extension', help='extension whose config should be printed')
+
+    list_parser = extensions_subparsers.add_parser(
+        'list', help='list extensions', description='list extensions'
+    )
+    list_parser.set_defaults(func=state.print_extensions)
+
+    run_parser = extensions_subparsers.add_parser(
+        'run',
+        help='run an extension',
+        description='run an extension',
+        usage='git state extensions run [-h] EXTENSION'
+    )
+    run_parser.set_defaults(func=state.run_extension)
+    run_parser.add_argument('extension', help='extension to run')
+
+
+def _view_subcommand(subparsers):
+
+    # general defaults
+    default_show_empty = settings.get('git-state.show-empty', default=False, as_type=parse_string.as_bool)
+    default_format = settings.get('git-state.format', default='compact')
+    default_show_color = settings.get('color.ui', default='auto')
+    default_clear = settings.get('git-state.clear', default=True, as_type=parse_string.as_bool)
+
+    parser = subparsers.add_parser(
+        'view',
+        help='view state',
+        description='view state'
+    )
+    parser.set_defaults(func=state.state)
 
     # add --show-/--no-show- flags for custom extensions
-    extensions = settings.list_(
-        section='git-state.extensions',
-        config=None,
-        count=False,
-        limit_to='keys',
-        format_=None,
-        file_=None
-    ).splitlines()
+    extensions = state.get_extensions()
     extension_group = parser.add_mutually_exclusive_group()
     extension_group.add_argument(
         '--show-status',
@@ -68,20 +215,13 @@ def main():
         )
 
     # ignore sections
-    all_extensions = settings.list_(
-        'git-state.extensions',
-        config=None,
-        count=False,
-        limit_to='keys',
-        format_=None
-    ).splitlines()
     no_show_parser = parser.add_mutually_exclusive_group()
     no_show_parser.add_argument(
         '--no-show',
         help='extensions to hide',
         nargs='*',
         action=optional_list(),
-        const=all_extensions,
+        const=extensions,
         default=[],
         dest='ignore_extensions',
         metavar='EXTENSION'
@@ -90,30 +230,12 @@ def main():
         '--no-show-all',
         help='hide all extensions',
         action='store_const',
-        const=all_extensions,
+        const=extensions,
         dest='ignore_extensions'
     )
 
     # color
-    color_group = parser.add_mutually_exclusive_group()
-    color_group.add_argument(
-        '-c',
-        '--color',
-        help='color output',
-        const='always',
-        dest='show_color',
-        nargs='?',
-        choices=('always', 'never', 'auto'),
-        default=default_show_color
-    )
-    color_group.add_argument(
-        '-C',
-        '--no-color',
-        help='never color output',
-        action='store_const',
-        const='never',
-        dest='show_color'
-    )
+    _add_color_argument(parser, default_show_color)
 
     # format
     format_group = parser.add_mutually_exclusive_group()
@@ -196,7 +318,10 @@ def main():
         dest='page'
     )
 
-    state.state(**vars(parser.parse_args()))
+
+def _is_info_usage():
+    return any([opt in sys.argv for opt in ('-h', '--help', '-v', '--version')])
+
 
 if __name__ == '__main__':
     main()
