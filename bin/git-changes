@@ -123,16 +123,16 @@ def main():
     committish_group = view_parser.add_mutually_exclusive_group()
     committish_group.add_argument(
         'committish',
-        help='show the commits between HEAD and a commit-ish',
+        help='show changes between HEAD and a commit-ish',
         nargs='?',
         metavar='COMMIT-ISH'
     )
 
-    # -r|--remote
+    # -u|--upstream
     committish_group.add_argument(
-        '-r',
-        '--remote',
-        help='show the commits between the local and remote head',
+        '-u',
+        '--upstream',
+        help='show changes between the local and upstream branch',
         action='store_true',
         default=argparse.SUPPRESS
     )
@@ -222,7 +222,7 @@ def main():
         # suppressing output on retrieval makes no sense
         if 'quiet' in args:
             associate_parser.print_usage()
-            error('argument -q/--quiet: not allowed without positional argument committish or option -r/--remote', prefix='git changes: error:')
+            error('argument -q/--quiet: not allowed without positional argument committish or option -u/--upstream', prefix='git changes: error:')
         _error_if_files_supplied(associate_parser, file_args)
         args['func'] = changes.get_association
         del args['committish']
@@ -239,13 +239,13 @@ def main():
         del args['upstream']
     elif subcommand == 'unassociate':
         _error_if_files_supplied(unassociate_parser, file_args)
-    elif subcommand == 'view' and 'remote' in args:
-        # -r|--remote doesn't work with dest='committish' when committish is positional
-        del args['remote']
-        remote_branch = upstream.upstream(include_remote=upstream.IncludeRemote.NONE_LOCAL)
-        if not remote_branch:
-            error('{0!r} has no remote branch'.format(git.current_branch()))
-        args['committish'] = remote_branch
+    elif subcommand == 'view' and 'upstream' in args:
+        # -u|--upstream doesn't work with dest='committish' when committish is positional
+        del args['upstream']
+        upstream_branch = upstream.upstream(include_remote=upstream.IncludeRemote.NONE_LOCAL)
+        if not upstream_branch:
+            error('{0!r} has no upstream branch'.format(git.current_branch()))
+        args['committish'] = upstream_branch
         args['files'] = file_args
     elif subcommand == 'view' and not args['committish']:
         if git.is_empty_repository():

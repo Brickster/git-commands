@@ -81,7 +81,7 @@
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
 <p><code>git changes view</code> [(<code>-l</code>|<code>--log</code>)] [(<code>-i</code>|<code>--inverse</code>)] [(<code>-c</code>|<code>--count</code>)]<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-s</code>|<code>--stat</code>)] [(<code>-d</code>|<code>--diff</code>)] [(<code>-r</code>|<code>--remote</code>)]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-s</code>|<code>--stat</code>)] [(<code>-d</code>|<code>--diff</code>)] [(<code>-u</code>|<code>--upstream</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--color</code> [<var>when</var>]] [<code>--no-color</code>] [<var>commit-ish</var>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[-- FILE [FILE ...]]<br />
 <code>git changes associate</code> [(<code>-q</code>|<code>--quiet</code>)] [(<code>-u</code>|<code>--upstream</code>)]<br />
@@ -101,8 +101,8 @@
 <dt class="flush"><code>view</code></dt><dd><p>  View changes between a branch and a commit-ish. This is the default when no subcommand is specified.</p>
 
 <dl>
-<dt><code>commit-ish</code></dt><dd><p>  Show the commits between HEAD and the specified commit-ish. If not specified, following are considered and the first to evaluate is used: (1) config value <code>git-state.associations.&lt;branch>.with</code>, (2) config value <code>git-changes.default-commit-ish</code>, (3) <code>refs/heads/master</code></p></dd>
-<dt><code>-r</code>|<code>--remote</code></dt><dd><p>  Show the commits between the local and remote head.</p></dd>
+<dt><code>commit-ish</code></dt><dd><p>  Show changes between HEAD and the specified commit-ish. If not specified, following are considered and the first to evaluate is used: (1) config value <code>git-state.associations.&lt;branch>.with</code>, (2) config value <code>git-changes.default-commit-ish</code>, (3) <code>refs/heads/master</code></p></dd>
+<dt><code>-u</code>|<code>--upstream</code></dt><dd><p>  Show changes between the local and upstream branch.</p></dd>
 <dt><code>-l</code>|<code>--log</code></dt><dd><p>  Show changes as log entries.</p></dd>
 <dt><code>-i</code>|<code>--inverse</code></dt><dd><p>  Inverse of <code>--log</code> so only common commits are printed.</p></dd>
 <dt><code>-c</code>|<code>--count</code></dt><dd><p>  Show as a count of changes.</p></dd>

@@ -109,7 +109,7 @@ class TestChangesView(unittest.TestCase):
         self.assertEqual(os.linesep.join([self.commit3_log, self.commit2_log]), self.repo.git.changes('HEAD^^'))
         self.assertEqual(os.linesep.join([self.commit3_log, self.commit2_log]), self.repo.git.changes('view', 'HEAD^^'))
 
-    def test_view_remote(self):
+    def test_view_upstream(self):
 
         # given: a local upstream branch
         self.repo.git.branch('upstream-branch', 'HEAD^')
@@ -119,9 +119,9 @@ class TestChangesView(unittest.TestCase):
         self.repo.git.config('git-changes.associations.master.with', self.repo.rev_parse('HEAD^^'))
 
         # expect
-        self.assertEqual(self.commit3_log, self.repo.git.changes('-r'))
-        self.assertEqual(self.commit3_log, self.repo.git.changes('--remote'))
-        self.assertNotEqual(self.repo.git.changes(), self.repo.git.changes('--remote'))
+        self.assertEqual(self.commit3_log, self.repo.git.changes('-u'))
+        self.assertEqual(self.commit3_log, self.repo.git.changes('--upstream'))
+        self.assertNotEqual(self.repo.git.changes(), self.repo.git.changes('--upstream'))
 
     def test_view_count(self):
 
@@ -315,7 +315,7 @@ class TestChangesAssociate(unittest.TestCase):
         # then
         self.assertEqual('usage: git changes associate [-h] [-u] [-V] [COMMIT-ISH [-q]]\n', output[0])
         self.assertEqual('git changes: error: argument -q/--quiet: not allowed without positional argument committish '
-                         'or option -r/--remote\n', output[1])
+                         'or option -u/--upstream\n', output[1])
 
     def test_associate_filesNotSupported(self):
 

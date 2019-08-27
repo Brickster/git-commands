@@ -3,7 +3,7 @@
 ## SYNOPSIS
 
 `git changes view` [(`-l`|`--log`)] [(`-i`|`--inverse`)] [(`-c`|`--count`)]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-s`|`--stat`)] [(`-d`|`--diff`)] [(`-r`|`--remote`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-s`|`--stat`)] [(`-d`|`--diff`)] [(`-u`|`--upstream`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--color` [<when>]] [`--no-color`] [<commit-ish>]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[-- FILE [FILE ...]]<br>
 `git changes associate` [(`-q`|`--quiet`)] [(`-u`|`--upstream`)]<br>
@@ -23,10 +23,10 @@
     View changes between a branch and a commit-ish. This is the default when no subcommand is specified.
 
     * `commit-ish`:
-        Show the commits between HEAD and the specified commit-ish. If not specified, following are considered and the first to evaluate is used: (1) config value `git-state.associations.<branch>.with`, (2) config value `git-changes.default-commit-ish`, (3) `refs/heads/master`
+        Show changes between HEAD and the specified commit-ish. If not specified, following are considered and the first to evaluate is used: (1) config value `git-state.associations.<branch>.with`, (2) config value `git-changes.default-commit-ish`, (3) `refs/heads/master`
 
-    * `-r`|`--remote`:
-        Show the commits between the local and remote head.
+    * `-u`|`--upstream`:
+        Show changes between the local and upstream branch.
 
     * `-l`|`--log`:
         Show changes as log entries.
