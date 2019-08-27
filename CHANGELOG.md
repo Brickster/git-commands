@@ -7,10 +7,12 @@ All notable changes to this project will be documented in this file. This projec
 - **Changes**: --inverse option to show common commits [#118][] [#134][]
 
 ### Changes
+- **Settings**: remove get command [#135][]
 - **Changes**: rename --remote to --upstream [#140][]
 
 [#118]: https://github.com/Brickster/git-commands/issues/118
 [#134]: https://github.com/Brickster/git-commands/issues/134
+[#135]: https://github.com/Brickster/git-commands/issues/135
 [#140]: https://github.com/Brickster/git-commands/issues/140
 
 ## [v0.7.0][] - 2019-08-26

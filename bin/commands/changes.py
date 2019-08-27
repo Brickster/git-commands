@@ -3,7 +3,7 @@
 import os
 import subprocess
 
-from . import settings, upstream
+from . import upstream
 from utils import directories, git, messages
 
 _DETAIL_OPTIONS = ('log', 'inverse_log', 'diff', 'stat', 'count')
@@ -131,11 +131,11 @@ def get_association(branch=None, verbose=False):
         return None
 
     branch = branch if branch else git.current_branch()
-    default_branch = settings.get('git-changes.default-commit-ish', default='refs/heads/master')
+    default_branch = git.get_config_value('git-changes.default-commit-ish', default='refs/heads/master')
     if branch == 'HEAD' or not branch:
         associated_branch = None
     else:
-        associated_branch = settings.get('git-changes.associations.' + branch + '.with', config='local')
+        associated_branch = git.get_config_value('git-changes.associations.' + branch + '.with', config='local')
 
     if not associated_branch and verbose:
         return default_branch

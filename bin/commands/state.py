@@ -80,11 +80,11 @@ def _print_sections(sections, order=[], page=False, clear=False):
 
 
 def _run_extension(extension, options, show_color):
-    extension_command = settings.get('git-state.extensions.' + extension + '.command')
-    extension_name = settings.get('git-state.extensions.' + extension + '.name', default=extension)
+    extension_command = git.get_config_value('git-state.extensions.' + extension + '.command')
+    extension_name = git.get_config_value('git-state.extensions.' + extension + '.name', default=extension)
 
     # merge config and command line options
-    extension_options = settings.get(
+    extension_options = git.get_config_value(
         'git-state.extensions.' + extension + '.options',
         default=[],
         as_type=(lambda value: [value])  # pragma: no cover since this call is mocked and the lambda never fires
@@ -93,7 +93,7 @@ def _run_extension(extension, options, show_color):
     extension_options = [o for sub in [shlex.split(line) for line in extension_options] for o in sub]
 
     extension_command = shlex.split(extension_command) + extension_options
-    if settings.get('git-state.extensions.' + extension + '.color', default=True, as_type=parse_string.as_bool):
+    if git.get_config_value('git-state.extensions.' + extension + '.color', default=True, as_type=parse_string.as_bool):
         extension_command += ['--color={}'.format(show_color)]
 
     extension_proc = subprocess.Popen(extension_command, stdout=PIPE, stderr=PIPE)
@@ -186,7 +186,7 @@ def state(**kwargs):
     colorama.init(strip=(show_color == 'never'))
 
     kwargs['show_color'] = show_color
-    kwargs['show_clean_message'] = settings.get(
+    kwargs['show_clean_message'] = git.get_config_value(
         'git-state.status.show-clean-message',
         default=True,
         as_type=parse_string.as_bool
@@ -217,7 +217,7 @@ def state(**kwargs):
         for extension in extensions or []:
 
             # skip if we should ignore this extension
-            if extension not in show_extensions and not settings.get('git-state.extensions.' + extension + '.show', default=True, as_type=parse_string.as_bool):
+            if extension not in show_extensions and not git.get_config_value('git-state.extensions.' + extension + '.show', default=True, as_type=parse_string.as_bool):
                 continue
 
             extension_name, extension_text = _run_extension(extension, options, show_color)
@@ -230,5 +230,5 @@ def state(**kwargs):
                 color=show_color
             )
 
-    order = kwargs.get('order', settings.get('git-state.order', default=[], as_type=parse_string.as_delimited_list('|')))
+    order = kwargs.get('order', git.get_config_value('git-state.order', default=[], as_type=parse_string.as_delimited_list('|')))
     _print_sections(sections, order, kwargs.get('page', True), kwargs.get('clear'))

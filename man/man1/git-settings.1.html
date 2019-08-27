@@ -81,8 +81,7 @@
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>git settings get</code> [<var>file-option</var>] [(<code>-d</code>|<code>--default</code>) <var>value</var>] <var>key</var><br />
-<code>git settings destroy</code> [(<code>-d</code>|<code>--dry-run</code>)] <var>section</var><br />
+<p><code>git settings destroy</code> [(<code>-d</code>|<code>--dry-run</code>)] <var>section</var><br />
 <code>git settings list</code> [<var>file-option</var>] [(<code>-p</code>|<code>--pretty</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-f</code>|<code>--format</code>) <var>format</var>] [(<code>-c</code>|<code>--count</code>)]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-s</code>|<code>--sections</code>)] [(<code>-k</code>|<code>--keys</code>)] [<var>section</var>]<br />
@@ -96,13 +95,6 @@
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
-<dt><code>get</code> <var>key</var> </dt><dd><p>  Retrieve a configuration by key.</p>
-
-<dl>
-<dt><code>-d</code>|<code>--default</code></dt><dd><p>  A default value to use when no configuration exists.</p></dd>
-<dt><var>file-option</var></dt><dd><p>  The key will be loaded from a specific file. See <strong><a href="#FILE-OPTIONS" title="FILE OPTIONS" data-bare-link="true">FILE OPTIONS</a></strong> section for more details.</p></dd>
-</dl>
-</dd>
 <dt><code>destroy</code> <var>section</var></dt><dd><p>  Destroy a section from the local, global, and system config files.</p>
 
 <dl>

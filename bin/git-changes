@@ -3,7 +3,7 @@
 import argparse
 import sys
 
-from commands import changes, settings, upstream
+from commands import changes, upstream
 from commands.utils import git
 from commands.utils.messages import error
 
@@ -146,7 +146,7 @@ def main():
         action='store_const',
         const='log',
         dest='details',
-        default=settings.get('git-changes.default-view', default='log')
+        default=git.get_config_value('git-changes.default-view', default='log')
     )
     details_group.add_argument(
         '--inverse',
@@ -252,7 +252,7 @@ def main():
             sys.exit(0)  # nothing to do
         committish = changes.get_association()
         if not committish:
-            committish = settings.get('git-changes.default-commit-ish', default='refs/heads/master')
+            committish = git.get_config_value('git-changes.default-commit-ish', default='refs/heads/master')
         args['committish'] = committish
         args['files'] = file_args
     elif subcommand == 'view':

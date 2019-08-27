@@ -169,7 +169,7 @@ class TestStatePrintSection(unittest.TestCase):
 class TestStateState(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
     @mock.patch('bin.commands.stateextensions.status.title')
@@ -190,7 +190,7 @@ class TestStateState(unittest.TestCase):
             mock_statustitle,
             mock_statusget,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -208,7 +208,7 @@ class TestStateState(unittest.TestCase):
         mock_statustitle.return_value = 'status title'
         mock_statusaccent.return_value = 'status accent'
         mock_printsection.return_value = 'status section\n'
-        mock_get.side_effect = [True, []]
+        mock_getconfigvalue.side_effect = [True, []]
         mock_list.return_value = ''
 
         # when
@@ -225,18 +225,18 @@ class TestStateState(unittest.TestCase):
             show_empty=True,
             color='never'
         )
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
         mock_call.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
@@ -251,7 +251,7 @@ class TestStateState(unittest.TestCase):
             mock_list,
             mock_printsection,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -265,7 +265,7 @@ class TestStateState(unittest.TestCase):
             'show_empty': True
         }
 
-        mock_get.side_effect = [True, []]
+        mock_getconfigvalue.side_effect = [True, []]
         mock_list.return_value = ''
 
         # when
@@ -275,7 +275,7 @@ class TestStateState(unittest.TestCase):
         mock_isgitrepository.assert_called_once_with()
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_not_called()
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
@@ -304,7 +304,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.resolve_coloring')
     @mock.patch('colorama.init')
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
     @mock.patch('bin.commands.stateextensions.status.title')
@@ -325,7 +325,7 @@ class TestStateState(unittest.TestCase):
             mock_statustitle,
             mock_statusget,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_init,
             mock_resolvecoloring,
             mock_isgitrepository
@@ -346,7 +346,7 @@ class TestStateState(unittest.TestCase):
         mock_statustitle.return_value = 'status title'
         mock_statusaccent.return_value = 'status accent'
         mock_printsection.return_value = 'status section\n'
-        mock_get.side_effect = [True, []]
+        mock_getconfigvalue.side_effect = [True, []]
         mock_list.return_value = ''
 
         # when
@@ -374,11 +374,11 @@ class TestStateState(unittest.TestCase):
             show_empty=True,
             color='never'
         )
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
@@ -387,7 +387,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.resolve_coloring')
     @mock.patch('colorama.init')
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
     @mock.patch('bin.commands.stateextensions.status.title')
@@ -408,7 +408,7 @@ class TestStateState(unittest.TestCase):
             mock_statustitle,
             mock_statusget,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_init,
             mock_resolvecoloring,
             mock_isgitrepository
@@ -430,7 +430,7 @@ class TestStateState(unittest.TestCase):
         mock_statustitle.return_value = 'status title'
         mock_statusaccent.return_value = 'status accent'
         mock_printsection.return_value = 'status section\n'
-        mock_get.side_effect = [True, []]
+        mock_getconfigvalue.side_effect = [True, []]
 
         # when
         state.state(**kwargs)
@@ -456,18 +456,18 @@ class TestStateState(unittest.TestCase):
             show_empty=True,
             color='always'
         )
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
         mock_call.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=True)
     @mock.patch('bin.commands.stateextensions.status.get')
     @mock.patch('bin.commands.stateextensions.status.title')
@@ -488,7 +488,7 @@ class TestStateState(unittest.TestCase):
             mock_statustitle,
             mock_statusget,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -507,7 +507,7 @@ class TestStateState(unittest.TestCase):
         mock_statustitle.return_value = 'status title'
         mock_statusaccent.return_value = 'status accent'
         mock_printsection.return_value = 'section output\n'
-        mock_get.side_effect = [True, []]
+        mock_getconfigvalue.side_effect = [True, []]
 
         # when
         state.state(**kwargs)
@@ -523,7 +523,7 @@ class TestStateState(unittest.TestCase):
             show_empty=True,
             color='never'
         )
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
@@ -533,7 +533,7 @@ class TestStateState(unittest.TestCase):
         mock_call.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=True)
     @mock.patch('bin.commands.stateextensions.status.get')
     @mock.patch('bin.commands.stateextensions.status.title')
@@ -554,7 +554,7 @@ class TestStateState(unittest.TestCase):
             mock_statustitle,
             mock_statusget,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -573,7 +573,7 @@ class TestStateState(unittest.TestCase):
         mock_statustitle.return_value = 'status title'
         mock_statusaccent.return_value = 'status accent'
         mock_printsection.return_value = 'section output\n'
-        mock_get.side_effect = [True, []]
+        mock_getconfigvalue.side_effect = [True, []]
 
         # when
         state.state(**kwargs)
@@ -582,7 +582,7 @@ class TestStateState(unittest.TestCase):
         mock_isgitrepository.assert_called_once_with()
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_not_called()
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
@@ -592,7 +592,7 @@ class TestStateState(unittest.TestCase):
         mock_call.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
@@ -609,7 +609,7 @@ class TestStateState(unittest.TestCase):
             mock_list,
             mock_printsection,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -625,7 +625,7 @@ class TestStateState(unittest.TestCase):
         changes_command = 'changes command'
         changes_name = 'changes'
         changes_output = 'the changes'
-        mock_get.side_effect = [True, True, changes_command, changes_name, [], True, []]
+        mock_getconfigvalue.side_effect = [True, True, changes_command, changes_name, [], True, []]
         mock_list.return_value = 'git-state.extensions.changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
@@ -646,7 +646,7 @@ class TestStateState(unittest.TestCase):
             show_empty=None,
             color='never'
         )
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.show', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.command'),
@@ -665,7 +665,7 @@ class TestStateState(unittest.TestCase):
         mock_proc.communicate.assert_called_once_with()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
@@ -682,7 +682,7 @@ class TestStateState(unittest.TestCase):
             mock_list,
             mock_printsection,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -698,7 +698,7 @@ class TestStateState(unittest.TestCase):
         changes_command = 'changes command'
         changes_name = 'changes'
         changes_output = 'the changes'
-        mock_get.side_effect = [True, True, changes_command, changes_name, [], False, []]
+        mock_getconfigvalue.side_effect = [True, True, changes_command, changes_name, [], False, []]
         mock_list.return_value = 'git-state.extensions.changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
@@ -719,7 +719,7 @@ class TestStateState(unittest.TestCase):
             show_empty=None,
             color='never'
         )
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.show', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.command'),
@@ -738,7 +738,7 @@ class TestStateState(unittest.TestCase):
         mock_proc.communicate.assert_called_once_with()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
@@ -755,7 +755,7 @@ class TestStateState(unittest.TestCase):
             mock_list,
             mock_printsection,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -771,7 +771,7 @@ class TestStateState(unittest.TestCase):
         changes_command = 'changes command'
         changes_name = 'changes'
         changes_output = 'the changes'
-        mock_get.side_effect = [True, True, changes_command, changes_name, [], True, []]
+        mock_getconfigvalue.side_effect = [True, True, changes_command, changes_name, [], True, []]
         mock_list.return_value = 'git-state.extensions.changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
@@ -792,7 +792,7 @@ class TestStateState(unittest.TestCase):
             show_empty=None,
             color='never'
         )
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.show', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.command'),
@@ -811,7 +811,7 @@ class TestStateState(unittest.TestCase):
         mock_proc.communicate.assert_called_once_with()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
@@ -828,7 +828,7 @@ class TestStateState(unittest.TestCase):
             mock_list,
             mock_printsection,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -844,7 +844,7 @@ class TestStateState(unittest.TestCase):
         changes_command = 'changes command'
         changes_name = 'changes'
         changes_output = 'the changes'
-        mock_get.side_effect = [True, True, changes_command, changes_name, ['--option1 -o "1 2"'], True, []]
+        mock_getconfigvalue.side_effect = [True, True, changes_command, changes_name, ['--option1 -o "1 2"'], True, []]
         mock_list.return_value = 'git-state.extensions.changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
@@ -865,7 +865,7 @@ class TestStateState(unittest.TestCase):
             show_empty=None,
             color='never'
         )
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.show', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.command'),
@@ -885,7 +885,7 @@ class TestStateState(unittest.TestCase):
         mock_proc.communicate.assert_called_once_with()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
@@ -902,7 +902,7 @@ class TestStateState(unittest.TestCase):
             mock_list,
             mock_printsection,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -918,7 +918,7 @@ class TestStateState(unittest.TestCase):
         changes_command = 'changes command'
         changes_name = 'changes'
         changes_output = 'the changes'
-        mock_get.side_effect = [True, True, changes_command, changes_name, ['--option2 true'], True, []]
+        mock_getconfigvalue.side_effect = [True, True, changes_command, changes_name, ['--option2 true'], True, []]
         mock_list.return_value = 'git-state.extensions.changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
@@ -939,7 +939,7 @@ class TestStateState(unittest.TestCase):
             show_empty=None,
             color='never'
         )
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.show', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.command'),
@@ -959,7 +959,7 @@ class TestStateState(unittest.TestCase):
         mock_proc.communicate.assert_called_once_with()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
@@ -976,7 +976,7 @@ class TestStateState(unittest.TestCase):
             mock_list,
             mock_printsection,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -989,7 +989,7 @@ class TestStateState(unittest.TestCase):
             'ignore_extensions': ['changes', 'status'],
             'options': {}
         }
-        mock_get.side_effect = [True, []]
+        mock_getconfigvalue.side_effect = [True, []]
         mock_list.return_value = 'git-state.extentions.changes'
 
         # when
@@ -999,7 +999,7 @@ class TestStateState(unittest.TestCase):
         mock_isgitrepository.assert_called_once_with()
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_not_called()
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
@@ -1010,7 +1010,7 @@ class TestStateState(unittest.TestCase):
         mock_popen.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
@@ -1027,7 +1027,7 @@ class TestStateState(unittest.TestCase):
             mock_list,
             mock_printsection,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -1040,7 +1040,7 @@ class TestStateState(unittest.TestCase):
             'ignore_extensions': ['status'],
             'options': {}
         }
-        mock_get.side_effect = [True, False, []]
+        mock_getconfigvalue.side_effect = [True, False, []]
         mock_list.return_value = 'git-state.extensions.changes'
 
         # when
@@ -1050,7 +1050,7 @@ class TestStateState(unittest.TestCase):
         mock_isgitrepository.assert_called_once_with()
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_not_called()
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.show', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
@@ -1062,7 +1062,7 @@ class TestStateState(unittest.TestCase):
         mock_popen.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
@@ -1079,7 +1079,7 @@ class TestStateState(unittest.TestCase):
             mock_list,
             mock_printsection,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -1096,7 +1096,7 @@ class TestStateState(unittest.TestCase):
         changes_command = 'changes command'
         changes_name = 'changes'
         changes_output = 'the changes'
-        mock_get.side_effect = [True, changes_command, changes_name, [], True, []]
+        mock_getconfigvalue.side_effect = [True, changes_command, changes_name, [], True, []]
         mock_list.return_value = 'git-state.extensions.changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
@@ -1117,7 +1117,7 @@ class TestStateState(unittest.TestCase):
             show_empty=None,
             color='never'
         )
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.command'),
             mock.call('git-state.extensions.changes.name', default='changes'),
@@ -1135,7 +1135,7 @@ class TestStateState(unittest.TestCase):
         mock_proc.communicate.assert_called_once_with()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
     @mock.patch('bin.commands.stateextensions.status.title')
@@ -1158,7 +1158,7 @@ class TestStateState(unittest.TestCase):
             mock_statustitle,
             mock_statusget,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -1180,7 +1180,7 @@ class TestStateState(unittest.TestCase):
         changes_command = 'changes command'
         changes_name = 'changes'
         changes_output = 'the changes'
-        mock_get.side_effect = [True, True, changes_command, changes_name, [], True, ['changes', 'status']]
+        mock_getconfigvalue.side_effect = [True, True, changes_command, changes_name, [], True, ['changes', 'status']]
         mock_list.return_value = 'git-state.extensions.changes'
         mock_proc = mock.Mock()
         mock_proc.communicate.return_value = [changes_output, None]
@@ -1210,7 +1210,7 @@ class TestStateState(unittest.TestCase):
                 color='never'
             )
         ])
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.show', default=True, as_type=mock.ANY),
             mock.call('git-state.extensions.changes.command'),
@@ -1219,7 +1219,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.extensions.changes.color', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('changes section\nstatus section')
@@ -1232,7 +1232,7 @@ class TestStateState(unittest.TestCase):
         mock_proc.communicate.assert_called_once_with()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
     @mock.patch('bin.commands.stateextensions.status.title')
@@ -1253,7 +1253,7 @@ class TestStateState(unittest.TestCase):
             mock_statustitle,
             mock_statusget,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -1271,7 +1271,7 @@ class TestStateState(unittest.TestCase):
         mock_statustitle.return_value = 'status'
         mock_statusaccent.return_value = 'status accent'
         mock_printsection.side_effect = ['status section\n']
-        mock_get.side_effect = [True, ['status', 'unknown']]
+        mock_getconfigvalue.side_effect = [True, ['status', 'unknown']]
         mock_list.return_value = ''
 
         # when
@@ -1288,18 +1288,18 @@ class TestStateState(unittest.TestCase):
             show_empty=True,
             color='never'
         )
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
         mock_call.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
     @mock.patch('bin.commands.stateextensions.status.title')
@@ -1322,7 +1322,7 @@ class TestStateState(unittest.TestCase):
             mock_statustitle,
             mock_statusget,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -1341,7 +1341,7 @@ class TestStateState(unittest.TestCase):
         mock_statustitle.return_value = 'status title'
         mock_statusaccent.return_value = 'status accent'
         mock_printsection.return_value = 'status section\ntwo\nthree\nfour\nfive\n'
-        mock_get.side_effect = [True, []]
+        mock_getconfigvalue.side_effect = [True, []]
         mock_echo = mock.Mock()
         mock_echo.stdout = 'mock out'
         mock_popen.return_value = mock_echo
@@ -1360,11 +1360,11 @@ class TestStateState(unittest.TestCase):
             show_empty=True,
             color='never'
         )
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_not_called()
@@ -1373,7 +1373,7 @@ class TestStateState(unittest.TestCase):
         mock_echo.wait.assert_called_once_with()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
     @mock.patch('bin.commands.stateextensions.status.title')
@@ -1392,7 +1392,7 @@ class TestStateState(unittest.TestCase):
             mock_statustitle,
             mock_statusget,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -1412,7 +1412,7 @@ class TestStateState(unittest.TestCase):
         mock_statustitle.return_value = 'status title'
         mock_statusaccent.return_value = 'status accent'
         mock_printsection.return_value = 'status section\ntwo\nthree\nfour\nfive\n'
-        mock_get.side_effect = [True, []]
+        mock_getconfigvalue.side_effect = [True, []]
 
         # when
         state.state(**kwargs)
@@ -1428,18 +1428,18 @@ class TestStateState(unittest.TestCase):
             show_empty=True,
             color='never'
         )
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section\ntwo\nthree\nfour\nfive')
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('colorama.init')
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
     @mock.patch('bin.commands.stateextensions.status.title')
@@ -1462,7 +1462,7 @@ class TestStateState(unittest.TestCase):
             mock_statustitle,
             mock_statusget,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_init,
             mock_isgitrepository
     ):
@@ -1482,7 +1482,7 @@ class TestStateState(unittest.TestCase):
         mock_statustitle.return_value = 'status title'
         mock_statusaccent.return_value = 'status accent'
         mock_printsection.return_value = 'status section\n'
-        mock_get.side_effect = [True, []]
+        mock_getconfigvalue.side_effect = [True, []]
 
         # when
         state.state(**kwargs)
@@ -1499,18 +1499,18 @@ class TestStateState(unittest.TestCase):
             show_empty=True,
             color='never'
         )
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
         mock_call.assert_called_once_with('clear')
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
     @mock.patch('bin.commands.stateextensions.status.title')
@@ -1533,7 +1533,7 @@ class TestStateState(unittest.TestCase):
             mock_statustitle,
             mock_statusget,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -1552,7 +1552,7 @@ class TestStateState(unittest.TestCase):
         mock_statustitle.return_value = 'status title'
         mock_statusaccent.return_value = 'status accent'
         mock_printsection.return_value = 'status section\n'
-        mock_get.side_effect = [True, []]
+        mock_getconfigvalue.side_effect = [True, []]
 
         # when
         state.state(**kwargs)
@@ -1568,11 +1568,11 @@ class TestStateState(unittest.TestCase):
             show_empty=True,
             color='never'
         )
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections'
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
@@ -1580,7 +1580,7 @@ class TestStateState(unittest.TestCase):
         mock_call.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.settings.get', return_value=False)
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
     @mock.patch('bin.commands.stateextensions.status.title')
@@ -1601,7 +1601,7 @@ class TestStateState(unittest.TestCase):
             mock_statustitle,
             mock_statusget,
             mock_isemptyrepository,
-            mock_get,
+            mock_getconfigvalue,
             mock_isgitrepository
     ):
 
@@ -1620,7 +1620,7 @@ class TestStateState(unittest.TestCase):
         mock_statustitle.return_value = 'status title'
         mock_statusaccent.return_value = 'status accent'
         mock_printsection.return_value = 'status section\n'
-        mock_get.side_effect = [True, []]
+        mock_getconfigvalue.side_effect = [True, []]
 
         # when
         state.state(**kwargs)
@@ -1636,11 +1636,11 @@ class TestStateState(unittest.TestCase):
             show_empty=True,
             color='never'
         )
-        mock_get.assert_has_calls([
+        mock_getconfigvalue.assert_has_calls([
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_get.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')

@@ -1,8 +1,11 @@
+import collections
 import mock
+import os
 import unittest
 
-from subprocess import PIPE
+from subprocess import PIPE, STDOUT
 
+from .. import testutils
 from bin.commands.utils import git
 
 
@@ -12,10 +15,14 @@ class TestGit(unittest.TestCase):
         # store private methods so they can be restored after tests that mock them
         self._is_ref = git.is_ref
         self._symbolic_ref = git.symbolic_ref
+        self._validate_config = git.validate_config
+        self._get_config_value = git.get_config_value
 
     def tearDown(self):
         git.is_ref = self._is_ref
         git.symbolic_ref = self._symbolic_ref
+        git.validate_config = self._validate_config
+        git.get_config_value = self._get_config_value
 
     @mock.patch('subprocess.Popen')
     def test_isValidReference(self, mock_popen):
@@ -477,12 +484,248 @@ MM modified.txt
         self.assertEqual(color, 'always')
         mock_isatty.assert_called_once()
 
-    @mock.patch('bin.commands.settings.get', return_value='always')
-    def test_resolveColoring_none(self, mock_get):
+    @mock.patch('bin.commands.utils.git.get_config_value', return_value='always')
+    def test_resolveColoring_none(self, mock_get_config_value):
 
         # when
         color = git.resolve_coloring(None)
 
         # then
         self.assertEqual(color, 'always')
-        mock_get.assert_called_once_with('color.ui', default='auto')
+        mock_get_config_value.assert_called_once_with('color.ui', default='auto')
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.messages.error')
+    def test_validateConfig(self, mock_error, mock_isgetrepository):
+
+        # when
+        git.validate_config(None)
+
+        # then
+        mock_isgetrepository.assert_not_called()
+        mock_error.assert_not_called()
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
+    @mock.patch('os.getcwd', return_value='the_dir')
+    def test_validateConfig_localAndNotRepository(self, mock_getcwd, mock_error, mock_isgetrepository):
+
+        # when
+        try:
+            git.validate_config('local')
+            self.fail('expected to exit but did not')  # pragma: no cover
+        except SystemExit:
+            pass
+
+        # then
+        mock_isgetrepository.assert_called_once()
+        mock_error.assert_has_calls([
+            mock.call('{0!r} is not a git repository'.format('the_dir'), exit_=False),
+            mock.call("'local' does not apply")
+        ])
+        mock_getcwd.assert_called_once()
+        # self.fail('not implemented')
+        #
+        # # then
+        # mock_validateconfig.assert_called_once()
+        # mock_popen.assert_called_with(('git', 'config', key), stdout=PIPE, stderr=STDOUT)
+        # mock_process.communicate.assert_called_once()
+        # mock_error.assert_called_once_with(
+        #     'Cannot parse value {0!r} for key {1!r} using format {2!r}'.format(value, key, as_type.__name__)
+        # )
+
+    @mock.patch('bin.commands.utils.git.validate_config')
+    @mock.patch('subprocess.Popen')
+    def test_getConfigValue(self, mock_popen, mock_validateconfig):
+
+        # given
+        key = 'the key'
+        value = 'the value'
+        mock_process = mock.Mock()
+        mock_popen.return_value = mock_process
+        mock_process.communicate.return_value = (value + os.linesep, None)
+
+        # when
+        actual_value = git.get_config_value(key)
+
+        # then
+        self.assertEqual(actual_value, value)
+
+        mock_validateconfig.assert_called_once()
+        mock_popen.assert_called_with(('git', 'config', key), stdout=PIPE, stderr=STDOUT)
+        mock_process.communicate.assert_called_once()
+
+    @mock.patch('bin.commands.utils.git.validate_config')
+    @mock.patch('subprocess.Popen')
+    def test_getConfigValue_withDefault_noValueSoUseDefault(self, mock_popen, mock_validateconfig):
+
+        # given
+        key = 'the key'
+        value = ''
+        default = 'the default'
+        mock_process = mock.Mock()
+        mock_popen.return_value = mock_process
+        mock_process.communicate.return_value = (value + os.linesep, None)
+
+        # when
+        actual_value = git.get_config_value(key, default=default)
+
+        # then
+        self.assertEqual(actual_value, default)
+
+        mock_validateconfig.assert_called_once()
+        mock_popen.assert_called_with(('git', 'config', key), stdout=PIPE, stderr=STDOUT)
+        mock_process.communicate.assert_called_once()
+
+    @mock.patch('bin.commands.utils.git.validate_config')
+    @mock.patch('subprocess.Popen')
+    def test_getConfigValue_withDefault_hasValueSoIgnoreDefault(self, mock_popen, mock_validateconfig):
+
+        # given
+        key = 'the key'
+        value = 'the value'
+        mock_process = mock.Mock()
+        mock_popen.return_value = mock_process
+        mock_process.communicate.return_value = (value + os.linesep, None)
+
+        # when
+        actual_value = git.get_config_value(key, default='the default')
+
+        # then
+        self.assertEqual(actual_value, value)
+
+        mock_validateconfig.assert_called_once()
+        mock_popen.assert_called_with(('git', 'config', key), stdout=PIPE, stderr=STDOUT)
+        mock_process.communicate.assert_called_once()
+
+    @mock.patch('bin.commands.utils.git.validate_config')
+    @mock.patch('subprocess.Popen')
+    def test_getConfigValue_withConfig(self, mock_popen, mock_validateconfig):
+
+        # given
+        key = 'the key'
+        value = 'the value'
+        mock_process = mock.Mock()
+        mock_popen.return_value = mock_process
+        mock_process.communicate.return_value = (value + os.linesep, None)
+
+        # when
+        actual_value = git.get_config_value(key, config='global')
+
+        # then
+        self.assertEqual(actual_value, value)
+
+        mock_validateconfig.assert_called_once()
+        mock_popen.assert_called_with(('git', 'config', '--global', key), stdout=PIPE, stderr=STDOUT)
+        mock_process.communicate.assert_called_once()
+
+    @mock.patch('bin.commands.utils.git.validate_config')
+    @mock.patch('subprocess.Popen')
+    def test_getConfigValue_withFile(self, mock_popen, mock_validateconfig):
+
+        # given
+        key = 'the key'
+        value = 'the value'
+        file_path = '/path/to/config'
+        mock_process = mock.Mock()
+        mock_popen.return_value = mock_process
+        mock_process.communicate.return_value = (value + os.linesep, None)
+
+        # when
+        actual_value = git.get_config_value(key, config='file', file_=file_path)
+
+        # then
+        self.assertEqual(actual_value, value)
+
+        mock_validateconfig.assert_called_once()
+        mock_popen.assert_called_with(('git', 'config', '--file', file_path, key), stdout=PIPE, stderr=STDOUT)
+        mock_process.communicate.assert_called_once()
+
+    @mock.patch('bin.commands.utils.git.validate_config')
+    @mock.patch('subprocess.Popen')
+    def test_getConfigValue_asType_hasCall(self, mock_popen, mock_validateconfig):
+
+        # given
+        key = 'the key'
+        value = 'the value'
+        mock_process = mock.Mock()
+        mock_popen.return_value = mock_process
+        mock_process.communicate.return_value = (value + os.linesep, None)
+
+        # when
+        actual_value = git.get_config_value(key, as_type=str)
+
+        # then
+        self.assertEqual(actual_value, value)
+
+        mock_validateconfig.assert_called_once()
+        mock_popen.assert_called_with(('git', 'config', key), stdout=PIPE, stderr=STDOUT)
+        mock_process.communicate.assert_called_once()
+
+    @mock.patch('bin.commands.utils.git.validate_config')
+    @mock.patch('subprocess.Popen')
+    def test_getConfigValue_asType_hasBases(self, mock_popen, mock_validateconfig):
+
+        # given
+        key = 'the key'
+        value = 'the value'
+        as_type = collections.namedtuple('AsType', ['v'])
+        mock_process = mock.Mock()
+        mock_popen.return_value = mock_process
+        mock_process.communicate.return_value = (value + os.linesep, None)
+
+        # when
+        actual_value = git.get_config_value(key, as_type=as_type)
+
+        # then
+        self.assertIsInstance(actual_value, as_type)
+        self.assertEqual(actual_value.v, value)
+
+        mock_validateconfig.assert_called_once()
+        mock_popen.assert_called_with(('git', 'config', key), stdout=PIPE, stderr=STDOUT)
+        mock_process.communicate.assert_called_once()
+
+    @mock.patch('bin.commands.utils.git.validate_config')
+    @mock.patch('subprocess.Popen')
+    @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
+    def test_getConfigValue_asType_throwsException(self, mock_error, mock_popen, mock_validateconfig):
+
+        # given
+        key = 'the key'
+        value = 'the value'
+        as_type = TestGit
+        mock_process = mock.Mock()
+        mock_popen.return_value = mock_process
+        mock_process.communicate.return_value = (value + os.linesep, None)
+
+        # when
+        try:
+            git.get_config_value(key, as_type=as_type)
+            self.fail('expected to exit but did not')  # pragma: no cover
+        except SystemExit:
+            pass
+
+        # then
+        mock_validateconfig.assert_called_once()
+        mock_popen.assert_called_with(('git', 'config', key), stdout=PIPE, stderr=STDOUT)
+        mock_process.communicate.assert_called_once()
+        mock_error.assert_called_once_with(
+            'Cannot parse value {0!r} for key {1!r} using format {2!r}'.format(value, key, as_type.__name__)
+        )
+
+    @mock.patch('bin.commands.utils.git.validate_config')
+    def test_getConfigValue_asType_notCallable(self, mock_validateconfig):
+
+        # given
+        as_type = 'a'
+
+        # when
+        # noinspection PyBroadException
+        try:
+            git.get_config_value('key', as_type=as_type)
+            self.fail('expected exception but found none')  # pragma: no cover
+        except Exception as e:
+            # then
+            self.assertEqual(e.message, '{} is not callable'.format(as_type))
+
+        mock_validateconfig.assert_called_once()

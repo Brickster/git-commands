@@ -5,9 +5,9 @@ import re
 import sys
 
 import subprocess
-from subprocess import PIPE
+from subprocess import PIPE, STDOUT
 
-from .. import settings
+import directories, messages
 
 
 class GitException(Exception):  # pragma: no cover
@@ -58,7 +58,9 @@ def is_detached():
 def symbolic_ref(object_):
     """Returns symbolic ref"""
 
-    symbolic_proc = subprocess.Popen(['git', 'symbolic-ref', '--quiet', object_], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    symbolic_proc = subprocess.Popen(
+        ['git', 'symbolic-ref', '--quiet', object_], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
     revolved_symbolic_ref = symbolic_proc.communicate()[0]
     if revolved_symbolic_ref:
         revolved_symbolic_ref = revolved_symbolic_ref.strip()
@@ -181,7 +183,58 @@ def resolve_sha1(revision):
 
 
 def resolve_coloring(color):
-    color_when = color.lower() if color else settings.get('color.ui', default='auto')
+    color_when = color.lower() if color else get_config_value('color.ui', default='auto')
     if color_when == 'auto':
         return 'always' if sys.stdout.isatty() else 'never'
     return color_when
+
+
+def _get_command(key, config, file_):
+    if config is None:
+        return 'git', 'config', key
+    elif file_ is not None:
+        return 'git', 'config', '--file', file_, key
+    return 'git', 'config', '--{}'.format(config), key
+
+
+def validate_config(config=None):
+    """Validates that the directory and file specified are compatible.
+
+    :param config: the config name
+    """
+
+    if config == 'local' and not directories.is_git_repository():
+        messages.error('{0!r} is not a git repository'.format(os.getcwd()), exit_=False)
+        messages.error("'local' does not apply")
+
+
+def get_config_value(key, default=None, config=None, file_=None, as_type=str):
+    """Retrieve a configuration value.
+
+    :param str or unicode key: the value key
+    :param str or unicode default: a default to return if no value is found
+    :param str or unicode config: the config to retrieve from
+    :param str or unicode file_: path to a config file to retrieve from
+    :param callable as_type: a callable, built-in type, or class object used to convert the result
+
+    :return: the configuration value
+    """
+
+    validate_config(config)
+
+    if not hasattr(as_type, '__call__') and not hasattr(as_type, '__bases__'):
+        raise Exception('{} is not callable'.format(as_type))
+
+    command = _get_command(key, config, file_)
+    proc = subprocess.Popen(command, stdout=PIPE, stderr=STDOUT)
+    value = proc.communicate()[0].strip()
+
+    if not value:
+        return default
+    else:
+        try:
+            return as_type(value)
+        except ValueError:
+            messages.error(
+                'Cannot parse value {0!r} for key {1!r} using format {2!r}'.format(value, key, as_type.__name__)
+            )

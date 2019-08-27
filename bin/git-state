@@ -3,8 +3,8 @@
 import argparse
 import sys
 
-from commands import settings, state
-from commands.utils import parse_string
+from commands import state
+from commands.utils import git, parse_string
 from commands.utils.parse_actions import append_list, dict_set, optional_list
 
 
@@ -59,9 +59,6 @@ def _add_color_argument(parser, default_show_color):
 
 
 def _extensions_subcommand(subparsers):
-
-    # general defaults
-    default_show_color = settings.get('color.ui', default='auto')
 
     parser = subparsers.add_parser(
         'extensions',
@@ -164,10 +161,10 @@ def _extensions_subcommand(subparsers):
 def _view_subcommand(subparsers):
 
     # general defaults
-    default_show_empty = settings.get('git-state.show-empty', default=False, as_type=parse_string.as_bool)
-    default_format = settings.get('git-state.format', default='compact')
-    default_show_color = settings.get('color.ui', default='auto')
-    default_clear = settings.get('git-state.clear', default=True, as_type=parse_string.as_bool)
+    default_show_empty = git.get_config_value('git-state.show-empty', default=False, as_type=parse_string.as_bool)
+    default_format = git.get_config_value('git-state.format', default='compact')
+    default_show_color = git.get_config_value('color.ui', default='auto')
+    default_clear = git.get_config_value('git-state.clear', default=True, as_type=parse_string.as_bool)
 
     parser = subparsers.add_parser(
         'view',
@@ -196,7 +193,7 @@ def _view_subcommand(subparsers):
         default=[]
     )
     for extension in extensions:
-        section_name = settings.get('git-state.extensions.' + extension + '.name', default=extension)
+        section_name = git.get_config_value('git-state.extensions.' + extension + '.name', default=extension)
         extension_group.add_argument(
             '--show-' + extension,
             help='show {} extension'.format(section_name),

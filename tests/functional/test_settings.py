@@ -27,53 +27,6 @@ class TestSettings(unittest.TestCase):
         self.assertTrue(self._output('git settings --help'.split()))
 
 
-class TestSettingsGet(unittest.TestCase):
-
-    def setUp(self):
-        self.dirpath = tempfile.mkdtemp()
-        os.chdir(self.dirpath)
-        self.repo = git.Repo.init(self.dirpath)
-
-        # set some configs
-        self.repo.git.config('--local', 'git-settings.test.get', 'value')
-
-    def tearDown(self):
-        shutil.rmtree(self.dirpath)
-
-    def test_get(self):
-        self.assertEqual(self.repo.git.settings('get', 'git-settings.test.get'), 'value')
-
-    def test_get_withDefault(self):
-        self.assertEqual(self.repo.git.settings('get', '--default=value2', 'git-settings.test.get'), 'value')
-        self.assertEqual(self.repo.git.settings('get', '--default=value', 'git-settings.test.get2'), 'value')
-
-    def test_get_local(self):
-        self.assertEqual(self.repo.git.settings('get', '--local', 'git-settings.test.get'), 'value')
-
-    # too dangerous to edit the user's configs for anything more complicated
-    def test_get_global(self):
-        self.assertFalse(self.repo.git.settings('get', '--global', 'git-settings.test.get'))
-
-    # too dangerous to edit the user's configs for anything more complicated
-    def test_get_system(self):
-        self.assertFalse(self.repo.git.settings('get', '--system', 'git-settings.test.get'))
-
-    def test_get_file(self):
-
-        # given
-        config_file_path = self.dirpath + '/config_file'
-        with open(config_file_path, 'w') as config_file:
-            config_file.write("""[git-settings "test"]
-    get = file_value
-""")
-
-        # when
-        config_value = self.repo.git.settings('get', '--file=' + config_file_path, 'git-settings.test.get')
-
-        # then
-        self.assertEqual(config_value, 'file_value')
-
-
 class TestSettingsList(unittest.TestCase):
 
     def setUp(self):

@@ -2,7 +2,6 @@
 
 ## SYNOPSIS
 
-`git settings get` [<file-option>] [(`-d`|`--default`) <value>] <key><br>
 `git settings destroy` [(`-d`|`--dry-run`)] <section><br>
 `git settings list` [<file-option>] [(`-p`|`--pretty`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-f`|`--format`) <format>] [(`-c`|`--count`)]<br>
@@ -15,15 +14,6 @@
 `git-settings` is a compliment to `git-config` that adds missing functionality.
 
 ## OPTIONS
-
-* `get` <key> :
-    Retrieve a configuration by key.
-
-    * `-d`|`--default`:
-        A default value to use when no configuration exists.
-
-    * <file-option>:
-        The key will be loaded from a specific file. See **[FILE OPTIONS][]** section for more details.
 
 * `destroy` <section>:
     Destroy a section from the local, global, and system config files.

@@ -3,7 +3,6 @@
 import os
 import re
 import subprocess
-from subprocess import PIPE, STDOUT
 
 from utils import directories, execute, messages
 
@@ -156,41 +155,3 @@ def destroy(section, dry_run):
             _dry_destroy_section(config, section)
         else:
             execute.swallow(('git', 'config', '--' + config, '--remove-section', section))
-
-
-def get(key, default=None, config=None, file_=None, as_type=str):
-    """Retrieve a configuration value.
-
-    :param str or unicode key: the value key
-    :param str or unicode default: a default to return if no value is found
-    :param str or unicode config: the config to retrieve from
-    :param str or unicode file_: path to a config file to retrieve from
-    :param callable as_type: a callable, built-in type, or class object used to convert the result
-
-    :return: the configuration value
-    """
-
-    _validate_config(config)
-
-    if not hasattr(as_type, '__call__') and not hasattr(as_type, '__bases__'):
-        raise Exception('{} is not callable'.format(as_type))
-
-    command = _get_command(key, config, file_)
-    proc = subprocess.Popen(command, stdout=PIPE, stderr=STDOUT)
-    value = proc.communicate()[0].strip()
-
-    if not value:
-        return default
-    else:
-        try:
-            return as_type(value)
-        except ValueError:
-            messages.error('Cannot parse value {0!r} for key {1!r} using format {2!r}'.format(value, key, as_type.__name__))
-
-
-def _get_command(key, config, file_):
-    if config is None:
-        return 'git', 'config', key
-    elif file_ is not None:
-        return 'git', 'config', '--file', file_, key
-    return 'git', 'config', '--{}'.format(config), key

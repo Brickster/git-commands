@@ -90,7 +90,6 @@ git changes (-v|--version)
 Used as a compliment to `git-config` by adding missing features.
 
 ```bash
-git settings get [FILE-OPTION] [(-d|--default) VALUE] KEY
 git settings destroy [(-d|--dry-run)] SECTION
 git settings list [FILE-OPTION] [(-p|--pretty)]
                   [(-f|--format) FORMAT] [(-c|--count)]

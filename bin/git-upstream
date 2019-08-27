@@ -2,8 +2,8 @@
 
 import argparse
 
-from commands import settings, upstream
-from commands.utils import directories, parse_string
+from commands import upstream
+from commands.utils import directories, git, parse_string
 
 
 def main():
@@ -25,7 +25,7 @@ def main():
         action='store_const',
         const=upstream.IncludeRemote.ALWAYS,
         dest='include_remote',
-        default=settings.get(
+        default=git.get_config_value(
             'git-upstream.include-remote',
             default=upstream.IncludeRemote.NEVER,
             as_type=parse_string.as_enum(upstream.IncludeRemote)

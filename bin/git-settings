@@ -3,13 +3,13 @@
 import argparse
 
 from commands import settings
-from commands.utils import messages
+from commands.utils import messages, git
 from commands.utils.parse_actions import multi_set
 
 
 def main():
 
-    default_format = settings.get('git-settings.list.format', default='compact')
+    default_format = git.get_config_value('git-settings.list.format', default='compact')
 
     file_parser = argparse.ArgumentParser(add_help=False)
     file_group = file_parser.add_mutually_exclusive_group()
@@ -57,27 +57,6 @@ def main():
     )
     parser.add_argument('-v', '--version', action='version', help='show version and exit', version='git-settings 0.7.0')
     subparsers = parser.add_subparsers(help='sub-command help', dest='subcommand')
-
-    # --------------------------------------------
-    # get sub-command
-    # --------------------------------------------
-    get_parser = subparsers.add_parser(
-        'get',
-        help='retrieve a configuration value',
-        description='retrieve a configuration value',
-        parents=[file_parser]
-    )
-    get_parser.add_argument(
-        'key',
-        help='a configuration key',
-        metavar='KEY'
-    )
-    get_parser.add_argument(
-        '-d',
-        '--default',
-        help='a default value to return when no setting exists'
-    )
-    get_parser.set_defaults(func=settings.get)
 
     # --------------------------------------------
     # list sub-command

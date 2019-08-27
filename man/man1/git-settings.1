@@ -7,9 +7,6 @@
 \fBgit\-settings\fR \- more ways to view and edit config files
 .
 .SH "SYNOPSIS"
-\fBgit settings get\fR [\fIfile\-option\fR] [(\fB\-d\fR|\fB\-\-default\fR) \fIvalue\fR] \fIkey\fR
-.
-.br
 \fBgit settings destroy\fR [(\fB\-d\fR|\fB\-\-dry\-run\fR)] \fIsection\fR
 .
 .br
@@ -31,19 +28,6 @@
 \fBgit\-settings\fR is a compliment to \fBgit\-config\fR that adds missing functionality\.
 .
 .SH "OPTIONS"
-.
-.TP
-\fBget\fR \fIkey\fR
-Retrieve a configuration by key\.
-.
-.TP
-\fB\-d\fR|\fB\-\-default\fR
-A default value to use when no configuration exists\.
-.
-.TP
-\fIfile\-option\fR
-The key will be loaded from a specific file\. See \fB\fIFILE OPTIONS\fR\fR section for more details\.
-
 .
 .TP
 \fBdestroy\fR \fIsection\fR
