@@ -105,6 +105,71 @@ class TestSnapshotSnapshot(unittest.TestCase):
         mock_checkoutput.assert_called_once_with('git status --porcelain'.split())
         mock_info.assert_called_once_with('No local changes to save. No snapshot created.', quiet)
 
+    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.snapshot._stash_buffer')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.swallow')
+    def test_snapshot_replace(self, mock_swallow, mock_call, mock_stashbuffer, mock_checkoutput):
+
+        # given
+        mock_checkoutput.side_effect = [
+            'status\noutput\n',
+            'stash@{0}: WIP on master: 8a3a15e edit readme\nstash@{1}: On master: edit readme\n'
+        ]
+
+        # when
+        snapshot.snapshot('edit readme', replace=True)
+
+        # then
+        mock_checkoutput.assert_has_calls([
+            mock.call('git status --porcelain'.split()),
+            mock.call('git stash list'.split())
+        ])
+        mock_stashbuffer.assert_called_once()
+        mock_call.assert_has_calls([
+            mock.call('git stash drop --quiet stash@{1}'.split()),
+            mock.call(['git', 'stash', 'push', '--include-untracked', '--message', 'edit readme'])
+        ])
+        mock_swallow.assert_called_once_with('git stash apply --quiet --index'.split())
+
+    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.snapshot._stash_buffer')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.swallow')
+    def test_snapshot_replace_nothingMatches(self, mock_swallow, mock_call, mock_stashbuffer, mock_checkoutput):
+        # given
+        mock_checkoutput.side_effect = [
+            'status\noutput\n',
+            'stash@{0}: WIP on master: 8a3a15e edit readme\n'
+        ]
+
+        # when
+        snapshot.snapshot('edit readme', replace=True)
+
+        # then
+        mock_checkoutput.assert_has_calls([
+            mock.call('git status --porcelain'.split()),
+            mock.call('git stash list'.split())
+        ])
+        mock_stashbuffer.assert_called_once()
+        mock_call.assert_called_once_with(['git', 'stash', 'push', '--include-untracked', '--message', 'edit readme'])
+        mock_swallow.assert_called_once_with('git stash apply --quiet --index'.split())
+
+    @mock.patch('subprocess.check_output', return_value='status\noutput\n')
+    @mock.patch('bin.commands.snapshot._stash_buffer')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.swallow')
+    def test_snapshot_replace_noMessageIncluded(self, mock_swallow, mock_call, mock_stashbuffer, mock_checkoutput):
+
+        # when
+        snapshot.snapshot(replace=True)
+
+        # then
+        mock_checkoutput.assert_called_once_with('git status --porcelain'.split())
+        mock_stashbuffer.assert_called_once()
+        mock_call.assert_called_once_with('git stash push --include-untracked'.split())
+        mock_swallow.assert_called_once_with('git stash apply --quiet --index'.split())
+
 
 class TestSnapshotStashBuffer(unittest.TestCase):
 

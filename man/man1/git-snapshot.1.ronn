@@ -2,7 +2,8 @@
 
 ## SYNOPSIS
 
-`git snapshot` [<message>] [(`-q`|`--quiet`)] [-- <file> [<file> ...]]<br>
+`git snapshot` [<message>] [(`-r`|`--replace`)] [(`-q`|`--quiet`)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[-- <file> [<file> ...]]<br>
 `git snapshot` (`-h`|`--help`)<br>
 `git snapshot` (`-v`|`--version`)
 
@@ -19,6 +20,9 @@ $ git stash apply
 
 * <message> :
     The message to use when creating the underlying stash. If no message is supplied, the default `git-stash` message is used.
+
+* `-r`|`--replace`:
+    Replace a snapshot by message. Requires positional argument <message>.
 
 * `-q`|`--quiet`:
     Suppress all non-error output.

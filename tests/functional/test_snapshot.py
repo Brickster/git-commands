@@ -23,6 +23,7 @@ class TestGitSnapshot(unittest.TestCase):
         os.chdir(self.dirpath)
         call('git init --quiet'.split())
         call('touch CHANGELOG.md'.split())
+        call('touch CONTRIBUTING.md'.split())
         call('git add -A'.split())
         call(['git', 'commit', '--quiet', '-m', 'Initial commit'])
 
@@ -246,3 +247,37 @@ A  file3.txt
         # expect
         self.assertTrue(self._output('git snapshot -h'.split()))
         self.assertTrue(self._output('git snapshot --help'.split()))
+
+    def test_snapshot_replace(self):
+
+        # given
+        message = "My snapshot message"
+        self._output('git reset --hard'.split())
+        self._output('git stash drop'.split())
+        with open('CONTRIBUTING.md', 'w') as a_file:
+            a_file.write('contributing\n')
+
+        # when
+        stdout, stderr = Popen(('git', 'snapshot', '--replace', message), stdout=PIPE, stderr=PIPE).communicate()
+
+        # then
+        self.assertEqual(stdout.strip(), 'Saved working directory and index state On master: My snapshot message')
+        self.assertFalse(stderr)
+        self.assertEqual(self._status(), " M CONTRIBUTING.md\n")
+
+        stashes = self._stashes()
+        self.assertEqual(len(stashes), 1)
+        self.assertRegexpMatches(stashes[0], 'stash@\{0\}: On master: ' + message)
+
+        call('git reset --hard --quiet'.split())
+        call('git stash pop --quiet'.split())
+        self.assertEqual(self._status(), " M CONTRIBUTING.md\n")
+
+    def test_snapshot_replaceWithoutMessage(self):
+
+        # when
+        stdout, stderr = Popen(('git', 'snapshot', '--replace'), stdout=PIPE, stderr=PIPE).communicate()
+
+        # then
+        self.assertEqual(stdout.strip(), 'usage: git snapshot [MESSAGE] [-h] [-v] [-r] [-q] [-- FILE [FILE ...]]')
+        self.assertEqual(stderr.strip(), 'git snapshot: error: argument -r/--replace: not allowed without positional argument message')

@@ -64,7 +64,7 @@ git state (-v|--version)
 Used to record the current state of the working directory without reverting it.
 
 ```bash
-git snapshot [MESSAGE] [(-q|--quiet)] [-- FILE [FILE ...]]
+git snapshot [MESSAGE] [(-r|--replace)] [(-q|--quiet)] [-- FILE [FILE ...]]
 git snapshot (-h|--help)
 git snapshot (-v|--version)
 ```

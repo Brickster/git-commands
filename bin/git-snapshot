@@ -8,10 +8,10 @@ import argparse
 import sys
 
 from commands import snapshot
-from commands.utils import directories
+from commands.utils import directories, messages
 
 # specific usage message needed to include the '--' part
-_USAGE_MESSAGE = 'git snapshot [MESSAGE] [-h] [-v] [-q] [-- FILE [FILE ...]]'
+_USAGE_MESSAGE = 'git snapshot [MESSAGE] [-h] [-v] [-r] [-q] [-- FILE [FILE ...]]'
 
 
 def main():
@@ -25,6 +25,7 @@ def main():
     )
 
     parser.add_argument('message', help='the message when creating the underlying stash', nargs='?', metavar='MESSAGE')
+    parser.add_argument('-r', '--replace', help='replace a snapshot by message', action='store_true')
     parser.add_argument('-q', '--quiet', help='suppress all non-error output', action='store_true', default=False)
 
     # -- <files> ...
@@ -41,8 +42,16 @@ def main():
 
     args = parser.parse_args(args)
     args.files = file_args
+    args = vars(args)
+
     directories.exit_if_not_git_repository()
-    snapshot.snapshot(**vars(args))
+    if args['replace'] and not args['message']:
+        parser.print_usage()
+        messages.error(
+            'argument -r/--replace: not allowed without positional argument message', prefix='git snapshot: error:'
+        )
+
+    snapshot.snapshot(**args)
 
 
 if __name__ == '__main__':
