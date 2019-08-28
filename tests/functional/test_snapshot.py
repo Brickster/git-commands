@@ -38,6 +38,24 @@ class TestGitSnapshot(unittest.TestCase):
         stdout, stderr = Popen('git snapshot'.split(), stdout=PIPE, stderr=PIPE).communicate()
 
         # verify
+        self.assertRegexpMatches(stdout.strip(), 'Saved working directory and index state WIP on master: \w+ Initial commit')
+        self.assertFalse(stderr)
+        self.assertEqual(self._status(), " M CHANGELOG.md\n")
+
+        stashes = self._stashes()
+        self.assertEqual(len(stashes), 1)
+        self.assertRegexpMatches(stashes[0], 'stash@\{0\}: WIP on master: [0-9a-f]+ Initial commit')
+
+        call('git reset --hard --quiet'.split())
+        call('git stash pop --quiet'.split())
+        self.assertEqual(self._status(), " M CHANGELOG.md\n")
+
+    def test_snapshot_quiet(self):
+
+        # run
+        stdout, stderr = Popen('git snapshot --quiet'.split(), stdout=PIPE, stderr=PIPE).communicate()
+
+        # verify
         self.assertFalse(stdout)
         self.assertFalse(stderr)
         self.assertEqual(self._status(), " M CHANGELOG.md\n")
@@ -96,7 +114,7 @@ class TestGitSnapshot(unittest.TestCase):
         # ?? file4.txt
 
         # run
-        call('git snapshot'.split())
+        call('git snapshot --quiet'.split())
 
         # verify
         call('git reset --hard --quiet'.split())
@@ -120,7 +138,7 @@ A  file3.txt
         stdout, stderr = Popen(('git', 'snapshot', message), stdout=PIPE, stderr=PIPE).communicate()
 
         # verify
-        self.assertFalse(stdout)
+        self.assertEqual(stdout.strip(), 'Saved working directory and index state On master: My snapshot message')
         self.assertFalse(stderr)
         self.assertEqual(self._status(), " M CHANGELOG.md\n")
 
@@ -157,7 +175,7 @@ A  file3.txt
             a_file.write('readme\n')
 
         # run
-        call('git snapshot -- CHANGELOG.md'.split())
+        call('git snapshot --quiet -- CHANGELOG.md'.split())
 
         # verify
         self.assertEqual(self._status(), " M CHANGELOG.md\n?? README.md\n")

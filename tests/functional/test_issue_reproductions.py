@@ -253,7 +253,7 @@ class TestIssue111(unittest.TestCase):
     def test(self):
         """Issue 111: Unable to include files and message in snapshot"""
 
-        self.assertFalse(subprocess.check_output('git snapshot "md files" -- *.md'.split()).strip())
+        self.assertFalse(subprocess.check_output('git snapshot --quiet "md files" -- *.md'.split()).strip())
         self.assertEqual(1, len(subprocess.check_output('git stash list'.split()).strip().split('\n')))
 
 

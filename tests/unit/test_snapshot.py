@@ -25,6 +25,21 @@ class TestSnapshotSnapshot(unittest.TestCase):
         # then
         mock_checkoutput.assert_called_once_with('git status --porcelain'.split())
         mock_stashbuffer.assert_called_once()
+        mock_call.assert_called_once_with('git stash push --include-untracked'.split())
+        mock_swallow.assert_called_once_with('git stash apply --quiet --index'.split())
+
+    @mock.patch('subprocess.check_output', return_value='status\noutput\n')
+    @mock.patch('bin.commands.snapshot._stash_buffer')
+    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.swallow')
+    def test_snapshot_quiet(self, mock_swallow, mock_call, mock_stashbuffer, mock_checkoutput):
+
+        # when
+        snapshot.snapshot(quiet=True)
+
+        # then
+        mock_checkoutput.assert_called_once_with('git status --porcelain'.split())
+        mock_stashbuffer.assert_called_once()
         mock_call.assert_called_once_with('git stash push --include-untracked --quiet'.split())
         mock_swallow.assert_called_once_with('git stash apply --quiet --index'.split())
 
@@ -41,7 +56,7 @@ class TestSnapshotSnapshot(unittest.TestCase):
         # then
         mock_checkoutput.assert_called_once_with('git status --porcelain'.split())
         mock_stashbuffer.assert_called_once()
-        mock_call.assert_called_once_with(['git', 'stash', 'push', '--include-untracked', '--quiet', '--message', message])
+        mock_call.assert_called_once_with(['git', 'stash', 'push', '--include-untracked', '--message', message])
         mock_swallow.assert_called_once_with('git stash apply --quiet --index'.split())
 
     @mock.patch('subprocess.check_output', return_value='status\noutput\n')
@@ -58,7 +73,7 @@ class TestSnapshotSnapshot(unittest.TestCase):
         # then
         mock_checkoutput.assert_called_once_with('git status --porcelain'.split())
         mock_stashbuffer.assert_called_once()
-        mock_call.assert_called_once_with(['git', 'stash', 'push', '--include-untracked', '--quiet', '--'] + files)
+        mock_call.assert_called_once_with(['git', 'stash', 'push', '--include-untracked', '--'] + files)
         mock_swallow.assert_called_once_with('git stash apply --quiet --index'.split())
 
     @mock.patch('subprocess.check_output', return_value='status\noutput\n')
@@ -75,7 +90,7 @@ class TestSnapshotSnapshot(unittest.TestCase):
         # then
         mock_checkoutput.assert_called_once_with('git status --porcelain'.split())
         mock_stashbuffer.assert_called_once()
-        mock_call.assert_called_once_with(['git', 'stash', 'push', '--include-untracked', '--quiet', '--message', message, '--'] + files)
+        mock_call.assert_called_once_with(['git', 'stash', 'push', '--include-untracked', '--message', message, '--'] + files)
         mock_swallow.assert_called_once_with('git stash apply --quiet --index'.split())
 
     @mock.patch('subprocess.check_output', return_value='')

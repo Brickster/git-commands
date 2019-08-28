@@ -4,12 +4,14 @@ All notable changes to this project will be documented in this file. This projec
 
 ## [Unreleased][]
 ### Features
+- **Snapshot**: add result message [#54][]
 - **Changes**: --inverse option to show common commits [#118][] [#134][]
 
 ### Changes
 - **Settings**: remove get command [#135][]
 - **Changes**: rename --remote to --upstream [#140][]
 
+[#54]: https://github.com/Brickster/git-commands/issues/54
 [#118]: https://github.com/Brickster/git-commands/issues/118
 [#134]: https://github.com/Brickster/git-commands/issues/134
 [#135]: https://github.com/Brickster/git-commands/issues/135

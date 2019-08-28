@@ -36,7 +36,8 @@ def snapshot(message=None, quiet=False, files=None):
         messages.info('No local changes to save. No snapshot created.', quiet)
         return
 
-    stash_command = ['git', 'stash', 'push', '--include-untracked', '--quiet']
+    stash_command = ['git', 'stash', 'push', '--include-untracked']
+    stash_command = stash_command if not quiet else stash_command + ['--quiet']
     stash_command = stash_command if message is None else stash_command + ['--message', message]
     stash_command = stash_command if not files else stash_command + ['--'] + files
     _stash_buffer(quiet)
