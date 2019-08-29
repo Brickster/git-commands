@@ -7,13 +7,10 @@
 \fBgit\-state\fR \- a customizable view for the state of a working tree
 .
 .SH "SYNOPSIS"
-\fBgit state\fR [\fBview\fR] [\fB\-\-show\-status\fR] [\fB\-\-no\-show\-status\fR]
+\fBgit state\fR [\fBview\fR] [(\fB\-s\fR|\fB\-\-show\fR) \fIextension\fR [\fIextension\fR \.\.\.]]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-show\-*\fR] [\fB\-\-no\-show\-*\fR]
-.
-.br
-\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-no\-show\-all\fR] [\fB\-\-no\-show\fR [\fIextension\fR \.\.\.]]
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-S\fR|\fB\-\-no\-show\fR) \fIextension\fR [\fIextension\fR \.\.\.]]
 .
 .br
 \~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-e\fR|\fB\-\-show\-empty\fR)] [(\fB\-E\fR|\fB\-\-no\-show\-empty\fR)]
@@ -87,37 +84,12 @@ Print a simple help message\.
 Print version\.
 .
 .TP
-\fB\-\-show\-status\fR
-Print the status section\.
+\fB\-s\fR|\fB\-\-show\fR \fIextension\fR
+A list of extensions to show\. Option based shows always take precedence over hides\. See \fB\fIEXTENSIONS\fR\fR section for more detail\.
 .
 .TP
-\fB\-\-no\-show\-status\fR
-Don\'t print the status section\.
-.
-.TP
-\fB\-\-show\-*\fR
-Show extension *\. Where * is the configuration key value\. For instance, given:
-.
-.IP
-git\-state\.extentions\.last\-ten\-commits=git log \-\-oneline \-10
-.
-.br
-git\-state\.extentions\.last\-ten\-commits\.name=last ten commits
-.
-.IP
-The show flag is \fB\-\-show\-last\-ten\-commits\fR\.
-.
-.TP
-\fB\-\-no\-show\-*\fR
-Hide extension *\.
-.
-.TP
-\fB\-\-no\-show\-all\fR
-Hide all extensions\.
-.
-.TP
-\fB\-\-no\-show\fR [\fIextension\fR \.\.\.]
-A list of extensions to hide\. If none are specified, all of them will be hidden\. See \fB\fIEXTENSIONS\fR\fR section for more detail\.
+\fB\-S\fR|\fB\-\-no\-show\fR \fIextension\fR
+A list of extensions to hide\. See \fB\fIEXTENSIONS\fR\fR section for more detail\.
 .
 .TP
 \fB\-e\fR|\fB\-\-show\-empty\fR
@@ -186,7 +158,7 @@ Any other options to include when running the extension command\.
 .
 .TP
 \fB\-\-no\-show\fR
-Set the extension to not show by default\. \fB\-\-show\-*\fR will override this setting at execution time\.
+Set the extension to not show by default\. \fB\-\-show\fR \fIextension\fR will override this setting at execution time\.
 .
 .TP
 \fB\-\-no\-color\fR
@@ -215,7 +187,7 @@ Any other options to include when running the extension command\.
 .
 .TP
 \fB\-\-no\-show\fR
-Set the extension to not show by default\. \fB\-\-show\-*\fR will override this setting at execution time\.
+Set the extension to not show by default\. \fB\-\-show\fR \fIextension\fR will override this setting at execution time\.
 .
 .TP
 \fB\-\-no\-color\fR
@@ -304,7 +276,7 @@ Options to pass to the extension\. These are merged with any command line option
 .
 .TP
 \fBgit\-state\.extensions\.*\.show\fR \fIbool\fR
-True or false flag determining whether to show the extension\. Options \fB\-\-show\-*\fR and \fB\-\-no\-show\-*\fR override this value\. See \fB\fIEXTENSIONS\fR\fR section for more detail\.
+True or false flag determining whether to show the extension\. Options \fB\-\-show\fR \fIextension\fR and \fB\-\-no\-show\fR \fIextension\fR override this value\. See \fB\fIEXTENSIONS\fR\fR section for more detail\.
 .
 .IP
 Default: \fItrue\fR
@@ -393,7 +365,7 @@ Options can be handled per configuration by setting \fB\-\-options <options>\fR\
 An extension can be hidden by setting \fB\-\-no\-show\fR\. This is useful for globally defined extensions that aren\'t needed for all repositories\.
 .
 .P
-Alternatively, an extension can be hidden by listing it in \fB\-\-no\-show\fR [\fIextension\fR \.\.\.] or using the flag \fB\-\-no\-show\-*\fR\.
+Alternatively, an extension can be hidden by listing it in \fB\-\-no\-show\fR \fIextension\fR [\fIextension\fR \.\.\.]\.
 .
 .SH "SEE ALSO"
 git\-status(1), git\-config(1)

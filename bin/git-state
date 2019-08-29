@@ -5,7 +5,7 @@ import sys
 
 from commands import state
 from commands.utils import git, parse_string
-from commands.utils.parse_actions import append_list, dict_set, optional_list
+from commands.utils.parse_actions import dict_set, optional_list
 
 
 def main():
@@ -173,63 +173,28 @@ def _view_subcommand(subparsers):
     )
     parser.set_defaults(func=state.state)
 
-    # add --show-/--no-show- flags for custom extensions
+    # show/no show
     extensions = state.get_extensions()
-    status_extension_group = parser.add_mutually_exclusive_group()
-    status_extension_group.add_argument(
-        '--show-status',
-        help='show status extension',
-        action=append_list('status'),
-        nargs=0,
+    parser.add_argument(
+        '-s',
+        '--show',
+        help='extensions to show',
+        nargs='+',
+        action=optional_list(),
+        default=[],
         dest='show_extensions',
-        default=[]
+        metavar='EXTENSION'
     )
-    status_extension_group.add_argument(
-        '--no-show-status',
-        help='hide status extension',
-        action=append_list('status'),
-        nargs=0,
-        dest='ignore_extensions',
-        default=[]
-    )
-    for extension in extensions:
-        section_name = git.get_config_value('git-state.extensions.' + extension + '.name', default=extension)
-        extension_group = parser.add_mutually_exclusive_group()
-        extension_group.add_argument(
-            '--show-' + extension,
-            help='show {} extension'.format(section_name),
-            action=append_list(extension),
-            nargs=0,
-            dest='show_extensions',
-            default=[]
-        )
-        extension_group.add_argument(
-            '--no-show-' + extension,
-            help='hide {} extension'.format(section_name),
-            action=append_list(extension),
-            nargs=0,
-            dest='ignore_extensions',
-            default=[]
-        )
-
-    # ignore sections
-    no_show_parser = parser.add_mutually_exclusive_group()
-    no_show_parser.add_argument(
+    parser.add_argument(
+        '-S',
         '--no-show',
         help='extensions to hide',
-        nargs='*',
+        nargs='+',
         action=optional_list(),
         const=extensions,
         default=[],
         dest='ignore_extensions',
         metavar='EXTENSION'
-    )
-    no_show_parser.add_argument(
-        '--no-show-all',
-        help='hide all extensions',
-        action='store_const',
-        const=extensions,
-        dest='ignore_extensions'
     )
 
     # color

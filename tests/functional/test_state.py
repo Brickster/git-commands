@@ -59,10 +59,6 @@ class TestStateView(unittest.TestCase):
 nothing to commit, repository is empty
 ''')
 
-    def test_state_view_cleanAndEmptyRepository_noShowStatus(self):
-        # expect
-        self.assertFalse(self._output('git state --no-show-status'))
-
     def test_state_view_workingDirectoryIsClean(self):
 
         # given: an initial commit
@@ -148,33 +144,15 @@ nothing to commit, working directory is clean
         # expect
         self.assertFalse(self._output('git state'))
 
-    def test_state_view_showStatus(self):
-
-        # given
-        self._output('git config git-state.status.show false')
-        expected = '''# status (master)
-nothing to commit, repository is empty
-'''
-
-        # expect
-        self.assertEqual(self._output('git state --show-status'), expected)
-
-    def test_state_view_noShowStatus(self):
-
-        # given
-        self._output('git config git-state.status.show true')
-
-        # expect
-        self.assertFalse(self._output('git state --no-show-status'))
-        self.assertFalse(self._output('git state --no-show status'))
-
 
 class TestStateViewWithExtension(unittest.TestCase):
 
     def _output(self, command):
+        if type(command) == str:
+            command = command.split()
         pyenv = os.environ.copy()
         pyenv['GIT_CONFIG'] = self.dirpath + '/.git/config'
-        proc = subprocess.Popen(command.split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=pyenv)
+        proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=pyenv)
         return proc.communicate()[0]
 
     def setUp(self):
@@ -322,7 +300,12 @@ nothing to commit, working directory is clean
 '''.format(self.full_log)
 
         # expect
-        self.assertEqual(self._output('git state --show-log'), expected)
+        self.assertEqual(self._output(['git', 'state', '--show', 'log']), expected)
+        self.assertEqual(self._output(['git', 'state', '-s', 'log']), expected)
+
+        # expect: show takes precedence
+        self.assertEqual(self._output(['git', 'state', '--show', 'log', '--no-show', 'log']), expected)
+        self.assertEqual(self._output(['git', 'state', '--no-show', 'log', '--show', 'log']), expected)
 
     def test_state_viewWithExtension_noShowExtensionUsingFlag(self):
 
@@ -333,8 +316,18 @@ nothing to commit, working directory is clean
 '''
 
         # expect
-        self.assertEqual(self._output('git state --no-show log'), expected)
-        self.assertEqual(self._output('git state --no-show-log'), expected)
+        self.assertEqual(self._output(['git', 'state', '--no-show', 'log']), expected)
+        self.assertEqual(self._output(['git', 'state', '-S', 'log']), expected)
+
+    def test_state_viewWithExtension_noShowExtensionUsingFlag_worksOnStatus(self):
+        # given
+        self.repo.config_writer('repository').set_value('git-state.extensions.log', 'show', 'true').release()
+        expected = '''# log
+{}
+'''.format(self.full_log)
+
+        # expect
+        self.assertEqual(self._output(['git', 'state', '--no-show', 'status']), expected)
 
     def test_state_viewWithExtension_showExtensionUsingConfig(self):
 
@@ -428,13 +421,6 @@ nothing to commit, working directory is clean
 
         # expect
         self.assertEqual(self._output('git state'), expected)
-
-    def test_state_viewWithExtension_noShowAll(self):
-
-        # expect
-        self.assertEqual(self._output('git state --no-show-all'), '''# status (master)
-nothing to commit, working directory is clean
-''')
 
     def test_state_viewWithExtension_formatCompactIsDefault(self):
 

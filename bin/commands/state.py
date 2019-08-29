@@ -195,24 +195,31 @@ def state(**kwargs):
     format_ = kwargs.get('format_')
     show_empty = kwargs.get('show_empty')
     ignore_extensions = kwargs.get('ignore_extensions')
+    show_extensions = list(set(kwargs.get('show_extensions', [])))
+
     sections = OrderedDict()
     if git.is_empty_repository():
-        if 'status' not in ignore_extensions:
+        extensions = ['status']
+        extensions = list(set(show_extensions).union(set(extensions) - set(ignore_extensions)))
+
+        if 'status' in extensions:
             status_output = status.get(new_repository=True, **kwargs)
             status_title = status.title()
             status_accent = status.accent(new_repository=True, **kwargs)
             sections[status_title] = _print_section(status_title, status_accent, status_output, format_, show_empty=show_empty, color=show_color)
+            extensions.remove('status')
     else:
-        if 'status' not in ignore_extensions:
+        extensions = get_extensions() + ['status']
+        extensions = list(set(show_extensions).union(set(extensions) - set(ignore_extensions)))
+
+        if 'status' in extensions:
             status_output = status.get(**kwargs)
             status_title = status.title()
             status_accent = status.accent(show_color=show_color)
             sections[status_title] = _print_section(status_title, status_accent, status_output, format_, show_empty=show_empty, color=show_color)
+            extensions.remove('status')
 
         # show any user defined sections
-        extensions = get_extensions()
-        extensions = list(set(extensions) - set(ignore_extensions))
-        show_extensions = kwargs.get('show_extensions', [])
         options = kwargs.get('options')
         for extension in extensions or []:
 

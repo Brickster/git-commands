@@ -11,9 +11,7 @@ All notable changes to this project will be documented in this file. This projec
 ### Changes
 - **Settings**: remove get command [#135][]
 - **Changes**: rename --remote to --upstream [#140][]
-
-### Fixes
-- **State**: multiple --no-show-* options work together [#151][]
+- **State**: simplify show/no-show options [#145][] [#151][]
 
 [#54]: https://github.com/Brickster/git-commands/issues/54
 [#118]: https://github.com/Brickster/git-commands/issues/118
@@ -21,6 +19,7 @@ All notable changes to this project will be documented in this file. This projec
 [#135]: https://github.com/Brickster/git-commands/issues/135
 [#140]: https://github.com/Brickster/git-commands/issues/140
 [#143]: https://github.com/Brickster/git-commands/issues/143
+[#145]: https://github.com/Brickster/git-commands/issues/145
 [#151]: https://github.com/Brickster/git-commands/issues/151
 
 ## [v0.7.0][] - 2019-08-26

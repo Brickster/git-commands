@@ -25,7 +25,7 @@ def append_list(value):
     class AppendList(argparse.Action):
         """Appends a value to the destination list.
 
-        This is different action='append' in that the value is not from the command line.
+        This is different from action='append' in that the value is not from the command line.
         """
 
         def __call__(self, parser, namespace, values, option_string=None):

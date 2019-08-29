@@ -2,9 +2,8 @@
 
 ## SYNOPSIS
 
-`git state` [`view`] [`--show-status`] [`--no-show-status`]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--show-*`] [`--no-show-*`]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--no-show-all`] [`--no-show` [<extension> ...]]<br>
+`git state` [`view`] [(`-s`|`--show`) <extension> [<extension> ...]]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-S`|`--no-show`) <extension> [<extension> ...]]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-c`|`--color`) [<when>]] [(`-C`|`--no-color`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
@@ -39,28 +38,11 @@ Used to see a more concise and comprehensive view of the working directory throu
     * `-v`|`--version`:
         Print version.
 
-    * `--show-status`:
-        Print the status section.
+    * `-s`|`--show` <extension>:
+        A list of extensions to show. Option based shows always take precedence over hides. See **[EXTENSIONS][]** section for more detail.
 
-    * `--no-show-status`:
-        Don't print the status section.
-
-    * `--show-*`:
-        Show extension *. Where * is the configuration key value. For instance, given:
-
-        git-state.extentions.last-ten-commits=git log --oneline -10<br>
-        git-state.extentions.last-ten-commits.name=last ten commits
-
-        The show flag is `--show-last-ten-commits`.
-
-    * `--no-show-*`:
-        Hide extension *.
-
-    * `--no-show-all`:
-        Hide all extensions.
-
-    * `--no-show` [<extension> ...]:
-        A list of extensions to hide. If none are specified, all of them will be hidden. See **[EXTENSIONS][]** section for more detail.
+    * `-S`|`--no-show` <extension>:
+        A list of extensions to hide. See **[EXTENSIONS][]** section for more detail.
 
     * `-e`|`--show-empty`:
         Show empty sections rather than omitting them.
@@ -111,7 +93,7 @@ Used to see a more concise and comprehensive view of the working directory throu
         Any other options to include when running the extension command.
 
     * `--no-show`:
-        Set the extension to not show by default. `--show-*` will override this setting at execution time.
+        Set the extension to not show by default. `--show` <extension> will override this setting at execution time.
 
     * `--no-color`:
         Do no include coloring option `--color=<when>` when executing the command.
@@ -132,7 +114,7 @@ Used to see a more concise and comprehensive view of the working directory throu
         Any other options to include when running the extension command.
 
     * `--no-show`:
-        Set the extension to not show by default. `--show-*` will override this setting at execution time.
+        Set the extension to not show by default. `--show` <extension> will override this setting at execution time.
 
     * `--no-color`:
         Do no include coloring option `--color=<when>` when executing the command.
@@ -195,7 +177,7 @@ Used to see a more concise and comprehensive view of the working directory throu
 	Options to pass to the extension. These are merged with any command line options for the extension. See **[EXTENSIONS][]** section for more detail.
 
 * `git-state.extensions.*.show` <bool>:
-	True or false flag determining whether to show the extension. Options `--show-*` and `--no-show-*` override this value. See **[EXTENSIONS][]** section for more detail.
+	True or false flag determining whether to show the extension. Options `--show` <extension> and `--no-show` <extension> override this value. See **[EXTENSIONS][]** section for more detail.
 
 	Default: <true>
 
@@ -264,7 +246,7 @@ Options can be handled per configuration by setting `--options <options>`.
 ### Hide an Extension
 An extension can be hidden by setting `--no-show`. This is useful for globally defined extensions that aren't needed for all repositories.
 
-Alternatively, an extension can be hidden by listing it in `--no-show` [<extension> ...] or using the flag `--no-show-*`.
+Alternatively, an extension can be hidden by listing it in `--no-show` <extension> [<extension> ...].
 
 ## SEE ALSO
 

@@ -8,23 +8,6 @@ import unittest
 import git
 
 
-class TestIssue093(unittest.TestCase):
-    """State --no-status not respected for new repositories"""
-
-    def setUp(self):
-        self.dirpath = tempfile.mkdtemp()
-        os.chdir(self.dirpath)
-        self.repo = git.Repo.init(self.dirpath)
-
-    def tearDown(self):
-        shutil.rmtree(self.dirpath)
-
-    def test(self):
-        """Issue 93: --no-status should be respected even for new repositories"""
-
-        self.assertFalse(self.repo.git.state('--no-show-status'))
-
-
 class TestIssue094(unittest.TestCase):
     """Changes breaks when HEAD is detached"""
 
@@ -470,7 +453,7 @@ class TestIssue131(unittest.TestCase):
 
 
 class TestIssue151(unittest.TestCase):
-    """Multiple --no-show-* options can't be used together"""
+    """Multiple --no-show options can't be used together"""
 
     def setUp(self):
         self.dirpath = tempfile.mkdtemp()
@@ -485,11 +468,11 @@ class TestIssue151(unittest.TestCase):
         shutil.rmtree(self.dirpath)
 
     def test(self):
-        """Issue 151: multiple --no-show-* options should work together"""
+        """Issue 151: multiple --no-show options should work together"""
 
         # when
         state_proc = subprocess.Popen(
-            'git state --no-color --no-show-log --no-show-stashes'.split(),
+            'git state --no-color --no-show log --no-show stashes'.split(),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
@@ -497,4 +480,6 @@ class TestIssue151(unittest.TestCase):
 
         # then
         self.assertRegexpMatches(stdout, '^# status.*')
+        self.assertTrue('# log' not in stdout)
+        self.assertTrue('# stashes' not in stdout)
         self.assertFalse(stderr)
