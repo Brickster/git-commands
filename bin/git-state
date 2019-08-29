@@ -175,8 +175,8 @@ def _view_subcommand(subparsers):
 
     # add --show-/--no-show- flags for custom extensions
     extensions = state.get_extensions()
-    extension_group = parser.add_mutually_exclusive_group()
-    extension_group.add_argument(
+    status_extension_group = parser.add_mutually_exclusive_group()
+    status_extension_group.add_argument(
         '--show-status',
         help='show status extension',
         action=append_list('status'),
@@ -184,7 +184,7 @@ def _view_subcommand(subparsers):
         dest='show_extensions',
         default=[]
     )
-    extension_group.add_argument(
+    status_extension_group.add_argument(
         '--no-show-status',
         help='hide status extension',
         action=append_list('status'),
@@ -194,6 +194,7 @@ def _view_subcommand(subparsers):
     )
     for extension in extensions:
         section_name = git.get_config_value('git-state.extensions.' + extension + '.name', default=extension)
+        extension_group = parser.add_mutually_exclusive_group()
         extension_group.add_argument(
             '--show-' + extension,
             help='show {} extension'.format(section_name),

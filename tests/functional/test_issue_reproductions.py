@@ -467,3 +467,34 @@ class TestIssue131(unittest.TestCase):
 
         # then
         self.assertFalse(stdout)
+
+
+class TestIssue151(unittest.TestCase):
+    """Multiple --no-show-* options can't be used together"""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+
+        # initialize repository
+        self.repo = git.Repo.init(self.dirpath)
+        self.repo.git.state(['extensions', 'create', 'log', '--command', 'git log'])
+        self.repo.git.state(['extensions', 'create', 'stashes', '--command', 'git stash list'])
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        """Issue 151: multiple --no-show-* options should work together"""
+
+        # when
+        state_proc = subprocess.Popen(
+            'git state --no-color --no-show-log --no-show-stashes'.split(),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        stdout, stderr = state_proc.communicate()
+
+        # then
+        self.assertRegexpMatches(stdout, '^# status.*')
+        self.assertFalse(stderr)
