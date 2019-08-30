@@ -3,17 +3,15 @@
 import os
 import re
 import shlex
-import subprocess
 import sys
 from ast import literal_eval
 from collections import OrderedDict
-from subprocess import PIPE
 
 import colorama
 
 from . import settings
 from stateextensions import status
-from utils import directories, git, messages, parse_string
+from utils import directories, execute, git, messages, parse_string
 
 
 def _print_section(title, accent=None, text=None, format_='compact', show_empty=False, color='auto'):
@@ -68,15 +66,13 @@ def _print_sections(sections, order=[], page=False, clear=False):
     if state_result:
         state_result = state_result[:-1]  # strip the extra trailing newline
         state_lines = len(state_result.splitlines())
-        terminal_lines = literal_eval(subprocess.check_output(['tput', 'lines']))
+        terminal_lines = literal_eval(execute.check_output(['tput', 'lines']))
         if not page or terminal_lines >= state_lines + 2:  # one for the newline and one for the prompt
             if clear and sys.stdout.isatty():
-                subprocess.call('clear')
+                execute.call('clear')
             messages.info(state_result)
         else:
-            echo = subprocess.Popen(['echo', state_result], stdout=PIPE)
-            subprocess.call(['less', '-r'], stdin=echo.stdout)
-            echo.wait()
+            execute.pipe(['echo', state_result], ['less', '-r'])
 
 
 def _run_extension(extension, options, show_color):
@@ -96,9 +92,8 @@ def _run_extension(extension, options, show_color):
     if git.get_config_value('git-state.extensions.' + extension + '.color', default=True, as_type=parse_string.as_bool):
         extension_command += ['--color={}'.format(show_color)]
 
-    extension_proc = subprocess.Popen(extension_command, stdout=PIPE, stderr=PIPE)
-    extension_out, extension_error = extension_proc.communicate()
-    extension_text = extension_out if not extension_proc.returncode else extension_error
+    extension_out, extension_error, extension_code = execute.execute(extension_command)
+    extension_text = extension_out if not extension_code else extension_error
 
     return extension_name, extension_text
 
@@ -115,15 +110,15 @@ def edit_extension(extension, command=None, name=None, options=None, show=None, 
     extension_section = 'git-state.extensions.' + extension
     already_exists = _extension_exists(extension)
     if command:
-        subprocess.call(['git', 'config', '--local', extension_section + '.command', command])
+        execute.call(['git', 'config', '--local', extension_section + '.command', command])
     if name:
-        subprocess.call(['git', 'config', '--local', extension_section + '.name', name])
+        execute.call(['git', 'config', '--local', extension_section + '.name', name])
     if options:
-        subprocess.call(['git', 'config', '--local', extension_section + '.options', options])
+        execute.call(['git', 'config', '--local', extension_section + '.options', options])
     if show is not None:
-        subprocess.call(['git', 'config', '--local', extension_section + '.show', str(show)])
+        execute.call(['git', 'config', '--local', extension_section + '.show', str(show)])
     if color is not None:
-        subprocess.call(['git', 'config', '--local', extension_section + '.color', str(color)])
+        execute.call(['git', 'config', '--local', extension_section + '.color', str(color)])
     messages.info('Extension {} {}'.format(extension, 'updated' if already_exists else 'created'))
 
 
@@ -161,7 +156,7 @@ def delete_extension(extension):
     # TODO: where to delete from?
     # TODO: quiet
     if _extension_exists(extension):
-        subprocess.call(['git', 'config', '--local', '--remove-section', 'git-state.extensions.{}'.format(extension)])
+        execute.call(['git', 'config', '--local', '--remove-section', 'git-state.extensions.{}'.format(extension)])
         messages.info('Extension {} deleted'.format(extension))
 
 

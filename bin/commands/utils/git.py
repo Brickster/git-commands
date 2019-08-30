@@ -4,10 +4,16 @@ import os
 import re
 import sys
 
-import subprocess
-from subprocess import PIPE, STDOUT
+from enum import Enum
 
-import directories, messages
+import directories
+import execute
+import messages
+
+
+class RefType(Enum):
+    HEADS = 1
+    TAGS = 2
 
 
 class GitException(Exception):  # pragma: no cover
@@ -26,11 +32,7 @@ def is_valid_reference(reference):
     :return bool: whether or not the reference is valid
     """
 
-    assert isinstance(reference, str), "'reference' must be a str. Given: " + type(reference).__name__
-
-    show_ref_proc = subprocess.Popen(['git', 'show-ref', '--quiet', reference])
-    show_ref_proc.communicate()
-    return not show_ref_proc.returncode
+    return not execute.swallow(['git', 'show-ref', '--quiet', reference])
 
 
 def is_commit(object_):
@@ -41,12 +43,7 @@ def is_commit(object_):
     :return bool: whether or not the object is a commit object
     """
 
-    assert isinstance(object_, str), "'object' must be a str. Given: " + type(object_).__name__
-
-    with open(os.devnull, 'w') as dev_null:
-        cat_file_proc = subprocess.Popen(['git', 'cat-file', '-t', object_], stdout=PIPE, stderr=dev_null)
-        object_type = cat_file_proc.communicate()[0].strip()
-        return not cat_file_proc.returncode and object_type == 'commit'
+    return execute.stdout(['git', 'cat-file', '-t', object_]).strip() == 'commit'
 
 
 def is_detached():
@@ -58,10 +55,7 @@ def is_detached():
 def symbolic_ref(object_):
     """Returns symbolic ref"""
 
-    symbolic_proc = subprocess.Popen(
-        ['git', 'symbolic-ref', '--quiet', object_], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
-    revolved_symbolic_ref = symbolic_proc.communicate()[0]
+    revolved_symbolic_ref = execute.stdout(['git', 'symbolic-ref', '--quiet', object_])
     if revolved_symbolic_ref:
         revolved_symbolic_ref = revolved_symbolic_ref.strip()
     return revolved_symbolic_ref
@@ -75,10 +69,7 @@ def is_ref(object_):
     :return bool: whether or not the object is a ref
     """
 
-    assert isinstance(object_, str), "'object' must be a str. Given: " + type(object_).__name__
-
-    with open(os.devnull, 'w') as dev_null:
-        return not subprocess.call(('git', 'show-ref', object_), stdout=dev_null, stderr=dev_null)
+    return not execute.swallow(['git', 'show-ref', object_])
 
 
 def is_ref_ambiguous(ref, limit=None):
@@ -92,35 +83,20 @@ def is_ref_ambiguous(ref, limit=None):
     :raise GitException: if ref is not a ref
     """
 
-    assert isinstance(ref, str), "'ref' must be a str. Given: " + type(ref).__name__
-    assert not limit or _is_valid_limit(limit), "'limit' may only contain 'heads' and/or 'tags'"
-
     # normalize input
-    if limit and isinstance(limit, str):
+    if limit and isinstance(limit, RefType):
         limit = [limit]
 
     if not is_ref(ref):
         raise GitException('{0!r} is not a ref'.format(ref))
 
-    with open(os.devnull, 'w') as dev_null:
-        show_ref_command = ['git', 'show-ref']
-        if limit:
-            show_ref_command += ['--' + l for l in limit]
-        show_ref_command += [ref]
-        show_ref_proc = subprocess.Popen(show_ref_command, stdout=PIPE, stderr=dev_null)
-        return len(show_ref_proc.communicate()[0].splitlines()) > 1
+    show_ref_command = ['git', 'show-ref']
+    if limit:
+        show_ref_command += ['--' + l.name.lower() for l in limit]
+    show_ref_command += [ref]
 
-
-def _is_valid_limit(limit):
-    # check strs
-    if isinstance(limit, str) and limit in ('heads', 'tags'):
-        return True
-
-    # check list types
-    if isinstance(limit, (tuple, list)) and all([l in ('heads', 'tags') for l in limit]):
-        return True
-
-    return False
+    show_ref = execute.stdout(show_ref_command)
+    return len(show_ref.splitlines()) > 1
 
 
 def symbolic_full_name(ref):
@@ -131,7 +107,7 @@ def symbolic_full_name(ref):
     :return str: the symbolic full name
     """
 
-    return subprocess.check_output(('git', 'rev-parse', '--symbolic-full-name', ref)).strip()
+    return execute.check_output(['git', 'rev-parse', '--symbolic-full-name', ref]).strip()
 
 
 def current_branch():
@@ -142,7 +118,7 @@ def current_branch():
 
     if not os.listdir('.git/refs/heads'):
         return None
-    return subprocess.check_output(('git', 'rev-parse', '--abbrev-ref', 'HEAD')).strip()
+    return execute.check_output('git rev-parse --abbrev-ref HEAD').strip()
 
 
 def deleted_files():
@@ -151,8 +127,8 @@ def deleted_files():
     :return list: a list of deleted file paths
     """
 
-    all_files = subprocess.check_output(['git', 'status', '--short', '--porcelain'])
-    return [match.group(1) for match in re.finditer('^(?:D\s|\sD)\s(.*)', all_files, re.MULTILINE)]
+    all_files = execute.check_output('git status --short --porcelain')
+    return [match.group(1) for match in re.finditer('^(?:D\\s|\\sD)\\s(.*)', all_files, re.MULTILINE)]
 
 
 def is_empty_repository():
@@ -160,11 +136,7 @@ def is_empty_repository():
 
     :return bool: whether or not the repository is empty
     """
-
-    with open(os.devnull, 'w') as devnull:
-        log_proc = subprocess.Popen(['git', 'log', '--oneline', '-1'], stdout=devnull, stderr=devnull)
-        log_proc.wait()
-        return log_proc.returncode != 0
+    return execute.swallow(['git', 'log', '--oneline', '-1']) != 0
 
 
 def resolve_sha1(revision):
@@ -175,8 +147,7 @@ def resolve_sha1(revision):
     :return str: SHA1
     """
 
-    rev_proc = subprocess.Popen(['git', 'rev-parse', '--verify', '--quiet', revision], stdout=subprocess.PIPE)
-    sha1 = rev_proc.communicate()[0].strip()
+    sha1 = execute.stdout(['git', 'rev-parse', '--verify', '--quiet', revision]).strip()
     if not sha1:
         return None
     return sha1
@@ -226,8 +197,7 @@ def get_config_value(key, default=None, config=None, file_=None, as_type=str):
         raise Exception('{} is not callable'.format(as_type))
 
     command = _get_command(key, config, file_)
-    proc = subprocess.Popen(command, stdout=PIPE, stderr=STDOUT)
-    value = proc.communicate()[0].strip()
+    value = execute.stdout(command).strip()
 
     if not value:
         return default

@@ -1,11 +1,8 @@
 """Restash changes."""
 
-import os
 import re
-import subprocess
-from subprocess import PIPE
 
-from utils import messages
+from utils import execute, messages
 
 
 def _is_valid_stash(stash):
@@ -18,11 +15,7 @@ def _is_valid_stash(stash):
 
     if re.match('^stash@{.*}$', stash) is None:
         return False
-
-    with open(os.devnull, 'w') as devnull:
-        proc = subprocess.Popen(('git', 'cat-file', '-t', stash), stdout=devnull, stderr=devnull)
-        proc.wait()
-        return proc.returncode == 0
+    return execute.swallow(['git', 'cat-file', '-t', stash]) == 0
 
 
 def _parents(commit):
@@ -33,7 +26,7 @@ def _parents(commit):
     :return list: a list of parent SHAs
     """
 
-    return subprocess.check_output(['git', 'rev-list', '--parents', '-1', commit]).strip().split(' ')[1:]
+    return execute.check_output(['git', 'rev-list', '--parents', '-1', commit]).strip().split(' ')[1:]
 
 
 def restash(stash='stash@{0}', quiet=False):
@@ -43,7 +36,7 @@ def restash(stash='stash@{0}', quiet=False):
     :param bool quiet: suppress all output
     """
 
-    if not subprocess.check_output('git stash list'.split()):
+    if not execute.check_output('git stash list'):
         messages.error('no stashes exist')
     if not _is_valid_stash(stash):
         messages.error('{} is not a valid stash reference'.format(stash))
@@ -51,18 +44,16 @@ def restash(stash='stash@{0}', quiet=False):
     _reverse_modifications(stash)
     _remove_untracked_files(stash)
 
-    stash_sha = subprocess.check_output(['git', 'rev-parse', stash]).splitlines()[0]
+    stash_sha = execute.check_output(['git', 'rev-parse', stash]).splitlines()[0]
     messages.info('Restashed {} ({})'.format(stash, stash_sha), quiet)
 
 
 def _reverse_modifications(stash):
     # if there are modifications, reverse apply them
-    reverse_patch = subprocess.check_output(['git', 'stash', 'show', '--patch', '--no-color', stash])
+    reverse_patch = execute.check_output(['git', 'stash', 'show', '--patch', '--no-color', stash])
     if reverse_patch:
-        restash_proc = subprocess.Popen(['git', 'apply', '--reverse'], stdin=PIPE)
-        restash_proc.communicate(input=reverse_patch)
-
-        if restash_proc.returncode:
+        return_code = execute.call_input(['git', 'apply', '--reverse'], reverse_patch)
+        if return_code:
             messages.error('unable to reverse modifications', exit_=True)
 
 
@@ -70,8 +61,8 @@ def _remove_untracked_files(stash):
     # check if we need remove any untracked files. For a stash ref, the third parent contains the untracked files.
     parents = _parents(stash)
     if len(parents) == 3:
-        untracked_files = subprocess.check_output(['git', 'ls-tree', '--name-only', '{}^3'.format(stash)]).splitlines()
+        untracked_files = execute.check_output(['git', 'ls-tree', '--name-only', '{}^3'.format(stash)]).splitlines()
 
         # it's possible to have three parents and no untracked files if --include-untracked was unnecessarily used
         if untracked_files:
-            subprocess.call(['git', 'clean', '--force', '--quiet', '--'] + untracked_files)
+            execute.call(['git', 'clean', '--force', '--quiet', '--'] + untracked_files)

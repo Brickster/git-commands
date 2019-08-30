@@ -8,9 +8,9 @@ from bin.commands import reindex
 class TestReindex(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     @mock.patch('bin.commands.utils.git.deleted_files', return_value=['file3'])
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_reindex_noneDeleted(self, mock_call, mock_deletedfiles, mock_checkoutput, mock_isgitrepository):
 
         # setup
@@ -26,9 +26,9 @@ class TestReindex(unittest.TestCase):
         mock_call.assert_called_once_with(['git', 'add', '--'] + files)
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     @mock.patch('bin.commands.utils.git.deleted_files')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_reindex_someDeleted(self, mock_call, mock_deletedfiles, mock_checkoutput, mock_isgitrepository):
 
         # setup
@@ -45,9 +45,9 @@ class TestReindex(unittest.TestCase):
         mock_call.assert_called_once_with(['git', 'add', '--', 'file1', 'file3'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     @mock.patch('bin.commands.utils.git.deleted_files')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_reindex_allDeleted(self, mock_call, mock_deletedfiles, mock_checkoutput, mock_isgitrepository):
 
         # setup
@@ -64,8 +64,8 @@ class TestReindex(unittest.TestCase):
         mock_call.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('subprocess.check_output', return_value = '')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value = '')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_reindex_noFilesToIndex(self, mock_call, mock_checkoutput, mock_isgitrepository):
 
         # when

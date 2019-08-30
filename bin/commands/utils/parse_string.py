@@ -9,8 +9,6 @@ def as_bool(value):
     :return bool: the bool representation
     """
 
-    assert isinstance(value, str), ('{0!r} is not a string'.format(value))
-
     if value.lower() in ('yes', 'on', 'true', '1'):
         return True
     elif value.lower() in ('no', 'off', 'false', '0'):
@@ -20,10 +18,6 @@ def as_bool(value):
 
 
 def as_enum(enum_type):
-    assert type(enum_type) == enum.EnumMeta, "'enum_type' must be an {!r}. Given {!r}".format(
-        enum.Enum,
-        type(enum_type)
-    )
     return lambda value: enum_type[value.upper()]
 
 

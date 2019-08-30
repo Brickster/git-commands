@@ -1,6 +1,5 @@
 import unittest
 import mock
-from subprocess import PIPE
 
 import testutils
 from bin.commands import upstream
@@ -10,16 +9,13 @@ from bin.commands import upstream
 class TestUpstream(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.git.current_branch', return_value='the-branch')
-    @mock.patch('subprocess.Popen')
-    def test_upstream(self, mock_popen, mock_currentbranch, mock_isemptyrepository):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_upstream(self, mock_stdout, mock_currentbranch, mock_isemptyrepository):
 
         # setup
         expected_upstream = "the-upstream"
         upstream_info = "refs/heads/{}\n".format(expected_upstream)
-
-        mock_process = mock.Mock()
-        mock_process.communicate.return_value = [upstream_info]
-        mock_popen.return_value = mock_process
+        mock_stdout.return_value = upstream_info
 
         # when
         actual_upstream = upstream.upstream()
@@ -29,17 +25,14 @@ class TestUpstream(unittest.TestCase):
 
         mock_isemptyrepository.assert_called_once_with()
         mock_currentbranch.assert_called_once_with()
-        mock_process.communicate.assert_called_once_with()
-        mock_popen.assert_called_once_with('git config --local branch.the-branch.merge'.split(), stdout=PIPE)
+        mock_stdout.assert_called_once_with('git config --local branch.the-branch.merge')
 
     @mock.patch('bin.commands.utils.git.current_branch', return_value='the-branch')
-    @mock.patch('subprocess.Popen')
-    def test_upstream_includeRemote_noUpstream(self, mock_popen, mock_currentbranch, mock_isemptyrepository):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_upstream_includeRemote_noUpstream(self, mock_stdout, mock_currentbranch, mock_isemptyrepository):
 
         # setup
-        mock_process = mock.Mock()
-        mock_process.communicate.return_value = ['']
-        mock_popen.return_value = mock_process
+        mock_stdout.return_value = ''
 
         # when
         actual_upstream = upstream.upstream()
@@ -48,8 +41,7 @@ class TestUpstream(unittest.TestCase):
         self.assertEqual(actual_upstream, '')
 
         mock_currentbranch.assert_called_once_with()
-        mock_process.communicate.assert_called_once_with()
-        mock_popen.assert_called_once_with('git config --local branch.the-branch.merge'.split(), stdout=PIPE)
+        mock_stdout.assert_called_once_with('git config --local branch.the-branch.merge')
 
     def test_upstream_repositoryIsEmpty(self, mock_isemptyrepository):
 
@@ -66,17 +58,14 @@ class TestUpstream(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.git.current_branch', return_value='the-branch')
     @mock.patch('bin.commands.utils.git.is_valid_reference', return_value=True)
-    @mock.patch('subprocess.Popen')
-    def test_upstream_branchIncluded(self, mock_popen, mock_isvalidreference, mock_currentbranch, mock_isemptyrepository):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_upstream_branchIncluded(self, mock_stdout, mock_isvalidreference, mock_currentbranch, mock_isemptyrepository):
 
         # setup
         branch_name = 'the-branch'
         expected_upstream = "the-upstream"
         upstream_info = "refs/heads/{}\n".format(expected_upstream)
-
-        mock_process = mock.Mock()
-        mock_process.communicate.return_value = [upstream_info]
-        mock_popen.return_value = mock_process
+        mock_stdout.return_value = upstream_info
 
         # when
         actual_upstream = upstream.upstream(branch=branch_name)
@@ -86,8 +75,7 @@ class TestUpstream(unittest.TestCase):
 
         mock_currentbranch.assert_not_called()
         mock_isvalidreference.assert_called_once_with(branch_name)
-        mock_process.communicate.assert_called_once_with()
-        mock_popen.assert_called_once_with('git config --local branch.the-branch.merge'.split(), stdout=PIPE)
+        mock_stdout.assert_called_once_with('git config --local branch.the-branch.merge')
 
     @mock.patch('bin.commands.utils.git.is_valid_reference', return_value=False)
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
@@ -104,17 +92,14 @@ class TestUpstream(unittest.TestCase):
         mock_error.assert_called_once_with("'bad-branch' is not a valid branch")
 
     @mock.patch('bin.commands.utils.git.current_branch', return_value='the-branch')
-    @mock.patch('subprocess.Popen')
-    @mock.patch('subprocess.check_output', return_value='the-remote')
-    def test_upstream_includeRemote_always(self, mock_checkoutput, mock_popen, mock_currentbranch, mock_isemptyrepository):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='the-remote')
+    def test_upstream_includeRemote_always(self, mock_checkoutput, mock_stdout, mock_currentbranch, mock_isemptyrepository):
 
         # setup
         expected_upstream = "the-upstream"
         upstream_info = "refs/heads/{}\n".format(expected_upstream)
-
-        mock_process = mock.Mock()
-        mock_process.communicate.return_value = [upstream_info]
-        mock_popen.return_value = mock_process
+        mock_stdout.return_value = upstream_info
 
         # when
         actual_upstream = upstream.upstream(include_remote=upstream.IncludeRemote.ALWAYS)
@@ -124,20 +109,17 @@ class TestUpstream(unittest.TestCase):
 
         mock_isemptyrepository.assert_called_once()
         mock_currentbranch.assert_called_once()
-        mock_popen.assert_called_once_with('git config --local branch.the-branch.merge'.split(), stdout=PIPE)
-        mock_checkoutput.assert_called_once_with('git config --local branch.the-branch.remote'.split())
+        mock_stdout.assert_called_once_with('git config --local branch.the-branch.merge')
+        mock_checkoutput.assert_called_once_with('git config --local branch.the-branch.remote')
 
     @mock.patch('bin.commands.utils.git.current_branch', return_value='the-branch')
-    @mock.patch('subprocess.Popen')
-    def test_upstream_includeRemote_never(self, mock_popen, mock_currentbranch, mock_isemptyrepository):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_upstream_includeRemote_never(self, mock_stdout, mock_currentbranch, mock_isemptyrepository):
 
         # setup
         expected_upstream = "the-upstream"
         upstream_info = "refs/heads/{}\n".format(expected_upstream)
-
-        mock_process = mock.Mock()
-        mock_process.communicate.return_value = [upstream_info]
-        mock_popen.return_value = mock_process
+        mock_stdout.return_value = upstream_info
 
         # when
         actual_upstream = upstream.upstream(include_remote=upstream.IncludeRemote.NEVER)
@@ -147,20 +129,17 @@ class TestUpstream(unittest.TestCase):
 
         mock_isemptyrepository.assert_called_once()
         mock_currentbranch.assert_called_once()
-        mock_popen.assert_called_once_with('git config --local branch.the-branch.merge'.split(), stdout=PIPE)
+        mock_stdout.assert_called_once_with('git config --local branch.the-branch.merge')
 
     @mock.patch('bin.commands.utils.git.current_branch', return_value='the-branch')
-    @mock.patch('subprocess.Popen')
-    @mock.patch('subprocess.check_output', return_value='the-remote')
-    def test_upstream_includeRemote_noneLocal_notLocal(self, mock_checkoutput, mock_popen, mock_currentbranch, mock_isemptyrepository):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='the-remote')
+    def test_upstream_includeRemote_noneLocal_notLocal(self, mock_checkoutput, mock_stdout, mock_currentbranch, mock_isemptyrepository):
 
         # setup
         expected_upstream = "the-upstream"
         upstream_info = "refs/heads/{}\n".format(expected_upstream)
-
-        mock_process = mock.Mock()
-        mock_process.communicate.return_value = [upstream_info]
-        mock_popen.return_value = mock_process
+        mock_stdout.return_value = upstream_info
 
         # when
         actual_upstream = upstream.upstream(include_remote=upstream.IncludeRemote.NONE_LOCAL)
@@ -170,21 +149,18 @@ class TestUpstream(unittest.TestCase):
 
         mock_isemptyrepository.assert_called_once()
         mock_currentbranch.assert_called_once()
-        mock_popen.assert_called_once_with('git config --local branch.the-branch.merge'.split(), stdout=PIPE)
-        mock_checkoutput.assert_called_once_with('git config --local branch.the-branch.remote'.split())
+        mock_stdout.assert_called_once_with('git config --local branch.the-branch.merge')
+        mock_checkoutput.assert_called_once_with('git config --local branch.the-branch.remote')
 
     @mock.patch('bin.commands.utils.git.current_branch', return_value='the-branch')
-    @mock.patch('subprocess.Popen')
-    @mock.patch('subprocess.check_output', return_value='.')
-    def test_upstream_includeRemote_noneLocal_isLocal(self, mock_checkoutput, mock_popen, mock_currentbranch, mock_isemptyrepository):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='.')
+    def test_upstream_includeRemote_noneLocal_isLocal(self, mock_checkoutput, mock_stdout, mock_currentbranch, mock_isemptyrepository):
 
         # setup
         expected_upstream = "the-upstream"
         upstream_info = "refs/heads/{}\n".format(expected_upstream)
-
-        mock_process = mock.Mock()
-        mock_process.communicate.return_value = [upstream_info]
-        mock_popen.return_value = mock_process
+        mock_stdout.return_value = upstream_info
 
         # when
         actual_upstream = upstream.upstream(include_remote=upstream.IncludeRemote.NONE_LOCAL)
@@ -194,15 +170,5 @@ class TestUpstream(unittest.TestCase):
 
         mock_isemptyrepository.assert_called_once()
         mock_currentbranch.assert_called_once()
-        mock_popen.assert_called_once_with('git config --local branch.the-branch.merge'.split(), stdout=PIPE)
-        mock_checkoutput.assert_called_once_with('git config --local branch.the-branch.remote'.split())
-
-    def test_upstream_includeRemote_wrongType(self, mock_isemptyrepository):
-
-        # when
-        with self.assertRaises(AssertionError) as context:
-            upstream.upstream(include_remote='always')
-
-        # then
-        self.assertEqual(context.exception.message, "'include_remote' must be a {!r}. Given {!r}".format(upstream.IncludeRemote, str))
-        mock_isemptyrepository.assert_not_called()
+        mock_stdout.assert_called_once_with('git config --local branch.the-branch.merge')
+        mock_checkoutput.assert_called_once_with('git config --local branch.the-branch.remote')

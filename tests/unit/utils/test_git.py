@@ -24,97 +24,64 @@ class TestGit(unittest.TestCase):
         git.validate_config = self._validate_config
         git.get_config_value = self._get_config_value
 
-    @mock.patch('subprocess.Popen')
-    def test_isValidReference(self, mock_popen):
+    @mock.patch('bin.commands.utils.execute.swallow')
+    def test_isValidReference(self, mock_swallow):
 
         # given
         reference = 'ref'
-        mock_proc = mock.Mock()
-        mock_proc.returncode = 0
-        mock_popen.return_value = mock_proc
+        mock_swallow.return_value = 0
 
         # when
         is_valid = git.is_valid_reference(reference)
 
         # then
         self.assertTrue(is_valid)
-        mock_popen.assert_called_once_with(['git', 'show-ref', '--quiet', reference])
-        mock_proc.communicate.assert_called_once()
+        mock_swallow.assert_called_once_with(['git', 'show-ref', '--quiet', reference])
 
-    def test_isValidReference_notAStr(self):
-
-        # when
-        with self.assertRaises(AssertionError) as context:
-            git.is_valid_reference(1)
-
-        # then
-        self.assertEqual(context.exception.message, "'reference' must be a str. Given: int")
-
-    @mock.patch('subprocess.Popen')
-    def test_isCommit(self, mock_popen):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_isCommit(self, mock_stdout):
 
         # given
         object_ = 'o123'
         type_ = 'commit\n'
-        mock_proc = mock.Mock()
-        mock_proc.returncode = 0
-        mock_proc.communicate.return_value = [type_]
-        mock_popen.return_value = mock_proc
+        mock_stdout.return_value = type_
 
         # when
         is_commit = git.is_commit(object_)
 
         # then
         self.assertTrue(is_commit)
-        mock_popen.assert_called_once_with(['git', 'cat-file', '-t', object_], stdout=PIPE, stderr=mock.ANY)
-        mock_proc.communicate.assert_called_once()
+        mock_stdout.assert_called_once_with(['git', 'cat-file', '-t', object_])
 
-    @mock.patch('subprocess.Popen')
-    def test_isCommit_notAnObject(self, mock_popen):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_isCommit_notAnObject(self, mock_stdout):
 
         # given
         object_ = 'o123'
-        type_ = 'commit\n'
-        mock_proc = mock.Mock()
-        mock_proc.returncode = 1
-        mock_proc.communicate.return_value = [type_]
-        mock_popen.return_value = mock_proc
+        type_ = '\n'
+        mock_stdout.return_value = type_
 
         # when
         is_commit = git.is_commit(object_)
 
         # then
         self.assertFalse(is_commit)
-        mock_popen.assert_called_once_with(['git', 'cat-file', '-t', object_], stdout=PIPE, stderr=mock.ANY)
-        mock_proc.communicate.assert_called_once()
+        mock_stdout.assert_called_once_with(['git', 'cat-file', '-t', object_])
 
-    @mock.patch('subprocess.Popen')
-    def test_isCommit_notACommit(self, mock_popen):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_isCommit_notACommit(self, mock_stdout):
 
         # given
         object_ = 'o123'
         type_ = 'blog\n'
-        mock_proc = mock.Mock()
-        mock_proc.returncode = 0
-        mock_proc.communicate.return_value = [type_]
-        mock_popen.return_value = mock_proc
+        mock_stdout.return_value = type_
 
         # when
         is_commit = git.is_commit(object_)
 
         # then
         self.assertFalse(is_commit)
-        mock_popen.assert_called_once_with(['git', 'cat-file', '-t', object_], stdout=PIPE, stderr=mock.ANY)
-        mock_proc.communicate.assert_called_once()
-
-    def test_isCommit_notAStr(self):
-
-        # when
-        with self.assertRaises(AssertionError) as context:
-            git.is_commit(1)
-
-        # then
-        self.assertEqual(context.exception.message, "'object' must be a str. Given: int")
+        mock_stdout.assert_called_once_with(['git', 'cat-file', '-t', object_])
 
     @mock.patch('bin.commands.utils.git.symbolic_ref')
     def test_isDetached(self, mock_symbolicref):
@@ -129,43 +96,37 @@ class TestGit(unittest.TestCase):
         self.assertTrue(is_detached)
         mock_symbolicref.assert_called_once()
 
-    @mock.patch('subprocess.Popen')
-    def test_symbolicRef(self, mock_popen):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_symbolicRef(self, mock_stdout):
 
         # given
         object_ = 'xyz'
         expected_symbolic_ref = 'abc'
-        mock_proc = mock.Mock()
-        mock_proc.communicate.return_value = [expected_symbolic_ref, None]
-        mock_popen.return_value = mock_proc
+        mock_stdout.return_value = expected_symbolic_ref
 
         # when
         actual_symbolic_ref = git.symbolic_ref(object_)
 
         # then
         self.assertEqual(actual_symbolic_ref, expected_symbolic_ref)
-        mock_popen.assert_called_once_with(['git', 'symbolic-ref', '--quiet', object_], stdout=PIPE, stderr=PIPE)
-        mock_proc.communicate.assert_called_once()
+        mock_stdout.assert_called_once_with(['git', 'symbolic-ref', '--quiet', object_])
 
-    @mock.patch('subprocess.Popen')
-    def test_symbolicRef_detachedHead(self, mock_popen):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_symbolicRef_detachedHead(self, mock_stdout):
 
         # given
         object_ = 'xyz'
-        mock_proc = mock.Mock()
-        mock_proc.communicate.return_value = [None, None]
-        mock_popen.return_value = mock_proc
+        mock_stdout.return_value = None
 
         # when
         actual_symbolic_ref = git.symbolic_ref(object_)
 
         # then
         self.assertFalse(actual_symbolic_ref)
-        mock_popen.assert_called_once_with(['git', 'symbolic-ref', '--quiet', object_], stdout=PIPE, stderr=PIPE)
-        mock_proc.communicate.assert_called_once()
+        mock_stdout.assert_called_once_with(['git', 'symbolic-ref', '--quiet', object_])
 
-    @mock.patch('subprocess.call', return_value=0)
-    def test_isRef(self, mock_call):
+    @mock.patch('bin.commands.utils.execute.swallow', return_value=0)
+    def test_isRef(self, mock_swallow):
 
         # given
         object_ = 'o123'
@@ -175,27 +136,15 @@ class TestGit(unittest.TestCase):
 
         # then
         self.assertTrue(is_ref)
-        mock_call.assert_called_once_with(('git', 'show-ref', object_), stdout=mock.ANY, stderr=mock.ANY)
-
-    def test_isRef_notAStr(self):
-
-        # when
-        with self.assertRaises(AssertionError) as context:
-            git.is_ref(1)
-
-        # then
-        self.assertEqual(context.exception.message, "'object' must be a str. Given: int")
+        mock_swallow.assert_called_once_with(['git', 'show-ref', object_])
 
     @mock.patch('bin.commands.utils.git.is_ref', return_value=True)
-    @mock.patch('subprocess.Popen')
-    def test_isRefAmbiguous(self, mock_popen, mock_isref):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_isRefAmbiguous(self, mock_stdout, mock_isref):
 
         # given
         ref = 'ref'
-        mock_proc = mock.Mock()
-        mock_proc.returncode = 0
-        mock_proc.communicate.return_value = ['a\nb']
-        mock_popen.return_value = mock_proc
+        mock_stdout.return_value = 'a\nb'
 
         # when
         is_ambiguous = git.is_ref_ambiguous(ref)
@@ -203,19 +152,15 @@ class TestGit(unittest.TestCase):
         # then
         self.assertTrue(is_ambiguous)
         mock_isref.assert_called_once_with(ref)
-        mock_popen.assert_called_once_with(['git', 'show-ref', ref], stdout=PIPE, stderr=mock.ANY)
-        mock_proc.communicate.assert_called_once()
+        mock_stdout.assert_called_once_with(['git', 'show-ref', ref])
 
     @mock.patch('bin.commands.utils.git.is_ref', return_value=True)
-    @mock.patch('subprocess.Popen')
-    def test_isRefAmbiguous_notAmbiguous(self, mock_popen, mock_isref):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_isRefAmbiguous_notAmbiguous(self, mock_stdout, mock_isref):
 
         # given
         ref = 'ref'
-        mock_proc = mock.Mock()
-        mock_proc.returncode = 0
-        mock_proc.communicate.return_value = ['a\n']
-        mock_popen.return_value = mock_proc
+        mock_stdout.return_value = 'a\n'
 
         # when
         is_ambiguous = git.is_ref_ambiguous(ref)
@@ -223,8 +168,7 @@ class TestGit(unittest.TestCase):
         # then
         self.assertFalse(is_ambiguous)
         mock_isref.assert_called_once_with(ref)
-        mock_popen.assert_called_once_with(['git', 'show-ref', ref], stdout=PIPE, stderr=mock.ANY)
-        mock_proc.communicate.assert_called_once()
+        mock_stdout.assert_called_once_with(['git', 'show-ref', ref])
 
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     def test_isRefAmbiguous_notARef(self, mock_isref):
@@ -241,16 +185,13 @@ class TestGit(unittest.TestCase):
         mock_isref.assert_called_once_with(ref)
 
     @mock.patch('bin.commands.utils.git.is_ref', return_value=True)
-    @mock.patch('subprocess.Popen')
-    def test_isRefAmbiguous_limited_one_asStr(self, mock_popen, mock_isref):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_isRefAmbiguous_limited_one_asStr(self, mock_stdout, mock_isref):
 
         # given
         ref = 'ref'
-        limit = 'heads'
-        mock_proc = mock.Mock()
-        mock_proc.returncode = 0
-        mock_proc.communicate.return_value = ['a\nb']
-        mock_popen.return_value = mock_proc
+        limit = git.RefType.HEADS
+        mock_stdout.return_value = 'a\nb'
 
         # when
         is_ambiguous = git.is_ref_ambiguous(ref, limit)
@@ -258,20 +199,16 @@ class TestGit(unittest.TestCase):
         # then
         self.assertTrue(is_ambiguous)
         mock_isref.assert_called_once_with(ref)
-        mock_popen.assert_called_once_with(['git', 'show-ref', '--heads', ref], stdout=PIPE, stderr=mock.ANY)
-        mock_proc.communicate.assert_called_once()
+        mock_stdout.assert_called_once_with(['git', 'show-ref', '--heads', ref])
 
     @mock.patch('bin.commands.utils.git.is_ref', return_value=True)
-    @mock.patch('subprocess.Popen')
-    def test_isRefAmbiguous_limited_one_asList(self, mock_popen, mock_isref):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_isRefAmbiguous_limited_one_asList(self, mock_stdout, mock_isref):
 
         # given
         ref = 'ref'
-        limit = ['heads']
-        mock_proc = mock.Mock()
-        mock_proc.returncode = 0
-        mock_proc.communicate.return_value = ['a\nb']
-        mock_popen.return_value = mock_proc
+        limit = [git.RefType.HEADS]
+        mock_stdout.return_value = 'a\nb'
 
         # when
         is_ambiguous = git.is_ref_ambiguous(ref, limit)
@@ -279,20 +216,16 @@ class TestGit(unittest.TestCase):
         # then
         self.assertTrue(is_ambiguous)
         mock_isref.assert_called_once_with(ref)
-        mock_popen.assert_called_once_with(['git', 'show-ref', '--heads', ref], stdout=PIPE, stderr=mock.ANY)
-        mock_proc.communicate.assert_called_once()
+        mock_stdout.assert_called_once_with(['git', 'show-ref', '--heads', ref])
 
     @mock.patch('bin.commands.utils.git.is_ref', return_value=True)
-    @mock.patch('subprocess.Popen')
-    def test_isRefAmbiguous_limited_many(self, mock_popen, mock_isref):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_isRefAmbiguous_limited_many(self, mock_stdout, mock_isref):
 
         # given
         ref = 'ref'
-        limit = ['heads', 'tags']
-        mock_proc = mock.Mock()
-        mock_proc.returncode = 0
-        mock_proc.communicate.return_value = ['a\nb']
-        mock_popen.return_value = mock_proc
+        limit = [git.RefType.HEADS, git.RefType.TAGS]
+        mock_stdout.return_value = 'a\nb'
 
         # when
         is_ambiguous = git.is_ref_ambiguous(ref, limit)
@@ -300,37 +233,9 @@ class TestGit(unittest.TestCase):
         # then
         self.assertTrue(is_ambiguous)
         mock_isref.assert_called_once_with(ref)
-        mock_popen.assert_called_once_with(['git', 'show-ref', '--heads', '--tags', ref], stdout=PIPE, stderr=mock.ANY)
-        mock_proc.communicate.assert_called_once()
+        mock_stdout.assert_called_once_with(['git', 'show-ref', '--heads', '--tags', ref])
 
-    def test_isRefAmbiguous_refNotAStr(self):
-
-        # when
-        with self.assertRaises(AssertionError) as context:
-            git.is_ref_ambiguous(1)
-
-        # then
-            self.assertEqual(context.exception.message, "'ref' must be a str. Given: int")
-
-    def test_isRefAmbiguous_limitNotValid_single(self):
-
-        # when
-        with self.assertRaises(AssertionError) as context:
-            git.is_ref_ambiguous('abc', 'invalid')
-
-        # then
-        self.assertEqual(context.exception.message, "'limit' may only contain 'heads' and/or 'tags'")
-
-    def test_isRefAmbiguous_limitNotValid_many(self):
-
-        # when
-        with self.assertRaises(AssertionError) as context:
-            git.is_ref_ambiguous('abc', ('head', 'invalid'))
-
-        # then
-        self.assertEqual(context.exception.message, "'limit' may only contain 'heads' and/or 'tags'")
-
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     def test_symbolicFullName(self, mock_checkoutput):
 
         # given
@@ -343,10 +248,10 @@ class TestGit(unittest.TestCase):
 
         # then
         self.assertEqual(actual, expected)
-        mock_checkoutput.assert_called_once_with(('git', 'rev-parse', '--symbolic-full-name', ref))
+        mock_checkoutput.assert_called_once_with(['git', 'rev-parse', '--symbolic-full-name', ref])
 
     @mock.patch('os.listdir', return_value=['master'])
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     def test_currentBranch(self, mock_checkoutput, mock_listdir):
 
         # given
@@ -359,10 +264,10 @@ class TestGit(unittest.TestCase):
         # then
         self.assertEqual(current_branch, expected_branch)
         mock_listdir.assert_called_once_with('.git/refs/heads')
-        mock_checkoutput.assert_called_once_with(('git', 'rev-parse', '--abbrev-ref', 'HEAD'))
+        mock_checkoutput.assert_called_once_with('git rev-parse --abbrev-ref HEAD')
 
     @mock.patch('os.listdir', return_value=['master'])
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     def test_currentBranch_withTrailingWhitespace(self, mock_checkoutput, mock_listdir):
 
         # given
@@ -375,7 +280,7 @@ class TestGit(unittest.TestCase):
         # then
         self.assertEqual(current_branch, expected_branch)
         mock_listdir.assert_called_once_with('.git/refs/heads')
-        mock_checkoutput.assert_called_once_with(('git', 'rev-parse', '--abbrev-ref', 'HEAD'))
+        mock_checkoutput.assert_called_once_with('git rev-parse --abbrev-ref HEAD')
 
     @mock.patch('os.listdir', return_value=[])
     def test_currentBranch_noHeads(self, mock_listdir):
@@ -387,7 +292,7 @@ class TestGit(unittest.TestCase):
         self.assertFalse(current_branch)
         mock_listdir.assert_called_once_with('.git/refs/heads')
 
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     def test_deletedFiles(self, mock_checkoutput):
 
         # given
@@ -405,58 +310,49 @@ MM modified.txt
 
         # then
         self.assertEqual(deleted_files, ['deleted_indexed.txt', 'deleted_unindexed.txt'])
-        mock_checkoutput.assert_called_once_with(['git', 'status', '--short', '--porcelain'])
+        mock_checkoutput.assert_called_once_with('git status --short --porcelain')
 
-    @mock.patch('subprocess.Popen')
-    def test_isEmptyRepository(self, mock_popen):
+    @mock.patch('bin.commands.utils.execute.swallow')
+    def test_isEmptyRepository(self, mock_swallow):
 
         # given
-        mock_proc = mock.Mock()
-        mock_proc.returncode = 1
-        mock_popen.return_value = mock_proc
+        mock_swallow.return_value = 1
 
         # when
         is_empty = git.is_empty_repository()
 
         # then
         self.assertTrue(is_empty)
-        mock_popen.assert_called_once_with(['git', 'log', '--oneline', '-1'], stdout=mock.ANY, stderr=mock.ANY)
-        mock_proc.wait.assert_called_once()
+        mock_swallow.assert_called_once_with(['git', 'log', '--oneline', '-1'])
 
-    @mock.patch('subprocess.Popen')
-    def test_resolveSha1(self, mock_popen):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_resolveSha1(self, mock_stdout):
 
         # given
         revision = 'abc123'
         expected = revision * 2
-        mock_proc = mock.Mock()
-        mock_proc.communicate.return_value = [expected + '\n', None]
-        mock_popen.return_value = mock_proc
+        mock_stdout.return_value = expected + os.linesep
 
         # when
         actual = git.resolve_sha1(revision)
 
         # then
         self.assertEqual(actual, expected)
-        mock_popen.assert_called_once_with(['git', 'rev-parse', '--verify', '--quiet', revision], stdout=PIPE)
-        mock_proc.communicate.assert_called_once()
+        mock_stdout.assert_called_once_with(['git', 'rev-parse', '--verify', '--quiet', revision])
 
-    @mock.patch('subprocess.Popen')
-    def test_resolveSha1_invalid(self, mock_popen):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_resolveSha1_invalid(self, mock_stdout):
 
         # given
         revision = 'abc123'
-        mock_proc = mock.Mock()
-        mock_proc.communicate.return_value = ['\n', None]
-        mock_popen.return_value = mock_proc
+        mock_stdout.return_value = os.linesep
 
         # when
         actual = git.resolve_sha1(revision)
 
         # then
         self.assertFalse(actual)
-        mock_popen.assert_called_once_with(['git', 'rev-parse', '--verify', '--quiet', revision], stdout=PIPE)
-        mock_proc.communicate.assert_called_once()
+        mock_stdout.assert_called_once_with(['git', 'rev-parse', '--verify', '--quiet', revision])
 
     def test_resolveColoring_never(self):
         self.assertEqual(git.resolve_coloring('never'), 'never')
@@ -535,15 +431,13 @@ MM modified.txt
         # )
 
     @mock.patch('bin.commands.utils.git.validate_config')
-    @mock.patch('subprocess.Popen')
-    def test_getConfigValue(self, mock_popen, mock_validateconfig):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_getConfigValue(self, mock_stdout, mock_validateconfig):
 
         # given
         key = 'the key'
         value = 'the value'
-        mock_process = mock.Mock()
-        mock_popen.return_value = mock_process
-        mock_process.communicate.return_value = (value + os.linesep, None)
+        mock_stdout.return_value = value + os.linesep
 
         # when
         actual_value = git.get_config_value(key)
@@ -552,20 +446,17 @@ MM modified.txt
         self.assertEqual(actual_value, value)
 
         mock_validateconfig.assert_called_once()
-        mock_popen.assert_called_with(('git', 'config', key), stdout=PIPE, stderr=STDOUT)
-        mock_process.communicate.assert_called_once()
+        mock_stdout.assert_called_with(('git', 'config', key))
 
     @mock.patch('bin.commands.utils.git.validate_config')
-    @mock.patch('subprocess.Popen')
-    def test_getConfigValue_withDefault_noValueSoUseDefault(self, mock_popen, mock_validateconfig):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_getConfigValue_withDefault_noValueSoUseDefault(self, mock_stdout, mock_validateconfig):
 
         # given
         key = 'the key'
         value = ''
         default = 'the default'
-        mock_process = mock.Mock()
-        mock_popen.return_value = mock_process
-        mock_process.communicate.return_value = (value + os.linesep, None)
+        mock_stdout.return_value = value + os.linesep
 
         # when
         actual_value = git.get_config_value(key, default=default)
@@ -574,19 +465,16 @@ MM modified.txt
         self.assertEqual(actual_value, default)
 
         mock_validateconfig.assert_called_once()
-        mock_popen.assert_called_with(('git', 'config', key), stdout=PIPE, stderr=STDOUT)
-        mock_process.communicate.assert_called_once()
+        mock_stdout.assert_called_with(('git', 'config', key))
 
     @mock.patch('bin.commands.utils.git.validate_config')
-    @mock.patch('subprocess.Popen')
-    def test_getConfigValue_withDefault_hasValueSoIgnoreDefault(self, mock_popen, mock_validateconfig):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_getConfigValue_withDefault_hasValueSoIgnoreDefault(self, mock_stdout, mock_validateconfig):
 
         # given
         key = 'the key'
         value = 'the value'
-        mock_process = mock.Mock()
-        mock_popen.return_value = mock_process
-        mock_process.communicate.return_value = (value + os.linesep, None)
+        mock_stdout.return_value = value + os.linesep
 
         # when
         actual_value = git.get_config_value(key, default='the default')
@@ -595,19 +483,16 @@ MM modified.txt
         self.assertEqual(actual_value, value)
 
         mock_validateconfig.assert_called_once()
-        mock_popen.assert_called_with(('git', 'config', key), stdout=PIPE, stderr=STDOUT)
-        mock_process.communicate.assert_called_once()
+        mock_stdout.assert_called_with(('git', 'config', key))
 
     @mock.patch('bin.commands.utils.git.validate_config')
-    @mock.patch('subprocess.Popen')
-    def test_getConfigValue_withConfig(self, mock_popen, mock_validateconfig):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_getConfigValue_withConfig(self, mock_stdout, mock_validateconfig):
 
         # given
         key = 'the key'
         value = 'the value'
-        mock_process = mock.Mock()
-        mock_popen.return_value = mock_process
-        mock_process.communicate.return_value = (value + os.linesep, None)
+        mock_stdout.return_value = value + os.linesep
 
         # when
         actual_value = git.get_config_value(key, config='global')
@@ -616,20 +501,17 @@ MM modified.txt
         self.assertEqual(actual_value, value)
 
         mock_validateconfig.assert_called_once()
-        mock_popen.assert_called_with(('git', 'config', '--global', key), stdout=PIPE, stderr=STDOUT)
-        mock_process.communicate.assert_called_once()
+        mock_stdout.assert_called_with(('git', 'config', '--global', key))
 
     @mock.patch('bin.commands.utils.git.validate_config')
-    @mock.patch('subprocess.Popen')
-    def test_getConfigValue_withFile(self, mock_popen, mock_validateconfig):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_getConfigValue_withFile(self, mock_stdout, mock_validateconfig):
 
         # given
         key = 'the key'
         value = 'the value'
         file_path = '/path/to/config'
-        mock_process = mock.Mock()
-        mock_popen.return_value = mock_process
-        mock_process.communicate.return_value = (value + os.linesep, None)
+        mock_stdout.return_value = value + os.linesep
 
         # when
         actual_value = git.get_config_value(key, config='file', file_=file_path)
@@ -638,19 +520,16 @@ MM modified.txt
         self.assertEqual(actual_value, value)
 
         mock_validateconfig.assert_called_once()
-        mock_popen.assert_called_with(('git', 'config', '--file', file_path, key), stdout=PIPE, stderr=STDOUT)
-        mock_process.communicate.assert_called_once()
+        mock_stdout.assert_called_with(('git', 'config', '--file', file_path, key))
 
     @mock.patch('bin.commands.utils.git.validate_config')
-    @mock.patch('subprocess.Popen')
-    def test_getConfigValue_asType_hasCall(self, mock_popen, mock_validateconfig):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_getConfigValue_asType_hasCall(self, mock_stdout, mock_validateconfig):
 
         # given
         key = 'the key'
         value = 'the value'
-        mock_process = mock.Mock()
-        mock_popen.return_value = mock_process
-        mock_process.communicate.return_value = (value + os.linesep, None)
+        mock_stdout.return_value = value + os.linesep
 
         # when
         actual_value = git.get_config_value(key, as_type=str)
@@ -659,20 +538,17 @@ MM modified.txt
         self.assertEqual(actual_value, value)
 
         mock_validateconfig.assert_called_once()
-        mock_popen.assert_called_with(('git', 'config', key), stdout=PIPE, stderr=STDOUT)
-        mock_process.communicate.assert_called_once()
+        mock_stdout.assert_called_with(('git', 'config', key))
 
     @mock.patch('bin.commands.utils.git.validate_config')
-    @mock.patch('subprocess.Popen')
-    def test_getConfigValue_asType_hasBases(self, mock_popen, mock_validateconfig):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_getConfigValue_asType_hasBases(self, mock_stdout, mock_validateconfig):
 
         # given
         key = 'the key'
         value = 'the value'
         as_type = collections.namedtuple('AsType', ['v'])
-        mock_process = mock.Mock()
-        mock_popen.return_value = mock_process
-        mock_process.communicate.return_value = (value + os.linesep, None)
+        mock_stdout.return_value = value + os.linesep
 
         # when
         actual_value = git.get_config_value(key, as_type=as_type)
@@ -682,21 +558,18 @@ MM modified.txt
         self.assertEqual(actual_value.v, value)
 
         mock_validateconfig.assert_called_once()
-        mock_popen.assert_called_with(('git', 'config', key), stdout=PIPE, stderr=STDOUT)
-        mock_process.communicate.assert_called_once()
+        mock_stdout.assert_called_with(('git', 'config', key))
 
     @mock.patch('bin.commands.utils.git.validate_config')
-    @mock.patch('subprocess.Popen')
+    @mock.patch('bin.commands.utils.execute.stdout')
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
-    def test_getConfigValue_asType_throwsException(self, mock_error, mock_popen, mock_validateconfig):
+    def test_getConfigValue_asType_throwsException(self, mock_error, mock_stdout, mock_validateconfig):
 
         # given
         key = 'the key'
         value = 'the value'
         as_type = TestGit
-        mock_process = mock.Mock()
-        mock_popen.return_value = mock_process
-        mock_process.communicate.return_value = (value + os.linesep, None)
+        mock_stdout.return_value = value + os.linesep
 
         # when
         try:
@@ -707,8 +580,7 @@ MM modified.txt
 
         # then
         mock_validateconfig.assert_called_once()
-        mock_popen.assert_called_with(('git', 'config', key), stdout=PIPE, stderr=STDOUT)
-        mock_process.communicate.assert_called_once()
+        mock_stdout.assert_called_with(('git', 'config', key))
         mock_error.assert_called_once_with(
             'Cannot parse value {0!r} for key {1!r} using format {2!r}'.format(value, key, as_type.__name__)
         )

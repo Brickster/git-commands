@@ -113,7 +113,7 @@ class TestSettingsList(unittest.TestCase):
         settings._pretty_format_configs = self._pretty_format_configs
 
     @mock.patch('bin.commands.settings._validate_config')
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     def test_list(self, mock_checkoutput, mock_validateconfig):
 
         # given
@@ -129,7 +129,7 @@ class TestSettingsList(unittest.TestCase):
         mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 
     @mock.patch('bin.commands.settings._validate_config')
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     def test_list_withOverrides(self, mock_checkoutput, mock_validateconfig):
 
         # given
@@ -147,7 +147,7 @@ class TestSettingsList(unittest.TestCase):
 
     @mock.patch('bin.commands.settings._validate_config')
     @mock.patch('os.path.exists', return_value=True)
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     def test_list_withFile(self, mock_checkoutput, mock_exists, mock_validateconfig):
 
         # given
@@ -215,7 +215,7 @@ class TestSettingsList(unittest.TestCase):
         mock_stdout.assert_called_once_with(['git', 'config', '--list', '--null', '--system'])
 
     @mock.patch('bin.commands.settings._validate_config')
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     def test_list_withSection(self, mock_checkoutput, mock_validateconfig):
 
         # given
@@ -231,7 +231,7 @@ class TestSettingsList(unittest.TestCase):
         mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 
     @mock.patch('bin.commands.settings._validate_config')
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     def test_list_count(self, mock_checkoutput, mock_validateconfig):
 
         # given
@@ -247,7 +247,7 @@ class TestSettingsList(unittest.TestCase):
         mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 
     @mock.patch('bin.commands.settings._validate_config')
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     def test_list_keysOnly(self, mock_checkoutput, mock_validateconfig):
 
         # given
@@ -263,7 +263,7 @@ class TestSettingsList(unittest.TestCase):
         mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 
     @mock.patch('bin.commands.settings._validate_config')
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     def test_list_sectionsOnly(self, mock_checkoutput, mock_validateconfig):
 
         # given
@@ -280,7 +280,7 @@ class TestSettingsList(unittest.TestCase):
 
     @mock.patch('bin.commands.settings._validate_config')
     @mock.patch('bin.commands.settings._pretty_format_configs')
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     def test_list_prettyFormat(self, mock_checkoutput, mock_prettyformatconfig, mock_validateconfig):
 
         # given

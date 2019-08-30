@@ -34,15 +34,6 @@ class TestParseString(unittest.TestCase):
         self.assertFalse(parse_string.as_bool('FALSE'))
         self.assertFalse(parse_string.as_bool('0'))
 
-    def test_asBool_error_inputNotAStr(self):
-
-        # when
-        with self.assertRaises(AssertionError) as context:
-            parse_string.as_bool(1)
-
-        # then
-        self.assertEqual('{0!r} is not a string'.format(1), context.exception.message)
-
     def test_asBool_error_invalidBoolRepresentation(self):
 
         # when
@@ -70,15 +61,6 @@ class TestParseString(unittest.TestCase):
 
         # then
         self.assertEqual('Z', context.exception.message)
-
-    def test_asEnum_notAnEnum(self):
-
-        # when
-        with self.assertRaises(AssertionError) as context:
-            parse_string.as_enum(1)
-
-        # then
-        self.assertEqual("'enum_type' must be an {!r}. Given {!r}".format(enum.Enum, int), context.exception.message)
 
     def test_asDelimitedList(self):
 

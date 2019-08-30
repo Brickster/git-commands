@@ -1,9 +1,9 @@
 import mock
-import subprocess
 import unittest
 
 import testutils
 from bin.commands import changes, upstream
+from bin.commands.utils import git
 
 
 class TestChangesAssociate(unittest.TestCase):
@@ -15,7 +15,7 @@ class TestChangesAssociate(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_ref_ambiguous', return_value=False)
     @mock.patch('bin.commands.utils.git.symbolic_full_name')
     @mock.patch('bin.commands.utils.git.current_branch')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_associate_isRef_notAmbiguous(
             self,
@@ -46,7 +46,7 @@ class TestChangesAssociate(unittest.TestCase):
         mock_isemptyrepository.assert_called_once_with()
         mock_isdetached.assert_called_once()
         mock_isref.assert_called_once_with(committish)
-        mock_isrefambiguous.assert_called_once_with(committish, limit=('heads', 'tags'))
+        mock_isrefambiguous.assert_called_once_with(committish, limit=(git.RefType.HEADS, git.RefType.TAGS))
         mock_symbolicfullname.assert_called_once_with(committish)
         mock_currentbranch.assert_called_once()
         mock_call.assert_called_once_with(
@@ -59,7 +59,7 @@ class TestChangesAssociate(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_detached', return_value=False)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref_ambiguous', return_value=True)
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     def test_associate_isRef_isAmbiguous(
             self,
@@ -90,8 +90,8 @@ class TestChangesAssociate(unittest.TestCase):
         mock_isemptyrepository.assert_called_once_with()
         mock_isdetached.assert_called_once_with()
         mock_isref.assert_called_once_with(committish)
-        mock_isrefambiguous.assert_called_once_with(committish, limit=('heads', 'tags'))
-        mock_checkoutput.assert_called_once_with(('git', 'show-ref', '--tags', '--heads', committish))
+        mock_isrefambiguous.assert_called_once_with(committish, limit=(git.RefType.HEADS, git.RefType.TAGS))
+        mock_checkoutput.assert_called_once_with(['git', 'show-ref', '--tags', '--heads', committish])
         mock_error.assert_called_once_with(
             '{0!r} is an ambiguous ref. Use one of:\n{1}'.format(committish, '\n'.join(ref_names))
         )
@@ -102,7 +102,7 @@ class TestChangesAssociate(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.resolve_sha1')
     @mock.patch('bin.commands.utils.git.current_branch')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_associate_notARef(
             self,
@@ -291,30 +291,21 @@ class TestChangesAssociateUpstream(unittest.TestCase):
 
 class TestChangesGetAssociatedBranches(unittest.TestCase):
 
-    @mock.patch('subprocess.Popen')
-    def test_getAssociatedBranches(self, mock_popen):
+    @mock.patch('bin.commands.utils.execute.stdout')
+    def test_getAssociatedBranches(self, mock_stdout):
 
         # given
         association_keys = """git-changes.associations.develop.with
 git-changes.associations.master.with
 """
-
-        mock_proc = mock.Mock()
-        mock_proc.communicate.return_value = [association_keys, None]
-        mock_proc.returncode = 0
-        mock_popen.return_value = mock_proc
+        mock_stdout.return_value = association_keys
 
         # when
         actual_associations = changes._get_associated_branches()
 
         # then
         self.assertEqual(actual_associations, ['develop', 'master'])
-        mock_popen.assert_called_once_with(
-            ('git', 'config', '--local', '--name-only', '--get-regexp', 'git-changes.associations'),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
-        mock_proc.communicate.assert_called_once()
+        mock_stdout.assert_called_once_with('git config --local --name-only --get-regexp git-changes.associations')
 
 
 class TestChangesPruneAssociations(unittest.TestCase):
@@ -328,7 +319,7 @@ class TestChangesPruneAssociations(unittest.TestCase):
         changes.unassociate = self._unassociate
         changes._get_associated_branches = self._get_associated_branches
 
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     @mock.patch('bin.commands.changes._get_associated_branches')
     @mock.patch('bin.commands.changes.unassociate')
     @mock.patch('bin.commands.utils.messages.info')
@@ -342,15 +333,15 @@ class TestChangesPruneAssociations(unittest.TestCase):
 
         # when
         quiet = True
-        changes._prune_associations('prune', quiet=quiet)
+        changes._prune_associations(changes.CleanupOption.PRUNE, quiet=quiet)
 
         # then
-        mock_checkoutput.assert_called_once_with(('git', 'show-ref', '--heads'))
+        mock_checkoutput.assert_called_once_with('git show-ref --heads')
         mock_getassociatedbranches.assert_called_once()
         mock_unassociate.assert_called_once_with('develop')
         mock_info.assert_called_once_with("Removed association 'develop'", quiet)
 
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     @mock.patch('bin.commands.changes._get_associated_branches')
     @mock.patch('bin.commands.changes.unassociate')
     @mock.patch('bin.commands.utils.messages.info')
@@ -364,15 +355,15 @@ class TestChangesPruneAssociations(unittest.TestCase):
 
         # when
         quiet = True
-        changes._prune_associations('prune', quiet=quiet, dry_run=True)
+        changes._prune_associations(changes.CleanupOption.PRUNE, quiet=quiet, dry_run=True)
 
         # then
-        mock_checkoutput.assert_called_once_with(('git', 'show-ref', '--heads'))
+        mock_checkoutput.assert_called_once_with('git show-ref --heads')
         mock_getassociatedbranches.assert_called_once()
         mock_unassociate.assert_not_called()
         mock_info.assert_called_once_with("Would remove association 'develop'", quiet)
 
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     @mock.patch('bin.commands.changes._get_associated_branches')
     @mock.patch('bin.commands.changes.unassociate')
     @mock.patch('bin.commands.utils.messages.info')
@@ -388,10 +379,10 @@ class TestChangesPruneAssociations(unittest.TestCase):
 
         # when
         quiet = True
-        changes._prune_associations('all', quiet=quiet)
+        changes._prune_associations(changes.CleanupOption.ALL, quiet=quiet)
 
         # then
-        mock_checkoutput.assert_called_once_with(('git', 'show-ref', '--heads'))
+        mock_checkoutput.assert_called_once_with('git show-ref --heads')
         mock_getassociatedbranches.assert_called_once()
         mock_unassociate.assert_has_calls([
             mock.call('develop'),
@@ -416,7 +407,7 @@ class TestChangesUnassociate(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.utils.git.current_branch')
     @mock.patch('bin.commands.changes.get_association')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_unassociate_branch(self, mock_call, mock_getassociation, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
 
         # given
@@ -438,7 +429,7 @@ class TestChangesUnassociate(unittest.TestCase):
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.utils.git.current_branch')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     @mock.patch('bin.commands.changes.get_association')
     def test_unassociate_branch_dryRun(self, mock_getassociation, mock_info, mock_call, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
@@ -462,7 +453,7 @@ class TestChangesUnassociate(unittest.TestCase):
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.utils.git.current_branch')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     @mock.patch('bin.commands.changes.get_association')
     def test_unassociate_branch_dryRun_noExistingAssociation(
@@ -495,7 +486,7 @@ class TestChangesUnassociate(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.utils.git.current_branch')
     @mock.patch('bin.commands.changes.get_association')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_unassociate_nobranch(self, mock_call, mock_getassociation, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
 
         # setup
@@ -556,7 +547,7 @@ class TestChangesUnassociate(unittest.TestCase):
 
         # when
         quiet = True
-        cleanup = 'all'
+        cleanup = changes.CleanupOption.ALL
         dry_run = True
         changes.unassociate(cleanup=cleanup, quiet=quiet, dry_run=dry_run)
 
@@ -565,21 +556,11 @@ class TestChangesUnassociate(unittest.TestCase):
         mock_isemptyrepository.assert_called_once_with()
         mock_pruneassociations.assert_called_once_with(cleanup, quiet, dry_run)
 
-    def test_unassociate_cleanup_invalidtype(self):
-
-        # when
-        try:
-            changes.unassociate(cleanup='notvalid')
-            self.fail('expected AssertionError but found none')  # pragma: no cover
-        except AssertionError as error:
-            # then
-            self.assertEqual(error.message, 'cleanup must be one of ' + str(['all', 'prune']))
-
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.utils.git.current_branch')
     @mock.patch('bin.commands.changes.get_association')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_unassociate_noAssociation(self, mock_call, mock_getassociation, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
 
         # given
@@ -776,26 +757,6 @@ class TestChangesGetAssociation(unittest.TestCase):
 
 class TestChangesChanges(unittest.TestCase):
 
-    def test_changes_details_invalidoption(self):
-
-        # when
-        try:
-            changes.changes('HEAD', details='invalid')
-            self.fail('expected AssertionError but found none')  # pragma: no cover
-        except AssertionError as error:
-            # then
-            self.assertEqual(error.message, 'details must be one of ' + str(('log', 'inverse_log', 'diff', 'stat', 'count')))
-
-    def test_changes_color_invalidcolor(self):
-
-        # when
-        try:
-            changes.changes('HEAD', color_when='invalid')
-            self.fail('expected AssertionError but found none')  # pragma: no cover
-        except AssertionError as error:
-            # then
-            self.assertEqual(error.message, 'color_when must be one of ' + str(('always', 'auto', 'never')))
-
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     @mock.patch('os.getcwd', return_value='/working/dir')
@@ -836,8 +797,8 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.is_ref_ambiguous')
     @mock.patch('bin.commands.utils.git.get_config_value')
-    @mock.patch('subprocess.check_output')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_changes_isnotref(
             self,
             mock_call,
@@ -851,7 +812,7 @@ class TestChangesChanges(unittest.TestCase):
 
         # when
         committish = 'commit-ish'
-        color_when = 'never'
+        color_when = changes.ColorOption.NEVER
         changes.changes(committish, color_when=color_when)
 
         # then
@@ -861,7 +822,7 @@ class TestChangesChanges(unittest.TestCase):
         mock_isrefambiguous.assert_not_called()
         mock_getconfigvalue.assert_not_called()
         mock_call.assert_called_once_with(
-            ['git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish), '--color=' + color_when]
+            ['git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish), '--color=' + color_when.name.lower()]
         )
         mock_checkoutput.assert_not_called()
 
@@ -870,8 +831,8 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.is_ref_ambiguous')
     @mock.patch('bin.commands.utils.git.get_config_value')
-    @mock.patch('subprocess.check_output')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_changes_isnotref_withFiles(
             self,
             mock_call,
@@ -885,7 +846,7 @@ class TestChangesChanges(unittest.TestCase):
 
         # when
         committish = 'commit-ish'
-        color_when = 'never'
+        color_when = changes.ColorOption.NEVER
         files = ['*md', '*txt']
         changes.changes(committish, color_when=color_when, files=files)
 
@@ -896,7 +857,7 @@ class TestChangesChanges(unittest.TestCase):
         mock_isrefambiguous.assert_not_called()
         mock_getconfigvalue.assert_not_called()
         mock_call.assert_called_once_with(
-            ['git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish), '--color=' + color_when, '--', ' '.join(files)]
+            ['git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish), '--color=' + color_when.name.lower(), '--', ' '.join(files)]
         )
         mock_checkoutput.assert_not_called()
 
@@ -905,8 +866,8 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_ref', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref_ambiguous', return_value=False)
     @mock.patch('bin.commands.utils.git.get_config_value')
-    @mock.patch('subprocess.check_output')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_changes_isref(
             self,
             mock_call,
@@ -920,17 +881,17 @@ class TestChangesChanges(unittest.TestCase):
 
         # when
         committish = 'commit-ish'
-        color_when = 'never'
+        color_when = changes.ColorOption.NEVER
         changes.changes(committish, color_when=color_when)
 
         # then
         mock_isgitrepository.assert_called_once_with()
         mock_iscommit.assert_called_once_with(committish)
         mock_isref.assert_called_once_with(committish)
-        mock_isrefambiguous.assert_called_once_with(committish, limit=('heads', 'tags'))
+        mock_isrefambiguous.assert_called_once_with(committish, limit=(git.RefType.HEADS, git.RefType.TAGS))
         mock_getconfigvalue.assert_not_called()
         mock_call.assert_called_once_with(
-            ['git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish), '--color=' + color_when]
+            ['git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish), '--color=' + color_when.name.lower()]
         )
         mock_checkoutput.assert_not_called()
 
@@ -938,7 +899,7 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref_ambiguous', return_value=True)
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     def test_changes_isrefandisambiguous(
             self, mock_error, mock_checkoutput, mock_isrefambiguous, mock_isref, mock_iscommit, mock_isgitrepository
@@ -960,8 +921,8 @@ class TestChangesChanges(unittest.TestCase):
         mock_isgitrepository.assert_called_once_with()
         mock_iscommit.assert_called_once_with(committish)
         mock_isref.assert_called_once_with(committish)
-        mock_isrefambiguous.assert_called_once_with(committish, limit=('heads', 'tags'))
-        mock_checkoutput.assert_called_once_with(('git', 'show-ref', '--tags', '--heads', committish))
+        mock_isrefambiguous.assert_called_once_with(committish, limit=(git.RefType.HEADS, git.RefType.TAGS))
+        mock_checkoutput.assert_called_once_with(['git', 'show-ref', '--tags', '--heads', committish])
         mock_error.assert_called_once_with(
             '{0!r} is an ambiguous ref. Use one of:\n{1}'.format(committish, '\n'.join(ref_names))
         )
@@ -971,34 +932,34 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.get_config_value')
     @mock.patch('bin.commands.utils.git.resolve_coloring', return_value='always')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_changes_color(
             self, mock_call, mock_resolvecoloring, mock_getconfigvalue, mock_isref, mock_iscommit, mock_isgitrepository
     ):
 
         # when
-        color_when = 'never'
+        color_when = changes.ColorOption.NEVER
         changes.changes('HEAD', color_when=color_when)
 
         # then
         mock_getconfigvalue.assert_not_called()
-        mock_resolvecoloring.assert_called_once_with(color_when)
+        mock_resolvecoloring.assert_called_once_with(color_when.name)
         mock_call.assert_called_once_with(['git', 'log', '--no-decorate', '--oneline', 'HEAD..HEAD', '--color=always'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.resolve_coloring')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_changes_details_diff(self, mock_call, mock_resolvecoloring, mock_isref, mock_iscommit, mock_isgitrepository):
 
         # given
         committish = 'commit-ish'
-        color_when = 'never'
+        color_when = changes.ColorOption.NEVER
         mock_resolvecoloring.return_value = color_when
 
         # when
-        changes.changes(committish, details='diff', color_when=color_when)
+        changes.changes(committish, details=changes.DetailsOption.DIFF, color_when=color_when)
 
         # then
         mock_isgitrepository.assert_called_once_with()
@@ -1010,18 +971,18 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.resolve_coloring')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_changes_details_diff_withFiles(self, mock_call, mock_resolvecoloring, mock_isref, mock_iscommit,
                                   mock_isgitrepository):
 
         # given
         committish = 'commit-ish'
-        color_when = 'never'
+        color_when = changes.ColorOption.NEVER
         files = ['*txt', '*md']
         mock_resolvecoloring.return_value = color_when
 
         # when
-        changes.changes(committish, details='diff', color_when=color_when, files=files)
+        changes.changes(committish, details=changes.DetailsOption.DIFF, color_when=color_when, files=files)
 
         # then
         mock_isgitrepository.assert_called_once_with()
@@ -1033,16 +994,16 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.resolve_coloring')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_changes_details_stat(self, mock_call, mock_resolvecoloring, mock_isref, mock_iscommit, mock_isgitrepository):
 
         # given
         committish = 'commit-ish'
-        color_when = 'never'
+        color_when = changes.ColorOption.NEVER
         mock_resolvecoloring.return_value = color_when
 
         # when
-        changes.changes(committish, details='stat', color_when=color_when)
+        changes.changes(committish, details=changes.DetailsOption.STAT, color_when=color_when)
 
         # then
         mock_isgitrepository.assert_called_once_with()
@@ -1056,17 +1017,17 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.resolve_coloring')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_changes_details_stat_withFiles(self, mock_call, mock_resolvecoloring, mock_isref, mock_iscommit, mock_isgitrepository):
 
         # given
         committish = 'commit-ish'
-        color_when = 'never'
+        color_when = changes.ColorOption.NEVER
         files = ['*txt', '*md']
         mock_resolvecoloring.return_value = color_when
 
         # when
-        changes.changes(committish, details='stat', color_when=color_when, files=files)
+        changes.changes(committish, details=changes.DetailsOption.STAT, color_when=color_when, files=files)
 
         # then
         mock_isgitrepository.assert_called_once_with()
@@ -1080,19 +1041,19 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.resolve_coloring')
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     @mock.patch('bin.commands.utils.messages.info')
     def test_changes_details_count(self, mock_info, mock_checkoutput, mock_resolvecoloring, mock_isref, mock_iscommit, mock_isgitrepository):
 
         # given
         committish = 'commit-ish'
-        color_when = 'never'
+        color_when = changes.ColorOption.NEVER
         log = ['one', 'two', 'three']
         mock_checkoutput.return_value = '\n'.join(log) + '\n'
         mock_resolvecoloring.return_value = color_when
 
         # when
-        changes.changes(committish, details='count', color_when=color_when)
+        changes.changes(committish, details=changes.DetailsOption.COUNT, color_when=color_when)
 
         # then
         mock_isgitrepository.assert_called_once_with()
@@ -1105,20 +1066,20 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.resolve_coloring')
-    @mock.patch('subprocess.check_output')
+    @mock.patch('bin.commands.utils.execute.check_output')
     @mock.patch('bin.commands.utils.messages.info')
     def test_changes_details_count_withFiles(self, mock_info, mock_checkoutput, mock_resolvecoloring, mock_isref, mock_iscommit, mock_isgitrepository):
 
         # given
         committish = 'commit-ish'
-        color_when = 'never'
+        color_when = changes.ColorOption.NEVER
         files = ['*txt', '*md']
         log = ['one', 'two', 'three']
         mock_checkoutput.return_value = '\n'.join(log) + '\n'
         mock_resolvecoloring.return_value = color_when
 
         # when
-        changes.changes(committish, details='count', color_when=color_when, files=files)
+        changes.changes(committish, details=changes.DetailsOption.COUNT, color_when=color_when, files=files)
 
         # then
         mock_isgitrepository.assert_called_once_with()
@@ -1132,52 +1093,52 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.resolve_coloring')
-    @mock.patch('subprocess.check_output')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_changes_details_inverse_log(self, mock_call, mock_checkoutput, mock_resolvecoloring, mock_isref, mock_iscommit, mock_isgitrepository):
 
         # given
         committish = 'commit-ish'
-        color_when = 'never'
+        color_when = changes.ColorOption.NEVER
         merge_base = 'merge_base_commit'
         mock_checkoutput.return_value = merge_base
-        mock_resolvecoloring.return_value = color_when
+        mock_resolvecoloring.return_value = color_when.name.lower()
 
         # when
-        changes.changes(committish, details='inverse_log', color_when=color_when)
+        changes.changes(committish, details=changes.DetailsOption.INVERSE_LOG, color_when=color_when)
 
         # then
         mock_isgitrepository.assert_called_once_with()
         mock_iscommit.assert_called_once_with(committish)
         mock_isref.assert_called_once_with(committish)
         mock_checkoutput.assert_called_once_with(['git', 'merge-base', committish, 'HEAD'])
-        mock_call.assert_called_once_with(['git', 'log', '--no-decorate', '--oneline', '-10', merge_base, '--color=' + color_when])
+        mock_call.assert_called_once_with(['git', 'log', '--no-decorate', '--oneline', '-10', merge_base, '--color=' + color_when.name.lower()])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.resolve_coloring')
-    @mock.patch('subprocess.check_output')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_changes_details_inverse_log_withFiles(self, mock_call, mock_checkoutput, mock_resolvecoloring, mock_isref, mock_iscommit, mock_isgitrepository):
 
         # given
         committish = 'commit-ish'
-        color_when = 'never'
+        color_when = changes.ColorOption.NEVER
         files = ['*txt', '*md']
         merge_base = 'merge_base_commit'
         mock_checkoutput.return_value = merge_base
-        mock_resolvecoloring.return_value = color_when
+        mock_resolvecoloring.return_value = color_when.name.lower()
 
         # when
-        changes.changes(committish, details='inverse_log', color_when=color_when, files=files)
+        changes.changes(committish, details=changes.DetailsOption.INVERSE_LOG, color_when=color_when, files=files)
 
         # then
         mock_isgitrepository.assert_called_once_with()
         mock_iscommit.assert_called_once_with(committish)
         mock_isref.assert_called_once_with(committish)
         mock_checkoutput.assert_called_once_with(['git', 'merge-base', committish, 'HEAD'])
-        mock_call.assert_called_once_with(['git', 'log', '--no-decorate', '--oneline', '-10', merge_base, '--color=' + color_when, '--', ' '.join(files)])
+        mock_call.assert_called_once_with(['git', 'log', '--no-decorate', '--oneline', '-10', merge_base, '--color=' + color_when.name.lower(), '--', ' '.join(files)])
 
     # same as a previous test but explicitly sets to log mode
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
@@ -1185,8 +1146,8 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.is_ref_ambiguous')
     @mock.patch('bin.commands.utils.git.get_config_value')
-    @mock.patch('subprocess.check_output')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output')
+    @mock.patch('bin.commands.utils.execute.call')
     def test_changes_details_log(
             self,
             mock_call,
@@ -1200,8 +1161,8 @@ class TestChangesChanges(unittest.TestCase):
 
         # when
         committish = 'commit-ish'
-        color_when = 'never'
-        changes.changes(committish, details='log', color_when=color_when)
+        color_when = changes.ColorOption.NEVER
+        changes.changes(committish, details=changes.DetailsOption.LOG, color_when=color_when)
 
         # then
         mock_isgitrepository.assert_called_once_with()
@@ -1210,7 +1171,7 @@ class TestChangesChanges(unittest.TestCase):
         mock_isrefambiguous.assert_not_called()
         mock_getconfigvalue.assert_not_called()
         mock_call.assert_called_once_with(
-            ['git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish), '--color=' + color_when]
+            ['git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish), '--color=' + color_when.name.lower()]
         )
         mock_checkoutput.assert_not_called()
 

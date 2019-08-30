@@ -82,42 +82,6 @@ class TestMessages(unittest.TestCase):
         # then
         mock_print.assert_called_once_with(prefix + ' ' + message, file=file_)
 
-    def test__print_messageNotAStr(self):
-
-        # when
-        with self.assertRaises(AssertionError) as context:
-            messages._print(123)
-
-        # then
-        self.assertEqual(context.exception.message, 'message must be a str')
-
-    def test__print_prefixNotAStr(self):
-
-        # when
-        with self.assertRaises(AssertionError) as context:
-            messages._print('message', prefix=123)
-
-        # then
-        self.assertEqual(context.exception.message, 'prefix must be a str')
-
-    def test__print_quietNotABool(self):
-
-        # when
-        with self.assertRaises(AssertionError) as context:
-            messages._print('message', quiet='false')
-
-        # then
-        self.assertEqual(context.exception.message, 'quiet must be a bool')
-
-    def test__print_exitNotABool(self):
-
-        # when
-        with self.assertRaises(AssertionError) as context:
-            messages._print('message', exit_='false')
-
-        # then
-        self.assertEqual(context.exception.message, 'exit must be a bool')
-
     @mock.patch('bin.commands.utils.messages._print')
     def test_error(self, mock_print):
 

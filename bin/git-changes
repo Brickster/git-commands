@@ -79,7 +79,7 @@ def main():
         '--all',
         help='unassociate all branches',
         action='store_const',
-        const='all',
+        const=changes.CleanupOption.ALL,
         dest='cleanup'
     )
     cleanup_group.add_argument(
@@ -87,7 +87,7 @@ def main():
         '--prune',
         help='remove associations for branches that no longer exist',
         action='store_const',
-        const='prune',
+        const=changes.CleanupOption.PRUNE,
         dest='cleanup'
     )
 
@@ -144,7 +144,7 @@ def main():
         '-l',
         help='show commits from an association or committish to HEAD',
         action='store_const',
-        const='log',
+        const=changes.DetailsOption.LOG,
         dest='details',
         default=git.get_config_value('git-changes.default-view', default='log')
     )
@@ -153,7 +153,7 @@ def main():
         '-i',
         help='show commits up to an association or committish',
         action='store_const',
-        const='inverse_log',
+        const=changes.DetailsOption.INVERSE_LOG,
         dest='details'
     )
     details_group.add_argument(
@@ -161,7 +161,7 @@ def main():
         '--count',
         help='show as a count of changes',
         action='store_const',
-        const='count',
+        const=changes.DetailsOption.COUNT,
         dest='details'
     )
     details_group.add_argument(
@@ -169,7 +169,7 @@ def main():
         '--stat',
         help='show as a diffstat',
         action='store_const',
-        const='stat',
+        const=changes.DetailsOption.STAT,
         dest='details'
     )
     details_group.add_argument(
@@ -177,7 +177,7 @@ def main():
         '--diff',
         help='show as a full diff',
         action='store_const',
-        const='diff',
+        const=changes.DetailsOption.DIFF,
         dest='details'
     )
 

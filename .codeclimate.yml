@@ -4,6 +4,8 @@ checks:
     config:
       threshold: 5
 plugins:
+  bandit:
+    enabled: true
   fixme:
     enabled: true
   git-legal:

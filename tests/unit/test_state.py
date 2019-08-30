@@ -176,8 +176,8 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_status(
             self,
@@ -240,8 +240,8 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_alloff(
             self,
@@ -311,8 +311,8 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_showcolor_never(
             self,
@@ -394,8 +394,8 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_showcolor_always(
             self,
@@ -474,8 +474,8 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_', return_return='')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_emptyRepository(
             self,
@@ -540,8 +540,8 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_', return_return='')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_emptyRepository_noShowStatus(
             self,
@@ -596,13 +596,13 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
-    @mock.patch('subprocess.Popen')
+    @mock.patch('bin.commands.utils.execute.execute')
     def test_state_withextensions(
             self,
-            mock_popen,
+            mock_execute,
             mock_info,
             mock_call,
             mock_checkoutput,
@@ -627,10 +627,7 @@ class TestStateState(unittest.TestCase):
         changes_output = 'the changes'
         mock_getconfigvalue.side_effect = [True, True, changes_command, changes_name, [], True, []]
         mock_list.return_value = 'git-state.extensions.changes'
-        mock_proc = mock.Mock()
-        mock_proc.communicate.return_value = [changes_output, None]
-        mock_proc.returncode = 0
-        mock_popen.return_value = mock_proc
+        mock_execute.return_value = [changes_output, None, 0]
         mock_printsection.return_value = 'final changes output\n'
 
         # when
@@ -659,23 +656,20 @@ class TestStateState(unittest.TestCase):
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
-        mock_popen.assert_called_once_with(
-            ['changes', 'command', '--color=never'], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-        )
-        mock_proc.communicate.assert_called_once_with()
+        mock_execute.assert_called_once_with(['changes', 'command', '--color=never'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
-    @mock.patch('subprocess.Popen')
+    @mock.patch('bin.commands.utils.execute.execute')
     def test_state_withextensions_doesNotSupportColor(
             self,
-            mock_popen,
+            mock_execute,
             mock_info,
             mock_call,
             mock_checkoutput,
@@ -700,10 +694,7 @@ class TestStateState(unittest.TestCase):
         changes_output = 'the changes'
         mock_getconfigvalue.side_effect = [True, True, changes_command, changes_name, [], False, []]
         mock_list.return_value = 'git-state.extensions.changes'
-        mock_proc = mock.Mock()
-        mock_proc.communicate.return_value = [changes_output, None]
-        mock_proc.returncode = 0
-        mock_popen.return_value = mock_proc
+        mock_execute.return_value = [changes_output, None, 0]
         mock_printsection.return_value = 'final changes output\n'
 
         # when
@@ -732,23 +723,20 @@ class TestStateState(unittest.TestCase):
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
-        mock_popen.assert_called_once_with(
-            ['changes', 'command'], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-        )
-        mock_proc.communicate.assert_called_once_with()
+        mock_execute.assert_called_once_with(['changes', 'command'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
-    @mock.patch('subprocess.Popen')
+    @mock.patch('bin.commands.utils.execute.execute')
     def test_state_withextensions_withoptions_fromcommandline(
             self,
-            mock_popen,
+            mock_execute,
             mock_info,
             mock_call,
             mock_checkoutput,
@@ -773,10 +761,7 @@ class TestStateState(unittest.TestCase):
         changes_output = 'the changes'
         mock_getconfigvalue.side_effect = [True, True, changes_command, changes_name, [], True, []]
         mock_list.return_value = 'git-state.extensions.changes'
-        mock_proc = mock.Mock()
-        mock_proc.communicate.return_value = [changes_output, None]
-        mock_proc.returncode = 0
-        mock_popen.return_value = mock_proc
+        mock_execute.return_value = [changes_output, None, 0]
         mock_printsection.return_value = 'final changes output\n'
 
         # when
@@ -805,23 +790,20 @@ class TestStateState(unittest.TestCase):
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
-        mock_popen.assert_called_once_with(
-            ['changes', 'command', '--option1', '-o', '1 2', '--color=never'], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-        )
-        mock_proc.communicate.assert_called_once_with()
+        mock_execute.assert_called_once_with(['changes', 'command', '--option1', '-o', '1 2', '--color=never'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
-    @mock.patch('subprocess.Popen')
+    @mock.patch('bin.commands.utils.execute.execute')
     def test_state_withextensions_withoptions_fromconfig(
             self,
-            mock_popen,
+            mock_execute,
             mock_info,
             mock_call,
             mock_checkoutput,
@@ -846,10 +828,7 @@ class TestStateState(unittest.TestCase):
         changes_output = 'the changes'
         mock_getconfigvalue.side_effect = [True, True, changes_command, changes_name, ['--option1 -o "1 2"'], True, []]
         mock_list.return_value = 'git-state.extensions.changes'
-        mock_proc = mock.Mock()
-        mock_proc.communicate.return_value = [changes_output, None]
-        mock_proc.returncode = 0
-        mock_popen.return_value = mock_proc
+        mock_execute.return_value = [changes_output, None, 0]
         mock_printsection.return_value = 'final changes output\n'
 
         # when
@@ -878,24 +857,20 @@ class TestStateState(unittest.TestCase):
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
-        mock_popen.assert_called_once_with(
-            ['changes', 'command', '--option1', '-o', '1 2', '--color=never'], stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
-        mock_proc.communicate.assert_called_once_with()
+        mock_execute.assert_called_once_with(['changes', 'command', '--option1', '-o', '1 2', '--color=never'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
-    @mock.patch('subprocess.Popen')
+    @mock.patch('bin.commands.utils.execute.execute')
     def test_state_withextensions_withoptions_fromcommandlineandconfig(
             self,
-            mock_popen,
+            mock_execute,
             mock_info,
             mock_call,
             mock_checkoutput,
@@ -920,10 +895,7 @@ class TestStateState(unittest.TestCase):
         changes_output = 'the changes'
         mock_getconfigvalue.side_effect = [True, True, changes_command, changes_name, ['--option2 true'], True, []]
         mock_list.return_value = 'git-state.extensions.changes'
-        mock_proc = mock.Mock()
-        mock_proc.communicate.return_value = [changes_output, None]
-        mock_proc.returncode = 0
-        mock_popen.return_value = mock_proc
+        mock_execute.return_value = [changes_output, None, 0]
         mock_printsection.return_value = 'final changes output\n'
 
         # when
@@ -952,19 +924,15 @@ class TestStateState(unittest.TestCase):
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
-        mock_popen.assert_called_once_with(
-            ['changes', 'command', '--option2', 'true', '--option1', '-o', '1 2', '--color=never'], stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
-        mock_proc.communicate.assert_called_once_with()
+        mock_execute.assert_called_once_with(['changes', 'command', '--option2', 'true', '--option1', '-o', '1 2', '--color=never'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     @mock.patch('subprocess.Popen')
     def test_state_withextensions_butignoresome(
@@ -1014,8 +982,8 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     @mock.patch('subprocess.Popen')
     def test_state_withextensions_butignoresome_viaconfig(
@@ -1066,13 +1034,13 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
-    @mock.patch('subprocess.Popen')
+    @mock.patch('bin.commands.utils.execute.execute')
     def test_state_withextensions_ignoredViaConfig_showViaCommandLine(
             self,
-            mock_popen,
+            mock_execute,
             mock_info,
             mock_call,
             mock_checkoutput,
@@ -1098,10 +1066,7 @@ class TestStateState(unittest.TestCase):
         changes_output = 'the changes'
         mock_getconfigvalue.side_effect = [True, changes_command, changes_name, [], True, []]
         mock_list.return_value = 'git-state.extensions.changes'
-        mock_proc = mock.Mock()
-        mock_proc.communicate.return_value = [changes_output, None]
-        mock_proc.returncode = 0
-        mock_popen.return_value = mock_proc
+        mock_execute.return_value = [changes_output, None, 0]
         mock_printsection.return_value = 'final changes output\n'
 
         # when
@@ -1129,10 +1094,7 @@ class TestStateState(unittest.TestCase):
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
-        mock_popen.assert_called_once_with(
-            ['changes', 'command', '--color=never'], stdout=subprocess.PIPE, stderr=subprocess.PIPE
-        )
-        mock_proc.communicate.assert_called_once_with()
+        mock_execute.assert_called_once_with(['changes', 'command', '--color=never'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
@@ -1142,13 +1104,13 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
-    @mock.patch('subprocess.Popen')
+    @mock.patch('bin.commands.utils.execute.execute')
     def test_state_withorder(
             self,
-            mock_popen,
+            mock_execute,
             mock_info,
             mock_call,
             mock_checkoutput,
@@ -1182,10 +1144,7 @@ class TestStateState(unittest.TestCase):
         changes_output = 'the changes'
         mock_getconfigvalue.side_effect = [True, True, changes_command, changes_name, [], True, ['changes', 'status']]
         mock_list.return_value = 'git-state.extensions.changes'
-        mock_proc = mock.Mock()
-        mock_proc.communicate.return_value = [changes_output, None]
-        mock_proc.returncode = 0
-        mock_popen.return_value = mock_proc
+        mock_execute.return_value = [changes_output, None, 0]
 
         # when
         state.state(**kwargs)
@@ -1224,12 +1183,7 @@ class TestStateState(unittest.TestCase):
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('changes section\nstatus section')
         mock_call.assert_not_called()
-        mock_popen.assert_called_once_with(
-            ['changes', 'command', '--color=never'],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
-        mock_proc.communicate.assert_called_once_with()
+        mock_execute.assert_called_once_with(['changes', 'command', '--color=never'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
@@ -1239,8 +1193,8 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_withorder_withunknownsection(
             self,
@@ -1306,13 +1260,13 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='1')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='1')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
-    @mock.patch('subprocess.Popen')
+    @mock.patch('bin.commands.utils.execute.pipe')
     def test_state_pageOutput(
             self,
-            mock_popen,
+            mock_pipe,
             mock_info,
             mock_call,
             mock_checkoutput,
@@ -1342,9 +1296,6 @@ class TestStateState(unittest.TestCase):
         mock_statusaccent.return_value = 'status accent'
         mock_printsection.return_value = 'status section\ntwo\nthree\nfour\nfive\n'
         mock_getconfigvalue.side_effect = [True, []]
-        mock_echo = mock.Mock()
-        mock_echo.stdout = 'mock out'
-        mock_popen.return_value = mock_echo
 
         # when
         state.state(**kwargs)
@@ -1368,9 +1319,7 @@ class TestStateState(unittest.TestCase):
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_not_called()
-        mock_call.assert_called_once_with(['less', '-r'], stdin=mock_echo.stdout)
-        mock_popen.assert_called_once_with(['echo', 'status section\ntwo\nthree\nfour\nfive'], stdout=subprocess.PIPE)
-        mock_echo.wait.assert_called_once_with()
+        mock_pipe.assert_called_once_with(['echo', 'status section\ntwo\nthree\nfour\nfive'], ['less', '-r'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
@@ -1380,7 +1329,7 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='1')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='1')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_doNotPageOutputEvenIfTooLarge(
             self,
@@ -1446,8 +1395,8 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     @mock.patch('sys.stdout.isatty', return_value=True)
     def test_state_clear(
@@ -1517,8 +1466,8 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     @mock.patch('sys.stdout.isatty', return_value=False)
     def test_state_clear_notatty(
@@ -1587,8 +1536,8 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.stateextensions.status.accent')
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.settings.list_')
-    @mock.patch('subprocess.check_output', return_value='100')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_clear_noclear(
             self,
@@ -1666,7 +1615,7 @@ class TestStateExtensionExists(unittest.TestCase):
 class TestStateEditExtension(unittest.TestCase):
 
     @mock.patch('bin.commands.state._extension_exists')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_editExtension_created(self, mock_info, mock_call, mock_extension_exists):
 
@@ -1688,7 +1637,7 @@ class TestStateEditExtension(unittest.TestCase):
         mock_info.assert_called_once_with('Extension log created')
 
     @mock.patch('bin.commands.state._extension_exists')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_editExtension_edited(self, mock_info, mock_call, mock_extension_exists):
 
@@ -1710,7 +1659,7 @@ class TestStateEditExtension(unittest.TestCase):
         mock_info.assert_called_once_with('Extension log updated')
 
     @mock.patch('bin.commands.state._extension_exists')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_editExtension_onlyCommand(self, mock_info, mock_call, mock_extension_exists):
 
@@ -1726,7 +1675,7 @@ class TestStateEditExtension(unittest.TestCase):
         mock_info.assert_called_once_with('Extension log updated')
 
     @mock.patch('bin.commands.state._extension_exists')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_editExtension_onlyName(self, mock_info, mock_call, mock_extension_exists):
 
@@ -1742,7 +1691,7 @@ class TestStateEditExtension(unittest.TestCase):
         mock_info.assert_called_once_with('Extension log updated')
 
     @mock.patch('bin.commands.state._extension_exists')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_editExtension_onlyOptions(self, mock_info, mock_call, mock_extension_exists):
 
@@ -1758,7 +1707,7 @@ class TestStateEditExtension(unittest.TestCase):
         mock_info.assert_called_once_with('Extension log updated')
 
     @mock.patch('bin.commands.state._extension_exists')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_editExtension_onlyShow(self, mock_info, mock_call, mock_extension_exists):
 
@@ -1774,7 +1723,7 @@ class TestStateEditExtension(unittest.TestCase):
         mock_info.assert_called_once_with('Extension log updated')
 
     @mock.patch('bin.commands.state._extension_exists')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_editExtension_onlyColor(self, mock_info, mock_call, mock_extension_exists):
 
@@ -1937,7 +1886,7 @@ class TestStateRunExtension(unittest.TestCase):
 class TestStateDeleteExtension(unittest.TestCase):
 
     @mock.patch('bin.commands.state._extension_exists')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_deleteExtension(self, mock_info, mock_call, mock_extension_exists):
 
@@ -1953,7 +1902,7 @@ class TestStateDeleteExtension(unittest.TestCase):
         mock_info.assert_called_once_with('Extension log deleted')
 
     @mock.patch('bin.commands.state._extension_exists')
-    @mock.patch('subprocess.call')
+    @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     def test_state_deleteExtension_extensionDoesNotExist(elf, mock_info, mock_call, mock_extension_exists):
 

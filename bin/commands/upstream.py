@@ -1,12 +1,8 @@
 """Get the current upstream branch."""
 
-import os
-import subprocess
-from subprocess import PIPE
-
 from enum import Enum
 
-from utils import directories, git, messages
+from utils import execute, git, messages
 
 _MERGE_CONFIG = 'git config --local branch.{}.merge'
 _REMOTE_CONFIG = 'git config --local branch.{}.remote'
@@ -30,8 +26,6 @@ def upstream(branch=None, include_remote=IncludeRemote.NEVER):
     :return str or unicode: the upstream branch name or an empty string
     """
 
-    assert type(include_remote) == IncludeRemote, "'include_remote' must be a {!r}. Given {!r}".format(IncludeRemote, type(include_remote))
-
     if git.is_empty_repository():
         return None
 
@@ -46,14 +40,13 @@ def upstream(branch=None, include_remote=IncludeRemote.NEVER):
     # get remote name
     remote_name = None
     if remote_branch and include_remote != IncludeRemote.NEVER:
-        remote_name = subprocess.check_output(_REMOTE_CONFIG.format(branch).split()).strip()
+        remote_name = execute.check_output(_REMOTE_CONFIG.format(branch)).strip()
 
     return _upstream_info(remote_name, remote_branch, include_remote)
 
 
 def _get_remote_branch(branch):
-    proc = subprocess.Popen(_MERGE_CONFIG.format(branch).split(), stdout=PIPE)
-    upstream_info = proc.communicate()[0].strip()
+    upstream_info = execute.stdout(_MERGE_CONFIG.format(branch)).strip()
     remote_branch = upstream_info.rsplit('/', 1)[-1]
     return remote_branch
 

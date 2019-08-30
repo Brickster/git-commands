@@ -4,12 +4,6 @@ import sys
 
 
 def _print(message, prefix=None, quiet=False, exit_=False, file_=None):
-
-    assert isinstance(message, str), "message must be a str"
-    assert not prefix or isinstance(prefix, str), "prefix must be a str"
-    assert isinstance(quiet, bool), "quiet must be a bool"
-    assert isinstance(exit_, bool), "exit must be a bool"
-
     message = prefix + ' ' + message if prefix else message
     if not quiet:
         _print_to_file(message, file_)

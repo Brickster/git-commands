@@ -23,7 +23,7 @@ class TestStatus(unittest.TestCase):
             '{no_color}({green}master{no_color})'.format(no_color=Fore.RESET, green=Fore.GREEN)
         )
 
-    @mock.patch('subprocess.check_output', return_value='the full title\n')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='the full title\n')
     @mock.patch('re.match')
     def test_accent_notNewRepository(self, mock_rematch, mock_checkoutput):
 
@@ -41,12 +41,12 @@ class TestStatus(unittest.TestCase):
         self.assertEqual(actual_status, '{}({})'.format(Fore.RESET, 'the short title'))
 
         mock_checkoutput.assert_called_once_with(
-            ('git', '-c', 'color.status=' + show_color, 'status', '--branch', '--short')
+            ['git', '-c', 'color.status=' + show_color, 'status', '--branch', '--short']
         )
         mock_rematch.assert_called_once_with('.*##.*? (.*)', 'the full title')
         mock_match.group.assert_called_once_with(1)
 
-    @mock.patch('subprocess.check_output', return_value='the full title\n')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='the full title\n')
     @mock.patch('re.match')
     def test_accent_notNewRepository_butNotPassedInAsArgument(self, mock_rematch, mock_checkoutput):
 
@@ -64,12 +64,12 @@ class TestStatus(unittest.TestCase):
         self.assertEqual(actual_status, '{}({})'.format(Fore.RESET, 'the short title'))
 
         mock_checkoutput.assert_called_once_with(
-            ('git', '-c', 'color.status=' + show_color, 'status', '--branch', '--short')
+            ['git', '-c', 'color.status=' + show_color, 'status', '--branch', '--short']
         )
         mock_rematch.assert_called_once_with('.*##.*? (.*)', 'the full title')
         mock_match.group.assert_called_once_with(1)
 
-    @mock.patch('subprocess.check_output', return_value='the status')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='the status')
     def test_get_newRepository(self, mock_checkoutput):
 
         # when
@@ -80,7 +80,7 @@ class TestStatus(unittest.TestCase):
         self.assertEqual(actual_status, 'the status')
         mock_checkoutput.assert_called_once_with(['git', '-c', 'color.status=' + show_color, 'status', '--short'])
 
-    @mock.patch('subprocess.check_output', return_value='')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='')
     def test_get_newRepository_repositoryIsEmpty(self, mock_checkoutput):
 
         # when
@@ -91,7 +91,7 @@ class TestStatus(unittest.TestCase):
         self.assertEqual(actual_status, 'nothing to commit, repository is empty' + os.linesep)
         mock_checkoutput.assert_called_once_with(['git', '-c', 'color.status=' + show_color, 'status', '--short'])
 
-    @mock.patch('subprocess.check_output', return_value='the status')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='the status')
     def test_get_notNewRepository(self, mock_checkoutput):
 
         # when
@@ -104,7 +104,7 @@ class TestStatus(unittest.TestCase):
             ['git', '-c', 'color.status=' + show_color, 'status', '--short', '--untracked-files=all']
         )
 
-    @mock.patch('subprocess.check_output', return_value='')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='')
     def test_get_notNewRepository_noStatus_andShowCleanMessage(self, mock_checkoutput):
 
         # when
@@ -117,7 +117,7 @@ class TestStatus(unittest.TestCase):
             ['git', '-c', 'color.status=' + show_color, 'status', '--short', '--untracked-files=all']
         )
 
-    @mock.patch('subprocess.check_output', return_value='')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='')
     def test_get_notNewRepository_noStatus_andNoShowCleanMessage(self, mock_checkoutput):
 
         # when

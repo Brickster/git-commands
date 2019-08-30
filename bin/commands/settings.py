@@ -2,7 +2,6 @@
 
 import os
 import re
-import subprocess
 
 from utils import directories, execute, messages
 
@@ -93,11 +92,11 @@ def list_(section=None, config=None, count=False, limit_to=None, format_=None, f
 
 def _get_config_contents(config, file_):
     if config is None:
-        config_contents = subprocess.check_output(['git', 'config', '--list', '--null'])
+        config_contents = execute.check_output(['git', 'config', '--list', '--null'])
     elif file_ is not None:
         if not os.path.exists(file_):
             messages.error('no such file {!r}'.format(file_))
-        config_contents = subprocess.check_output(['git', 'config', '--list', '--null', '--file', file_])
+        config_contents = execute.check_output(['git', 'config', '--list', '--null', '--file', file_])
     else:
         config_contents = execute.stdout(['git', 'config', '--list', '--null', '--{}'.format(config)])
     return config_contents

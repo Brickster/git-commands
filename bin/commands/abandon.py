@@ -1,8 +1,6 @@
 """Drop a count or range of stashes."""
 
-import subprocess
-
-from utils import messages
+from utils import execute, messages
 
 
 def abandon(start, end, dry_run=False, quiet=False):
@@ -24,20 +22,20 @@ def abandon(start, end, dry_run=False, quiet=False):
 def _dry_run(start, end):
     for i in range(start, end):
         stash = 'stash@{{{}}}'.format(i)
-        stash_sha = subprocess.check_output(['git', 'rev-parse', stash]).splitlines()[0]
+        stash_sha = execute.check_output(['git', 'rev-parse', stash]).splitlines()[0]
         messages.info('Would drop refs/{} ({})'.format(stash, stash_sha))
 
 
 def _run(start, end, quiet):
     start_stash = 'stash@{{{}}}'.format(start)
     for i in range(start, end):
-        stash_sha = subprocess.check_output(['git', 'rev-parse', start_stash]).splitlines()[0]
-        subprocess.call(['git', 'stash', 'drop', '--quiet', start_stash])
+        stash_sha = execute.check_output(['git', 'rev-parse', start_stash]).splitlines()[0]
+        execute.call(['git', 'stash', 'drop', '--quiet', start_stash])
         messages.info('Dropped refs/stash@{{{}}} ({})'.format(i, stash_sha), quiet)
 
 
 def _validate_bounds(start, end):
-    stash_count = len(subprocess.check_output(['git', 'stash', 'list']).splitlines())
+    stash_count = len(execute.check_output(['git', 'stash', 'list']).splitlines())
     if end < 0:
         messages.error('end cannot be negative')
     elif end < start:
