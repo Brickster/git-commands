@@ -4,6 +4,10 @@ import subprocess
 import tempfile
 import unittest
 
+import git
+
+import testutils
+
 
 class TestGitUpstream(unittest.TestCase):
 
@@ -12,9 +16,12 @@ class TestGitUpstream(unittest.TestCase):
         return proc.communicate()[0].strip()
 
     def setUp(self):
+        # init repo
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
-        subprocess.call('git init --quiet'.split())
+        self.repo = git.Repo.init(self.dirpath)
+        testutils.init_local_config(self.repo)
+
         subprocess.call('touch README.md'.split())
         subprocess.call('git add -A'.split())
         subprocess.call(['git', 'commit', '--quiet', '-m', 'Initial commit'])

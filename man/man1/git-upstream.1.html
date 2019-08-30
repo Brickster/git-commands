@@ -103,9 +103,14 @@
 <h2 id="CONFIGURATION">CONFIGURATION</h2>
 
 <dl>
-<dt><code>git-upstream.include-remote</code> <var>bool</var></dt><dd><p>  <var>true</var> or <var>false</var> flag determining whether the remote name should be printed by default. Options (<code>-r</code>|<code>--include-remote</code>) and (<code>-R</code>|<code>--no-include-remote</code>) override this value.</p>
+<dt><code>git-upstream.include-remote</code> <var>bool</var></dt><dd><p>  When should remote information print. Options (<code>-r</code>|<code>--include-remote</code>) and (<code>-R</code>|<code>--no-include-remote</code>) override this value.</p>
 
-<p>  Default: <var>false</var></p></dd>
+<p>  Options are:<br />
+  <code>NEVER</code> = 'Never include remote'<br />
+  <code>ALWAYS</code> = 'Always include remote'<br />
+  <code>NONE_LOCAL</code> = 'Only include when not a local remote'<br /></p>
+
+<p>  Default: <var>NEVER</var></p></dd>
 </dl>
 
 
@@ -116,7 +121,7 @@
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>March 2016</li>
+    <li class='tc'>August 2019</li>
     <li class='tr'>git-upstream(1)</li>
   </ol>
 

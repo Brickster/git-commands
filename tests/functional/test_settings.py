@@ -7,6 +7,8 @@ import unittest
 
 import git
 
+import testutils
+
 
 class TestSettings(unittest.TestCase):
 
@@ -33,6 +35,7 @@ class TestSettingsList(unittest.TestCase):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         self.repo = git.Repo.init(self.dirpath)
+        testutils.init_local_config(self.repo)
 
         # recreate the local config
         os.remove(self.dirpath + '/.git/config')
@@ -301,6 +304,7 @@ class TestSettingsDestroy(unittest.TestCase):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         self.repo = git.Repo.init(self.dirpath)
+        testutils.init_local_config(self.repo)
 
         # recreate the local config
         os.remove(self.dirpath + '/.git/config')

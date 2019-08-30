@@ -16,9 +16,9 @@ _LOCAL_REMOTE = '.'
 class IncludeRemote(Enum):
     """Specify when to include remote information."""
 
-    NEVER = 'Never include remote information'
-    ALWAYS = 'Always include remote information'
-    NONE_LOCAL = 'Only include remote information when not a local remote'
+    NEVER = 'Never include remote'
+    ALWAYS = 'Always include remote'
+    NONE_LOCAL = 'Only when not a local remote'
 
 
 def upstream(branch=None, include_remote=IncludeRemote.NEVER):

@@ -7,6 +7,8 @@ import unittest
 
 import git
 
+import testutils
+
 
 class TestIssue093(unittest.TestCase):
     """State --no-status not respected for new repositories"""
@@ -405,6 +407,7 @@ class TestIssue124(unittest.TestCase):
 
         # initialize repository with a README
         self.repo = git.Repo.init(self.dirpath)
+        testutils.init_local_config(self.repo)
         open('README.md', 'w').close()
         self.repo.index.add(['README.md'])
         self.repo.index.commit('Initial commit')

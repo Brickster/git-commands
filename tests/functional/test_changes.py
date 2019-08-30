@@ -6,6 +6,8 @@ import unittest
 
 import git
 
+import testutils
+
 
 class TestChanges(unittest.TestCase):
 
@@ -32,6 +34,7 @@ class TestChangesView(unittest.TestCase):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         self.repo = git.Repo.init(self.dirpath)
+        testutils.init_local_config(self.repo)
         subprocess.call('touch README.md'.split())
         with open('README.md', 'w') as a_file:
             a_file.write('readme\n')
@@ -67,9 +70,6 @@ class TestChangesView(unittest.TestCase):
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-18T00:00:00Z'
         subprocess.call(['git', 'commit', '--quiet', '-a', '-m', 'edit changelog'], env=pyenv)
         self.commit3_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' edit changelog'
-
-        # make sure coloring isn't enabled
-        subprocess.call(['git', 'config', '--local', 'color.ui', 'never'])
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
@@ -202,6 +202,7 @@ class TestChangesAssociate(unittest.TestCase):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         self.repo = git.Repo.init(self.dirpath)
+        testutils.init_local_config(self.repo)
 
         # initial commit
         open('README.md', 'w').close()
@@ -341,6 +342,7 @@ class TestChangesUnassociate(unittest.TestCase):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         self.repo = git.Repo.init(self.dirpath)
+        testutils.init_local_config(self.repo)
         subprocess.call('touch README.md'.split())
         with open('README.md', 'w') as a_file:
             a_file.write('readme\n')

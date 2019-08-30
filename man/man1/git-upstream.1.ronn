@@ -31,9 +31,14 @@
 ## CONFIGURATION
 
 * `git-upstream.include-remote` <bool>:
-    <true> or <false> flag determining whether the remote name should be printed by default. Options (`-r`|`--include-remote`) and (`-R`|`--no-include-remote`) override this value.
+    When should remote information print. Options (`-r`|`--include-remote`) and (`-R`|`--no-include-remote`) override this value.
 
-    Default: <false>
+    Options are:<br>
+    `NEVER` = 'Never include remote'<br>
+    `ALWAYS` = 'Always include remote'<br>
+    `NONE_LOCAL` = 'Only include when not a local remote'<br>
+
+    Default: <NEVER>
 
 ## SEE ALSO
 

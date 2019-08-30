@@ -24,7 +24,7 @@ def as_enum(enum_type):
         enum.Enum,
         type(enum_type)
     )
-    return lambda value: enum_type[value]
+    return lambda value: enum_type[value.upper()]
 
 
 def as_delimited_list(delimiter):

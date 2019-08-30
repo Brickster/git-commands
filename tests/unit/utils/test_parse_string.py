@@ -60,6 +60,7 @@ class TestParseString(unittest.TestCase):
         # then
         self.assertEqual(TestEnum.A, parse_enum('A'))
         self.assertEqual(TestEnum.BB, parse_enum('BB'))
+        self.assertEqual(TestEnum.BB, parse_enum('bb'))
 
     def test_asEnum_invalidEnumValue(self):
 

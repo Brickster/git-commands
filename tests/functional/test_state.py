@@ -6,6 +6,8 @@ import unittest
 
 import git
 
+import testutils
+
 
 class TestState(unittest.TestCase):
 
@@ -48,7 +50,7 @@ class TestStateView(unittest.TestCase):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         self.repo = git.Repo.init(self.dirpath)
-        self.repo.config_writer('repository').set_value('color', 'ui', 'never').release()
+        testutils.init_local_config(self.repo)
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
@@ -161,7 +163,7 @@ class TestStateViewWithExtension(unittest.TestCase):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         self.repo = git.Repo.init(self.dirpath)
-        self.repo.config_writer('repository').set_value('color', 'ui', 'never').release()
+        testutils.init_local_config(self.repo)
         self.repo.config_writer('repository').set_value('git-state.extensions.log', 'command', 'git log --oneline').release()
 
         # initial commit
@@ -504,7 +506,7 @@ class TestStateExtensions(unittest.TestCase):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         self.repo = git.Repo.init(self.dirpath)
-        self.repo.config_writer('repository').set_value('color', 'ui', 'never').release()
+        testutils.init_local_config(self.repo)
 
         # initial commit
         subprocess.call('touch README.md'.split())
