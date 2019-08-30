@@ -58,17 +58,50 @@ class TestAppendList(unittest.TestCase):
     def test_appendList(self):
 
         # given
-        value = 'v'
+        value = 'v1'
+        value2 = 'v2'
+        value3 = 'v3'
         destination = 'd'
-        action = parse_actions.append_list(value)(None, destination)
+        action = parse_actions.append_list(value, value2)(None, destination)
         namespace = Namespace()
         setattr(namespace, destination, [])
 
         # when
-        action(None, namespace, value)
+        action(None, namespace, [value3])
 
         # then
-        self.assertEqual(getattr(namespace, destination), [value])
+        self.assertEqual([value, value2, value3], getattr(namespace, destination))
+
+    def test_appendList_noConstantValues(self):
+
+        # given
+        value = 'v1'
+        destination = 'd'
+        action = parse_actions.append_list()(None, destination)
+        namespace = Namespace()
+        setattr(namespace, destination, [])
+
+        # when
+        action(None, namespace, [value])
+
+        # then
+        self.assertEqual([value], getattr(namespace, destination))
+
+    def test_appendList_noArgumentValues(self):
+
+        # given
+        value = 'v1'
+        value2 = 'v2'
+        destination = 'd'
+        action = parse_actions.append_list(value, value2)(None, destination)
+        namespace = Namespace()
+        setattr(namespace, destination, [])
+
+        # when
+        action(None, namespace, None)
+
+        # then
+        self.assertEqual([value, value2], getattr(namespace, destination))
 
 
 class TestOptionalList(unittest.TestCase):

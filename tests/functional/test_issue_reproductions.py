@@ -8,6 +8,23 @@ import unittest
 import git
 
 
+class TestIssue093(unittest.TestCase):
+    """State --no-status not respected for new repositories"""
+
+    def setUp(self):
+        self.dirpath = tempfile.mkdtemp()
+        os.chdir(self.dirpath)
+        self.repo = git.Repo.init(self.dirpath)
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+
+    def test(self):
+        """Issue 93: hiding status should be respected even for new repositories"""
+
+        self.assertFalse(self.repo.git.state('--no-show status'.split()))
+
+
 class TestIssue094(unittest.TestCase):
     """Changes breaks when HEAD is detached"""
 
@@ -453,7 +470,7 @@ class TestIssue131(unittest.TestCase):
 
 
 class TestIssue151(unittest.TestCase):
-    """Multiple --no-show options can't be used together"""
+    """Multiple --no-show-* options can't be used together"""
 
     def setUp(self):
         self.dirpath = tempfile.mkdtemp()

@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file. This projec
 - **Snapshot**: add result message [#54][]
 - **Changes**: --inverse option to show common commits [#118][] [#134][]
 - **Snapshot**: replace a snapshot with --replace [#143][]
+- **State**: add --show-all option [#145][]
 
 ### Changes
 - **Settings**: remove get command [#135][]

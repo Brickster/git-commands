@@ -5,7 +5,7 @@ import sys
 
 from commands import state
 from commands.utils import git, parse_string
-from commands.utils.parse_actions import dict_set, optional_list
+from commands.utils.parse_actions import append_list, dict_set
 
 
 def main():
@@ -174,13 +174,21 @@ def _view_subcommand(subparsers):
     parser.set_defaults(func=state.state)
 
     # show/no show
-    extensions = state.get_extensions()
+    extensions = state.get_extensions() + ['status']
+    parser.add_argument(
+        '--show-all',
+        help='show all extensions',
+        action='store_const',
+        default=[],
+        const=extensions,
+        dest='show_extensions'
+    )
     parser.add_argument(
         '-s',
         '--show',
         help='extensions to show',
         nargs='+',
-        action=optional_list(),
+        action=append_list(),
         default=[],
         dest='show_extensions',
         metavar='EXTENSION'
@@ -190,8 +198,6 @@ def _view_subcommand(subparsers):
         '--no-show',
         help='extensions to hide',
         nargs='+',
-        action=optional_list(),
-        const=extensions,
         default=[],
         dest='ignore_extensions',
         metavar='EXTENSION'

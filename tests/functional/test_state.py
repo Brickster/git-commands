@@ -289,6 +289,22 @@ nothing to commit, working directory is clean
         # expect
         self.assertEqual(self._output('git state'), expected)
 
+    def test_state_viewWithExtension_showAllFlag(self):
+        # given
+        self.repo.config_writer('repository').set_value('git-state.extensions.log', 'show', 'false').release()
+        expected = '''# status (master)
+nothing to commit, working directory is clean
+# log
+{}
+'''.format(self.full_log)
+
+        # expect
+        self.assertEqual(self._output(['git', 'state', '--show-all']), expected)
+
+        # expect: show takes precedence
+        self.assertEqual(self._output(['git', 'state', '--show-all', '--no-show', 'log']), expected)
+        self.assertEqual(self._output(['git', 'state', '--no-show', 'log', '--show-all']), expected)
+
     def test_state_viewWithExtension_showExtensionUsingFlag(self):
 
         # given

@@ -2,7 +2,7 @@
 
 ## SYNOPSIS
 
-`git state` [`view`] [(`-s`|`--show`) <extension> [<extension> ...]]<br>
+`git state` [`view`] [`--show-all`] [(`-s`|`--show`) <extension> [<extension> ...]]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-S`|`--no-show`) <extension> [<extension> ...]]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-e`|`--show-empty`)] [(`-E`|`--no-show-empty`)]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-c`|`--color`) [<when>]] [(`-C`|`--no-color`)]<br>
@@ -37,6 +37,9 @@ Used to see a more concise and comprehensive view of the working directory throu
 
     * `-v`|`--version`:
         Print version.
+
+    * `--show-all`:
+        Show all extensions.
 
     * `-s`|`--show` <extension>:
         A list of extensions to show. Option based shows always take precedence over hides. See **[EXTENSIONS][]** section for more detail.

@@ -15,10 +15,10 @@ def multi_set(**kwargs):
     return MultiSet
 
 
-def append_list(value):
+def append_list(*args):
     """Return an AppendList action with a given value to append.
 
-    :param value: the value to append to the destination list
+    :param args: values to append to the destination list
     :return: an AppendList
     """
 
@@ -30,7 +30,8 @@ def append_list(value):
 
         def __call__(self, parser, namespace, values, option_string=None):
             current_values = getattr(namespace, self.dest)
-            current_values.append(value)
+            [current_values.append(v) for v in args or []]
+            [current_values.append(v) for v in values or []]
             setattr(namespace, self.dest, current_values)
     return AppendList
 
