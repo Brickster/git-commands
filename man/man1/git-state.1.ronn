@@ -231,7 +231,7 @@ $ git state
 $
 ```
 
-Extension settings are stored in config files like all other git configurations. They can be edited manually but it is highly discouraged unless you are create global extensions. This is due to a limitation of the `extensions` command that only modifies local configuration files. However, `git-state` will inspect non-local files.
+Extension settings are stored in config files like all other git configurations. They can be edited manually but it is highly discouraged unless you are creating global extensions. This is due to a limitation of the `extensions` command that only modifies local configuration files. However, `git-state` will inspect non-local files.
 
 ### Coloring
 By default, an extension must accept the flag `--color=`<when>. This flag must be respected so coloring options are matched. <when> will only be one of: <never> or <always>. If an extension never colors, include `--no-color` when creating the extension.
