@@ -10,16 +10,16 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--clear`] [`--no-clear`] [`--no-page`]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--order`) <section> [<section> ...]]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-O`|`--options`) _option_ [_option_ ...]]<br>
-`git state create` (`-c`|`--command`) <command> [(`-n`|`--name`) <name>]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--options`) <options>] [`--no-show`] [`--no-color`]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<extension><br>
-`git state edit` [(`-c`|`--command`) <command>] [(`-n`|`--name`) <name>]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--options`) <options>] [`--no-show`] [`--no-color`]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<extension><br>
-`git state delete` <extension><br>
-`git state config` <extension><br>
-`git state list`<br>
-`git state run` <extension><br>
+`git state extensions create` (`-c`|`--command`) <command> [(`-n`|`--name`) <name>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--options`) <options>] [`--no-show`]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--no-color`] <extension><br>
+`git state extensions edit` [(`-c`|`--command`) <command>] [(`-n`|`--name`) <name>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--options`) <options>] [`--no-show`]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--no-color`] <extension><br>
+`git state extensions delete` <extension><br>
+`git state extensions config` <extension><br>
+`git state extensions list`<br>
+`git state extensions run` <extension><br>
 `git state` (`-h`|`--help`)<br>
 `git state` (`-v`|`--version`)
 
@@ -80,7 +80,7 @@ Used to see a more concise and comprehensive view of the working directory throu
     * `-O`|`--options` _option_ [_option_ ...]:
         A list of options to pass to an extension. Options are formatted as `<extension_name>:<option>`. See **[EXTENSIONS][]** section for more detail.
 
-* `create`:
+* `extensions create`:
     Create an extension.
 
     * `extension`:
@@ -101,7 +101,7 @@ Used to see a more concise and comprehensive view of the working directory throu
     * `--no-color`:
         Do no include coloring option `--color=<when>` when executing the command.
 
-* `edit`:
+* `extensions edit`:
     Edit an extension.
 
     * `extension`:
@@ -122,22 +122,22 @@ Used to see a more concise and comprehensive view of the working directory throu
     * `--no-color`:
         Do no include coloring option `--color=<when>` when executing the command.
 
-* `delete`:
+* `extensions delete`:
     Delete an extension.
 
     * `extension`:
         The name of an extension.
 
-* `config`:
+* `extensions config`:
     View the configuration of an extension.
 
     * `extension`:
         The name of an extension.
 
-* `list`:
+* `extensions list`:
     List the names of all extensions. This command has no options.
 
-* `run`:
+* `extensions run`:
     Run an extension. This command overrides any option that would otherwise hide the extension.
 
     * `extension`:

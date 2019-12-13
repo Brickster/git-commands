@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-STATE" "1" "September 2019" "" ""
+.TH "GIT\-STATE" "1" "December 2019" "" ""
 .
 .SH "NAME"
 \fBgit\-state\fR \- a customizable view for the state of a working tree
@@ -31,34 +31,34 @@
 \~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-O\fR|\fB\-\-options\fR) \fIoption\fR [\fIoption\fR \.\.\.]]
 .
 .br
-\fBgit state create\fR (\fB\-c\fR|\fB\-\-command\fR) \fIcommand\fR [(\fB\-n\fR|\fB\-\-name\fR) \fIname\fR]
+\fBgit state extensions create\fR (\fB\-c\fR|\fB\-\-command\fR) \fIcommand\fR [(\fB\-n\fR|\fB\-\-name\fR) \fIname\fR]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-o\fR|\fB\-\-options\fR) \fIoptions\fR] [\fB\-\-no\-show\fR] [\fB\-\-no\-color\fR]
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-o\fR|\fB\-\-options\fR) \fIoptions\fR] [\fB\-\-no\-show\fR]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\fIextension\fR
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-no\-color\fR] \fIextension\fR
 .
 .br
-\fBgit state edit\fR [(\fB\-c\fR|\fB\-\-command\fR) \fIcommand\fR] [(\fB\-n\fR|\fB\-\-name\fR) \fIname\fR]
+\fBgit state extensions edit\fR [(\fB\-c\fR|\fB\-\-command\fR) \fIcommand\fR] [(\fB\-n\fR|\fB\-\-name\fR) \fIname\fR]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-o\fR|\fB\-\-options\fR) \fIoptions\fR] [\fB\-\-no\-show\fR] [\fB\-\-no\-color\fR]
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-o\fR|\fB\-\-options\fR) \fIoptions\fR] [\fB\-\-no\-show\fR]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\fIextension\fR
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-no\-color\fR] \fIextension\fR
 .
 .br
-\fBgit state delete\fR \fIextension\fR
+\fBgit state extensions delete\fR \fIextension\fR
 .
 .br
-\fBgit state config\fR \fIextension\fR
+\fBgit state extensions config\fR \fIextension\fR
 .
 .br
-\fBgit state list\fR
+\fBgit state extensions list\fR
 .
 .br
-\fBgit state run\fR \fIextension\fR
+\fBgit state extensions run\fR \fIextension\fR
 .
 .br
 \fBgit state\fR (\fB\-h\fR|\fB\-\-help\fR)
@@ -141,7 +141,7 @@ A list of options to pass to an extension\. Options are formatted as \fB<extensi
 
 .
 .TP
-\fBcreate\fR
+\fBextensions create\fR
 Create an extension\.
 .
 .TP
@@ -170,7 +170,7 @@ Do no include coloring option \fB\-\-color=<when>\fR when executing the command\
 
 .
 .TP
-\fBedit\fR
+\fBextensions edit\fR
 Edit an extension\.
 .
 .TP
@@ -199,7 +199,7 @@ Do no include coloring option \fB\-\-color=<when>\fR when executing the command\
 
 .
 .TP
-\fBdelete\fR
+\fBextensions delete\fR
 Delete an extension\.
 .
 .TP
@@ -208,7 +208,7 @@ The name of an extension\.
 
 .
 .TP
-\fBconfig\fR
+\fBextensions config\fR
 View the configuration of an extension\.
 .
 .TP
@@ -217,11 +217,11 @@ The name of an extension\.
 
 .
 .TP
-\fBlist\fR
+\fBextensions list\fR
 List the names of all extensions\. This command has no options\.
 .
 .TP
-\fBrun\fR
+\fBextensions run\fR
 Run an extension\. This command overrides any option that would otherwise hide the extension\.
 .
 .TP

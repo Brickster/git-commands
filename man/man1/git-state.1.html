@@ -89,16 +89,16 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--clear</code>] [<code>--no-clear</code>] [<code>--no-page</code>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-o</code>|<code>--order</code>) <var>section</var> [<var>section</var> ...]]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-O</code>|<code>--options</code>) <em>option</em> [<em>option</em> ...]]<br />
-<code>git state create</code> (<code>-c</code>|<code>--command</code>) <var>command</var> [(<code>-n</code>|<code>--name</code>) <var>name</var>]<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-o</code>|<code>--options</code>) <var>options</var>] [<code>--no-show</code>] [<code>--no-color</code>]<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<var>extension</var><br />
-<code>git state edit</code> [(<code>-c</code>|<code>--command</code>) <var>command</var>] [(<code>-n</code>|<code>--name</code>) <var>name</var>]<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-o</code>|<code>--options</code>) <var>options</var>] [<code>--no-show</code>] [<code>--no-color</code>]<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<var>extension</var><br />
-<code>git state delete</code> <var>extension</var><br />
-<code>git state config</code> <var>extension</var><br />
-<code>git state list</code><br />
-<code>git state run</code> <var>extension</var><br />
+<code>git state extensions create</code> (<code>-c</code>|<code>--command</code>) <var>command</var> [(<code>-n</code>|<code>--name</code>) <var>name</var>]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-o</code>|<code>--options</code>) <var>options</var>] [<code>--no-show</code>]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--no-color</code>] <var>extension</var><br />
+<code>git state extensions edit</code> [(<code>-c</code>|<code>--command</code>) <var>command</var>] [(<code>-n</code>|<code>--name</code>) <var>name</var>]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-o</code>|<code>--options</code>) <var>options</var>] [<code>--no-show</code>]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--no-color</code>] <var>extension</var><br />
+<code>git state extensions delete</code> <var>extension</var><br />
+<code>git state extensions config</code> <var>extension</var><br />
+<code>git state extensions list</code><br />
+<code>git state extensions run</code> <var>extension</var><br />
 <code>git state</code> (<code>-h</code>|<code>--help</code>)<br />
 <code>git state</code> (<code>-v</code>|<code>--version</code>)</p>
 
@@ -130,7 +130,7 @@
 <dt><code>-O</code>|<code>--options</code> <em>option</em> [<em>option</em> ...]</dt><dd><p>  A list of options to pass to an extension. Options are formatted as <code>&lt;extension_name>:&lt;option&gt;</code>. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
 </dl>
 </dd>
-<dt class="flush"><code>create</code></dt><dd><p>  Create an extension.</p>
+<dt><code>extensions create</code></dt><dd><p>  Create an extension.</p>
 
 <dl>
 <dt><code>extension</code></dt><dd><p>  Name of the extension. Must be a valid <code>git-config</code> sub-section name.</p></dd>
@@ -141,7 +141,7 @@
 <dt><code>--no-color</code></dt><dd><p>  Do no include coloring option <code>--color=&lt;when></code> when executing the command.</p></dd>
 </dl>
 </dd>
-<dt class="flush"><code>edit</code></dt><dd><p>  Edit an extension.</p>
+<dt><code>extensions edit</code></dt><dd><p>  Edit an extension.</p>
 
 <dl>
 <dt><code>extension</code></dt><dd><p>  Name of the extension. Must be a valid <code>git-config</code> sub-section name.</p></dd>
@@ -152,20 +152,20 @@
 <dt><code>--no-color</code></dt><dd><p>  Do no include coloring option <code>--color=&lt;when></code> when executing the command.</p></dd>
 </dl>
 </dd>
-<dt class="flush"><code>delete</code></dt><dd><p>  Delete an extension.</p>
+<dt><code>extensions delete</code></dt><dd><p>  Delete an extension.</p>
 
 <dl>
 <dt><code>extension</code></dt><dd>  The name of an extension.</dd>
 </dl>
 </dd>
-<dt class="flush"><code>config</code></dt><dd><p>  View the configuration of an extension.</p>
+<dt><code>extensions config</code></dt><dd><p>  View the configuration of an extension.</p>
 
 <dl>
 <dt><code>extension</code></dt><dd>  The name of an extension.</dd>
 </dl>
 </dd>
-<dt class="flush"><code>list</code></dt><dd><p>  List the names of all extensions. This command has no options.</p></dd>
-<dt class="flush"><code>run</code></dt><dd><p>  Run an extension. This command overrides any option that would otherwise hide the extension.</p>
+<dt><code>extensions list</code></dt><dd><p>  List the names of all extensions. This command has no options.</p></dd>
+<dt><code>extensions run</code></dt><dd><p>  Run an extension. This command overrides any option that would otherwise hide the extension.</p>
 
 <dl>
 <dt><code>extension</code></dt><dd>  The name of an extension.</dd>
@@ -273,7 +273,7 @@ $
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>September 2019</li>
+    <li class='tc'>December 2019</li>
     <li class='tr'>git-state(1)</li>
   </ol>
 
