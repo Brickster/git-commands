@@ -24,3 +24,4 @@ exclude_patterns:
 - htmlcov/
 - bin/__init__.py
 - bin/commands/__init__.py
+- cover/
