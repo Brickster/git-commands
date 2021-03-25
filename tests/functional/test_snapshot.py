@@ -80,12 +80,17 @@ class TestGitSnapshot(unittest.TestCase):
             a_file.write('contributing\n')
         with open('README.md', 'w') as a_file:
             a_file.write('readme\n')
+        with open('file0.txt', 'w') as a_file:
+            a_file.write('file0\n')
         with open('file1.txt', 'w') as a_file:
             a_file.write('file1\n')
         with open('file2.txt', 'w') as a_file:
             a_file.write('file2\n')
         call('git add -A'.split())
         call(['git', 'commit', '--quiet', '--message', 'Initial commit'])
+
+        call('rm file0.txt'.split())
+        call(['git', 'commit', '--all', '--quiet', '--message', 'Remove file0.txt'])
 
         with open('CHANGELOG.md', 'a') as a_file:
             a_file.write('changelog\n')
