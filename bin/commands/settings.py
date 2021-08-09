@@ -20,7 +20,7 @@ def _validate_config(config=None):
 def _pretty_format_configs(config_map):
     all_sections_map = _get_sections_map(config_map)
     result = []
-    for section, section_map in all_sections_map.iteritems():
+    for section, section_map in iter(all_sections_map.items()):
         _append_section_header(result, section)
         _append_section_keys(result, section_map)
     return result
