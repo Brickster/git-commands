@@ -124,7 +124,7 @@ def _get_list_result(count, limit_to, format_, config_map):
         return _pretty_format_configs(config_map)
 
     result = []
-    for key, value in config_map.iteritems():
+    for key, value in iter(config_map.items()):
         result += ['{}={}'.format(key, value)]
     return result
 
