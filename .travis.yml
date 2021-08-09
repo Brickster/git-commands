@@ -2,10 +2,14 @@ dist: trusty
 language: python
 python:
   - "2.7"
+addons:
+  apt:
+    update: true
+    sources:
+      - 'ppa:git-core/ppa'
+    packages:
+      - git
 before_install:
-  - sudo add-apt-repository ppa:git-core/ppa -y
-  - sudo apt-get update
-  - sudo apt-get install git
   # make sure travis can update the system git config
   - sudo chown travis:travis /etc
 install: "pip install -r requirements-test.txt"
