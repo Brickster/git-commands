@@ -1,8 +1,10 @@
 """Create a snapshot of the changes in a dirty working directory."""
 
+from __future__ import absolute_import
+
 import time
 
-from utils import execute, messages
+from .utils import execute, messages
 
 
 def _stash_buffer(quiet):

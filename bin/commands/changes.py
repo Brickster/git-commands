@@ -1,11 +1,13 @@
 """List the commits between this branch and another."""
 
+from __future__ import absolute_import
+
 import os
 
 from enum import Enum
 
 from . import upstream
-from utils import directories, execute, git, messages
+from .utils import directories, execute, git, messages
 
 
 class DetailsOption(Enum):

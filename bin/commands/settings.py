@@ -1,9 +1,11 @@
 """More ways to view and edit config files."""
 
+from __future__ import absolute_import
+
 import os
 import re
 
-from utils import directories, execute, messages
+from .utils import directories, execute, messages
 
 
 def _validate_config(config=None):

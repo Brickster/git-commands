@@ -1,8 +1,10 @@
 """Get the current upstream branch."""
 
+from __future__ import absolute_import
+
 from enum import Enum
 
-from utils import execute, git, messages
+from .utils import execute, git, messages
 
 _MERGE_CONFIG = 'git config --local branch.{}.merge'
 _REMOTE_CONFIG = 'git config --local branch.{}.remote'

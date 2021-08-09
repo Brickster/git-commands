@@ -1,14 +1,16 @@
 """A collection of common git actions."""
 
+from __future__ import absolute_import
+
 import os
 import re
 import sys
 
 from enum import Enum
 
-import directories
-import execute
-import messages
+from . import directories
+from . import execute
+from . import messages
 
 
 class RefType(Enum):

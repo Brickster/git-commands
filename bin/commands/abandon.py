@@ -1,6 +1,8 @@
 """Drop a count or range of stashes."""
 
-from utils import execute, messages
+from __future__ import absolute_import
+
+from .utils import execute, messages
 
 
 def abandon(start, end, dry_run=False, quiet=False):

@@ -1,5 +1,7 @@
 """View the state of the working tree."""
 
+from __future__ import absolute_import
+
 import os
 import re
 import shlex
@@ -10,8 +12,8 @@ from collections import OrderedDict
 import colorama
 
 from . import settings
-from stateextensions import status
-from utils import directories, execute, git, messages, parse_string
+from .stateextensions import status
+from .utils import directories, execute, git, messages, parse_string
 
 
 def _print_section(title, accent=None, text=None, format_='compact', show_empty=False, color='auto'):
