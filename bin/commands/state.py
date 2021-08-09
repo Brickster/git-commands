@@ -177,7 +177,7 @@ def state(**kwargs):
     """
 
     if not directories.is_git_repository():
-        messages.error('{0!r} not a git repository'.format(os.getcwd()))
+        messages.error("'{}' not a git repository".format(os.getcwd()))
 
     show_color = git.resolve_coloring(kwargs.get('show_color').lower())
     colorama.init(strip=(show_color == 'never'))

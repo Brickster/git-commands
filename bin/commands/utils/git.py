@@ -90,7 +90,7 @@ def is_ref_ambiguous(ref, limit=None):
         limit = [limit]
 
     if not is_ref(ref):
-        raise GitException('{0!r} is not a ref'.format(ref))
+        raise GitException("'{}' is not a ref".format(ref))
 
     show_ref_command = ['git', 'show-ref']
     if limit:
@@ -177,7 +177,7 @@ def validate_config(config=None):
     """
 
     if config == 'local' and not directories.is_git_repository():
-        messages.error('{0!r} is not a git repository'.format(os.getcwd()), exit_=False)
+        messages.error("'{}' is not a git repository".format(os.getcwd()), exit_=False)
         messages.error("'local' does not apply")
 
 
@@ -208,5 +208,5 @@ def get_config_value(key, default=None, config=None, file_=None, as_type=str):
             return as_type(value)
         except ValueError:
             messages.error(
-                'Cannot parse value {0!r} for key {1!r} using format {2!r}'.format(value, key, as_type.__name__)
+                "Cannot parse value '{0}' for key '{1}' using format '{2}'".format(value, key, as_type.__name__)
             )

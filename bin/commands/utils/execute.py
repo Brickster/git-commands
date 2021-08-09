@@ -25,7 +25,7 @@ def stdout(command):
     if isinstance(command, str):
         command = command.split()
     with open(os.devnull, 'w') as devnull:
-        return subprocess.Popen(command, stdout=subprocess.PIPE, stderr=devnull).communicate()[0]
+        return subprocess.Popen(command, stdout=subprocess.PIPE, stderr=devnull).communicate()[0].decode('UTF-8')
 
 
 def call_input(command, input_):
@@ -41,13 +41,13 @@ def execute(command):
         command = command.split()
     proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     command_stdout, command_stderr = proc.communicate()
-    return command_stdout, command_stderr, proc.returncode
+    return command_stdout.decode('UTF-8'), command_stderr.decode('UTF-8'), proc.returncode
 
 
 def check_output(command):
     if isinstance(command, str):
         command = command.split()
-    return subprocess.check_output(command)
+    return subprocess.check_output(command).decode('UTF-8')
 
 
 def call(command):

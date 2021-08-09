@@ -34,7 +34,7 @@ def upstream(branch=None, include_remote=IncludeRemote.NEVER):
     if not branch:
         branch = git.current_branch()
     elif not git.is_valid_reference(branch):
-        messages.error('{0!r} is not a valid branch'.format(branch))
+        messages.error("'{}' is not a valid branch".format(branch))
 
     # get remote branch name
     remote_branch = _get_remote_branch(branch)

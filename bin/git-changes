@@ -244,7 +244,7 @@ def main():
         del args['upstream']
         upstream_branch = upstream.upstream(include_remote=upstream.IncludeRemote.NONE_LOCAL)
         if not upstream_branch:
-            error('{0!r} has no upstream branch'.format(git.current_branch()))
+            error("'{}' has no upstream branch".format(git.current_branch()))
         args['committish'] = upstream_branch
         args['files'] = file_args
     elif subcommand == 'view' and not args['committish']:

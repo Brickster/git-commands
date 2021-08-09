@@ -15,7 +15,7 @@ def _validate_config(config=None):
     """
 
     if config == 'local' and not directories.is_git_repository():
-        messages.error('{0!r} is not a git repository'.format(os.getcwd()), exit_=False)
+        messages.error("'{}' is not a git repository".format(os.getcwd()), exit_=False)
         messages.error("'local' does not apply")
 
 
@@ -97,7 +97,7 @@ def _get_config_contents(config, file_):
         config_contents = execute.check_output(['git', 'config', '--list', '--null'])
     elif file_ is not None:
         if not os.path.exists(file_):
-            messages.error('no such file {!r}'.format(file_))
+            messages.error("no such file '{}'".format(file_))
         config_contents = execute.check_output(['git', 'config', '--list', '--null', '--file', file_])
     else:
         config_contents = execute.stdout(['git', 'config', '--list', '--null', '--{}'.format(config)])

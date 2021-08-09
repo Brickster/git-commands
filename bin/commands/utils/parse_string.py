@@ -16,7 +16,7 @@ def as_bool(value):
     elif value.lower() in ('no', 'off', 'false', '0'):
         return False
     else:
-        raise ValueError('{0!r} is not a boolean representation'.format(value))
+        raise ValueError("'{0}' is not a boolean representation".format(value))
 
 
 def as_enum(enum_type):

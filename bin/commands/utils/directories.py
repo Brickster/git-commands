@@ -15,4 +15,4 @@ def exit_if_not_git_repository(directory=None):
     if directory is None:
         directory = os.getcwd()
     if not is_git_repository(directory):
-        messages.error('{0!r} not a git repository'.format(directory))
+        messages.error("'{}' not a git repository".format(directory))
