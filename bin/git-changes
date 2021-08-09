@@ -4,7 +4,7 @@ import argparse
 import sys
 
 from commands import changes, upstream
-from commands.utils import git
+from commands.utils import git, messages
 from commands.utils.messages import error
 
 
@@ -261,7 +261,7 @@ def main():
     func = args.pop('func')
     result = func(**args)
     if result:
-        print result
+        messages.info(result)
 
 
 def _error_if_files_supplied(parser, file_args):

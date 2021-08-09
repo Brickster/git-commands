@@ -3,7 +3,7 @@
 import argparse
 
 from commands import upstream
-from commands.utils import directories, git, parse_string
+from commands.utils import directories, git, messages, parse_string
 
 
 def main():
@@ -53,7 +53,7 @@ def main():
     directories.exit_if_not_git_repository()
     upstream_output = upstream.upstream(**vars(args))
     if upstream_output:
-        print upstream_output
+        messages.info(upstream_output)
 
 
 if __name__ == '__main__':
