@@ -8,10 +8,10 @@ from commands import reindex
 
 parser = argparse.ArgumentParser(
     prog='git reindex',
-    version='git-reindex 0.7.0',
     description=reindex.__doc__,
     epilog='for more detail, use: git help reindex'
 )
+parser.add_argument('-v', '--version', action='version', version='git-reindex 0.7.0')
 
 parser.parse_args()
 reindex.reindex()

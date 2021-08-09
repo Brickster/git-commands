@@ -12,10 +12,10 @@ def main():
 
     parser = argparse.ArgumentParser(
         prog='git changes',
-        version='git-changes 0.7.0',
         description=changes.__doc__,
         epilog='for more detail, use: git help changes'
     )
+    parser.add_argument('-v', '--version', action='version', version='git-changes 0.7.0')
 
     # --------------------------------------------
     # associate sub-command

@@ -13,10 +13,10 @@ def main():
 
     parser = argparse.ArgumentParser(
         prog='git abandon',
-        version='git-abandon 0.7.0',
         description=abandon.__doc__,
         epilog='for more detail, use: git help abandon'
     )
+    parser.add_argument('-v', '--version', action='version', version='git-abandon 0.7.0')
 
     # <start>
     parser.add_argument(

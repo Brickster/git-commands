@@ -10,10 +10,10 @@ def main():
 
     parser = argparse.ArgumentParser(
         prog='git restash',
-        version='git-restash 0.7.0',
         description=restash.__doc__,
         epilog='for more detail, use: git help restash'
     )
+    parser.add_argument('-v', '--version', action='version', version='git-restash 0.7.0')
 
     # <stash>
     parser.add_argument(
