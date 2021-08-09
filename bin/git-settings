@@ -3,7 +3,7 @@
 import argparse
 
 from commands import settings
-from commands.utils import messages, git
+from commands.utils import git, messages
 from commands.utils.parse_actions import multi_set
 
 
@@ -121,7 +121,7 @@ def main():
     func = args.pop('func')
     result = func(**args)
     if result:
-        print result
+        messages.info(result)
 
 
 if __name__ == '__main__':
