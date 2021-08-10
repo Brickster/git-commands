@@ -2,7 +2,7 @@ import mock
 import os
 import unittest
 
-import testutils
+from . import testutils
 from bin.commands import settings
 
 

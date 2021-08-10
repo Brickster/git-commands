@@ -6,7 +6,7 @@ import unittest
 
 import git
 
-import testutils
+from . import testutils
 
 
 class TestChanges(unittest.TestCase):

@@ -14,8 +14,8 @@ class TestGitSnapshot(unittest.TestCase):
         return check_output(('git', 'stash', 'list')).splitlines()
 
     def _output(self, command):
-        proc = Popen(command, stdout=PIPE, stderr=STDOUT)
-        return proc.communicate()[0].strip()
+        proc = Popen(command, stdout=PIPE, stderr=PIPE)
+        return [x.decode('UTF-8').strip() if x is not None else x for x in proc.communicate()]
 
     def setUp(self):
 
@@ -36,7 +36,7 @@ class TestGitSnapshot(unittest.TestCase):
     def test_snapshot(self):
 
         # run
-        stdout, stderr = Popen('git snapshot'.split(), stdout=PIPE, stderr=PIPE).communicate()
+        stdout, stderr = self._output('git snapshot'.split())
 
         # verify
         self.assertRegexpMatches(stdout.strip(), 'Saved working directory and index state WIP on master: \w+ Initial commit')
@@ -54,7 +54,7 @@ class TestGitSnapshot(unittest.TestCase):
     def test_snapshot_quiet(self):
 
         # run
-        stdout, stderr = Popen('git snapshot --quiet'.split(), stdout=PIPE, stderr=PIPE).communicate()
+        stdout, stderr = self._output('git snapshot --quiet'.split())
 
         # verify
         self.assertFalse(stdout)
@@ -141,7 +141,7 @@ A  file3.txt
         message = "My snapshot message"
 
         # run
-        stdout, stderr = Popen(('git', 'snapshot', message), stdout=PIPE, stderr=PIPE).communicate()
+        stdout, stderr = self._output(('git', 'snapshot', message))
 
         # verify
         self.assertEqual(stdout.strip(), 'Saved working directory and index state On master: My snapshot message')
@@ -159,7 +159,7 @@ A  file3.txt
     def test_snapshot_quiet(self):
 
         # run
-        stdout, stderr = Popen('git snapshot --quiet'.split(), stdout=PIPE, stderr=PIPE).communicate()
+        stdout, stderr = self._output('git snapshot --quiet'.split())
 
         # verify
         self.assertFalse(stdout)
@@ -168,7 +168,7 @@ A  file3.txt
     def test_snapshot_quiet_shortOption(self):
 
         # run
-        stdout, stderr = Popen('git snapshot -q'.split(), stdout=PIPE, stderr=PIPE).communicate()
+        stdout, stderr = self._output('git snapshot -q'.split())
 
         # verify
         self.assertFalse(stdout)
@@ -208,7 +208,7 @@ A  file3.txt
         call('git reset --hard --quiet'.split())
 
         # run
-        stdout, stderr = Popen('git snapshot --quiet'.split(), stdout=PIPE, stderr=PIPE).communicate()
+        stdout, stderr = self._output('git snapshot --quiet'.split())
 
         # verify
         self.assertFalse(stdout)
@@ -220,7 +220,7 @@ A  file3.txt
         call('git reset --hard --quiet'.split())
 
         # run
-        stdout, stderr = Popen('git snapshot -q'.split(), stdout=PIPE, stderr=PIPE).communicate()
+        stdout, stderr = self._output('git snapshot -q'.split())
 
         # verify
         self.assertFalse(stdout)
@@ -233,25 +233,24 @@ A  file3.txt
         os.chdir(self.dirpath + '/dir')
 
         # run
-        p = Popen('git snapshot'.split(), stdout=PIPE, stderr=PIPE)
-        stdout, stderr = p.communicate()
+        stdout, stderr = self._output('git snapshot'.split())
 
         # verify
         expected = "error: '{}' not a git repository".format(os.path.realpath(self.dirpath) + '/dir')
-        self.assertEqual(expected, stderr.strip())
+        self.assertEqual(expected, stderr)
         self.assertFalse(stdout)
 
     def test_snapshot_version(self):
 
         # expect
-        self.assertRegexpMatches(self._output('git snapshot -v'.split()), 'git-snapshot \\d+\\.\\d+\\.\\d+')
-        self.assertRegexpMatches(self._output('git snapshot --version'.split()), 'git-snapshot \\d+\\.\\d+\\.\\d+')
+        self.assertRegexpMatches(self._output('git snapshot -v'.split())[1], 'git-snapshot \\d+\\.\\d+\\.\\d+')
+        self.assertRegexpMatches(self._output('git snapshot --version'.split())[1], 'git-snapshot \\d+\\.\\d+\\.\\d+')
 
     def test_snapshot_help(self):
 
         # expect
-        self.assertTrue(self._output('git snapshot -h'.split()))
-        self.assertTrue(self._output('git snapshot --help'.split()))
+        self.assertTrue(self._output('git snapshot -h'.split())[0])
+        self.assertTrue(self._output('git snapshot --help'.split())[0])
 
     def test_snapshot_replace(self):
 
@@ -263,10 +262,10 @@ A  file3.txt
             a_file.write('contributing\n')
 
         # when
-        stdout, stderr = Popen(('git', 'snapshot', '--replace', message), stdout=PIPE, stderr=PIPE).communicate()
+        stdout, stderr = self._output(('git', 'snapshot', '--replace', message))
 
         # then
-        self.assertEqual(stdout.strip(), 'Saved working directory and index state On master: My snapshot message')
+        self.assertEqual(stdout, 'Saved working directory and index state On master: My snapshot message')
         self.assertFalse(stderr)
         self.assertEqual(self._status(), " M CONTRIBUTING.md\n")
 
@@ -281,8 +280,8 @@ A  file3.txt
     def test_snapshot_replaceWithoutMessage(self):
 
         # when
-        stdout, stderr = Popen(('git', 'snapshot', '--replace'), stdout=PIPE, stderr=PIPE).communicate()
+        stdout, stderr = self._output(('git', 'snapshot', '--replace'))
 
         # then
-        self.assertEqual(stdout.strip(), 'usage: git snapshot [MESSAGE] [-h] [-v] [-r] [-q] [-- FILE [FILE ...]]')
-        self.assertEqual(stderr.strip(), 'git snapshot: error: argument -r/--replace: not allowed without positional argument message')
+        self.assertEqual(stdout, 'usage: git snapshot [MESSAGE] [-h] [-v] [-r] [-q] [-- FILE [FILE ...]]')
+        self.assertEqual(stderr, 'git snapshot: error: argument -r/--replace: not allowed without positional argument message')

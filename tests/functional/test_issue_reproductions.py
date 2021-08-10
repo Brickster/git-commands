@@ -7,7 +7,7 @@ import unittest
 
 import git
 
-import testutils
+from . import testutils
 
 
 class TestIssue093(unittest.TestCase):

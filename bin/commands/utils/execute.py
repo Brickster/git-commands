@@ -32,7 +32,7 @@ def call_input(command, input_):
     if isinstance(command, str):
         command = command.split()
     proc = subprocess.Popen(command, stdin=subprocess.PIPE)
-    proc.communicate(input=input_)
+    proc.communicate(input=input_.encode('UTF-8'))
     return proc.returncode
 
 

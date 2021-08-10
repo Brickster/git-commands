@@ -7,7 +7,7 @@ import unittest
 
 import git
 
-import testutils
+from . import testutils
 
 
 class TestSettings(unittest.TestCase):
@@ -263,7 +263,7 @@ git-settings.test.getb=valueb""")
     def test_list_keys(self):
 
         import sys
-        print 'args:', sys.argv
+        print('args:', sys.argv)
 
         # when
         keys = self.repo.git.settings('list', '--local', '--keys', 'git-settings.test').splitlines()
@@ -274,7 +274,7 @@ git-settings.test.getb=valueb""")
     def test_list_sections(self):
 
         import sys
-        print 'args:', sys.argv
+        print('args:', sys.argv)
 
         # when
         sections = self.repo.git.settings('list', '--local', '--sections').splitlines()

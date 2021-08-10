@@ -30,7 +30,7 @@ def _pretty_format_configs(config_map):
 
 def _get_sections_map(config_map):
     all_sections_map = {}
-    for key, value in config_map.iteritems():
+    for key, value in iter(config_map.items()):
         match = re.match('^(.*)\.([-a-zA-Z0-9]+)', key)
         subkey = match.group(1)
         key = match.group(2)
@@ -54,7 +54,7 @@ def _append_section_header(result, section):
 
 
 def _append_section_keys(result, section_map):
-    for key, value in section_map.iteritems():
+    for key, value in iter(section_map.items()):
         result += ['    {} = {}'.format(key, value)]
 
 

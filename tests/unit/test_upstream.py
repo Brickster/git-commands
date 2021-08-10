@@ -1,7 +1,7 @@
 import unittest
 import mock
 
-import testutils
+from . import testutils
 from bin.commands import upstream
 
 

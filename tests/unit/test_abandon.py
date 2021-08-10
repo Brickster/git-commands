@@ -1,7 +1,7 @@
 import mock
 import unittest
 
-import testutils
+from . import testutils
 from bin.commands import abandon
 
 

@@ -12,7 +12,7 @@ def multi_set(**kwargs):
         def __call__(self, parser, namespace, values, option_string=None):
             if values is not None:
                 setattr(namespace, self.dest, values)
-            for dest, value in kwargs.iteritems():
+            for dest, value in iter(kwargs.items()):
                 setattr(namespace, dest, value)
     return MultiSet
 

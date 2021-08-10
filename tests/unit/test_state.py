@@ -5,7 +5,7 @@ import unittest
 
 import colorama
 
-import testutils
+from . import testutils
 from bin.commands import state
 
 
