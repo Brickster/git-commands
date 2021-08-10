@@ -1,6 +1,7 @@
 import collections
 import mock
 import os
+import sys
 import unittest
 
 from subprocess import PIPE, STDOUT
@@ -360,25 +361,35 @@ MM modified.txt
     def test_resolveColoring_always(self):
         self.assertEqual(git.resolve_coloring('always'), 'always')
 
-    @mock.patch('sys.stdout.isatty', return_value=False)
-    def test_resolveColoring_auto_notTTY(self, mock_isatty):
+    def test_resolveColoring_auto_notTTY(self):
+
+        # setup
+        orig_tty = sys.stdout
+        sys.stdout = testutils.PseudoTTY(sys.stdout, False)
 
         # when
         color = git.resolve_coloring('auto')
 
         # then
         self.assertEqual(color, 'never')
-        mock_isatty.assert_called_once()
 
-    @mock.patch('sys.stdout.isatty', return_value=True)
-    def test_resolveColoring_never_isTTY(self, mock_isatty):
+        # cleanup
+        sys.stdout = orig_tty
+
+    def test_resolveColoring_never_isTTY(self):
+
+        # setup
+        orig_tty = sys.stdout
+        sys.stdout = testutils.PseudoTTY(sys.stdout, True)
 
         # when
         color = git.resolve_coloring('auto')
 
         # then
         self.assertEqual(color, 'always')
-        mock_isatty.assert_called_once()
+
+        # cleanup
+        sys.stdout = orig_tty
 
     @mock.patch('bin.commands.utils.git.get_config_value', return_value='always')
     def test_resolveColoring_none(self, mock_get_config_value):

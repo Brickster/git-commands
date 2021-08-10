@@ -100,9 +100,8 @@ class TestSettingsList(unittest.TestCase):
         # then
         self.assertFalse(stdout)
 
-    # a bit of a hack since --no-skip is a nosetests flag.
     @unittest.skipIf(
-        '--no-skip' not in sys.argv,
+        '--config' not in sys.argv and '-c' not in sys.argv,
         'requires editing user config and should only run during non-local builds.'
     )
     def test_list_global(self):
@@ -132,7 +131,7 @@ class TestSettingsList(unittest.TestCase):
         self.assertTrue('git-settings.test2.getc=valuec' not in actual)
 
     @unittest.skipIf(
-        '--no-skip' not in sys.argv,
+        '--config' not in sys.argv and '-c' not in sys.argv,
         'requires editing user config and should only run during non-local builds.'
     )
     def test_list_global_configFileDoesNotExist(self):
@@ -156,7 +155,7 @@ class TestSettingsList(unittest.TestCase):
 
     # a bit of a hack since --no-skip is a nosetests flag.
     @unittest.skipIf(
-        '--no-skip' not in sys.argv,
+        '--config' not in sys.argv and '-c' not in sys.argv,
         'requires editing user config and should only run during non-local builds.'
     )
     def test_list_system(self):
@@ -186,7 +185,7 @@ class TestSettingsList(unittest.TestCase):
         self.assertTrue('git-settings.test2.getc=valuec' not in actual)
 
     @unittest.skipIf(
-        '--no-skip' not in sys.argv,
+        '--config' not in sys.argv and '-c' not in sys.argv,
         'requires editing user config and should only run during non-local builds.'
     )
     def test_list_system_configFileDoesNotExist(self):
@@ -262,9 +261,6 @@ git-settings.test.getb=valueb""")
 
     def test_list_keys(self):
 
-        import sys
-        print('args:', sys.argv)
-
         # when
         keys = self.repo.git.settings('list', '--local', '--keys', 'git-settings.test').splitlines()
 
@@ -272,9 +268,6 @@ git-settings.test.getb=valueb""")
         self.assertEqual(keys, ['geta', 'getb'])
 
     def test_list_sections(self):
-
-        import sys
-        print('args:', sys.argv)
 
         # when
         sections = self.repo.git.settings('list', '--local', '--sections').splitlines()
@@ -293,9 +286,8 @@ git-settings.test.getb=valueb""")
         self.assertEqual('error: argument -k/--keys: not allowed without positional argument section', stderr.strip())
 
 
-# a bit of a hack since --no-skip is a nosetests flag.
 @unittest.skipIf(
-    '--no-skip' not in sys.argv,
+    '--config' not in sys.argv and '-c' not in sys.argv,
     'requires editing user config and should only run during non-local builds.'
 )
 class TestSettingsDestroy(unittest.TestCase):

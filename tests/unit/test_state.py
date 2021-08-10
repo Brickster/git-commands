@@ -1,5 +1,6 @@
 import mock
 import os
+import sys
 import subprocess
 import unittest
 
@@ -126,8 +127,11 @@ class TestStatePrintSection(unittest.TestCase):
         # then
         mock_error.assert_called_once_with("unknown format 'invalid'")
 
-    @mock.patch('sys.stdout.isatty', return_value=True)
-    def test_printsection_color_auto_isatty(self, mock_isatty):
+    def test_printsection_color_auto_isatty(self):
+
+        # setup
+        orig_tty = sys.stdout
+        sys.stdout = testutils.PseudoTTY(sys.stdout, True)
 
         # given
         expected_output = '# ' + colorama.Fore.GREEN + 'title' + colorama.Fore.RESET + os.linesep
@@ -138,10 +142,14 @@ class TestStatePrintSection(unittest.TestCase):
         # then
         self.assertEqual(section_output, expected_output)
 
-        mock_isatty.assert_called_once_with()
+        # cleanup
+        sys.stdout = orig_tty
 
-    @mock.patch('sys.stdout.isatty', return_value=False)
-    def test_printsection_color_auto_isnotatty(self, mock_isatty):
+    def test_printsection_color_auto_isnotatty(self):
+
+        # setup
+        orig_tty = sys.stdout
+        sys.stdout = testutils.PseudoTTY(sys.stdout, False)
 
         # given
         expected_output = '# ' + colorama.Fore.RESET + 'title' + colorama.Fore.RESET + os.linesep
@@ -152,7 +160,8 @@ class TestStatePrintSection(unittest.TestCase):
         # then
         self.assertEqual(section_output, expected_output)
 
-        mock_isatty.assert_called_once_with()
+        # cleanup
+        sys.stdout = orig_tty
 
     def test_printsection_color_never(self):
 

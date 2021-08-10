@@ -143,7 +143,7 @@ git reindex (-v|--version)
 
 ```
 pip install requirements-test.txt
-nosetests
+nose2
 ```
 
 ## Dependencies
