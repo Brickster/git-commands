@@ -23,7 +23,7 @@ class TestGitAbandon(unittest.TestCase):
     def setUp(self):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
-        subprocess.call('git init --quiet'.split())
+        self.repo = git.Repo.init(self.dirpath)
         testutils.init_local_config(self.repo)
         subprocess.call('touch README.md'.split())
         with open('README.md', 'w') as a_file:
