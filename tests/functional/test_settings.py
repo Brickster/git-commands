@@ -49,7 +49,7 @@ class TestSettingsList(unittest.TestCase):
 
     def tearDown(self):
         # put global configs back since some tests remove them
-        if '--no-skip' in sys.argv:
+        if '--config' in sys.argv or '-c' in sys.argv:
             self.repo.git.config('--global', 'user.name', 'Marcus Rosenow')
             self.repo.git.config('--global', 'user.email', 'Brickstertwo@users.noreply.github.com')
         shutil.rmtree(self.dirpath)

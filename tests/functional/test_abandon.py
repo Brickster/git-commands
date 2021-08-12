@@ -6,8 +6,6 @@ import unittest
 
 import git
 
-from . import testutils
-
 _DROPPED_FORMAT = 'Dropped refs/stash@{{{}}} ({})'
 _DRY_RUN_FORMAT = 'Would drop refs/stash@{{{}}} ({})'
 _STASH_FORMAT = '{} refs/stash@{{{}}}: WIP on master: {}'
@@ -27,7 +25,6 @@ class TestGitAbandon(unittest.TestCase):
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         self.repo = git.Repo.init(self.dirpath)
-        testutils.init_local_config(self.repo)
         subprocess.call('touch README.md'.split())
         with open('README.md', 'w') as a_file:
             a_file.write('readme\n')
