@@ -4,6 +4,8 @@ import subprocess
 import tempfile
 import unittest
 
+import git
+
 from . import testutils
 
 _DROPPED_FORMAT = 'Dropped refs/stash@{{{}}} ({})'
@@ -21,6 +23,7 @@ class TestGitAbandon(unittest.TestCase):
         return proc.communicate()[0].strip()
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         self.repo = git.Repo.init(self.dirpath)
@@ -73,6 +76,7 @@ class TestGitAbandon(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test_abandon_endOnly(self):
 

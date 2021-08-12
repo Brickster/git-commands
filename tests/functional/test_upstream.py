@@ -16,6 +16,8 @@ class TestGitUpstream(unittest.TestCase):
         return proc.communicate()[0].strip()
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
+
         # init repo
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
@@ -30,6 +32,7 @@ class TestGitUpstream(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test_upstream(self):
         self.assertEqual('master', subprocess.check_output('git upstream'.split()).strip())

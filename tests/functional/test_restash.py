@@ -14,6 +14,7 @@ class TestGitRestash(unittest.TestCase):
         return proc.communicate()[0].strip()
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         self.repo = git.Repo.init(self.dirpath)
@@ -30,6 +31,7 @@ class TestGitRestash(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test_restash_full(self):
 

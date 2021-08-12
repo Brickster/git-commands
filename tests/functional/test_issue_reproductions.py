@@ -14,12 +14,14 @@ class TestIssue093(unittest.TestCase):
     """State --no-status not respected for new repositories"""
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         self.repo = git.Repo.init(self.dirpath)
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         """Issue 93: hiding status should be respected even for new repositories"""
@@ -31,6 +33,7 @@ class TestIssue094(unittest.TestCase):
     """Changes breaks when HEAD is detached"""
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
@@ -49,6 +52,7 @@ class TestIssue094(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         """Issue 094: Changes should be returned even if head is detached"""
@@ -60,6 +64,7 @@ class TestIssue095(unittest.TestCase):
     """Settings list fails if a value contains a newline"""
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
@@ -76,6 +81,7 @@ c""")
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         """Issue 95: settings list should handle values with newlines"""
@@ -98,6 +104,7 @@ class TestIssue102(unittest.TestCase):
     """
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         repo = git.Repo.init(self.dirpath)
@@ -107,6 +114,7 @@ class TestIssue102(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         """Issue 102: Nothing should be returned if no association exists."""
@@ -118,6 +126,7 @@ class TestIssue103(unittest.TestCase):
     """`changes unassociate --prune` fails when no association exist for any branch"""
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
@@ -129,6 +138,7 @@ class TestIssue103(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         """Issue 103: Nothing should happen when pruning with no associations at all."""
@@ -140,12 +150,14 @@ class TestIssue104(unittest.TestCase):
     """`changes unassociate --prune` fails for new repositories"""
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         git.Repo.init(self.dirpath)
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         """Issue 104: Nothing should happen when pruning a new repository."""
@@ -158,6 +170,7 @@ class TestIssue106(unittest.TestCase):
     """Associating when detached uses HEAD as branch"""
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
@@ -176,6 +189,7 @@ class TestIssue106(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         """Issue 106: Do not allow associating a detached HEAD"""
@@ -190,6 +204,7 @@ class TestIssue107(unittest.TestCase):
     """Associate blows up on invalid revision"""
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
@@ -201,6 +216,7 @@ class TestIssue107(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         """Issue 107: an error should be printed when associating with an invalid revision"""
@@ -214,6 +230,7 @@ class TestIssue108(unittest.TestCase):
     """Dry running an unassociate without an association print misleading result"""
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
@@ -225,6 +242,7 @@ class TestIssue108(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         """Issue 108: Dry running an unassociate without an association should print nothing"""
@@ -236,6 +254,7 @@ class TestIssue111(unittest.TestCase):
     """Snapshotting specific files with a message should snapshot successfully"""
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
@@ -251,6 +270,7 @@ class TestIssue111(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         """Issue 111: Unable to include files and message in snapshot"""
@@ -263,6 +283,7 @@ class TestIssue112(unittest.TestCase):
     """Associating with a local upstream should associate with refs/head/<<UPSTREAM>>"""
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
@@ -279,6 +300,7 @@ class TestIssue112(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         """Issue 112: Associate --upstream fails for local upstream"""
@@ -293,6 +315,7 @@ class TestIssue114(unittest.TestCase):
     """Snapshot occasionally does nothing."""
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
@@ -310,6 +333,7 @@ class TestIssue114(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         """Issue 114: quickly creating n snapshots should create n stashes."""
@@ -330,6 +354,7 @@ class TestIssue119(unittest.TestCase):
     """Limiting settings to keys should require a section"""
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
@@ -338,6 +363,7 @@ class TestIssue119(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         settings_proc = subprocess.Popen(
@@ -354,6 +380,7 @@ class TestIssue121(unittest.TestCase):
     """Settings list fails when the config file is empty"""
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
@@ -364,6 +391,7 @@ class TestIssue121(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         """Issue 121: settings list should not fail with blank config files"""
@@ -376,6 +404,7 @@ class TestIssue122(unittest.TestCase):
     """Settings list does not gracefully handle unknown files"""
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
@@ -384,6 +413,7 @@ class TestIssue122(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         """Issue 122: settings list should gracefully print unknown file errors"""
@@ -402,6 +432,7 @@ class TestIssue124(unittest.TestCase):
     """`git changes` decoration differs when printing to a terminal"""
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
@@ -424,6 +455,7 @@ class TestIssue124(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         """Issue 124: git-changes should not decorate when printing to a TTY"""
@@ -442,6 +474,7 @@ class TestIssue131(unittest.TestCase):
     """Handle missing system config when using git-settings list"""
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
@@ -450,6 +483,7 @@ class TestIssue131(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         """Issue 131: a missing config file should print nothing"""
@@ -476,6 +510,7 @@ class TestIssue151(unittest.TestCase):
     """Multiple --no-show-* options can't be used together"""
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
@@ -486,6 +521,7 @@ class TestIssue151(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test(self):
         """Issue 151: multiple --no-show options should work together"""

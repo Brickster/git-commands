@@ -12,12 +12,14 @@ from . import testutils
 class TestState(unittest.TestCase):
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         # The current directory may not exist if this test ran after another functional test. So just create a new one.
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def _output(self, command):
         proc = subprocess.Popen(command.split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -45,6 +47,7 @@ class TestStateView(unittest.TestCase):
         return proc.communicate()[0]
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
 
         # init repo
         self.dirpath = tempfile.mkdtemp()
@@ -54,6 +57,7 @@ class TestStateView(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test_state_view_cleanAndEmptyRepository(self):
         # expect
@@ -158,6 +162,7 @@ class TestStateViewWithExtension(unittest.TestCase):
         return proc.communicate()[0]
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
 
         # init repo
         self.dirpath = tempfile.mkdtemp()
@@ -202,6 +207,10 @@ class TestStateViewWithExtension(unittest.TestCase):
         self.commit3_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' edit changelog'
 
         self.full_log = os.linesep.join([self.commit3_log, self.commit2_log, self.commit1_log, self.commit0_log])
+
+    def tearDown(self):
+        shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test_state_viewWithExtension(self):
 
@@ -502,6 +511,8 @@ class TestStateExtensions(unittest.TestCase):
         return proc.communicate()[0]
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
+
         # init repo
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
@@ -547,6 +558,7 @@ class TestStateExtensions(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test_state_extensions_create(self):
 

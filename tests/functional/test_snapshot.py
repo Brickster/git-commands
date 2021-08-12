@@ -18,7 +18,7 @@ class TestGitSnapshot(unittest.TestCase):
         return [x.decode('UTF-8').strip() if x is not None else x for x in proc.communicate()]
 
     def setUp(self):
-
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         call('git init --quiet'.split())
@@ -32,6 +32,7 @@ class TestGitSnapshot(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test_snapshot(self):
 

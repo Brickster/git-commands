@@ -32,6 +32,7 @@ class TestSettings(unittest.TestCase):
 class TestSettingsList(unittest.TestCase):
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         self.repo = git.Repo.init(self.dirpath)
@@ -52,6 +53,7 @@ class TestSettingsList(unittest.TestCase):
             self.repo.git.config('--global', 'user.name', 'Marcus Rosenow')
             self.repo.git.config('--global', 'user.email', 'Brickstertwo@users.noreply.github.com')
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test_list(self):
 
@@ -293,6 +295,7 @@ git-settings.test.getb=valueb""")
 class TestSettingsDestroy(unittest.TestCase):
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         self.repo = git.Repo.init(self.dirpath)
@@ -316,6 +319,7 @@ class TestSettingsDestroy(unittest.TestCase):
             subprocess.call(('git', 'config', '--system', '--remove-section', 'git-settings.test'), stdout=devnull, stderr=devnull)
 
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test_destory(self):
 

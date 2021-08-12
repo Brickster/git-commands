@@ -18,6 +18,7 @@ class TestGitReindex(unittest.TestCase):
         return proc.communicate()[0].strip()
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         subprocess.call('git init --quiet'.split())
@@ -32,6 +33,7 @@ class TestGitReindex(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test_reindex(self):
 

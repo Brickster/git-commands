@@ -31,6 +31,7 @@ class TestChanges(unittest.TestCase):
 class TestChangesView(unittest.TestCase):
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         self.repo = git.Repo.init(self.dirpath)
@@ -73,6 +74,7 @@ class TestChangesView(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test_view(self):
 
@@ -199,6 +201,7 @@ class TestChangesView(unittest.TestCase):
 class TestChangesAssociate(unittest.TestCase):
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         self.repo = git.Repo.init(self.dirpath)
@@ -216,6 +219,7 @@ class TestChangesAssociate(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test_associate(self):
 
@@ -339,6 +343,7 @@ class TestChangesUnassociate(unittest.TestCase):
         return proc.communicate()[0].strip()
 
     def setUp(self):
+        self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
         os.chdir(self.dirpath)
         self.repo = git.Repo.init(self.dirpath)
@@ -369,6 +374,7 @@ class TestChangesUnassociate(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
+        os.chdir(self.proj_dir)
 
     def test_unassociate_currentBranch(self):
 
