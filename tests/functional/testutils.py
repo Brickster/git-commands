@@ -1,6 +1,9 @@
 def init_local_config(repo):
     writer = repo.config_writer('repository')
 
+    writer.set_value('user.name', 'Marcus Rosenow')
+    writer.set_value('user.email', 'Brickstertwo@users.noreply.github.com')
+
     writer.set_value('git-changes', 'default-commit-ish', 'refs/heads/master')
     writer.set_value('git-changes', 'default-view', 'log')
 
