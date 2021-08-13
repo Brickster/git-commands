@@ -41,7 +41,7 @@ class TestParseString(unittest.TestCase):
             parse_string.as_bool('yup')
 
         # then
-        self.assertEqual('{0!r} is not a boolean representation'.format('yup'), context.exception.message)
+        self.assertEqual('{0!r} is not a boolean representation'.format('yup'), str(context.exception))
 
     def test_asEnum(self):
 
@@ -60,7 +60,7 @@ class TestParseString(unittest.TestCase):
             parse_string.as_enum(TestEnum)('Z')
 
         # then
-        self.assertEqual('Z', context.exception.message)
+        self.assertEqual("'Z'", str(context.exception))
 
     def test_asDelimitedList(self):
 

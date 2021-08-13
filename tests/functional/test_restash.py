@@ -11,7 +11,7 @@ class TestGitRestash(unittest.TestCase):
 
     def _output(self, command):
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        return proc.communicate()[0].strip()
+        return proc.communicate()[0].decode('utf-8').strip()
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -45,7 +45,7 @@ class TestGitRestash(unittest.TestCase):
         # then
         stash_sha = self.repo.git.rev_parse('stash@{0}')
         self.assertEqual(restash_output, 'Restashed stash@{{0}} ({})'.format(stash_sha))
-        self.assertFalse(subprocess.check_output('git status --short'.split()).strip())
+        self.assertFalse(subprocess.check_output('git status --short'.split()).decode('utf-8').strip())
 
     def test_restash_partial(self):
 
@@ -61,7 +61,7 @@ class TestGitRestash(unittest.TestCase):
         # then
         stash_sha = self.repo.git.rev_parse('stash@{0}')
         self.assertEqual(restash_output, 'Restashed stash@{{0}} ({})'.format(stash_sha))
-        status_output = subprocess.check_output('git -c color.ui=never status --short'.split()).rstrip()
+        status_output = subprocess.check_output('git -c color.ui=never status --short'.split()).decode('utf-8').rstrip()
         self.assertEqual(status_output, ' M CHANGELOG.md')
 
     def test_restash_specifyStash(self):
@@ -80,7 +80,7 @@ class TestGitRestash(unittest.TestCase):
         # then
         stash_sha = self.repo.git.rev_parse('stash@{1}')
         self.assertEqual(restash_output, 'Restashed stash@{{1}} ({})'.format(stash_sha))
-        status_output = subprocess.check_output('git -c color.ui=never status --short'.split()).rstrip()
+        status_output = subprocess.check_output('git -c color.ui=never status --short'.split()).decode('utf-8').rstrip()
         self.assertEqual(status_output, ' M CHANGELOG.md')
 
     def test_restash_withNewFiles(self):
@@ -96,7 +96,7 @@ class TestGitRestash(unittest.TestCase):
         # then
         stash_sha = self.repo.git.rev_parse('stash@{0}')
         self.assertEqual(restash_output, 'Restashed stash@{{0}} ({})'.format(stash_sha))
-        self.assertFalse(subprocess.check_output('git status --short'.split()).strip())
+        self.assertFalse(subprocess.check_output('git status --short'.split()).decode('utf-8').strip())
 
     def test_restash_withDeletedFiles(self):
 
@@ -111,7 +111,7 @@ class TestGitRestash(unittest.TestCase):
         # then
         stash_sha = self.repo.git.rev_parse('stash@{0}')
         self.assertEqual(restash_output, 'Restashed stash@{{0}} ({})'.format(stash_sha))
-        self.assertFalse(subprocess.check_output('git status --short'.split()).strip())
+        self.assertFalse(subprocess.check_output('git status --short'.split()).decode('utf-8').strip())
 
     def test_restash_quiet_shortOption(self):
 
@@ -144,7 +144,7 @@ class TestGitRestash(unittest.TestCase):
             'git restash blarg'.split(),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
-        ).communicate()[1].strip()
+        ).communicate()[1].decode('utf-8').strip()
 
         # then
         self.assertEqual(error_message, 'error: no stashes exist')
@@ -159,7 +159,7 @@ class TestGitRestash(unittest.TestCase):
             'git restash blarg'.split(),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
-        ).communicate()[1].strip()
+        ).communicate()[1].decode('utf-8').strip()
 
         # then
         self.assertEqual(error_message, 'error: blarg is not a valid stash reference')
@@ -172,7 +172,7 @@ class TestGitRestash(unittest.TestCase):
 
         # run
         p = subprocess.Popen('git restash'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = p.communicate()
+        stdout, stderr = [x.decode('utf-8') for x in p.communicate()]
 
         # verify
         expected = "error: '{}' not a git repository".format(os.path.realpath(self.dirpath) + '/dir')

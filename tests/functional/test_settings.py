@@ -14,7 +14,7 @@ class TestSettings(unittest.TestCase):
 
     def _output(self, command):
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        return proc.communicate()[0].strip()
+        return proc.communicate()[0].decode('utf-8').strip()
 
     def test_settings_version(self):
 
@@ -30,6 +30,10 @@ class TestSettings(unittest.TestCase):
 
 
 class TestSettingsList(unittest.TestCase):
+
+    def _output(self, command):
+        proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        return proc.communicate()[0].decode('utf-8').strip()
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -92,12 +96,7 @@ class TestSettingsList(unittest.TestCase):
         os.remove(self.dirpath + '/.git/config')
 
         # when
-        settings_proc = subprocess.Popen(
-            'git settings list --local'.split(),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT
-        )
-        stdout = settings_proc.communicate()[0]
+        stdout = self._output('git settings list --local'.split())
 
         # then
         self.assertFalse(stdout)
@@ -145,12 +144,7 @@ class TestSettingsList(unittest.TestCase):
             os.remove(os.path.expanduser('~/.config/git/config'))
 
         # when
-        settings_proc = subprocess.Popen(
-            'git settings list --global'.split(),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT
-        )
-        stdout = settings_proc.communicate()[0]
+        stdout = self._output('git settings list --global'.split())
 
         # then
         self.assertFalse(stdout)
@@ -199,12 +193,7 @@ class TestSettingsList(unittest.TestCase):
             os.remove('/usr/local/etc/gitconfig')
 
         # when
-        settings_proc = subprocess.Popen(
-            'git settings list --system'.split(),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT
-        )
-        stdout = settings_proc.communicate()[0]
+        stdout = self._output('git settings list --system'.split())
 
         # then
         self.assertFalse(stdout)
@@ -230,9 +219,9 @@ class TestSettingsList(unittest.TestCase):
         compact_settings = self.repo.git.settings('list', '--local', '--format=compact')
 
         # then
-        self.assertEqual(compact_settings, """git-settings.test2.getc=valuec
-git-settings.test.geta=valuea
-git-settings.test.getb=valueb""")
+        self.assertEqual(compact_settings, """git-settings.test.geta=valuea
+git-settings.test.getb=valueb
+git-settings.test2.getc=valuec""")
 
     def test_list_format_pretty(self):
 
@@ -240,11 +229,11 @@ git-settings.test.getb=valueb""")
         pretty_settings = self.repo.git.settings('list', '--local', '--format=pretty')
 
         # then
-        self.assertEqual(pretty_settings, """[git-settings "test2"]
-    getc = valuec
-[git-settings "test"]
+        self.assertEqual(pretty_settings, """[git-settings "test"]
     geta = valuea
-    getb = valueb""")
+    getb = valueb
+[git-settings "test2"]
+    getc = valuec""")
 
     def test_list_pretty(self):
 
@@ -252,11 +241,11 @@ git-settings.test.getb=valueb""")
         pretty_settings = self.repo.git.settings('list', '--local', '--pretty')
 
         # then
-        self.assertEqual(pretty_settings, """[git-settings "test2"]
-    getc = valuec
-[git-settings "test"]
+        self.assertEqual(pretty_settings, """[git-settings "test"]
     geta = valuea
-    getb = valueb""")
+    getb = valueb
+[git-settings "test2"]
+    getc = valuec""")
 
     def test_list_count(self):
         self.assertEqual(int(self.repo.git.settings('list', '--local', '--count')), 3)
@@ -281,7 +270,7 @@ git-settings.test.getb=valueb""")
 
         # run
         p = subprocess.Popen('git settings list --keys'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = p.communicate()
+        stdout, stderr = [x.decode('utf-8') for x in p.communicate()]
 
         # verify
         self.assertFalse(stdout)
@@ -328,12 +317,7 @@ class TestSettingsDestroy(unittest.TestCase):
 
         # then
         self.assertFalse(destroy_output, 'destroy should have no output')
-        proc = subprocess.Popen(
-            'git config --get-regexp git-settings.test'.split(),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT
-        )
-        self.assertFalse(proc.communicate()[0].strip())
+        self.assertFalse(self._output('git config --get-regexp git-settings.test'.split()))
 
     def test_destory_localOnly(self):
 
@@ -346,12 +330,7 @@ class TestSettingsDestroy(unittest.TestCase):
 
         # then
         self.assertFalse(destroy_output, 'destroy should have no output')
-        proc = subprocess.Popen(
-            'git config --get-regexp git-settings.test'.split(),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT
-        )
-        self.assertFalse(proc.communicate()[0].strip())
+        self.assertFalse(self._output('git config --get-regexp git-settings.test'.split()))
 
     def test_destory_globalOnly(self):
 
@@ -364,12 +343,7 @@ class TestSettingsDestroy(unittest.TestCase):
 
         # then
         self.assertFalse(destroy_output, 'destroy should have no output')
-        proc = subprocess.Popen(
-            'git config --get-regexp git-settings.test'.split(),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT
-        )
-        self.assertFalse(proc.communicate()[0].strip())
+        self.assertFalse(self._output('git config --get-regexp git-settings.test'.split()))
 
     def test_destory_systemOnly(self):
 
@@ -382,12 +356,7 @@ class TestSettingsDestroy(unittest.TestCase):
 
         # then
         self.assertFalse(destroy_output, 'destroy should have no output')
-        proc = subprocess.Popen(
-            'git config --get-regexp git-settings.test'.split(),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT
-        )
-        self.assertFalse(proc.communicate()[0].strip())
+        self.assertFalse(self._output('git config --get-regexp git-settings.test'.split()))
 
     def test_destory_dryRun(self):
 

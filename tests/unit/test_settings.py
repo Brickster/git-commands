@@ -64,19 +64,22 @@ class TestSettings(unittest.TestCase):
         # given
         config_map = {
             'settings.keys.key1': 'value1',
+            'settings.key3': 'value3',
             'settings.key2': 'value2',
-            'settings.key3': 'value3'
+            'a_setting.key0': 'value0'
         }
 
         # when
         formatted = settings._pretty_format_configs(config_map)
 
-        # then
-        self.assertEqual(os.linesep.join(formatted), '''[settings "keys"]
-    key1 = value1
+        # then: config if printed with keys sorted
+        self.assertEqual(os.linesep.join(formatted), '''[a_setting]
+    key0 = value0
 [settings]
+    key2 = value2
     key3 = value3
-    key2 = value2''')
+[settings "keys"]
+    key1 = value1''')
 
     @mock.patch('bin.commands.utils.execute.stdout')
     @mock.patch('bin.commands.utils.messages.info')

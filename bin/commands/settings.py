@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import
 
+import operator
 import os
 import re
 
@@ -22,7 +23,7 @@ def _validate_config(config=None):
 def _pretty_format_configs(config_map):
     all_sections_map = _get_sections_map(config_map)
     result = []
-    for section, section_map in iter(all_sections_map.items()):
+    for section, section_map in iter(sorted(all_sections_map.items(), key=operator.itemgetter(0))):
         _append_section_header(result, section)
         _append_section_keys(result, section_map)
     return result
@@ -54,7 +55,7 @@ def _append_section_header(result, section):
 
 
 def _append_section_keys(result, section_map):
-    for key, value in iter(section_map.items()):
+    for key, value in iter(sorted(section_map.items(), key=operator.itemgetter(0))):
         result += ['    {} = {}'.format(key, value)]
 
 
@@ -124,7 +125,7 @@ def _get_list_result(count, limit_to, format_, config_map):
         return _pretty_format_configs(config_map)
 
     result = []
-    for key, value in iter(config_map.items()):
+    for key, value in iter(sorted(config_map.items(), key=operator.itemgetter(0))):
         result += ['{}={}'.format(key, value)]
     return result
 

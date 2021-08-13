@@ -609,6 +609,6 @@ MM modified.txt
             self.fail('expected exception but found none')  # pragma: no cover
         except Exception as e:
             # then
-            self.assertEqual(e.message, '{} is not callable'.format(as_type))
+            self.assertEqual(str(e), '{} is not callable'.format(as_type))
 
         mock_validateconfig.assert_called_once()

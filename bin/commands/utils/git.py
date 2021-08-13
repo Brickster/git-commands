@@ -196,7 +196,7 @@ def get_config_value(key, default=None, config=None, file_=None, as_type=str):
     validate_config(config)
 
     if not hasattr(as_type, '__call__') and not hasattr(as_type, '__bases__'):
-        raise Exception('{} is not callable'.format(as_type))
+        raise TypeError('{} is not callable'.format(as_type))
 
     command = _get_command(key, config, file_)
     value = execute.stdout(command).strip()

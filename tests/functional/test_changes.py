@@ -13,7 +13,7 @@ class TestChanges(unittest.TestCase):
 
     def _output(self, command):
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        return proc.communicate()[0].strip()
+        return proc.communicate()[0].strip().decode('utf-8')
 
     def test_changes_version(self):
 
@@ -46,7 +46,7 @@ class TestChangesView(unittest.TestCase):
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-15T00:00:00Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-15T00:00:00Z'
         subprocess.call(['git', 'commit', '--quiet', '-m', 'Initial commit'], env=pyenv)
-        self.commit0_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' Initial commit'
+        self.commit0_log = subprocess.check_output('git rev-parse --short HEAD'.split()).decode('utf-8').strip() + ' Initial commit'
 
         # edit readme
         with open('README.md', 'a') as a_file:
@@ -54,7 +54,7 @@ class TestChangesView(unittest.TestCase):
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-16T00:00:00Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-16T00:00:00Z'
         subprocess.call(['git', 'commit', '--quiet', '-a', '-m', 'edit readme'], env=pyenv)
-        self.commit1_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' edit readme'
+        self.commit1_log = subprocess.check_output('git rev-parse --short HEAD'.split()).decode('utf-8').strip() + ' edit readme'
 
         # add changelog
         subprocess.call('touch CHANGELOG.md'.split())
@@ -62,7 +62,7 @@ class TestChangesView(unittest.TestCase):
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-17T00:00:00Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-17T00:00:00Z'
         subprocess.call(['git', 'commit', '--quiet', '-m', 'add changelog'], env=pyenv)
-        self.commit2_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' add changelog'
+        self.commit2_log = subprocess.check_output('git rev-parse --short HEAD'.split()).decode('utf-8').strip() + ' add changelog'
 
         # edit changelog
         with open('CHANGELOG.md', 'w') as a_file:
@@ -70,7 +70,7 @@ class TestChangesView(unittest.TestCase):
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-18T00:00:00Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-18T00:00:00Z'
         subprocess.call(['git', 'commit', '--quiet', '-a', '-m', 'edit changelog'], env=pyenv)
-        self.commit3_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' edit changelog'
+        self.commit3_log = subprocess.check_output('git rev-parse --short HEAD'.split()).decode('utf-8').strip() + ' edit changelog'
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
@@ -311,36 +311,36 @@ class TestChangesAssociate(unittest.TestCase):
     def test_associate_get_cannotBeUsedWithQuiet(self):
 
         # when
-        output = subprocess.Popen(
+        stdout, stderr = [x.decode('utf-8').strip() for x in subprocess.Popen(
             'git changes associate --quiet'.split(),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
-        ).communicate()
+        ).communicate()]
 
         # then
-        self.assertEqual('usage: git changes associate [-h] [-u] [-V] [COMMIT-ISH [-q]]\n', output[0])
+        self.assertEqual('usage: git changes associate [-h] [-u] [-V] [COMMIT-ISH [-q]]', stdout)
         self.assertEqual('git changes: error: argument -q/--quiet: not allowed without positional argument committish '
-                         'or option -u/--upstream\n', output[1])
+                         'or option -u/--upstream', stderr)
 
     def test_associate_filesNotSupported(self):
 
         # when
-        output = subprocess.Popen(
+        stdout, stderr = [x.decode('utf-8').strip() for x in subprocess.Popen(
             'git changes associate -- file.txt'.split(),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
-        ).communicate()
+        ).communicate()]
 
         # then
-        self.assertEqual('usage: git changes associate [-h] [-u] [-V] [COMMIT-ISH [-q]]\n', output[0])
-        self.assertEqual('git changes: error: argument FILES: only supported for view sub-command\n', output[1])
+        self.assertEqual('usage: git changes associate [-h] [-u] [-V] [COMMIT-ISH [-q]]', stdout)
+        self.assertEqual('git changes: error: argument FILES: only supported for view sub-command', stderr)
 
 
 class TestChangesUnassociate(unittest.TestCase):
 
     def _output(self, command):
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        return proc.communicate()[0].strip()
+        return proc.communicate()[0].decode('utf-8').strip()
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -462,28 +462,27 @@ Would remove association 'stale-branch'""", self.repo.git.changes('unassociate',
     def test_unassociate_dryRunDoesNotSupportQuiet(self):
 
         # when
-        output = subprocess.Popen(
+        stdout, stderr = [x.decode('utf-8').strip() for x in subprocess.Popen(
             'git changes unassociate --dry-run --quiet'.split(),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
-        ).communicate()
+        ).communicate()]
 
         # then
         # TODO: usage should print to STDOUT
-        self.assertFalse(output[0])
+        self.assertFalse(stdout)
         self.assertEqual("""usage: git changes unassociate [-h] [-a | -p] [-q | -d]
-git changes unassociate: error: argument -q/--quiet: not allowed with argument -d/--dry-run
-""", output[1])
+git changes unassociate: error: argument -q/--quiet: not allowed with argument -d/--dry-run""", stderr)
 
     def test_unassociate_filesNotSupported(self):
 
         # when
-        output = subprocess.Popen(
+        stdout, stderr = [x.decode('utf-8').strip() for x in subprocess.Popen(
             'git changes unassociate -- file.txt'.split(),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
-        ).communicate()
+        ).communicate()]
 
         # then
-        self.assertEqual('usage: git changes unassociate [-h] [-a | -p] [-q | -d]\n', output[0])
-        self.assertEqual('git changes: error: argument FILES: only supported for view sub-command\n', output[1])
+        self.assertEqual('usage: git changes unassociate [-h] [-a | -p] [-q | -d]', stdout)
+        self.assertEqual('git changes: error: argument FILES: only supported for view sub-command', stderr)

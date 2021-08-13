@@ -23,7 +23,7 @@ class TestState(unittest.TestCase):
 
     def _output(self, command):
         proc = subprocess.Popen(command.split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        return proc.communicate()[0]
+        return proc.communicate()[0].decode('utf-8')
 
     def test_state_version(self):
 
@@ -44,7 +44,7 @@ class TestStateView(unittest.TestCase):
         pyenv = os.environ.copy()
         pyenv['GIT_CONFIG'] = self.dirpath + '/.git/config'
         proc = subprocess.Popen(command.split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=pyenv)
-        return proc.communicate()[0]
+        return proc.communicate()[0].decode('utf-8')
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -159,7 +159,7 @@ class TestStateViewWithExtension(unittest.TestCase):
         pyenv = os.environ.copy()
         pyenv['GIT_CONFIG'] = self.dirpath + '/.git/config'
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=pyenv)
-        return proc.communicate()[0]
+        return proc.communicate()[0].decode('utf-8')
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -180,7 +180,7 @@ class TestStateViewWithExtension(unittest.TestCase):
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-15T00:00:00Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-15T00:00:00Z'
         subprocess.call(['git', 'commit', '--quiet', '-m', 'Initial commit'], env=pyenv)
-        self.commit0_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' Initial commit'
+        self.commit0_log = subprocess.check_output('git rev-parse --short HEAD'.split()).decode('utf-8').strip() + ' Initial commit'
 
         # edit readme
         with open('README.md', 'a') as a_file:
@@ -188,7 +188,7 @@ class TestStateViewWithExtension(unittest.TestCase):
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-16T00:00:00Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-16T00:00:00Z'
         subprocess.call(['git', 'commit', '--quiet', '-a', '-m', 'edit readme'], env=pyenv)
-        self.commit1_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' edit readme'
+        self.commit1_log = subprocess.check_output('git rev-parse --short HEAD'.split()).decode('utf-8').strip() + ' edit readme'
 
         # add changelog
         subprocess.call('touch CHANGELOG.md'.split())
@@ -196,7 +196,7 @@ class TestStateViewWithExtension(unittest.TestCase):
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-17T00:00:00Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-17T00:00:00Z'
         subprocess.call(['git', 'commit', '--quiet', '-m', 'add changelog'], env=pyenv)
-        self.commit2_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' add changelog'
+        self.commit2_log = subprocess.check_output('git rev-parse --short HEAD'.split()).decode('utf-8').strip() + ' add changelog'
 
         # edit changelog
         with open('CHANGELOG.md', 'w') as a_file:
@@ -204,7 +204,7 @@ class TestStateViewWithExtension(unittest.TestCase):
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-18T00:00:00Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-18T00:00:00Z'
         subprocess.call(['git', 'commit', '--quiet', '-a', '-m', 'edit changelog'], env=pyenv)
-        self.commit3_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' edit changelog'
+        self.commit3_log = subprocess.check_output('git rev-parse --short HEAD'.split()).decode('utf-8').strip() + ' edit changelog'
 
         self.full_log = os.linesep.join([self.commit3_log, self.commit2_log, self.commit1_log, self.commit0_log])
 
@@ -276,7 +276,7 @@ nothing to commit, working directory is clean
     def test_state_viewWithExtension_optionsConfig(self):
 
         # given
-        self.repo.config_writer('repository').set_value('git-state.extensions.log', 'options', '-2')
+        self.repo.config_writer('repository').set_value('git-state.extensions.log', 'options', '-2').release()
         expected = '''# status (master)
 nothing to commit, working directory is clean
 # log
@@ -290,7 +290,7 @@ nothing to commit, working directory is clean
     def test_state_viewWithExtension_nameConfig(self):
 
         # given
-        self.repo.config_writer('repository').set_value('git-state.extensions.log', 'name', 'git log')
+        self.repo.config_writer('repository').set_value('git-state.extensions.log', 'name', 'git log').release()
         expected = '''# status (master)
 nothing to commit, working directory is clean
 # git log
@@ -508,7 +508,7 @@ class TestStateExtensions(unittest.TestCase):
         if set_config:
             pyenv['GIT_CONFIG'] = self.dirpath + '/.git/config'
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=pyenv)
-        return proc.communicate()[0]
+        return proc.communicate()[0].decode('utf-8')
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -528,7 +528,7 @@ class TestStateExtensions(unittest.TestCase):
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-15T00:00:00Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-15T00:00:00Z'
         subprocess.call(['git', 'commit', '--quiet', '-m', 'Initial commit'], env=pyenv)
-        self.commit0_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' Initial commit'
+        self.commit0_log = subprocess.check_output('git rev-parse --short HEAD'.split()).decode('utf-8').strip() + ' Initial commit'
 
         # edit readme
         with open('README.md', 'a') as a_file:
@@ -536,7 +536,7 @@ class TestStateExtensions(unittest.TestCase):
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-16T00:00:00Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-16T00:00:00Z'
         subprocess.call(['git', 'commit', '--quiet', '-a', '-m', 'edit readme'], env=pyenv)
-        self.commit1_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' edit readme'
+        self.commit1_log = subprocess.check_output('git rev-parse --short HEAD'.split()).decode('utf-8').strip() + ' edit readme'
 
         # add changelog
         subprocess.call('touch CHANGELOG.md'.split())
@@ -544,7 +544,7 @@ class TestStateExtensions(unittest.TestCase):
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-17T00:00:00Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-17T00:00:00Z'
         subprocess.call(['git', 'commit', '--quiet', '-m', 'add changelog'], env=pyenv)
-        self.commit2_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' add changelog'
+        self.commit2_log = subprocess.check_output('git rev-parse --short HEAD'.split()).decode('utf-8').strip() + ' add changelog'
 
         # edit changelog
         with open('CHANGELOG.md', 'w') as a_file:
@@ -552,7 +552,7 @@ class TestStateExtensions(unittest.TestCase):
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-18T00:00:00Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-18T00:00:00Z'
         subprocess.call(['git', 'commit', '--quiet', '-a', '-m', 'edit changelog'], env=pyenv)
-        self.commit3_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' edit changelog'
+        self.commit3_log = subprocess.check_output('git rev-parse --short HEAD'.split()).decode('utf-8').strip() + ' edit changelog'
 
         self.full_log = os.linesep.join([self.commit3_log, self.commit2_log, self.commit1_log, self.commit0_log])
 

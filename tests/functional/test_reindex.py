@@ -8,14 +8,14 @@ import unittest
 class TestGitReindex(unittest.TestCase):
 
     def _reindex(self):
-        return subprocess.check_output(('git', 'reindex'))
+        return subprocess.check_output(('git', 'reindex')).decode('utf-8')
 
     def _status(self):
-        return subprocess.check_output(('git', '-c', 'color.ui=never', 'status', '--short'))
+        return subprocess.check_output(('git', '-c', 'color.ui=never', 'status', '--short')).decode('utf-8')
 
     def _output(self, command):
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        return proc.communicate()[0].strip()
+        return proc.communicate()[0].decode('utf-8').strip()
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -93,7 +93,7 @@ class TestGitReindex(unittest.TestCase):
 
         # run
         p = subprocess.Popen('git reindex'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = p.communicate()
+        stdout, stderr = [x.decode('utf-8') for x in p.communicate()]
 
         # verify
         expected = "error: '{}' not a git repository".format(os.path.realpath(self.dirpath) + '/dir')

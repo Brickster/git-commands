@@ -238,7 +238,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
@@ -387,7 +387,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
@@ -469,7 +469,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
@@ -1187,7 +1187,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.extensions.changes.color', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('changes section\nstatus section')
@@ -1255,7 +1255,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
@@ -1324,7 +1324,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_not_called()
@@ -1390,7 +1390,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section\ntwo\nthree\nfour\nfive')
@@ -1461,7 +1461,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')
@@ -1530,7 +1530,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections'
         )
         mock_checkoutput.assert_called_once_with('tput lines'.split())
@@ -1598,7 +1598,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.status.show-clean-message', default=True, as_type=mock.ANY),
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
-        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].func_name, 'as_bool')
+        self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(limit_to='sections')
         mock_checkoutput.assert_called_once_with('tput lines'.split())
         mock_info.assert_called_once_with('status section')

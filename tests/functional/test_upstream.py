@@ -13,7 +13,7 @@ class TestGitUpstream(unittest.TestCase):
 
     def _output(self, command):
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        return proc.communicate()[0].strip()
+        return proc.communicate()[0].decode('utf-8').strip()
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -35,19 +35,19 @@ class TestGitUpstream(unittest.TestCase):
         os.chdir(self.proj_dir)
 
     def test_upstream(self):
-        self.assertEqual('master', subprocess.check_output('git upstream'.split()).strip())
+        self.assertEqual('master', subprocess.check_output('git upstream'.split()).decode('utf-8').strip())
 
     def test_upstream_includeRemote_shortOption(self):
-        self.assertEqual('./master', subprocess.check_output('git upstream -r'.split()).strip())
+        self.assertEqual('./master', subprocess.check_output('git upstream -r'.split()).decode('utf-8').strip())
 
     def test_upstream_includeRemote_longOption(self):
-        self.assertEqual('./master', subprocess.check_output('git upstream --include-remote'.split()).strip())
+        self.assertEqual('./master', subprocess.check_output('git upstream --include-remote'.split()).decode('utf-8').strip())
 
     def test_upstream_excludeRemote_shortOption(self):
-        self.assertEqual('master', subprocess.check_output('git upstream -R'.split()).strip())
+        self.assertEqual('master', subprocess.check_output('git upstream -R'.split()).decode('utf-8').strip())
 
     def test_upstream_excludeRemote_longOption(self):
-        self.assertEqual('master', subprocess.check_output('git upstream --no-include-remote'.split()).strip())
+        self.assertEqual('master', subprocess.check_output('git upstream --no-include-remote'.split()).decode('utf-8').strip())
 
     def test_upstream_showRemoteProperty_never(self):
 
@@ -55,7 +55,7 @@ class TestGitUpstream(unittest.TestCase):
         subprocess.call('git config --local git-upstream.include-remote NEVER'.split())
 
         # run
-        upstream_result = subprocess.check_output('git upstream'.split()).strip()
+        upstream_result = subprocess.check_output('git upstream'.split()).decode('utf-8').strip()
 
         # verify
         self.assertEqual('master', upstream_result)
@@ -66,7 +66,7 @@ class TestGitUpstream(unittest.TestCase):
         subprocess.call('git config --local git-upstream.include-remote ALWAYS'.split())
 
         # run
-        upstream_result = subprocess.check_output('git upstream'.split()).strip()
+        upstream_result = subprocess.check_output('git upstream'.split()).decode('utf-8').strip()
 
         # verify
         self.assertEqual('./master', upstream_result)
@@ -78,7 +78,7 @@ class TestGitUpstream(unittest.TestCase):
         subprocess.call('git config --local git-upstream.include-remote NONE_LOCAL'.split())
 
         # run
-        upstream_result = subprocess.check_output('git upstream'.split()).strip()
+        upstream_result = subprocess.check_output('git upstream'.split()).decode('utf-8').strip()
 
         # verify
         self.assertEqual('origin/master', upstream_result)
@@ -89,7 +89,7 @@ class TestGitUpstream(unittest.TestCase):
         subprocess.call('git config --local git-upstream.include-remote NONE_LOCAL'.split())
 
         # run
-        upstream_result = subprocess.check_output('git upstream'.split()).strip()
+        upstream_result = subprocess.check_output('git upstream'.split()).decode('utf-8').strip()
 
         # verify
         self.assertEqual('master', upstream_result)
@@ -100,7 +100,7 @@ class TestGitUpstream(unittest.TestCase):
         subprocess.call('git config --local git-upstream.include-remote NEVER'.split())
 
         # run
-        upstream_result = subprocess.check_output('git upstream -r'.split()).strip()
+        upstream_result = subprocess.check_output('git upstream -r'.split()).decode('utf-8').strip()
 
         # verify
         self.assertEqual('./master', upstream_result)
@@ -111,7 +111,7 @@ class TestGitUpstream(unittest.TestCase):
         subprocess.call('git config --local git-upstream.include-remote NEVER'.split())
 
         # run
-        upstream_result = subprocess.check_output('git upstream --include-remote'.split()).strip()
+        upstream_result = subprocess.check_output('git upstream --include-remote'.split()).decode('utf-8').strip()
 
         # verify
         self.assertEqual('./master', upstream_result)
@@ -122,7 +122,7 @@ class TestGitUpstream(unittest.TestCase):
         subprocess.call('git config --local git-upstream.include-remote ALWAYS'.split())
 
         # run
-        upstream_result = subprocess.check_output('git upstream -R'.split()).strip()
+        upstream_result = subprocess.check_output('git upstream -R'.split()).decode('utf-8').strip()
 
         # verify
         self.assertEqual('master', upstream_result)
@@ -133,7 +133,7 @@ class TestGitUpstream(unittest.TestCase):
         subprocess.call('git config --local git-upstream.include-remote ALWAYS'.split())
 
         # run
-        upstream_result = subprocess.check_output('git upstream --no-include-remote'.split()).strip()
+        upstream_result = subprocess.check_output('git upstream --no-include-remote'.split()).decode('utf-8').strip()
 
         # verify
         self.assertEqual('master', upstream_result)
@@ -144,7 +144,7 @@ class TestGitUpstream(unittest.TestCase):
         subprocess.call('git checkout -b new-feature --quiet'.split())
 
         # run
-        upstream_result = subprocess.check_output('git upstream -b develop'.split()).strip()
+        upstream_result = subprocess.check_output('git upstream -b develop'.split()).decode('utf-8').strip()
 
         # verify
         self.assertEqual('master', upstream_result)
@@ -155,7 +155,7 @@ class TestGitUpstream(unittest.TestCase):
         subprocess.call('git checkout -b new-feature --quiet'.split())
 
         # run
-        upstream_result = subprocess.check_output('git upstream --branch develop'.split()).strip()
+        upstream_result = subprocess.check_output('git upstream --branch develop'.split()).decode('utf-8').strip()
 
         # verify
         self.assertEqual('master', upstream_result)
@@ -166,7 +166,7 @@ class TestGitUpstream(unittest.TestCase):
         subprocess.call('git checkout -b new-feature --quiet'.split())
 
         # run
-        upstream_result = subprocess.check_output('git upstream --branch=develop'.split()).strip()
+        upstream_result = subprocess.check_output('git upstream --branch=develop'.split()).decode('utf-8').strip()
 
         # verify
         self.assertEqual('master', upstream_result)
@@ -177,7 +177,7 @@ class TestGitUpstream(unittest.TestCase):
         subprocess.call('git branch --unset-upstream'.split())
 
         # run
-        upstream_result = subprocess.check_output('git upstream'.split())
+        upstream_result = subprocess.check_output('git upstream'.split()).decode('utf-8')
 
         # verify
         self.assertFalse(upstream_result)
@@ -189,7 +189,7 @@ class TestGitUpstream(unittest.TestCase):
 
         # run
         p = subprocess.Popen(['git', 'upstream', '-b', branch], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = p.communicate()
+        stdout, stderr = [x.decode('utf-8') for x in p.communicate()]
 
         # verify
         self.assertEqual('error: {0!r} is not a valid branch'.format(branch), stderr.strip())
@@ -203,7 +203,7 @@ class TestGitUpstream(unittest.TestCase):
 
         # run
         p = subprocess.Popen('git upstream'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = p.communicate()
+        stdout, stderr = [x.decode('utf-8') for x in p.communicate()]
 
         # verify
         expected = "error: '{}' not a git repository".format(os.path.realpath(self.dirpath) + '/dir')
@@ -220,7 +220,7 @@ class TestGitUpstream(unittest.TestCase):
 
         # when
         p = subprocess.Popen('git upstream'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = p.communicate()
+        stdout, stderr = [x.decode('utf-8') for x in p.communicate()]
 
         # then
         self.assertFalse(stdout)
@@ -233,22 +233,22 @@ git upstream: error: argument -R/--no-include-remote: not allowed with argument 
 """
 
         # run 1
-        stdout, stderr = subprocess.Popen('git upstream --include-remote --no-include-remote'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        stdout, stderr = [x.decode('utf-8') for x in subprocess.Popen('git upstream --include-remote --no-include-remote'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()]
         self.assertFalse(stdout)
         self.assertEqual(stderr, expected)
 
         # run 2
-        stdout, stderr = subprocess.Popen('git upstream --include-remote -R'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        stdout, stderr = [x.decode('utf-8') for x in subprocess.Popen('git upstream --include-remote -R'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()]
         self.assertFalse(stdout)
         self.assertEqual(stderr, expected)
 
         # run 3
-        stdout, stderr = subprocess.Popen('git upstream -r --no-include-remote'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        stdout, stderr = [x.decode('utf-8') for x in subprocess.Popen('git upstream -r --no-include-remote'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()]
         self.assertFalse(stdout)
         self.assertEqual(stderr, expected)
 
         # run 4
-        stdout, stderr = subprocess.Popen('git upstream -r -R'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+        stdout, stderr = [x.decode('utf-8') for x in subprocess.Popen('git upstream -r -R'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()]
         self.assertFalse(stdout)
         self.assertEqual(stderr, expected)
 

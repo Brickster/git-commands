@@ -2,6 +2,7 @@ import os
 import mock
 import subprocess
 import unittest
+from builtins import bytes
 
 from bin.commands.utils import execute
 
@@ -40,7 +41,7 @@ class TestExecute(unittest.TestCase):
         # given
         mock_process = mock.Mock()
         mock_popen.return_value = mock_process
-        mock_process.communicate.return_value = ['testing' + os.linesep]
+        mock_process.communicate.return_value = [bytes('testing' + os.linesep, 'utf-8')]
 
         command = ['git', 'config', '--list']
 
@@ -59,7 +60,7 @@ class TestExecute(unittest.TestCase):
         # given
         mock_process = mock.Mock()
         mock_popen.return_value = mock_process
-        mock_process.communicate.return_value = ['testing' + os.linesep]
+        mock_process.communicate.return_value = [bytes('testing' + os.linesep, 'utf-8')]
 
         command = 'git config --list'
 
@@ -81,7 +82,7 @@ class TestExecute(unittest.TestCase):
         # given
         command = 'the command'.split()
         mock_proc = mock.Mock()
-        mock_proc.communicate.return_value = ['the stdout', 'the stderr']
+        mock_proc.communicate.return_value = [b'the stdout', b'the stderr']
         mock_proc.returncode = 0
         mock_popen.return_value = mock_proc
 
@@ -102,7 +103,7 @@ class TestExecute(unittest.TestCase):
         # given
         command = 'the command'
         mock_proc = mock.Mock()
-        mock_proc.communicate.return_value = ['the stdout', 'the stderr']
+        mock_proc.communicate.return_value = [b'the stdout', b'the stderr']
         mock_proc.returncode = 0
         mock_popen.return_value = mock_proc
 
@@ -122,7 +123,7 @@ class TestExecute(unittest.TestCase):
 
         # given
         command = ['the', 'command']
-        mock_checkoutput.return_value = 'the output'
+        mock_checkoutput.return_value = b'the output'
 
         # when
         output = execute.check_output(command)
@@ -136,7 +137,7 @@ class TestExecute(unittest.TestCase):
 
         # given
         command = 'the command'
-        mock_checkoutput.return_value = 'the output'
+        mock_checkoutput.return_value = b'the output'
 
         # when
         output = execute.check_output(command)

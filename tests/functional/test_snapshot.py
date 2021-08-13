@@ -8,10 +8,10 @@ from subprocess import call, check_output, PIPE, Popen, STDOUT
 class TestGitSnapshot(unittest.TestCase):
 
     def _status(self):
-        return check_output(('git', '-c', 'color.ui=never', 'status', '--short'))
+        return check_output(('git', '-c', 'color.ui=never', 'status', '--short')).decode('utf-8')
 
     def _stashes(self):
-        return check_output(('git', 'stash', 'list')).splitlines()
+        return check_output(('git', 'stash', 'list')).decode('utf-8').splitlines()
 
     def _output(self, command):
         proc = Popen(command, stdout=PIPE, stderr=PIPE)
@@ -198,7 +198,7 @@ A  file3.txt
         call('git reset --hard --quiet'.split())
 
         # run
-        result = check_output('git snapshot'.split())
+        result = check_output('git snapshot'.split()).decode('utf-8')
 
         # verify
         self.assertEqual(result.strip(), 'No local changes to save. No snapshot created.')
@@ -244,8 +244,8 @@ A  file3.txt
     def test_snapshot_version(self):
 
         # expect
-        self.assertRegexpMatches(self._output('git snapshot -v'.split())[1], 'git-snapshot \\d+\\.\\d+\\.\\d+')
-        self.assertRegexpMatches(self._output('git snapshot --version'.split())[1], 'git-snapshot \\d+\\.\\d+\\.\\d+')
+        self.assertRegexpMatches(Popen('git snapshot -v'.split(), stdout=PIPE, stderr=STDOUT).communicate()[0].decode('utf-8'), 'git-snapshot \\d+\\.\\d+\\.\\d+')
+        self.assertRegexpMatches(Popen('git snapshot --version'.split(), stdout=PIPE, stderr=STDOUT).communicate()[0].decode('utf-8'), 'git-snapshot \\d+\\.\\d+\\.\\d+')
 
     def test_snapshot_help(self):
 

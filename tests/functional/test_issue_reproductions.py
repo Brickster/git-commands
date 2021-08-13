@@ -195,7 +195,7 @@ class TestIssue106(unittest.TestCase):
         """Issue 106: Do not allow associating a detached HEAD"""
 
         associate_proc = subprocess.Popen(('git', 'changes', 'associate', 'HEAD'), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = associate_proc.communicate()
+        stdout, stderr = [x.decode('utf-8') for x in associate_proc.communicate()]
         self.assertFalse(stdout)
         self.assertEqual(stderr.strip(), 'error: cannot associate while HEAD is detached')
 
@@ -222,7 +222,7 @@ class TestIssue107(unittest.TestCase):
         """Issue 107: an error should be printed when associating with an invalid revision"""
 
         bad_revision = 'bad_rev'
-        error = subprocess.Popen(['git', 'changes', 'associate', bad_revision], stderr=subprocess.PIPE).communicate()[1].strip()
+        error = subprocess.Popen(['git', 'changes', 'associate', bad_revision], stderr=subprocess.PIPE).communicate()[1].decode('utf-8').strip()
         self.assertEqual(error, 'error: {} is not a valid revision'.format(bad_revision))
 
 
@@ -276,7 +276,7 @@ class TestIssue111(unittest.TestCase):
         """Issue 111: Unable to include files and message in snapshot"""
 
         self.assertFalse(subprocess.check_output('git snapshot --quiet "md files" -- *.md'.split()).strip())
-        self.assertEqual(1, len(subprocess.check_output('git stash list'.split()).strip().split('\n')))
+        self.assertEqual(1, len(subprocess.check_output('git stash list'.split()).decode('utf-8').strip().split('\n')))
 
 
 class TestIssue112(unittest.TestCase):
@@ -306,7 +306,7 @@ class TestIssue112(unittest.TestCase):
         """Issue 112: Associate --upstream fails for local upstream"""
 
         self.assertEqual(
-            subprocess.check_output('git changes associate --upstream'.split()).strip(),
+            subprocess.check_output('git changes associate --upstream'.split()).decode('utf-8').strip(),
             'develop has been associated with refs/heads/master'
         )
 
@@ -371,7 +371,7 @@ class TestIssue119(unittest.TestCase):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
-        stdout, stderr = settings_proc.communicate()
+        stdout, stderr = [x.decode('utf-8') for x in settings_proc.communicate()]
         self.assertFalse(stdout)
         self.assertEqual(stderr.strip(), 'error: argument -k/--keys: not allowed without positional argument section')
 
@@ -423,7 +423,7 @@ class TestIssue122(unittest.TestCase):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
-        stdout, stderr = settings_proc.communicate()
+        stdout, stderr = [x.decode('utf-8') for x in settings_proc.communicate()]
         self.assertFalse(stdout)
         self.assertEqual(stderr.strip(), "error: no such file 'unknown_file'")
 
@@ -448,7 +448,7 @@ class TestIssue124(unittest.TestCase):
             readme_file.write('readme')
         self.repo.index.add(['README.md'])
         self.repo.index.commit('Edit readme')
-        self.commit0_log = subprocess.check_output('git rev-parse --short HEAD'.split()).strip() + ' Edit readme'
+        self.commit0_log = subprocess.check_output('git rev-parse --short HEAD'.split()).decode('utf-8').strip() + ' Edit readme'
 
         # make sure coloring isn't enabled
         subprocess.call(['git', 'config', '--local', 'color.ui', 'auto'])
@@ -532,7 +532,7 @@ class TestIssue151(unittest.TestCase):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
-        stdout, stderr = state_proc.communicate()
+        stdout, stderr = [x.decode('utf-8') for x in state_proc.communicate()]
 
         # then
         self.assertRegexpMatches(stdout, '^# status.*')

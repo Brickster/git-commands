@@ -14,11 +14,11 @@ _STASH_FORMAT = '{} refs/stash@{{{}}}: WIP on master: {}'
 class TestGitAbandon(unittest.TestCase):
 
     def _stashes(self):
-        return subprocess.check_output(('git', 'stash', 'list', '--oneline', '--no-color'))
+        return subprocess.check_output(('git', 'stash', 'list', '--oneline', '--no-color')).decode('utf-8')
 
     def _output(self, command):
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        return proc.communicate()[0].strip()
+        return proc.communicate()[0].decode('utf-8').strip()
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -37,39 +37,39 @@ class TestGitAbandon(unittest.TestCase):
         subprocess.call(['git', 'commit', '--quiet', '-m', 'Initial commit'], env=pyenv)
         with open('README.md', 'a') as a_file:
             a_file.write('readme\n')
-        self.initial_commit = subprocess.check_output('git log --no-color --oneline -1'.split()).strip()
+        self.initial_commit = subprocess.check_output('git log --no-color --oneline -1'.split()).decode('utf-8').strip()
 
         # stash@{3}
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-16T20:38:31Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-16T20:38:31Z'
         subprocess.call('git stash --quiet'.split(), env=pyenv)
         subprocess.call('git stash apply --quiet'.split())
-        self.stash3 = subprocess.check_output('git rev-parse stash@{0}'.split()).strip()
-        self.stash3_abbrev = subprocess.check_output('git rev-parse --short stash@{0}'.split()).strip()
+        self.stash3 = subprocess.check_output('git rev-parse stash@{0}'.split()).decode('utf-8').strip()
+        self.stash3_abbrev = subprocess.check_output('git rev-parse --short stash@{0}'.split()).decode('utf-8').strip()
 
         # stash@{2}
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-17T20:38:31Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-17T20:38:31Z'
         subprocess.call('git stash --quiet'.split(), env=pyenv)
         subprocess.call('git stash apply --quiet'.split())
-        self.stash2 = subprocess.check_output('git rev-parse stash@{0}'.split()).strip()
-        self.stash2_abbrev = subprocess.check_output('git rev-parse --short stash@{0}'.split()).strip()
+        self.stash2 = subprocess.check_output('git rev-parse stash@{0}'.split()).decode('utf-8').strip()
+        self.stash2_abbrev = subprocess.check_output('git rev-parse --short stash@{0}'.split()).decode('utf-8').strip()
 
         # stash@{1}
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-18T20:38:31Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-18T20:38:31Z'
         subprocess.call('git stash --quiet'.split(), env=pyenv)
         subprocess.call('git stash apply --quiet'.split())
-        self.stash1 = subprocess.check_output('git rev-parse stash@{0}'.split()).strip()
-        self.stash1_abbrev = subprocess.check_output('git rev-parse --short stash@{0}'.split()).strip()
+        self.stash1 = subprocess.check_output('git rev-parse stash@{0}'.split()).decode('utf-8').strip()
+        self.stash1_abbrev = subprocess.check_output('git rev-parse --short stash@{0}'.split()).decode('utf-8').strip()
 
         # stash@{0}
         pyenv['GIT_COMMITTER_DATE'] = '2016-02-19T20:38:31Z'
         pyenv['GIT_AUTHOR_DATE'] = '2016-02-19T20:38:31Z'
         subprocess.call('git stash --quiet'.split(), env=pyenv)
         subprocess.call('git stash apply --quiet'.split())
-        self.stash0 = subprocess.check_output('git rev-parse stash@{0}'.split()).strip()
-        self.stash0_abbrev = subprocess.check_output('git rev-parse --short stash@{0}'.split()).strip()
+        self.stash0 = subprocess.check_output('git rev-parse stash@{0}'.split()).decode('utf-8').strip()
+        self.stash0_abbrev = subprocess.check_output('git rev-parse --short stash@{0}'.split()).decode('utf-8').strip()
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
@@ -78,7 +78,7 @@ class TestGitAbandon(unittest.TestCase):
     def test_abandon_endOnly(self):
 
         # run
-        abandon_output = subprocess.check_output('git abandon 2'.split()).splitlines()
+        abandon_output = subprocess.check_output('git abandon 2'.split()).decode('utf-8').splitlines()
 
         # verify
         self.assertEqual(abandon_output[0], _DROPPED_FORMAT.format('0', self.stash0))
@@ -91,11 +91,11 @@ class TestGitAbandon(unittest.TestCase):
     def test_abandon_endOnly_negative(self):
 
         # test
-        stdout, stderr = subprocess.Popen(
+        stdout, stderr = [x.decode('utf-8') for x in subprocess.Popen(
             'git abandon -10'.split(),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
-        ).communicate()
+        ).communicate()]
 
         # verify
         self.assertFalse(stdout)
@@ -104,7 +104,7 @@ class TestGitAbandon(unittest.TestCase):
     def test_abandon_endOnly_pastEnd(self):
 
         # run
-        abandon_output = subprocess.check_output('git abandon 10'.split()).splitlines()
+        abandon_output = subprocess.check_output('git abandon 10'.split()).decode('utf-8').splitlines()
 
         # verify
         self.assertEqual(abandon_output[0], _DROPPED_FORMAT.format('0', self.stash0))
@@ -116,7 +116,7 @@ class TestGitAbandon(unittest.TestCase):
     def test_abandon_startAndEnd_all(self):
 
         # run
-        abandon_output = subprocess.check_output('git abandon 0 4'.split()).splitlines()
+        abandon_output = subprocess.check_output('git abandon 0 4'.split()).decode('utf-8').splitlines()
 
         # verify
         self.assertEqual(abandon_output[0], _DROPPED_FORMAT.format('0', self.stash0))
@@ -128,7 +128,7 @@ class TestGitAbandon(unittest.TestCase):
     def test_abandon_startAndEnd_fromZero(self):
 
         # run
-        abandon_output = subprocess.check_output('git abandon 0 2'.split()).splitlines()
+        abandon_output = subprocess.check_output('git abandon 0 2'.split()).decode('utf-8').splitlines()
 
         # verify
         self.assertEqual(abandon_output[0], _DROPPED_FORMAT.format('0', self.stash0))
@@ -141,7 +141,7 @@ class TestGitAbandon(unittest.TestCase):
     def test_abandon_startAndEnd_endsAtStashCount(self):
 
         # run
-        abandon_output = subprocess.check_output('git abandon 2 4'.split()).splitlines()
+        abandon_output = subprocess.check_output('git abandon 2 4'.split()).decode('utf-8').splitlines()
 
         # verify
         self.assertEqual(abandon_output[0], _DROPPED_FORMAT.format('2', self.stash2))
@@ -154,7 +154,7 @@ class TestGitAbandon(unittest.TestCase):
     def test_abandon_startAndEnd_pastEnd(self):
 
         # run
-        abandon_output = subprocess.check_output('git abandon 2 10'.split()).splitlines()
+        abandon_output = subprocess.check_output('git abandon 2 10'.split()).decode('utf-8').splitlines()
 
         # verify
         self.assertEqual(abandon_output[0], _DROPPED_FORMAT.format('2', self.stash2))
@@ -167,11 +167,11 @@ class TestGitAbandon(unittest.TestCase):
     def test_abandon_startAndEnd_startGreaterThanTotal(self):
 
         # test
-        stdout, stderr = subprocess.Popen(
+        stdout, stderr = [x.decode('utf-8') for x in subprocess.Popen(
             'git abandon 100 200'.split(),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
-        ).communicate()
+        ).communicate()]
 
         # verify
         self.assertFalse(stdout)
@@ -181,11 +181,11 @@ class TestGitAbandon(unittest.TestCase):
     def test_abandon_startAndEnd_endBeforeStart(self):
 
         # test
-        stdout, stderr = subprocess.Popen(
+        stdout, stderr = [x.decode('utf-8') for x in subprocess.Popen(
             'git abandon 5 2'.split(),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
-        ).communicate()
+        ).communicate()]
 
         # verify
         self.assertFalse(stdout)
@@ -194,7 +194,7 @@ class TestGitAbandon(unittest.TestCase):
     def test_abandon_dryRun_shortOption(self):
 
         # run
-        abandon_output = subprocess.check_output('git abandon -d 0 2'.split()).splitlines()
+        abandon_output = subprocess.check_output('git abandon -d 0 2'.split()).decode('utf-8').splitlines()
 
         # verify
         self.assertEqual(abandon_output[0], _DRY_RUN_FORMAT.format('0', self.stash0))
@@ -209,7 +209,7 @@ class TestGitAbandon(unittest.TestCase):
     def test_abandon_dryRun_longOption(self):
 
         # run
-        abandon_output = subprocess.check_output('git abandon --dry-run 0 2'.split()).splitlines()
+        abandon_output = subprocess.check_output('git abandon --dry-run 0 2'.split()).decode('utf-8').splitlines()
 
         # verify
         self.assertEqual(abandon_output[0], _DRY_RUN_FORMAT.format('0', self.stash0))
@@ -224,11 +224,11 @@ class TestGitAbandon(unittest.TestCase):
     def test_abandon_dryRunAndQuiet(self):
 
         # test
-        stdout, stderr = subprocess.Popen(
+        stdout, stderr = [x.decode('utf-8') for x in subprocess.Popen(
             'git abandon --quiet --dry-run 20'.split(),
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
-        ).communicate()
+        ).communicate()]
 
         # verify
         self.assertFalse(stdout)
@@ -241,7 +241,7 @@ class TestGitAbandon(unittest.TestCase):
     def test_abandon_quiet_shortOption(self):
 
         # run
-        abandon_output = subprocess.check_output('git abandon -q 2'.split()).splitlines()
+        abandon_output = subprocess.check_output('git abandon -q 2'.split()).decode('utf-8').splitlines()
 
         # verify
         self.assertFalse(abandon_output)
@@ -253,7 +253,7 @@ class TestGitAbandon(unittest.TestCase):
     def test_abandon_quiet_longOption(self):
 
         # run
-        abandon_output = subprocess.check_output('git abandon --quiet 2'.split()).splitlines()
+        abandon_output = subprocess.check_output('git abandon --quiet 2'.split()).decode('utf-8').splitlines()
 
         # verify
         self.assertFalse(abandon_output)
@@ -270,7 +270,7 @@ class TestGitAbandon(unittest.TestCase):
 
         # run
         p = subprocess.Popen('git abandon -d 2'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = p.communicate()
+        stdout, stderr = [x.decode('utf-8') for x in p.communicate()]
 
         # verify
         expected = "error: '{}' not a git repository".format(os.path.realpath(self.dirpath) + '/dir')

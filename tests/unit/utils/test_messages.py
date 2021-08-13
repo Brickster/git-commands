@@ -14,7 +14,7 @@ class TestMessages(unittest.TestCase):
     def tearDown(self):
         messages._print = self._print
 
-    @mock.patch('__builtin__.print')
+    @mock.patch('builtins.print' if sys.version_info >= (3, 0) else '__builtin__.print')
     def test__print(self, mock_print):
 
         # given
@@ -30,7 +30,7 @@ class TestMessages(unittest.TestCase):
         # then
         mock_print.assert_called_once_with(prefix + ' ' + message, file=file_)
 
-    @mock.patch('__builtin__.print')
+    @mock.patch('builtins.print' if sys.version_info >= (3, 0) else '__builtin__.print')
     def test__print_noFile(self, mock_print):
 
         # given
@@ -46,7 +46,7 @@ class TestMessages(unittest.TestCase):
         # then
         mock_print.assert_called_once_with(prefix + ' ' + message)
 
-    @mock.patch('__builtin__.print')
+    @mock.patch('builtins.print' if sys.version_info >= (3,0) else '__builtin__.print')
     def test__print_quiet(self, mock_print):
 
         # given
@@ -62,7 +62,7 @@ class TestMessages(unittest.TestCase):
         # then
         mock_print.assert_not_called()
 
-    @mock.patch('__builtin__.print')
+    @mock.patch('builtins.print' if sys.version_info >= (3, 0) else '__builtin__.print')
     def test__print_andExit(self, mock_print):
 
         # given
