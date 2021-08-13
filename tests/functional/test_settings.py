@@ -283,6 +283,10 @@ git-settings.test2.getc=valuec""")
 )
 class TestSettingsDestroy(unittest.TestCase):
 
+    def _output(self, command):
+        proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        return proc.communicate()[0].decode('utf-8').strip()
+
     def setUp(self):
         self.proj_dir = os.getcwd()
         self.dirpath = tempfile.mkdtemp()
