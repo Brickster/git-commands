@@ -1,6 +1,6 @@
 -r requirements.txt
 coverage==4.5.4
-gitpython==3.1.20; python_version >= '3.9'
+gitpython==3.1.20; python_version == '3.9'
 gitpython==2.1.15; python_version == '2.7'  # rq.filter: >=2.2,<3
 mock==3.0.5
 nose2==0.10.0
