@@ -37,4 +37,4 @@ script:
 after_script:
   # send coverage report to CodeClimate
   - coverage xml
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.9 ]]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
