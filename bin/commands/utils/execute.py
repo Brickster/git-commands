@@ -57,6 +57,10 @@ def call(command):
 
 
 def pipe(command1, command2):
-    echo = subprocess.Popen(command1, stdout=subprocess.PIPE)
-    subprocess.call(command2, stdin=echo.stdout)
-    echo.wait()
+    if isinstance(command1, str):
+        command1 = command1.split()
+    if isinstance(command2, str):
+        command2 = command2.split()
+    command1_proc = subprocess.Popen(command1, stdout=subprocess.PIPE)
+    subprocess.call(command2, stdin=command1_proc.stdout)
+    command1_proc.wait()

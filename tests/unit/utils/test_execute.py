@@ -73,8 +73,46 @@ class TestExecute(unittest.TestCase):
 
         stdout == 'testing' + os.linesep
 
-    # def test_call_input(self):
-    #     self.fail('going away')
+    @mock.patch('subprocess.Popen')
+    def test_call_input(self, mock_popen):
+
+        # given
+        command = 'the command'.split()
+        the_input = '123'
+
+        mock_process = mock.Mock()
+        mock_process.communicate = mock.Mock()
+        mock_process.returncode = 0
+        mock_popen.return_value = mock_process
+
+        # when
+        return_code = execute.call_input(command, the_input)
+
+        # then
+        mock_popen.assert_called_once_with(command, stdin=subprocess.PIPE)
+        mock_process.communicate.assert_called_once_with(input=the_input.encode('utf-8'))
+
+        self.assertEqual(return_code, 0)
+
+    @mock.patch('subprocess.Popen')
+    def test_call_input_asStr(self, mock_popen):
+        # given
+        command = 'the command'
+        the_input = '123'
+
+        mock_process = mock.Mock()
+        mock_process.communicate = mock.Mock()
+        mock_process.returncode = 0
+        mock_popen.return_value = mock_process
+
+        # when
+        return_code = execute.call_input(command, the_input)
+
+        # then
+        mock_popen.assert_called_once_with(command.split(), stdin=subprocess.PIPE)
+        mock_process.communicate.assert_called_once_with(input=the_input.encode('utf-8'))
+
+        self.assertEqual(return_code, 0)
 
     @mock.patch('subprocess.Popen')
     def test_execute(self, mock_popen):
@@ -174,5 +212,39 @@ class TestExecute(unittest.TestCase):
         mock_call.assert_called_once_with(command.split())
         self.assertEqual(0, return_code)
 
-    # def test_pipe(self):
-    #     self.fail('going away')
+    @mock.patch('subprocess.call')
+    @mock.patch('subprocess.Popen')
+    def test_pipe(self, mock_popen, mock_call):
+
+        # given
+        command1 = 'the command one'.split()
+        command2 = 'the command two'.split()
+
+        command1_proc = mock.Mock()
+        mock_popen.return_value = command1_proc
+
+        # when
+        execute.pipe(command1, command2)
+
+        # then
+        mock_popen.assert_called_once_with(command1, stdout=subprocess.PIPE)
+        mock_call.assert_called_once_with(command2, stdin=command1_proc.stdout)
+
+    @mock.patch('subprocess.call')
+    @mock.patch('subprocess.Popen')
+    def test_pipe_asStr(self, mock_popen, mock_call):
+
+        # given
+        command1 = 'the command one'
+        command2 = 'the command two'
+
+        command1_proc = mock.Mock()
+        command1_proc.stdout = 'stdout'
+        mock_popen.return_value = command1_proc
+
+        # when
+        execute.pipe(command1, command2)
+
+        # then
+        mock_popen.assert_called_once_with(command1.split(), stdout=subprocess.PIPE)
+        mock_call.assert_called_once_with(command2.split(), stdin=command1_proc.stdout)

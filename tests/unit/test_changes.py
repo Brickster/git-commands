@@ -946,6 +946,19 @@ class TestChangesChanges(unittest.TestCase):
         mock_resolvecoloring.assert_called_once_with(color_when.name)
         mock_call.assert_called_once_with(['git', 'log', '--no-decorate', '--oneline', 'HEAD..HEAD', '--color=always'])
 
+    @mock.patch('bin.commands.utils.git.get_config_value')
+    @mock.patch('bin.commands.utils.git.resolve_coloring', return_value='always')
+    @mock.patch('bin.commands.utils.execute.call')
+    def test_changes_color_asStr(self, mock_call, mock_resolvecoloring, mock_getconfigvalue):
+
+        # when
+        changes.changes('HEAD', color_when='never')
+
+        # then
+        mock_getconfigvalue.assert_not_called()
+        mock_resolvecoloring.assert_called_once_with(changes.ColorOption.NEVER.name)
+        mock_call.assert_called_once_with(['git', 'log', '--no-decorate', '--oneline', 'HEAD..HEAD', '--color=always'])
+
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
@@ -960,6 +973,28 @@ class TestChangesChanges(unittest.TestCase):
 
         # when
         changes.changes(committish, details=changes.DetailsOption.DIFF, color_when=color_when)
+
+        # then
+        mock_isgitrepository.assert_called_once_with()
+        mock_iscommit.assert_called_once_with(committish)
+        mock_isref.assert_called_once_with(committish)
+        mock_call.assert_called_once_with(['git', 'diff', '--color={}'.format(color_when), committish + '...HEAD'])
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_commit', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
+    @mock.patch('bin.commands.utils.git.resolve_coloring')
+    @mock.patch('bin.commands.utils.execute.call')
+    def test_changes_details_asStr(self, mock_call, mock_resolvecoloring, mock_isref, mock_iscommit,
+                                  mock_isgitrepository):
+
+        # given
+        committish = 'commit-ish'
+        color_when = changes.ColorOption.NEVER
+        mock_resolvecoloring.return_value = color_when
+
+        # when
+        changes.changes(committish, details='diff', color_when=color_when)
 
         # then
         mock_isgitrepository.assert_called_once_with()
