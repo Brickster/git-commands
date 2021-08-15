@@ -22,27 +22,15 @@ def _print_section(title, accent=None, text=None, format_='compact', show_empty=
     if not show_empty and not text:
         return ""
 
-    header_color = colorama.Fore.RESET
-    if color == 'auto' and sys.stdout.isatty():
-        header_color = colorama.Fore.GREEN
-    elif color == 'always':
-        header_color = colorama.Fore.GREEN
+    header_color = _resolve_header_color(color)
 
     if accent:
         section = '# {}{} {}{}'.format(header_color, title, accent, colorama.Fore.RESET) + os.linesep
     else:
         section = '# {}{}{}'.format(header_color, title, colorama.Fore.RESET) + os.linesep
 
-    if format_ == 'pretty' and text is not None and len(text) > 0:
-        # pretty print
-        section += os.linesep
-        text = text.splitlines()
-        for line in text:
-            section += '    ' + line + os.linesep
-        section += os.linesep
-    elif format_ == 'pretty':
-        # there's no text but we still want some nicer formatting
-        section += os.linesep
+    if format_ == 'pretty':
+        section += _pretty_print_section_text(text)
     elif format_ == 'compact':
         if text is not None:
             section += text
@@ -50,6 +38,28 @@ def _print_section(title, accent=None, text=None, format_='compact', show_empty=
         messages.error("unknown format '{}'".format(format_))
 
     return section
+
+
+def _pretty_print_section_text(text):
+    if text is not None and len(text) > 0:
+        result = os.linesep
+        text = text.splitlines()
+        for line in text:
+            result += '    ' + line + os.linesep
+        result += os.linesep
+        return result
+    else:
+        # there's no text but we still want some nicer formatting
+        return os.linesep
+
+
+def _resolve_header_color(color):
+    header_color = colorama.Fore.RESET
+    if color == 'auto' and sys.stdout.isatty():
+        header_color = colorama.Fore.GREEN
+    elif color == 'always':
+        header_color = colorama.Fore.GREEN
+    return header_color
 
 
 def _print_sections(sections, order=[], page=False, clear=False):
@@ -112,16 +122,20 @@ def edit_extension(extension, command=None, name=None, options=None, show=None, 
     extension_section = 'git-state.extensions.' + extension
     already_exists = _extension_exists(extension)
     if command:
-        execute.call(['git', 'config', '--local', extension_section + '.command', command])
+        _update_extension_config(extension_section, 'command', command)
     if name:
-        execute.call(['git', 'config', '--local', extension_section + '.name', name])
+        _update_extension_config(extension_section, 'name', name)
     if options:
-        execute.call(['git', 'config', '--local', extension_section + '.options', options])
+        _update_extension_config(extension_section, 'options', options)
     if show is not None:
-        execute.call(['git', 'config', '--local', extension_section + '.show', str(show)])
+        _update_extension_config(extension_section, 'show', str(show))
     if color is not None:
-        execute.call(['git', 'config', '--local', extension_section + '.color', str(color)])
+        _update_extension_config(extension_section, 'color', str(color))
     messages.info('Extension {} {}'.format(extension, 'updated' if already_exists else 'created'))
+
+
+def _update_extension_config(section, key, value):
+    execute.call(['git', 'config', '--local', section + '.' + key, value])
 
 
 def get_extensions():
@@ -197,7 +211,7 @@ def state(**kwargs):
     sections = OrderedDict()
     if git.is_empty_repository():
         extensions = ['status']
-        extensions = list(set(show_extensions).union(set(extensions) - set(ignore_extensions)))
+        extensions = _resolve_extensions(extensions, show_extensions, ignore_extensions)
 
         if 'status' in extensions:
             status_output = status.get(new_repository=True, **kwargs)
@@ -207,7 +221,7 @@ def state(**kwargs):
             extensions.remove('status')
     else:
         extensions = get_extensions() + ['status']
-        extensions = list(set(show_extensions).union(set(extensions) - set(ignore_extensions)))
+        extensions = _resolve_extensions(extensions, show_extensions, ignore_extensions)
 
         if 'status' in extensions:
             status_output = status.get(**kwargs)
@@ -221,7 +235,8 @@ def state(**kwargs):
         for extension in extensions or []:
 
             # skip if we should ignore this extension
-            if extension not in show_extensions and not git.get_config_value('git-state.extensions.' + extension + '.show', default=True, as_type=parse_string.as_bool):
+            if extension not in show_extensions and \
+                    not git.get_config_value('git-state.extensions.' + extension + '.show', default=True, as_type=parse_string.as_bool):
                 continue
 
             extension_name, extension_text = _run_extension(extension, options, show_color)
@@ -236,3 +251,7 @@ def state(**kwargs):
 
     order = kwargs.get('order', git.get_config_value('git-state.order', default=[], as_type=parse_string.as_delimited_list('|')))
     _print_sections(sections, order, kwargs.get('page', True), kwargs.get('clear'))
+
+
+def _resolve_extensions(all_extensions, show_extensions, ignore_extensions):
+    return list(set(show_extensions).union(set(all_extensions) - set(ignore_extensions)))

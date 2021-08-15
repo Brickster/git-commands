@@ -588,7 +588,7 @@ class TestChangesGetAssociation(unittest.TestCase):
 
         # setup
         expected_association = 'the-association'
-        mock_getconfigvalue.side_effect = ['refs/heads/master', expected_association]
+        mock_getconfigvalue.return_value = expected_association
 
         # when
         branch = 'the-branch'
@@ -598,10 +598,7 @@ class TestChangesGetAssociation(unittest.TestCase):
         mock_isemptyrepository.assert_called_once_with()
         mock_isgitrepository.assert_called_once_with()
         mock_currentbranch.assert_not_called()
-        mock_getconfigvalue.assert_has_calls([
-            mock.call('git-changes.default-commit-ish', default='refs/heads/master'),
-            mock.call('git-changes.associations.' + branch + '.with', config='local')
-        ])
+        mock_getconfigvalue.assert_called_once_with('git-changes.associations.' + branch + '.with', config='local')
 
         self.assertEqual(expected_association, actual_association)
 
@@ -612,7 +609,7 @@ class TestChangesGetAssociation(unittest.TestCase):
     def test_getassociation_noassociationexists(self, mock_getconfigvalue, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
 
         # setup
-        mock_getconfigvalue.side_effect = ['refs/heads/master', None]
+        mock_getconfigvalue.return_value = None
 
         # when
         branch = 'the-branch'
@@ -622,10 +619,7 @@ class TestChangesGetAssociation(unittest.TestCase):
         mock_isemptyrepository.assert_called_once_with()
         mock_isgitrepository.assert_called_once_with()
         mock_currentbranch.assert_not_called()
-        mock_getconfigvalue.assert_has_calls([
-            mock.call('git-changes.default-commit-ish', default='refs/heads/master'),
-            mock.call('git-changes.associations.' + branch + '.with', config='local')
-        ])
+        mock_getconfigvalue.assert_called_once_with('git-changes.associations.' + branch + '.with', config='local')
 
         self.assertIsNone(actual_association)
 
@@ -637,7 +631,7 @@ class TestChangesGetAssociation(unittest.TestCase):
 
         # setup
         default_committish = 'refs/heads/master'
-        mock_getconfigvalue.side_effect = [default_committish, None]
+        mock_getconfigvalue.side_effect = [None, default_committish]
 
         # when
         branch = 'the-branch'
@@ -648,8 +642,8 @@ class TestChangesGetAssociation(unittest.TestCase):
         mock_isemptyrepository.assert_called_once_with()
         mock_currentbranch.assert_not_called()
         mock_getconfigvalue.assert_has_calls([
-            mock.call('git-changes.default-commit-ish', default='refs/heads/master'),
-            mock.call('git-changes.associations.' + branch + '.with', config='local')
+            mock.call('git-changes.associations.' + branch + '.with', config='local'),
+            mock.call('git-changes.default-commit-ish', default='refs/heads/master')
         ])
 
         self.assertEqual(default_committish, actual_association)
@@ -662,7 +656,7 @@ class TestChangesGetAssociation(unittest.TestCase):
 
         # setup
         expected_association = 'the-association'
-        mock_getconfigvalue.side_effect = ['refs/heads/master', expected_association]
+        mock_getconfigvalue.return_value = expected_association
         current_branch = 'cur-branch'
         mock_currentbranch.return_value = current_branch
 
@@ -673,22 +667,14 @@ class TestChangesGetAssociation(unittest.TestCase):
         mock_isgitrepository.assert_called_once_with()
         mock_isemptyrepository.assert_called_once_with()
         mock_currentbranch.assert_called_once_with()
-        mock_getconfigvalue.assert_has_calls([
-            mock.call('git-changes.default-commit-ish', default='refs/heads/master'),
-            mock.call('git-changes.associations.' + current_branch + '.with', config='local')
-        ])
+        mock_getconfigvalue.assert_called_once_with('git-changes.associations.' + current_branch + '.with', config='local')
 
         self.assertEqual(expected_association, actual_association)
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.utils.git.current_branch', return_value='HEAD')
-    @mock.patch('bin.commands.utils.git.get_config_value')
-    def test_getassociation_detachedhead(self, mock_getconfigvalue, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
-
-        # given
-        default_association = 'refs/heads/master'
-        mock_getconfigvalue.return_value = default_association
+    def test_getassociation_detachedhead(self, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
 
         # when
         actual_association = changes.get_association(verbose=False)
@@ -697,7 +683,6 @@ class TestChangesGetAssociation(unittest.TestCase):
         mock_isgitrepository.assert_called_once_with()
         mock_isemptyrepository.assert_called_once_with()
         mock_currentbranch.assert_called_once_with()
-        mock_getconfigvalue.assert_called_once_with('git-changes.default-commit-ish', default='refs/heads/master')
 
         self.assertIsNone(actual_association)
 

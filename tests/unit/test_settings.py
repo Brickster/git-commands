@@ -8,57 +8,6 @@ from bin.commands import settings
 
 class TestSettings(unittest.TestCase):
 
-    @mock.patch('bin.commands.utils.directories.is_git_repository')
-    @mock.patch('bin.commands.utils.messages.error')
-    def test__validateConfig_valid_notLocal(self, mock_error, mock_isgitrepository):
-
-        # when
-        settings._validate_config('global')
-
-        # then
-        mock_isgitrepository.assert_not_called()
-        mock_error.assert_not_called()
-
-    @mock.patch('bin.commands.utils.directories.is_git_repository')
-    @mock.patch('bin.commands.utils.messages.error')
-    def test__validateConfig_valid_localButIsGitRepository(self, mock_error, mock_isgitrepository):
-
-        # given
-        mock_isgitrepository.return_value = True
-
-        # when
-        settings._validate_config('local')
-
-        # then
-        mock_isgitrepository.assert_called_once()
-        mock_error.assert_not_called()
-
-    @mock.patch('bin.commands.utils.directories.is_git_repository')
-    @mock.patch('bin.commands.utils.messages.error')
-    @mock.patch('os.getcwd', return_value='/working/dir')
-    def test__validateConfig_invalid(self, mock_getcwd, mock_error, mock_isgitrepository):
-
-        # given
-        directory = '/cur/dir'
-        mock_isgitrepository.return_value = False
-        mock_getcwd.return_value = directory
-        # mock_error.side_effect = [None, testutils.and_exit]
-
-        # when
-        try:
-            settings._validate_config('local')
-            # self.fail('expected to exit but did not')  # pragma: no cover
-        except SystemExit:
-            pass
-
-        # then
-        mock_isgitrepository.assert_called_once()
-        mock_error.assert_has_calls([
-            mock.call('{0!r} is not a git repository'.format(directory), exit_=False),
-            mock.call("'local' does not apply")
-        ])
-        mock_getcwd.assert_called_once()
-
     def test__prettyFormatConfigs(self):
 
         # given
@@ -108,14 +57,12 @@ class TestSettingsList(unittest.TestCase):
 
     def setUp(self):
         # store private methods so they can be restored after tests that mock them
-        self._validate_config = settings._validate_config
         self._pretty_format_configs = settings._pretty_format_configs
 
     def tearDown(self):
-        settings._validate_config = self._validate_config
         settings._pretty_format_configs = self._pretty_format_configs
 
-    @mock.patch('bin.commands.settings._validate_config')
+    @mock.patch('bin.commands.utils.git.validate_config')
     @mock.patch('bin.commands.utils.execute.check_output')
     def test_list(self, mock_checkoutput, mock_validateconfig):
 
@@ -131,7 +78,7 @@ class TestSettingsList(unittest.TestCase):
         mock_validateconfig.assert_called_once()
         mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 
-    @mock.patch('bin.commands.settings._validate_config')
+    @mock.patch('bin.commands.utils.git.validate_config')
     @mock.patch('bin.commands.utils.execute.check_output')
     def test_list_withOverrides(self, mock_checkoutput, mock_validateconfig):
 
@@ -148,7 +95,7 @@ class TestSettingsList(unittest.TestCase):
         mock_validateconfig.assert_called_once()
         mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 
-    @mock.patch('bin.commands.settings._validate_config')
+    @mock.patch('bin.commands.utils.git.validate_config')
     @mock.patch('os.path.exists', return_value=True)
     @mock.patch('bin.commands.utils.execute.check_output')
     def test_list_withFile(self, mock_checkoutput, mock_exists, mock_validateconfig):
@@ -167,7 +114,7 @@ class TestSettingsList(unittest.TestCase):
         mock_exists.assert_called_once_with(file_path)
         mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null', '--file', file_path])
 
-    @mock.patch('bin.commands.settings._validate_config')
+    @mock.patch('bin.commands.utils.git.validate_config')
     @mock.patch('os.path.exists', return_value=False)
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     def test_list_withFile_filesDoesNotExist(self, mock_error, mock_exists, mock_validateconfig):
@@ -186,7 +133,7 @@ class TestSettingsList(unittest.TestCase):
         mock_validateconfig.assert_called_once()
         mock_error.assert_called_once_with('no such file {!r}'.format(unknown_file))
 
-    @mock.patch('bin.commands.settings._validate_config')
+    @mock.patch('bin.commands.utils.git.validate_config')
     @mock.patch('bin.commands.utils.execute.stdout')
     def test_list_withConfig(self, mock_stdout, mock_validateconfig):
 
@@ -202,7 +149,7 @@ class TestSettingsList(unittest.TestCase):
         mock_validateconfig.assert_called_once()
         mock_stdout.assert_called_once_with(['git', 'config', '--list', '--null', '--global'])
 
-    @mock.patch('bin.commands.settings._validate_config')
+    @mock.patch('bin.commands.utils.git.validate_config')
     @mock.patch('bin.commands.utils.execute.stdout')
     def test_list_noConfigsFound(self, mock_stdout, mock_validateconfig):
 
@@ -217,7 +164,7 @@ class TestSettingsList(unittest.TestCase):
         mock_validateconfig.assert_called_once()
         mock_stdout.assert_called_once_with(['git', 'config', '--list', '--null', '--system'])
 
-    @mock.patch('bin.commands.settings._validate_config')
+    @mock.patch('bin.commands.utils.git.validate_config')
     @mock.patch('bin.commands.utils.execute.check_output')
     def test_list_withSection(self, mock_checkoutput, mock_validateconfig):
 
@@ -233,7 +180,7 @@ class TestSettingsList(unittest.TestCase):
         mock_validateconfig.assert_called_once()
         mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 
-    @mock.patch('bin.commands.settings._validate_config')
+    @mock.patch('bin.commands.utils.git.validate_config')
     @mock.patch('bin.commands.utils.execute.check_output')
     def test_list_count(self, mock_checkoutput, mock_validateconfig):
 
@@ -249,7 +196,7 @@ class TestSettingsList(unittest.TestCase):
         mock_validateconfig.assert_called_once()
         mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 
-    @mock.patch('bin.commands.settings._validate_config')
+    @mock.patch('bin.commands.utils.git.validate_config')
     @mock.patch('bin.commands.utils.execute.check_output')
     def test_list_keysOnly(self, mock_checkoutput, mock_validateconfig):
 
@@ -265,7 +212,7 @@ class TestSettingsList(unittest.TestCase):
         mock_validateconfig.assert_called_once()
         mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 
-    @mock.patch('bin.commands.settings._validate_config')
+    @mock.patch('bin.commands.utils.git.validate_config')
     @mock.patch('bin.commands.utils.execute.check_output')
     def test_list_sectionsOnly(self, mock_checkoutput, mock_validateconfig):
 
@@ -281,7 +228,7 @@ class TestSettingsList(unittest.TestCase):
         mock_validateconfig.assert_called_once()
         mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
 
-    @mock.patch('bin.commands.settings._validate_config')
+    @mock.patch('bin.commands.utils.git.validate_config')
     @mock.patch('bin.commands.settings._pretty_format_configs')
     @mock.patch('bin.commands.utils.execute.check_output')
     def test_list_prettyFormat(self, mock_checkoutput, mock_prettyformatconfig, mock_validateconfig):

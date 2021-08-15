@@ -69,8 +69,7 @@ def dict_set(delimiter):
             result = {}
             for current_value in values if values else []:
                 key, value = current_value.split(delimiter, 1)
-                if key not in result:
-                    result[key] = []
-                result[key] += [value]
+                result[key] = result.get(key, []) + [value]
             setattr(namespace, self.dest, result)
+
     return DictSet

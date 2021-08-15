@@ -6,18 +6,7 @@ import operator
 import os
 import re
 
-from .utils import directories, execute, messages
-
-
-def _validate_config(config=None):
-    """Validates that the directory and file specified are compatible.
-
-    :param config: the config name
-    """
-
-    if config == 'local' and not directories.is_git_repository():
-        messages.error("'{}' is not a git repository".format(os.getcwd()), exit_=False)
-        messages.error("'local' does not apply")
+from .utils import directories, execute, git, messages
 
 
 def _pretty_format_configs(config_map):
@@ -25,7 +14,7 @@ def _pretty_format_configs(config_map):
     result = []
     for section, section_map in iter(sorted(all_sections_map.items(), key=operator.itemgetter(0))):
         _append_section_header(result, section)
-        _append_section_keys(result, section_map)
+        _append_section_keys(result, '    {} = {}', section_map)
     return result
 
 
@@ -54,9 +43,9 @@ def _append_section_header(result, section):
         result += ['[{} "{}"]'.format(match.group(1), match.group(2))]
 
 
-def _append_section_keys(result, section_map):
+def _append_section_keys(result, result_format, section_map):
     for key, value in iter(sorted(section_map.items(), key=operator.itemgetter(0))):
-        result += ['    {} = {}'.format(key, value)]
+        result += [result_format.format(key, value)]
 
 
 def list_(section=None, config=None, count=False, limit_to=None, format_=None, file_=None):
@@ -72,7 +61,7 @@ def list_(section=None, config=None, count=False, limit_to=None, format_=None, f
     :return str or unicode: configuration details
     """
 
-    _validate_config(config)
+    git.validate_config(config)
 
     # get config contents
     config_contents = _get_config_contents(config, file_)
@@ -125,8 +114,7 @@ def _get_list_result(count, limit_to, format_, config_map):
         return _pretty_format_configs(config_map)
 
     result = []
-    for key, value in iter(sorted(config_map.items(), key=operator.itemgetter(0))):
-        result += ['{}={}'.format(key, value)]
+    _append_section_keys(result, '{}={}', config_map)
     return result
 
 

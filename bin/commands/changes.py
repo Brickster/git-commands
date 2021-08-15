@@ -148,14 +148,18 @@ def get_association(branch=None, verbose=False):
         return None
 
     branch = branch if branch else git.current_branch()
-    default_branch = git.get_config_value('git-changes.default-commit-ish', default='refs/heads/master')
+    associated_branch = _resolve_association(branch)
+
+    if not associated_branch and verbose:
+        return git.get_config_value('git-changes.default-commit-ish', default='refs/heads/master')
+    return associated_branch
+
+
+def _resolve_association(branch):
     if branch == 'HEAD' or not branch:
         associated_branch = None
     else:
         associated_branch = git.get_config_value('git-changes.associations.' + branch + '.with', config='local')
-
-    if not associated_branch and verbose:
-        return default_branch
     return associated_branch
 
 
@@ -168,11 +172,6 @@ def changes(committish, details=None, color_when=None, files=None):
     :param list files: a list of pathspecs to specific files
     """
 
-    if details and isinstance(details, str):
-        details = DetailsOption[details.upper()]
-    if color_when and isinstance(color_when, str):
-        color_when = ColorOption[color_when.upper()]
-
     if not directories.is_git_repository():
         messages.error("'{}' not a git repository".format(os.getcwd()))
     elif not git.is_commit(committish):
@@ -180,7 +179,16 @@ def changes(committish, details=None, color_when=None, files=None):
     elif git.is_ref(committish) and git.is_ref_ambiguous(committish, limit=(git.RefType.HEADS, git.RefType.TAGS)):
         _ambiguous_ref(committish)
 
+    if details and isinstance(details, str):
+        details = DetailsOption[details.upper()]
+    if color_when and isinstance(color_when, str):
+        color_when = ColorOption[color_when.upper()]
     color_when = git.resolve_coloring(color_when.name if color_when is not None else None)
+
+    _print_changes(committish, details, color_when, files)
+
+
+def _print_changes(committish, details, color_when, files):
     if details == DetailsOption.DIFF:
         command = ['git', 'diff', '--color={}'.format(color_when), committish + '...HEAD']
         execute.call(_append_any_file_args(command, files))
