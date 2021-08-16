@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file. This projec
 - **Changes**: rename --remote to --upstream [#140][]
 - **State**: simplify show/no-show options [#145][] [#151][]
 
-### Docs:
+### Docs
 - **State**: add missing extensions documentation [#154][]
 
 [#54]: https://github.com/Brickster/git-commands/issues/54
