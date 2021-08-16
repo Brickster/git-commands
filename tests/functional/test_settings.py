@@ -53,7 +53,7 @@ class TestSettingsList(unittest.TestCase):
 
     def tearDown(self):
         # put global configs back since some tests remove them
-        if '--config' in sys.argv or '-c' in sys.argv:
+        if '--no-skip' in sys.argv:
             self.repo.git.config('--global', 'user.name', 'Marcus Rosenow')
             self.repo.git.config('--global', 'user.email', 'Brickstertwo@users.noreply.github.com')
         shutil.rmtree(self.dirpath)
@@ -102,7 +102,7 @@ class TestSettingsList(unittest.TestCase):
         self.assertFalse(stdout)
 
     @unittest.skipIf(
-        '--config' not in sys.argv and '-c' not in sys.argv,
+        '--no-skip' not in sys.argv,
         'requires editing user config and should only run during non-local builds.'
     )
     def test_list_global(self):
@@ -132,7 +132,7 @@ class TestSettingsList(unittest.TestCase):
         self.assertTrue('git-settings.test2.getc=valuec' not in actual)
 
     @unittest.skipIf(
-        '--config' not in sys.argv and '-c' not in sys.argv,
+        '--no-skip' not in sys.argv,
         'requires editing user config and should only run during non-local builds.'
     )
     def test_list_global_configFileDoesNotExist(self):
@@ -151,7 +151,7 @@ class TestSettingsList(unittest.TestCase):
 
     # a bit of a hack since --no-skip is a nosetests flag.
     @unittest.skipIf(
-        '--config' not in sys.argv and '-c' not in sys.argv,
+        '--no-skip' not in sys.argv,
         'requires editing user config and should only run during non-local builds.'
     )
     def test_list_system(self):
@@ -181,7 +181,7 @@ class TestSettingsList(unittest.TestCase):
         self.assertTrue('git-settings.test2.getc=valuec' not in actual)
 
     @unittest.skipIf(
-        '--config' not in sys.argv and '-c' not in sys.argv,
+        '--no-skip' not in sys.argv,
         'requires editing user config and should only run during non-local builds.'
     )
     def test_list_system_configFileDoesNotExist(self):
@@ -278,7 +278,7 @@ git-settings.test2.getc=valuec""")
 
 
 @unittest.skipIf(
-    '--config' not in sys.argv and '-c' not in sys.argv,
+    '--no-skip' not in sys.argv,
     'requires editing user config and should only run during non-local builds.'
 )
 class TestSettingsDestroy(unittest.TestCase):

@@ -139,7 +139,7 @@ git reindex (-v|--version)
 
 ## Testing and OS Support
 
-`git-commands` has been tested using git 2.27.0, Python 2.7.15 and 3.9.6, and on macOS 11 Big Sur and Ubuntu Xenial Xerus. To confirm on your own system, install the test dependencies and run the test suite. Note that non-CI environments should not include nose2's `--config` flag or functional tests will read/write/delete global and system configs. Add this flag to local testing at your own discretion.
+`git-commands` has been tested using git 2.27.0, Python 2.7.15 and 3.9.6, and on macOS 11 Big Sur and Ubuntu Xenial Xerus. To confirm on your own system, install the test dependencies and run the test suite. Note that some tests are skipped locally as they edit/delete system and global git configs.
 
 ```
 pip install --user -r requirements-test.txt

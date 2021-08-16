@@ -32,7 +32,7 @@ script:
   - git config --global user.name "Marcus Rosenow"
 
   # test
-  - nose2 --verbose --config nose2.cfg
+  - nose2 --verbose --no-skip --log-level=INFO
 
 after_script:
   # send coverage report to CodeClimate

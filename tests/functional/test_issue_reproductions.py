@@ -467,7 +467,7 @@ class TestIssue124(unittest.TestCase):
 
 
 @unittest.skipIf(
-    '--config' not in sys.argv and '-c' not in sys.argv,
+    '--no-skip' not in sys.argv,
     'requires editing user config and should only run during non-local builds.'
 )
 class TestIssue131(unittest.TestCase):
