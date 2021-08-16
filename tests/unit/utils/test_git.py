@@ -4,8 +4,6 @@ import os
 import sys
 import unittest
 
-from subprocess import PIPE, STDOUT
-
 from .. import testutils
 from bin.commands.utils import git
 
