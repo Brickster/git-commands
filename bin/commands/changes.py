@@ -202,7 +202,6 @@ def _print_changes(committish, details, color_when, files):
         messages.info(str(len(log)))
     elif details == DetailsOption.INVERSE_LOG:
         merge_base = execute.check_output(['git', 'merge-base', committish, 'HEAD']).strip()
-        # TODO: make length configurable
         command = ['git', 'log', '--no-decorate', '--oneline', '-10', merge_base, '--color={}'.format(color_when)]
         execute.call(_append_any_file_args(command, files))
     else:

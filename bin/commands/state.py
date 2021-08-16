@@ -115,10 +115,6 @@ def _extension_exists(extension):
 
 
 def edit_extension(extension, command=None, name=None, options=None, show=None, color=True):
-    # print 'Would create extension', extension, command, name, options, show, show_color
-    # TODO: where to put the extension? global/sys/local/file
-    # TODO: is name necessary when subsection values can be anything exception \n and null byte?
-    # TODO: how do you you remove "options" via the command line?
     extension_section = 'git-state.extensions.' + extension
     already_exists = _extension_exists(extension)
     if command:
@@ -150,7 +146,6 @@ def print_extensions():
 
 
 def print_extension_config(extension):
-    # TODO: add pretty/compact options
     config = settings.list_(section='git-state.extensions.' + extension, format_=settings.FormatOption.PRETTY)
     if config:
         messages.info(config)
@@ -158,8 +153,6 @@ def print_extension_config(extension):
 
 def run_extension(extension):
     # TODO: BUG: piping to less prints the header with ANSII codes
-    # TODO: add proper coloring
-    # TODO: add proper formatting
     colorama.init(strip=True)
     if _extension_exists(extension):
         extension_name, extension_text = _run_extension(extension, {}, 'never')
@@ -169,8 +162,6 @@ def run_extension(extension):
 
 
 def delete_extension(extension):
-    # TODO: where to delete from?
-    # TODO: quiet
     if _extension_exists(extension):
         execute.call(['git', 'config', '--local', '--remove-section', 'git-state.extensions.{}'.format(extension)])
         messages.info('Extension {} deleted'.format(extension))
