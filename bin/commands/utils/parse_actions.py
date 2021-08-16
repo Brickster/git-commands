@@ -73,3 +73,18 @@ def dict_set(delimiter):
             setattr(namespace, self.dest, result)
 
     return DictSet
+
+
+def as_enum(enum_class):
+    """Return an AsEnum action for the enum class.
+
+    :param Enum enum_class: the enum class to use when parsing a value
+    """
+
+    class AsEnum(argparse.Action):
+        """As action that parses a specific enum from a value."""
+
+        def __call__(self, parse, namespace, values, option_string=None):
+            setattr(namespace, self.dest, enum_class[values.upper()])
+
+    return AsEnum

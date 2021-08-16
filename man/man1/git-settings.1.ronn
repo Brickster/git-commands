@@ -34,7 +34,7 @@
         The section is printed in config file format.
 
     * `-f`|`--format` <format>:
-        The section is printed in the specified format. Valid values include: <compact> and <pretty>.
+        The section is printed in the specified format. Valid values include: <compact>, <pretty>, <count>, <keys>, and <sections>.
 
     * `-c`|`--count`:
         Print the count of values in a given section/file.

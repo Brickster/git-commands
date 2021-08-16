@@ -1,6 +1,8 @@
 import unittest
 from argparse import Namespace
 
+from enum import Enum
+
 from bin.commands.utils import parse_actions
 
 
@@ -180,3 +182,24 @@ class TestDictSet(unittest.TestCase):
 
         # then
         self.assertEqual(getattr(namespace, destination), {})
+
+
+class TestAsEnum(unittest.TestCase):
+
+    class TestEnum(Enum):
+        ONE = 1
+        TWO = 2
+
+    def test_asEnum(self):
+
+        # given
+        value = 'one'
+        destination = 'd'
+        action = parse_actions.as_enum(self.TestEnum)(None, destination)
+        namespace = Namespace()
+
+        # when
+        action(None, namespace, value)
+
+        # then
+        self.assertEqual(getattr(namespace, destination), self.TestEnum.ONE)

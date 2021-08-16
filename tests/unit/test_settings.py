@@ -182,14 +182,30 @@ class TestSettingsList(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.git.validate_config')
     @mock.patch('bin.commands.utils.execute.check_output')
-    def test_list_count(self, mock_checkoutput, mock_validateconfig):
+    def test_list_format_compact(self, mock_checkoutput, mock_validateconfig):
 
         # given
         config_values = ['section.key1=value1', 'section.key2=value2']
         mock_checkoutput.return_value = '\x00'.join(config_values).replace('=', os.linesep) + '\x00'
 
         # when
-        actual_count = settings.list_(count=True)
+        actual_values = settings.list_(format_=settings.FormatOption.COMPACT)
+
+        # then
+        self.assertEqual(sorted(actual_values.splitlines()), config_values)
+        mock_validateconfig.assert_called_once()
+        mock_checkoutput.assert_called_once_with(['git', 'config', '--list', '--null'])
+
+    @mock.patch('bin.commands.utils.git.validate_config')
+    @mock.patch('bin.commands.utils.execute.check_output')
+    def test_list_format_count(self, mock_checkoutput, mock_validateconfig):
+
+        # given
+        config_values = ['section.key1=value1', 'section.key2=value2']
+        mock_checkoutput.return_value = '\x00'.join(config_values).replace('=', os.linesep) + '\x00'
+
+        # when
+        actual_count = settings.list_(format_=settings.FormatOption.COUNT)
 
         # then
         self.assertEqual(actual_count, '2')
@@ -198,14 +214,14 @@ class TestSettingsList(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.git.validate_config')
     @mock.patch('bin.commands.utils.execute.check_output')
-    def test_list_keysOnly(self, mock_checkoutput, mock_validateconfig):
+    def test_list_format_keys(self, mock_checkoutput, mock_validateconfig):
 
         # given
         config_values = ['section.key1=value1', 'section.key2=value2']
         mock_checkoutput.return_value = '\x00'.join(config_values).replace('=', os.linesep) + '\x00'
 
         # when
-        actual_values = settings.list_(limit_to='keys')
+        actual_values = settings.list_(format_=settings.FormatOption.KEYS)
 
         # then
         self.assertEqual(sorted(actual_values.splitlines()), ['key1', 'key2'])
@@ -214,14 +230,14 @@ class TestSettingsList(unittest.TestCase):
 
     @mock.patch('bin.commands.utils.git.validate_config')
     @mock.patch('bin.commands.utils.execute.check_output')
-    def test_list_sectionsOnly(self, mock_checkoutput, mock_validateconfig):
+    def test_list_format_sections(self, mock_checkoutput, mock_validateconfig):
 
         # given
         config_values = ['section.key1=value1', 'section.key2=value2', 'section2.key1=value1']
         mock_checkoutput.return_value = '\x00'.join(config_values).replace('=', os.linesep) + '\x00'
 
         # when
-        actual_values = settings.list_(limit_to='sections')
+        actual_values = settings.list_(format_=settings.FormatOption.SECTIONS)
 
         # then
         self.assertEqual(sorted(actual_values.splitlines()), ['section', 'section2'])
@@ -231,7 +247,7 @@ class TestSettingsList(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.validate_config')
     @mock.patch('bin.commands.settings._pretty_format_configs')
     @mock.patch('bin.commands.utils.execute.check_output')
-    def test_list_prettyFormat(self, mock_checkoutput, mock_prettyformatconfig, mock_validateconfig):
+    def test_list_format_pretty(self, mock_checkoutput, mock_prettyformatconfig, mock_validateconfig):
 
         # given
         config_values = ['section.keys.key1=value1', 'section.keys.key2=value2', 'sec.key=value']
@@ -240,7 +256,7 @@ class TestSettingsList(unittest.TestCase):
         mock_prettyformatconfig.return_value = format_result
 
         # when
-        pretty_output = settings.list_(format_='pretty')
+        pretty_output = settings.list_(format_=settings.FormatOption.PRETTY)
 
         # then
         self.assertEqual(pretty_output, format_result[0])

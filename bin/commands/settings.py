@@ -5,6 +5,9 @@ from __future__ import absolute_import
 import operator
 import os
 import re
+from functools import partial
+
+from enum import Enum
 
 from .utils import directories, execute, git, messages
 
@@ -48,14 +51,42 @@ def _append_section_keys(result, result_format, section_map):
         result += [result_format.format(key, value)]
 
 
-def list_(section=None, config=None, count=False, limit_to=None, format_=None, file_=None):
+def _count_printer(config_map):
+    return [str(len(config_map))]
+
+
+def _keys_printer(config_map):
+    return [key[key.rfind('.') + 1:] for key in config_map.keys()]
+
+
+def _sections_printer(config_map):
+    return list(set([key[0:key.rfind('.')] for key in config_map.keys()]))
+
+
+def _pretty_printer(config_map):
+    return _pretty_format_configs(config_map)
+
+
+def _compact_printer(config_map):
+    result = []
+    _append_section_keys(result, '{}={}', config_map)
+    return result
+
+
+class FormatOption(Enum):
+    COMPACT = partial(_compact_printer)
+    PRETTY = partial(_pretty_printer)
+    COUNT = partial(_count_printer)
+    KEYS = partial(_keys_printer)
+    SECTIONS = partial(_sections_printer)
+
+
+def list_(section=None, config=None, format_=FormatOption.COMPACT, file_=None):
     """List configuration settings respecting override precedence.
 
     :param section: limit to a specific section
     :param config: limit to a specific config (local|global|system)
-    :param count: return the total configuration values count rather than the configurations themselves
-    :param limit_to: limit to a specific config part (keys/sections/None)
-    :param format_: output format (compact|pretty)
+    :param FormatOption format_: output format (compact|pretty|count|keys|sections)
     :param str or unicode file_: path to a config file
 
     :return str or unicode: configuration details
@@ -78,7 +109,7 @@ def list_(section=None, config=None, count=False, limit_to=None, format_=None, f
         key, value = config.split(os.linesep, 1)
         config_map[key] = value
 
-    result = _get_list_result(count, limit_to, format_, config_map)
+    result = format_.value(config_map)
     return os.linesep.join(result)
 
 
@@ -101,21 +132,6 @@ def _limit_config_to_section(config_contents, section):
         if match is not None:
             config_section += [config]
     return config_section
-
-
-def _get_list_result(count, limit_to, format_, config_map):
-    if count:
-        return [str(len(config_map))]
-    elif limit_to == 'keys':
-        return [key[key.rfind('.') + 1:] for key in config_map.keys()]
-    elif limit_to == 'sections':
-        return list(set([key[0:key.rfind('.')] for key in config_map.keys()]))
-    elif format_ == 'pretty':
-        return _pretty_format_configs(config_map)
-
-    result = []
-    _append_section_keys(result, '{}={}', config_map)
-    return result
 
 
 def _dry_destroy_section(config, section):

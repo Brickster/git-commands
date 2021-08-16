@@ -111,7 +111,7 @@ def _run_extension(extension, options, show_color):
 
 
 def _extension_exists(extension):
-    return bool(int(settings.list_('git-state.extensions.' + extension, count=True)))
+    return bool(int(settings.list_('git-state.extensions.' + extension, format_=settings.FormatOption.COUNT)))
 
 
 def edit_extension(extension, command=None, name=None, options=None, show=None, color=True):
@@ -139,7 +139,7 @@ def _update_extension_config(section, key, value):
 
 
 def get_extensions():
-    extensions = settings.list_(limit_to='sections')
+    extensions = settings.list_(format_=settings.FormatOption.SECTIONS)
     return [match.group(1) for match in re.finditer('^git-state\\.extensions\\.([^.\n]+)$', extensions, re.MULTILINE)]
 
 
@@ -151,7 +151,7 @@ def print_extensions():
 
 def print_extension_config(extension):
     # TODO: add pretty/compact options
-    config = settings.list_(section='git-state.extensions.' + extension, format_='pretty')
+    config = settings.list_(section='git-state.extensions.' + extension, format_=settings.FormatOption.PRETTY)
     if config:
         messages.info(config)
 

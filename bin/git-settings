@@ -3,13 +3,17 @@
 import argparse
 
 from commands import settings
-from commands.utils import git, messages
-from commands.utils.parse_actions import multi_set
+from commands.utils import git, messages, parse_string
+from commands.utils.parse_actions import multi_set, as_enum
 
 
 def main():
 
-    default_format = git.get_config_value('git-settings.list.format', default='compact')
+    default_format = git.get_config_value(
+        'git-settings.list.format',
+        default=settings.FormatOption.COMPACT,
+        as_type=parse_string.as_enum(settings.FormatOption)
+    )
 
     file_parser = argparse.ArgumentParser(add_help=False)
     file_group = file_parser.add_mutually_exclusive_group()
@@ -77,22 +81,44 @@ def main():
     list_group.add_argument(
         '-f',
         '--format',
-        help='print using a specific format (choices: compact, pretty)',
-        choices=('compact', 'pretty'),
+        help='print using a specific format (choices: compact, pretty, count, keys, sections)',
+        choices=('compact', 'pretty', 'count', 'keys', 'sections'),
         default=default_format,
-        dest='format_'
+        dest='format_',
+        action=as_enum(settings.FormatOption)
     )
     list_group.add_argument(
         '-p',
         '--pretty',
         help='use pretty format',
         action='store_const',
-        const='pretty',
+        const=settings.FormatOption.PRETTY,
         dest='format_'
     )
-    list_group.add_argument('-c', '--count', help='print the count of configurations', action='store_true')
-    list_group.add_argument('-k', '--keys', help='list the keys for a section', action='store_const', const='keys', dest='limit_to')
-    list_group.add_argument('-s', '--sections', help='list only section names', action='store_const', const='sections', dest='limit_to')
+    list_group.add_argument(
+        '-c',
+        '--count',
+        help='print the count of configurations',
+        action='store_const',
+        const=settings.FormatOption.COUNT,
+        dest='format_'
+    )
+    list_group.add_argument(
+        '-k',
+        '--keys',
+        help='list the keys for a section',
+        action='store_const',
+        const=settings.FormatOption.KEYS,
+        dest='format_'
+    )
+    list_group.add_argument(
+        '-s',
+        '--sections',
+        help='list only section names',
+        action='store_const',
+        const=settings.FormatOption.SECTIONS,
+        dest='format_'
+    )
     list_parser.set_defaults(func=settings.list_)
 
     # --------------------------------------------
@@ -115,7 +141,7 @@ def main():
     args = vars(parser.parse_args())
 
     subcommand = args.pop('subcommand')
-    if subcommand == 'list' and not args['section'] and args['limit_to'] and args['limit_to'] == 'keys':
+    if subcommand == 'list' and not args['section'] and args['format_'] and args['format_'] == settings.FormatOption.KEYS:
         messages.error('argument -k/--keys: not allowed without positional argument section')
 
     func = args.pop('func')
