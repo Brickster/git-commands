@@ -2,18 +2,22 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org).
 
-## [Unreleased][]
+## [v0.8.0][] - 2021-08-15
 ### Features
 - **Snapshot**: add result message [#54][]
 - **Changes**: --inverse option to show common commits [#118][] [#134][]
 - **Snapshot**: replace a snapshot with --replace [#143][]
 - **State**: add --show-all option [#145][]
 - **Settings**: --format now supports count, keys, and sections
+- Support for Python 3.9
 
 ### Changes
 - **Settings**: remove get command [#135][]
 - **Changes**: rename --remote to --upstream [#140][]
 - **State**: simplify show/no-show options [#145][] [#151][]
+
+### Docs:
+- **State**: add missing extensions documentation [#154][]
 
 [#54]: https://github.com/Brickster/git-commands/issues/54
 [#118]: https://github.com/Brickster/git-commands/issues/118
@@ -22,7 +26,9 @@ All notable changes to this project will be documented in this file. This projec
 [#140]: https://github.com/Brickster/git-commands/issues/140
 [#143]: https://github.com/Brickster/git-commands/issues/143
 [#145]: https://github.com/Brickster/git-commands/issues/145
+[#146]: https://github.com/Brickster/git-commands/issues/146
 [#151]: https://github.com/Brickster/git-commands/issues/151
+[#154]: https://github.com/Brickster/git-commands/issues/154
 
 ## [v0.7.0][] - 2019-08-26
 ### Features
@@ -248,6 +254,7 @@ All notable changes to this project will be documented in this file. This projec
 - Everything
 
 [Unreleased]: https://github.com/Brickster/git-commands/compare/latest...HEAD
+[v0.8.0]: https://github.com/Brickster/git-commands/compare/v0.7.0...v0.8.0
 [v0.7.0]: https://github.com/Brickster/git-commands/compare/v0.6.1...v0.7.0
 [v0.6.1]: https://github.com/Brickster/git-commands/compare/v0.6.0...v0.6.1
 [v0.6.0]: https://github.com/Brickster/git-commands/compare/v0.5.0...v0.6.0

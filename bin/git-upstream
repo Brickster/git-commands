@@ -13,7 +13,7 @@ def main():
         description=upstream.__doc__,
         epilog='for more detail, use: git help upstream'
     )
-    parser.add_argument('-v', '--version', action='version', version='git-upstream 0.7.0')
+    parser.add_argument('-v', '--version', action='version', version='git-upstream 0.8.0')
 
     include_remote_group = parser.add_mutually_exclusive_group()
 

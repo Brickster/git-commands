@@ -15,7 +15,7 @@ def main():
         description=state.__doc__,
         epilog='for more detail, use: git help state'
     )
-    parser.add_argument('-v', '--version', action='version', version='git-state 0.7.0')
+    parser.add_argument('-v', '--version', action='version', version='git-state 0.8.0')
     subparsers = parser.add_subparsers(help='sub-command help', dest='subcommand')
 
     _view_subcommand(subparsers)

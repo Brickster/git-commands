@@ -13,7 +13,7 @@ def main():
         description=restash.__doc__,
         epilog='for more detail, use: git help restash'
     )
-    parser.add_argument('-v', '--version', action='version', version='git-restash 0.7.0')
+    parser.add_argument('-v', '--version', action='version', version='git-restash 0.8.0')
 
     # <stash>
     parser.add_argument(

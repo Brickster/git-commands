@@ -22,7 +22,7 @@ def main():
         description=snapshot.__doc__,
         epilog='for more detail, use: git help snapshot'
     )
-    parser.add_argument('-v', '--version', action='version', version='git-snapshot 0.7.0')
+    parser.add_argument('-v', '--version', action='version', version='git-snapshot 0.8.0')
 
     parser.add_argument('message', help='the message when creating the underlying stash', nargs='?', metavar='MESSAGE')
     parser.add_argument('-r', '--replace', help='replace a snapshot by message', action='store_true')

@@ -15,7 +15,7 @@ def main():
         description=changes.__doc__,
         epilog='for more detail, use: git help changes'
     )
-    parser.add_argument('-v', '--version', action='version', version='git-changes 0.7.0')
+    parser.add_argument('-v', '--version', action='version', version='git-changes 0.8.0')
 
     # --------------------------------------------
     # associate sub-command
