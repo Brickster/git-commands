@@ -2,10 +2,12 @@ import mock
 import unittest
 
 from . import testutils
+from ..layers import GitReindex
 from bin.commands import reindex
 
 
 class TestReindex(unittest.TestCase):
+    layer = GitReindex
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.execute.check_output')

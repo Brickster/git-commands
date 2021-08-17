@@ -2,10 +2,12 @@ import mock
 import unittest
 
 from . import testutils
+from ..layers import GitAbandon
 from bin.commands import abandon
 
 
 class TestAbandon(unittest.TestCase):
+    layer = GitAbandon
 
     @mock.patch('bin.commands.utils.execute.check_output')
     @mock.patch('bin.commands.utils.execute.call')

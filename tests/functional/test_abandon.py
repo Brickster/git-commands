@@ -5,6 +5,7 @@ import tempfile
 import unittest
 
 import git
+from ..layers import GitAbandonFunctional
 
 _DROPPED_FORMAT = 'Dropped refs/stash@{{{}}} ({})'
 _DRY_RUN_FORMAT = 'Would drop refs/stash@{{{}}} ({})'
@@ -12,6 +13,7 @@ _STASH_FORMAT = '{} refs/stash@{{{}}}: WIP on master: {}'
 
 
 class TestGitAbandon(unittest.TestCase):
+    layer = GitAbandonFunctional
 
     def _stashes(self):
         return subprocess.check_output(('git', 'stash', 'list', '--oneline', '--no-color')).decode('utf-8')

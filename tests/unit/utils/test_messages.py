@@ -2,10 +2,12 @@ import mock
 import sys
 import unittest
 
+from ...layers import UtilsMessages
 from bin.commands.utils import messages
 
 
 class TestMessages(unittest.TestCase):
+    layer = UtilsMessages
 
     def setUp(self):
         # store private methods so they can be restored after tests that mock them

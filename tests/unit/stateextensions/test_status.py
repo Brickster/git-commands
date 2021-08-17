@@ -4,10 +4,12 @@ import unittest
 
 from colorama import Fore
 
+from ...layers import GitStateExtensions
 from bin.commands.stateextensions import status
 
 
 class TestStatus(unittest.TestCase):
+    layer = GitStateExtensions
 
     def test_title(self):
         self.assertEqual(status.title(), 'status')

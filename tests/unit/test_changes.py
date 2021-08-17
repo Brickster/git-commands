@@ -2,11 +2,13 @@ import mock
 import unittest
 
 from . import testutils
+from ..layers import GitChanges
 from bin.commands import changes, upstream
 from bin.commands.utils import git
 
 
 class TestChangesAssociate(unittest.TestCase):
+    layer = GitChanges
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
@@ -227,6 +229,7 @@ class TestChangesAssociate(unittest.TestCase):
 
 
 class TestChangesAssociateUpstream(unittest.TestCase):
+    layer = GitChanges
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.current_branch')
@@ -290,6 +293,7 @@ class TestChangesAssociateUpstream(unittest.TestCase):
 
 
 class TestChangesGetAssociatedBranches(unittest.TestCase):
+    layer = GitChanges
 
     @mock.patch('bin.commands.utils.execute.stdout')
     def test_getAssociatedBranches(self, mock_stdout):
@@ -309,6 +313,7 @@ git-changes.associations.master.with
 
 
 class TestChangesPruneAssociations(unittest.TestCase):
+    layer = GitChanges
 
     def setUp(self):
         # store private methods so they can be restored after tests that mock them
@@ -395,6 +400,7 @@ class TestChangesPruneAssociations(unittest.TestCase):
 
 
 class TestChangesUnassociate(unittest.TestCase):
+    layer = GitChanges
 
     def setUp(self):
         # store private methods so they can be restored after tests that mock them
@@ -579,6 +585,7 @@ class TestChangesUnassociate(unittest.TestCase):
 
 
 class TestChangesGetAssociation(unittest.TestCase):
+    layer = GitChanges
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
@@ -741,6 +748,7 @@ class TestChangesGetAssociation(unittest.TestCase):
 
 
 class TestChangesChanges(unittest.TestCase):
+    layer = GitChanges
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)

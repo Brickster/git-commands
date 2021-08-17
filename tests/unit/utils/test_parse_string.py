@@ -2,6 +2,7 @@ import unittest
 
 import enum
 
+from ...layers import UtilsParseString
 from bin.commands.utils import parse_string
 
 
@@ -11,6 +12,7 @@ class TestEnum(enum.Enum):
 
 
 class TestParseString(unittest.TestCase):
+    layer = UtilsParseString
 
     def test_asBool_true(self):
 

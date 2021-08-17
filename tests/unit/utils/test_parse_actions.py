@@ -3,10 +3,12 @@ from argparse import Namespace
 
 from enum import Enum
 
+from ...layers import UtilsParseActions
 from bin.commands.utils import parse_actions
 
 
 class TestMultiSet(unittest.TestCase):
+    layer = UtilsParseActions
 
     def test_multiSet(self):
 
@@ -56,6 +58,7 @@ class TestMultiSet(unittest.TestCase):
 
 
 class TestAppendList(unittest.TestCase):
+    layer = UtilsParseActions
 
     def test_appendList(self):
 
@@ -107,6 +110,7 @@ class TestAppendList(unittest.TestCase):
 
 
 class TestOptionalList(unittest.TestCase):
+    layer = UtilsParseActions
 
     def test_optionalList(self):
 
@@ -139,6 +143,7 @@ class TestOptionalList(unittest.TestCase):
 
 
 class TestDictSet(unittest.TestCase):
+    layer = UtilsParseActions
 
     def test_dictSet(self):
 
@@ -185,6 +190,7 @@ class TestDictSet(unittest.TestCase):
 
 
 class TestAsEnum(unittest.TestCase):
+    layer = UtilsParseActions
 
     class TestEnum(Enum):
         ONE = 1

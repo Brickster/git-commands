@@ -5,10 +5,12 @@ import sys
 import unittest
 
 from .. import testutils
+from ...layers import UtilsGit
 from bin.commands.utils import git
 
 
 class TestGit(unittest.TestCase):
+    layer = UtilsGit
 
     def setUp(self):
         # store private methods so they can be restored after tests that mock them

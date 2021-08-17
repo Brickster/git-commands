@@ -8,9 +8,11 @@ import unittest
 import git
 
 from . import testutils
+from ..layers import GitSettingsFunctional
 
 
 class TestSettings(unittest.TestCase):
+    layer = GitSettingsFunctional
 
     def _output(self, command):
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -30,6 +32,7 @@ class TestSettings(unittest.TestCase):
 
 
 class TestSettingsList(unittest.TestCase):
+    layer = GitSettingsFunctional
 
     def _output(self, command):
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -282,6 +285,7 @@ git-settings.test2.getc=valuec""")
     'requires editing user config and should only run during non-local builds.'
 )
 class TestSettingsDestroy(unittest.TestCase):
+    layer = GitSettingsFunctional
 
     def _output(self, command):
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

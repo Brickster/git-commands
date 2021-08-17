@@ -2,11 +2,13 @@ import unittest
 import mock
 
 from . import testutils
+from ..layers import GitUpstream
 from bin.commands import upstream
 
 
 @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
 class TestUpstream(unittest.TestCase):
+    layer = GitUpstream
 
     @mock.patch('bin.commands.utils.git.current_branch', return_value='the-branch')
     @mock.patch('bin.commands.utils.execute.stdout')

@@ -7,9 +7,11 @@ import unittest
 import git
 
 from . import testutils
+from ..layers import GitStateFunctional
 
 
 class TestState(unittest.TestCase):
+    layer = GitStateFunctional
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -39,6 +41,7 @@ class TestState(unittest.TestCase):
 
 
 class TestStateView(unittest.TestCase):
+    layer = GitStateFunctional
 
     def _output(self, command):
         pyenv = os.environ.copy()
@@ -152,6 +155,7 @@ nothing to commit, working directory is clean
 
 
 class TestStateViewWithExtension(unittest.TestCase):
+    layer = GitStateFunctional
 
     def _output(self, command):
         if type(command) == str:
@@ -500,6 +504,7 @@ nothing to commit, working directory is clean
 
 
 class TestStateExtensions(unittest.TestCase):
+    layer = GitStateFunctional
 
     def _output(self, command, set_config=True):
         if type(command) == str:

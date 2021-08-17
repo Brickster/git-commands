@@ -1,16 +1,17 @@
 import mock
 import os
 import sys
-import subprocess
 import unittest
 
 import colorama
 
 from . import testutils
+from ..layers import GitState
 from bin.commands import settings, state
 
 
 class TestStatePrintSection(unittest.TestCase):
+    layer = GitState
 
     def test_printsection_withaccent(self):
 
@@ -176,6 +177,7 @@ class TestStatePrintSection(unittest.TestCase):
 
 
 class TestStateState(unittest.TestCase):
+    layer = GitState
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
@@ -1606,6 +1608,7 @@ class TestStateState(unittest.TestCase):
 
 
 class TestStateExtensionExists(unittest.TestCase):
+    layer = GitState
 
     @mock.patch('bin.commands.settings.list_')
     def test_state_extensionExists(self, mock_list):
@@ -1622,6 +1625,7 @@ class TestStateExtensionExists(unittest.TestCase):
 
 
 class TestStateEditExtension(unittest.TestCase):
+    layer = GitState
 
     @mock.patch('bin.commands.state._extension_exists')
     @mock.patch('bin.commands.utils.execute.call')
@@ -1749,6 +1753,7 @@ class TestStateEditExtension(unittest.TestCase):
 
 
 class TestStateGetExtensions(unittest.TestCase):
+    layer = GitState
 
     @mock.patch('bin.commands.settings.list_')
     def test_state_getExtensions(self, mock_list):
@@ -1781,6 +1786,7 @@ git-state.extensions.changes'''
 
 
 class TestStatePrintExtensions(unittest.TestCase):
+    layer = GitState
 
     @mock.patch('bin.commands.state.get_extensions')
     @mock.patch('bin.commands.utils.messages.info')
@@ -1814,6 +1820,7 @@ stashes''')
 
 
 class TestStatePrintExtensionConfig(unittest.TestCase):
+    layer = GitState
 
     @mock.patch('bin.commands.settings.list_')
     @mock.patch('bin.commands.utils.messages.info')
@@ -1845,6 +1852,7 @@ class TestStatePrintExtensionConfig(unittest.TestCase):
 
 
 class TestStateRunExtension(unittest.TestCase):
+    layer = GitState
 
     @mock.patch('colorama.init')
     @mock.patch('bin.commands.state._extension_exists')
@@ -1893,6 +1901,7 @@ class TestStateRunExtension(unittest.TestCase):
 
 
 class TestStateDeleteExtension(unittest.TestCase):
+    layer = GitState
 
     @mock.patch('bin.commands.state._extension_exists')
     @mock.patch('bin.commands.utils.execute.call')

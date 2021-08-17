@@ -4,8 +4,10 @@ import tempfile
 import unittest
 from subprocess import call, check_output, PIPE, Popen, STDOUT
 
+from ..layers import GitSnapshotFunctional
 
 class TestGitSnapshot(unittest.TestCase):
+    layer = GitSnapshotFunctional
 
     def _status(self):
         return check_output(('git', '-c', 'color.ui=never', 'status', '--short')).decode('utf-8')

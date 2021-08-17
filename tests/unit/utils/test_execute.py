@@ -4,10 +4,12 @@ import subprocess
 import unittest
 from builtins import bytes
 
+from ...layers import UtilsExecute
 from bin.commands.utils import execute
 
 
 class TestExecute(unittest.TestCase):
+    layer = UtilsExecute
 
     @mock.patch('subprocess.call')
     def test_swallow(self, mock_call):

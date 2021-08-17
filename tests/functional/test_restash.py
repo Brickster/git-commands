@@ -6,8 +6,11 @@ import unittest
 
 import git
 
+from ..layers import GitRestashFunctional
+
 
 class TestGitRestash(unittest.TestCase):
+    layer = GitRestashFunctional
 
     def _output(self, command):
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

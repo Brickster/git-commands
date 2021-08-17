@@ -7,9 +7,11 @@ import unittest
 import git
 
 from . import testutils
+from ..layers import GitUpstreamFunctional
 
 
 class TestGitUpstream(unittest.TestCase):
+    layer = GitUpstreamFunctional
 
     def _output(self, command):
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

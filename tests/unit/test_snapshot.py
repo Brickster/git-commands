@@ -1,10 +1,12 @@
 import mock
 import unittest
 
+from ..layers import GitSnapshot
 from bin.commands import snapshot
 
 
 class TestSnapshotSnapshot(unittest.TestCase):
+    layer = GitSnapshot
 
     def setUp(self):
         # store private methods so they can be restored after tests that mock them
@@ -172,6 +174,7 @@ class TestSnapshotSnapshot(unittest.TestCase):
 
 
 class TestSnapshotStashBuffer(unittest.TestCase):
+    layer = GitSnapshot
 
     @mock.patch('bin.commands.utils.execute.check_output', return_value='\n')
     def test_snapshot_stashBuffer_noPreviousStashes(self, mock_checkoutput):

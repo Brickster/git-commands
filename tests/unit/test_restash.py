@@ -2,10 +2,12 @@ import mock
 import unittest
 
 from . import testutils
+from ..layers import GitRestash
 from bin.commands import restash
 
 
 class TestRestash(unittest.TestCase):
+    layer = GitRestash
 
     def setUp(self):
         # store private methods so they can be restored after tests that mock them

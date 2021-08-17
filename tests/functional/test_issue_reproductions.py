@@ -8,10 +8,12 @@ import unittest
 import git
 
 from . import testutils
+from ..layers import Issues
 
 
 class TestIssue093(unittest.TestCase):
     """State --no-status not respected for new repositories"""
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -31,6 +33,7 @@ class TestIssue093(unittest.TestCase):
 
 class TestIssue094(unittest.TestCase):
     """Changes breaks when HEAD is detached"""
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -62,6 +65,7 @@ class TestIssue094(unittest.TestCase):
 
 class TestIssue095(unittest.TestCase):
     """Settings list fails if a value contains a newline"""
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -102,6 +106,7 @@ class TestIssue102(unittest.TestCase):
 
     https://github.com/Brickster/git-commands/issues/102
     """
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -124,6 +129,7 @@ class TestIssue102(unittest.TestCase):
 
 class TestIssue103(unittest.TestCase):
     """`changes unassociate --prune` fails when no association exist for any branch"""
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -148,6 +154,7 @@ class TestIssue103(unittest.TestCase):
 
 class TestIssue104(unittest.TestCase):
     """`changes unassociate --prune` fails for new repositories"""
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -168,6 +175,7 @@ class TestIssue104(unittest.TestCase):
 
 class TestIssue106(unittest.TestCase):
     """Associating when detached uses HEAD as branch"""
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -202,6 +210,7 @@ class TestIssue106(unittest.TestCase):
 
 class TestIssue107(unittest.TestCase):
     """Associate blows up on invalid revision"""
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -228,6 +237,7 @@ class TestIssue107(unittest.TestCase):
 
 class TestIssue108(unittest.TestCase):
     """Dry running an unassociate without an association print misleading result"""
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -252,6 +262,7 @@ class TestIssue108(unittest.TestCase):
 
 class TestIssue111(unittest.TestCase):
     """Snapshotting specific files with a message should snapshot successfully"""
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -281,6 +292,7 @@ class TestIssue111(unittest.TestCase):
 
 class TestIssue112(unittest.TestCase):
     """Associating with a local upstream should associate with refs/head/<<UPSTREAM>>"""
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -313,6 +325,7 @@ class TestIssue112(unittest.TestCase):
 
 class TestIssue114(unittest.TestCase):
     """Snapshot occasionally does nothing."""
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -352,6 +365,7 @@ class TestIssue114(unittest.TestCase):
 
 class TestIssue119(unittest.TestCase):
     """Limiting settings to keys should require a section"""
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -378,6 +392,7 @@ class TestIssue119(unittest.TestCase):
 
 class TestIssue121(unittest.TestCase):
     """Settings list fails when the config file is empty"""
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -402,6 +417,7 @@ class TestIssue121(unittest.TestCase):
 
 class TestIssue122(unittest.TestCase):
     """Settings list does not gracefully handle unknown files"""
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -430,6 +446,7 @@ class TestIssue122(unittest.TestCase):
 
 class TestIssue124(unittest.TestCase):
     """`git changes` decoration differs when printing to a terminal"""
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -472,6 +489,7 @@ class TestIssue124(unittest.TestCase):
 )
 class TestIssue131(unittest.TestCase):
     """Handle missing system config when using git-settings list"""
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -508,6 +526,7 @@ class TestIssue131(unittest.TestCase):
 
 class TestIssue151(unittest.TestCase):
     """Multiple --no-show-* options can't be used together"""
+    layer = Issues
 
     def setUp(self):
         self.proj_dir = os.getcwd()

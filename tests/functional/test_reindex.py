@@ -4,8 +4,11 @@ import subprocess
 import tempfile
 import unittest
 
+from ..layers import GitReindexFunctional
+
 
 class TestGitReindex(unittest.TestCase):
+    layer = GitReindexFunctional
 
     def _reindex(self):
         return subprocess.check_output(('git', 'reindex')).decode('utf-8')

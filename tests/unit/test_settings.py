@@ -3,10 +3,12 @@ import os
 import unittest
 
 from . import testutils
+from ..layers import GitSettings
 from bin.commands import settings
 
 
 class TestSettings(unittest.TestCase):
+    layer = GitSettings
 
     def test__prettyFormatConfigs(self):
 
@@ -54,6 +56,7 @@ class TestSettings(unittest.TestCase):
 
 
 class TestSettingsList(unittest.TestCase):
+    layer = GitSettings
 
     def setUp(self):
         # store private methods so they can be restored after tests that mock them
@@ -265,6 +268,7 @@ class TestSettingsList(unittest.TestCase):
 
 
 class TestSettingsDestroy(unittest.TestCase):
+    layer = GitSettings
 
     def setUp(self):
         # store private methods so they can be restored after tests that mock them

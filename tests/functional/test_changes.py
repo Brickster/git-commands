@@ -7,9 +7,11 @@ import unittest
 import git
 
 from . import testutils
+from ..layers import GitChangesFunctional
 
 
 class TestChanges(unittest.TestCase):
+    layer = GitChangesFunctional
 
     def _output(self, command):
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -29,6 +31,7 @@ class TestChanges(unittest.TestCase):
 
 
 class TestChangesView(unittest.TestCase):
+    layer = GitChangesFunctional
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -199,6 +202,7 @@ class TestChangesView(unittest.TestCase):
 
 
 class TestChangesAssociate(unittest.TestCase):
+    layer = GitChangesFunctional
 
     def setUp(self):
         self.proj_dir = os.getcwd()
@@ -337,6 +341,7 @@ class TestChangesAssociate(unittest.TestCase):
 
 
 class TestChangesUnassociate(unittest.TestCase):
+    layer = GitChangesFunctional
 
     def _output(self, command):
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

@@ -2,10 +2,12 @@ import os
 import mock
 import unittest
 
+from ...layers import UtilsDirectories
 from bin.commands.utils import directories
 
 
 class TestDirectories(unittest.TestCase):
+    layer = UtilsDirectories
 
     @mock.patch('os.path.exists', return_value=True)
     def test_isGitRepository(self, mock_exists):
