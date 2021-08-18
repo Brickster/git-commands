@@ -712,12 +712,18 @@ log
         config_writer.set_value('git-state.extensions.log', 'command', 'git log --oneline')
         config_writer.set_value('git-state.extensions.log', 'options', '-10')
         config_writer.set_value('git-state.extensions.log', 'show', 'true')
+        config_writer.set_value('git-state', 'format', 'pretty')
         config_writer.release()
 
         # expect
         self.assertEqual(self._output('git state extensions run log'), '''# log
-{}
-'''.format(self.full_log))
+
+    {}
+    {}
+    {}
+    {}
+
+'''.format(self.commit3_log, self.commit2_log, self.commit1_log, self.commit0_log))
 
     def test_state_extensions_run_extensionDoesNotExist(self):
         # expect

@@ -4,8 +4,10 @@ All notable changes to this project will be documented in this file. This projec
 
 ## [Unreleased][]
 ### Features
+- **State**: `extensions run` respects global color/format options [#160][]
 - **State**: delete an extension quietly [#162][]
 
+[#160]: https://github.com/Brickster/git-commands/issues/160
 [#162]: https://github.com/Brickster/git-commands/issues/162
 
 ## [v0.8.0][] - 2021-08-15

@@ -1854,18 +1854,22 @@ class TestStatePrintExtensionConfig(unittest.TestCase):
 class TestStateRunExtension(unittest.TestCase):
     layer = GitState
 
-    @mock.patch('colorama.init')
     @mock.patch('bin.commands.state._extension_exists')
+    @mock.patch('bin.commands.utils.git.resolve_coloring')
+    @mock.patch('colorama.init')
     @mock.patch('bin.commands.state._run_extension')
+    @mock.patch('bin.commands.utils.git.get_config_value')
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.state._print_sections')
-    def test_state_runExtension(self, mock_print_sections, mock_print_section, mock_run_extension, mock_extension_exists, mock_init):
+    def test_state_runExtension(self, mock_print_sections, mock_print_section, mock_get_config_value, mock_run_extension, mock_init, mock_resolve_coloring, mock_extension_exists):
 
         # given
+        mock_resolve_coloring.return_value = 'never'
         mock_extension_exists.return_value = True
         log_name = 'the log'
         log_text = 'log text'
         mock_run_extension.return_value = (log_name, log_text)
+        mock_get_config_value.return_value = 'pretty'
         section_text = 'section text'
         mock_print_section.return_value = section_text
 
@@ -1873,18 +1877,22 @@ class TestStateRunExtension(unittest.TestCase):
         state.run_extension('log')
 
         # then
-        mock_init.assert_called_once_with(strip=True)
         mock_extension_exists.assert_called_once_with('log')
+        mock_resolve_coloring.assert_called_once_with(None)
+        mock_init.assert_called_once_with(strip=True)
         mock_run_extension.assert_called_once_with('log', {}, 'never')
-        mock_print_section.assert_called_once_with(log_name, text=log_text, show_empty=True, color='never')
-        mock_print_sections.assert_called_once_with({log_name: section_text})
+        mock_get_config_value.assert_called_once_with('git-state.format', default='compact')
+        mock_print_section.assert_called_once_with(log_name, text=log_text, format_='pretty', show_empty=True, color='never')
+        mock_print_sections.assert_called_once_with({log_name: section_text}, page=True)
 
-    @mock.patch('colorama.init')
     @mock.patch('bin.commands.state._extension_exists')
+    @mock.patch('bin.commands.utils.git.resolve_coloring')
+    @mock.patch('colorama.init')
     @mock.patch('bin.commands.state._run_extension')
+    @mock.patch('bin.commands.utils.git.get_config_value')
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.state._print_sections')
-    def test_state_runExtension_extensionDoesNotExist(self, mock_print_sections, mock_print_section, mock_run_extension, mock_extension_exists, mock_init):
+    def test_state_runExtension_extensionDoesNotExist(self, mock_print_sections, mock_print_section, mock_get_config_value, mock_run_extension, mock_init, mock_resolve_coloring, mock_extension_exists):
 
         # given
         mock_extension_exists.return_value = False
@@ -1893,9 +1901,11 @@ class TestStateRunExtension(unittest.TestCase):
         state.run_extension('log')
 
         # then
-        mock_init.assert_called_once_with(strip=True)
         mock_extension_exists.assert_called_once_with('log')
+        mock_init.assert_not_called()
+        mock_resolve_coloring.assert_not_called()
         mock_run_extension.assert_not_called()
+        mock_get_config_value.assert_not_called()
         mock_print_section.assert_not_called()
         mock_print_sections.assert_not_called()
 

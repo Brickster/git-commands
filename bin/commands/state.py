@@ -152,13 +152,14 @@ def print_extension_config(extension):
 
 
 def run_extension(extension):
-    # TODO: BUG: piping to less prints the header with ANSII codes
-    colorama.init(strip=True)
     if _extension_exists(extension):
-        extension_name, extension_text = _run_extension(extension, {}, 'never')
-        section_text = _print_section(extension_name, text=extension_text, show_empty=True, color='never')
+        color_when = git.resolve_coloring(None)
+        colorama.init(strip=(color_when == 'never'))
+        extension_name, extension_text = _run_extension(extension, {}, color_when)
+        format_ = git.get_config_value('git-state.format', default='compact')
+        section_text = _print_section(extension_name, text=extension_text, format_=format_, show_empty=True, color=color_when)
         sections = {extension_name: section_text}
-        _print_sections(sections)
+        _print_sections(sections, page=True)
 
 
 def delete_extension(extension, quiet=False):
