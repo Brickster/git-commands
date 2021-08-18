@@ -161,10 +161,10 @@ def run_extension(extension):
         _print_sections(sections)
 
 
-def delete_extension(extension):
+def delete_extension(extension, quiet=False):
     if _extension_exists(extension):
         execute.call(['git', 'config', '--local', '--remove-section', 'git-state.extensions.{}'.format(extension)])
-        messages.info('Extension {} deleted'.format(extension))
+        messages.info('Extension {} deleted'.format(extension), quiet=quiet)
 
 
 def state(**kwargs):

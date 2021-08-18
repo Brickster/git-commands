@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This project adheres to [Semantic Versioning](http://semver.org).
 
+## [Unreleased][]
+### Features
+- **State**: delete an extension quietly [#162][]
+
+[#162]: https://github.com/Brickster/git-commands/issues/162
+
 ## [v0.8.0][] - 2021-08-15
 ### Features
 - **Snapshot**: add result message [#54][]

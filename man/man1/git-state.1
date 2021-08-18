@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "GIT\-STATE" "1" "December 2019" "" ""
+.TH "GIT\-STATE" "1" "August 2021" "" ""
 .
 .SH "NAME"
 \fBgit\-state\fR \- a customizable view for the state of a working tree
@@ -49,7 +49,7 @@
 \~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-no\-color\fR] \fIextension\fR
 .
 .br
-\fBgit state extensions delete\fR \fIextension\fR
+\fBgit state extensions delete\fR [(\fB\-q\fR|\fB\-\-quiet\fR)] \fIextension\fR
 .
 .br
 \fBgit state extensions config\fR \fIextension\fR
@@ -205,6 +205,10 @@ Delete an extension\.
 .TP
 \fBextension\fR
 The name of an extension\.
+.
+.TP
+\fB\-q\fR|\fB\-\-quiet\fR
+Suppress all non\-error output\.
 
 .
 .TP

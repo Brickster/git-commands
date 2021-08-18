@@ -639,6 +639,28 @@ class TestStateExtensions(unittest.TestCase):
         self.assertEqual(self._output('git state extensions delete log', set_config=False).strip(), '''Extension log deleted''')
         self.assertFalse(self._output('git settings list git-state.extensions.log'))
 
+    def test_state_extensions_delete_quiet(self):
+
+        # given
+        config_writer = self.repo.config_writer('repository')
+        config_writer.set_value('git-state.extensions.log', 'color', 'True')
+        config_writer.set_value('git-state.extensions.log', 'command', 'git log --oneline')
+        config_writer.release()
+
+        # expect
+        self.assertFalse(self._output('git state extensions delete log -q', set_config=False))
+        self.assertFalse(self._output('git settings list git-state.extensions.log'))
+
+        # given
+        config_writer = self.repo.config_writer('repository')
+        config_writer.set_value('git-state.extensions.log', 'color', 'True')
+        config_writer.set_value('git-state.extensions.log', 'command', 'git log --oneline')
+        config_writer.release()
+
+        # expect
+        self.assertFalse(self._output('git state extensions delete log --quiet', set_config=False))
+        self.assertFalse(self._output('git settings list git-state.extensions.log'))
+
     def test_state_extensions_delete_extensionDoesNotExist(self):
         # expect
         self.assertFalse(self._output('git state extensions delete blarg', set_config=False))

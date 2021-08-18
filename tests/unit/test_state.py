@@ -1917,7 +1917,38 @@ class TestStateDeleteExtension(unittest.TestCase):
         # then
         mock_extension_exists.assert_called_once_with('log')
         mock_call.assert_called_once_with('git config --local --remove-section git-state.extensions.log'.split())
-        mock_info.assert_called_once_with('Extension log deleted')
+        mock_info.assert_called_once_with('Extension log deleted', quiet=False)
+
+    @mock.patch('bin.commands.state._extension_exists')
+    @mock.patch('bin.commands.utils.execute.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_deleteExtension_quiet_false(self, mock_info, mock_call, mock_extension_exists):
+        # given
+        mock_extension_exists.return_value = True
+
+        # when
+        state.delete_extension('log', False)
+
+        # then
+        mock_extension_exists.assert_called_once_with('log')
+        mock_call.assert_called_once_with('git config --local --remove-section git-state.extensions.log'.split())
+        mock_info.assert_called_once_with('Extension log deleted', quiet=False)
+
+    @mock.patch('bin.commands.state._extension_exists')
+    @mock.patch('bin.commands.utils.execute.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_deleteExtension_quiet_true(self, mock_info, mock_call, mock_extension_exists):
+
+        # given
+        mock_extension_exists.return_value = True
+
+        # when
+        state.delete_extension('log', True)
+
+        # then
+        mock_extension_exists.assert_called_once_with('log')
+        mock_call.assert_called_once_with('git config --local --remove-section git-state.extensions.log'.split())
+        mock_info.assert_called_once_with('Extension log deleted', quiet=True)
 
     @mock.patch('bin.commands.state._extension_exists')
     @mock.patch('bin.commands.utils.execute.call')

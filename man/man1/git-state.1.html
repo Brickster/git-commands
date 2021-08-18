@@ -95,7 +95,7 @@
 <code>git state extensions edit</code> [(<code>-c</code>|<code>--command</code>) <var>command</var>] [(<code>-n</code>|<code>--name</code>) <var>name</var>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-o</code>|<code>--options</code>) <var>options</var>] [<code>--no-show</code>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--no-color</code>] <var>extension</var><br />
-<code>git state extensions delete</code> <var>extension</var><br />
+<code>git state extensions delete</code> [(<code>-q</code>|<code>--quiet</code>)] <var>extension</var><br />
 <code>git state extensions config</code> <var>extension</var><br />
 <code>git state extensions list</code><br />
 <code>git state extensions run</code> <var>extension</var><br />
@@ -155,7 +155,8 @@
 <dt><code>extensions delete</code></dt><dd><p>  Delete an extension.</p>
 
 <dl>
-<dt><code>extension</code></dt><dd>  The name of an extension.</dd>
+<dt><code>extension</code></dt><dd><p>  The name of an extension.</p></dd>
+<dt><code>-q</code>|<code>--quiet</code></dt><dd><p>  Suppress all non-error output.</p></dd>
 </dl>
 </dd>
 <dt><code>extensions config</code></dt><dd><p>  View the configuration of an extension.</p>
@@ -273,7 +274,7 @@ $
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>December 2019</li>
+    <li class='tc'>August 2021</li>
     <li class='tr'>git-state(1)</li>
   </ol>
 

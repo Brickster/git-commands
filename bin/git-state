@@ -129,10 +129,17 @@ def _extensions_subcommand(subparsers):
         'delete',
         help='delete an extension',
         description='delete an extension',
-        usage='git state extensions delete [-h] EXTENSION'
+        usage='git state extensions delete [-h] [-q] EXTENSION'
     )
     delete_parser.set_defaults(func=state.delete_extension)
     delete_parser.add_argument('extension', help='extension to delete')
+    delete_parser.add_argument(
+        '-q',
+        '--quiet',
+        help='suppress all non-error output',
+        action='store_true',
+        default=False
+    )
 
     config_parser = extensions_subparsers.add_parser(
         'config',

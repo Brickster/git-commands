@@ -16,7 +16,7 @@
 `git state extensions edit` [(`-c`|`--command`) <command>] [(`-n`|`--name`) <name>]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--options`) <options>] [`--no-show`]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--no-color`] <extension><br>
-`git state extensions delete` <extension><br>
+`git state extensions delete` [(`-q`|`--quiet`)] <extension><br>
 `git state extensions config` <extension><br>
 `git state extensions list`<br>
 `git state extensions run` <extension><br>
@@ -127,6 +127,9 @@ Used to see a more concise and comprehensive view of the working directory throu
 
     * `extension`:
         The name of an extension.
+
+    * `-q`|`--quiet`:
+        Suppress all non-error output.
 
 * `extensions config`:
     View the configuration of an extension.
