@@ -96,7 +96,8 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-o</code>|<code>--options</code>) <var>options</var>] [<code>--no-show</code>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--no-color</code>] <var>extension</var><br />
 <code>git state extensions delete</code> [(<code>-q</code>|<code>--quiet</code>)] <var>extension</var><br />
-<code>git state extensions config</code> <var>extension</var><br />
+<code>git state extensions config</code> [(<code>-p</code>|<code>--pretty</code>)] [(<code>-f</code>|<code>--format</code>) <var>format</var>]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<var>extension</var><br />
 <code>git state extensions list</code><br />
 <code>git state extensions run</code> <var>extension</var><br />
 <code>git state</code> (<code>-h</code>|<code>--help</code>)<br />
@@ -162,7 +163,9 @@
 <dt><code>extensions config</code></dt><dd><p>  View the configuration of an extension.</p>
 
 <dl>
-<dt><code>extension</code></dt><dd>  The name of an extension.</dd>
+<dt><code>extension</code></dt><dd><p>  The name of an extension.</p></dd>
+<dt><code>-p</code>|<code>--pretty</code></dt><dd><p>  Display in pretty format. This is equivalent to <code>-f</code>|<code>--format</code> <var>pretty</var>.</p></dd>
+<dt><code>-f</code>|<code>--format</code> <var>format</var></dt><dd><p>  The format used to print the config. Valid values include: <var>compact</var> and <var>pretty</var>.</p></dd>
 </dl>
 </dd>
 <dt><code>extensions list</code></dt><dd><p>  List the names of all extensions. This command has no options.</p></dd>

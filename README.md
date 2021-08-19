@@ -51,7 +51,7 @@ git state extensions edit [(-c|--command) COMMAND] [(-n|--name) NAME]
                           [(-o|--options) OPTIONS] [--no-show]
                           [--no-color] EXTENSION
 git state extensions delete [-q] EXTENSION
-git state extensions config EXTENSION
+git state extensions config [-f FORMAT | -p] EXTENSION
 git state extensions list
 git state extensions run EXTENSION
 git state (-h|--help)

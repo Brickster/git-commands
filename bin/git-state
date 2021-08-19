@@ -18,8 +18,9 @@ def main():
     parser.add_argument('-v', '--version', action='version', version='git-state 0.8.0')
     subparsers = parser.add_subparsers(help='sub-command help', dest='subcommand')
 
-    _view_subcommand(subparsers)
-    _extensions_subcommand(subparsers)
+    default_format = git.get_config_value('git-state.format', default='compact')
+    _view_subcommand(subparsers, default_format)
+    _extensions_subcommand(subparsers, default_format)
 
     # default to view mode
     if len(sys.argv) == 1 or sys.argv[1] not in ('view', 'extensions') and not _is_info_usage():
@@ -58,7 +59,7 @@ def _add_color_argument(parser, default_show_color):
     )
 
 
-def _extensions_subcommand(subparsers):
+def _extensions_subcommand(subparsers, default_format):
 
     parser = subparsers.add_parser(
         'extensions',
@@ -145,10 +146,28 @@ def _extensions_subcommand(subparsers):
         'config',
         help='show extension config',
         description='show extension config',
-        usage='git state extensions config [-h] EXTENSION'
+        usage='git state extensions config [-h] [-f FORMAT | -p] EXTENSION'
     )
     config_parser.set_defaults(func=state.print_extension_config)
     config_parser.add_argument('extension', help='extension whose config should be printed')
+    config_format_parser = config_parser.add_mutually_exclusive_group()
+    config_format_parser.add_argument(
+        '-f',
+        '--format',
+        help='format the each section (choices: compact, pretty)',
+        choices=('pretty', 'compact'),
+        metavar='FORMAT',
+        dest='format_',
+        default=default_format
+    )
+    config_format_parser.add_argument(
+        '-p',
+        '--pretty',
+        help='show in pretty format',
+        action='store_const',
+        const='pretty',
+        dest='format_'
+    )
 
     list_parser = extensions_subparsers.add_parser(
         'list', help='list extensions', description='list extensions'
@@ -165,11 +184,10 @@ def _extensions_subcommand(subparsers):
     run_parser.add_argument('extension', help='extension to run')
 
 
-def _view_subcommand(subparsers):
+def _view_subcommand(subparsers, default_format):
 
     # general defaults
     default_show_empty = git.get_config_value('git-state.show-empty', default=False, as_type=parse_string.as_bool)
-    default_format = git.get_config_value('git-state.format', default='compact')
     default_show_color = git.get_config_value('color.ui', default='auto')
     default_clear = git.get_config_value('git-state.clear', default=True, as_type=parse_string.as_bool)
 

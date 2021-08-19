@@ -1830,7 +1830,20 @@ class TestStatePrintExtensionConfig(unittest.TestCase):
         mock_list.return_value = 'config'
 
         # when
-        state.print_extension_config('log')
+        state.print_extension_config('log', settings.FormatOption.PRETTY)
+
+        # then
+        mock_list.assert_called_once_with(section='git-state.extensions.log', format_=settings.FormatOption.PRETTY)
+        mock_info.assert_called_once_with('config')
+
+    @mock.patch('bin.commands.settings.list_')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_printExtensionConfig_formatAsStr(self, mock_info, mock_list):
+        # given
+        mock_list.return_value = 'config'
+
+        # when
+        state.print_extension_config('log', 'pretty')
 
         # then
         mock_list.assert_called_once_with(section='git-state.extensions.log', format_=settings.FormatOption.PRETTY)
@@ -1844,7 +1857,7 @@ class TestStatePrintExtensionConfig(unittest.TestCase):
         mock_list.return_value = ''
 
         # when
-        state.print_extension_config('log')
+        state.print_extension_config('log', settings.FormatOption.PRETTY)
 
         # then
         mock_list.assert_called_once_with(section='git-state.extensions.log', format_=settings.FormatOption.PRETTY)

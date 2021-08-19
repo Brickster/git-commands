@@ -52,7 +52,10 @@
 \fBgit state extensions delete\fR [(\fB\-q\fR|\fB\-\-quiet\fR)] \fIextension\fR
 .
 .br
-\fBgit state extensions config\fR \fIextension\fR
+\fBgit state extensions config\fR [(\fB\-p\fR|\fB\-\-pretty\fR)] [(\fB\-f\fR|\fB\-\-format\fR) \fIformat\fR]
+.
+.br
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\fIextension\fR
 .
 .br
 \fBgit state extensions list\fR
@@ -218,6 +221,14 @@ View the configuration of an extension\.
 .TP
 \fBextension\fR
 The name of an extension\.
+.
+.TP
+\fB\-p\fR|\fB\-\-pretty\fR
+Display in pretty format\. This is equivalent to \fB\-f\fR|\fB\-\-format\fR \fIpretty\fR\.
+.
+.TP
+\fB\-f\fR|\fB\-\-format\fR \fIformat\fR
+The format used to print the config\. Valid values include: \fIcompact\fR and \fIpretty\fR\.
 
 .
 .TP

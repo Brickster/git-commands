@@ -676,7 +676,39 @@ class TestStateExtensions(unittest.TestCase):
         config_writer.release()
 
         # expect
-        self.assertEqual(self._output('git state extensions config log'), '''[git-state "extensions.log"]
+        self.assertEqual(self._output('git state extensions config log'), '''git-state.extensions.log.color=True
+git-state.extensions.log.command=git log --oneline
+git-state.extensions.log.options=-10
+git-state.extensions.log.show=false
+''')
+
+    def test_state_extensions_config_formatPretty(self):
+        # given
+        config_writer = self.repo.config_writer('repository')
+        config_writer.set_value('git-state.extensions.log', 'color', 'True')
+        config_writer.set_value('git-state.extensions.log', 'command', 'git log --oneline')
+        config_writer.set_value('git-state.extensions.log', 'options', '-10')
+        config_writer.set_value('git-state.extensions.log', 'show', 'false')
+        config_writer.release()
+
+        # expect
+        self.assertEqual(self._output('git state extensions config log --format=compact'), '''git-state.extensions.log.color=True
+git-state.extensions.log.command=git log --oneline
+git-state.extensions.log.options=-10
+git-state.extensions.log.show=false
+''')
+
+    def test_state_extensions_config_pretty(self):
+        # given
+        config_writer = self.repo.config_writer('repository')
+        config_writer.set_value('git-state.extensions.log', 'color', 'True')
+        config_writer.set_value('git-state.extensions.log', 'command', 'git log --oneline')
+        config_writer.set_value('git-state.extensions.log', 'options', '-10')
+        config_writer.set_value('git-state.extensions.log', 'show', 'false')
+        config_writer.release()
+
+        # expect
+        self.assertEqual(self._output('git state extensions config log --pretty'), '''[git-state "extensions.log"]
     color = True
     command = git log --oneline
     options = -10

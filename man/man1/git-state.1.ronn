@@ -17,7 +17,8 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--options`) <options>] [`--no-show`]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--no-color`] <extension><br>
 `git state extensions delete` [(`-q`|`--quiet`)] <extension><br>
-`git state extensions config` <extension><br>
+`git state extensions config` [(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<extension><br>
 `git state extensions list`<br>
 `git state extensions run` <extension><br>
 `git state` (`-h`|`--help`)<br>
@@ -136,6 +137,12 @@ Used to see a more concise and comprehensive view of the working directory throu
 
     * `extension`:
         The name of an extension.
+
+    * `-p`|`--pretty`:
+        Display in pretty format. This is equivalent to `-f`|`--format` <pretty>.
+
+    * `-f`|`--format` <format>:
+        The format used to print the config. Valid values include: <compact> and <pretty>.
 
 * `extensions list`:
     List the names of all extensions. This command has no options.

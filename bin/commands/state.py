@@ -145,8 +145,10 @@ def print_extensions():
         messages.info(os.linesep.join(sorted(extensions)))
 
 
-def print_extension_config(extension):
-    config = settings.list_(section='git-state.extensions.' + extension, format_=settings.FormatOption.PRETTY)
+def print_extension_config(extension, format_=settings.FormatOption.COMPACT):
+    if format_ and isinstance(format_, str):
+        format_ = settings.FormatOption[format_.upper()]
+    config = settings.list_(section='git-state.extensions.' + extension, format_=format_)
     if config:
         messages.info(config)
 
