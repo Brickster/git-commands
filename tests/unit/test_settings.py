@@ -54,6 +54,20 @@ class TestSettings(unittest.TestCase):
             mock.call('Would be deleted from {}: {}'.format(config, keys[1]))
         ])
 
+    def test__resolve_config_option_configIs_configOption(self):
+        self.assertEqual(settings.ConfigOption.LOCAL, settings._resolve_config_option(settings.ConfigOption.LOCAL))
+
+    def test__resolve_config_option_configIs_str(self):
+        self.assertEqual(settings.ConfigOption.LOCAL, settings._resolve_config_option('local'))
+        self.assertEqual(settings.ConfigOption.LOCAL, settings._resolve_config_option('LOCAL'))
+        self.assertEqual(settings.ConfigOption.LOCAL, settings._resolve_config_option('Local'))
+
+    def test__resolve_config_option_configIs_str_butNotValidOption(self):
+        self.assertEqual('/a/file', settings._resolve_config_option('/a/file'))
+
+    def test__resolve_config_option_none(self):
+        self.assertEqual(None, settings._resolve_config_option(None))
+
 
 class TestSettingsList(unittest.TestCase):
     layer = GitSettings
@@ -109,7 +123,7 @@ class TestSettingsList(unittest.TestCase):
         mock_checkoutput.return_value = '\x00'.join(config_values).replace('=', os.linesep) + '\x00'
 
         # when
-        actual_values = settings.list_(config='file', file_=file_path)
+        actual_values = settings.list_(config=file_path)
 
         # then
         self.assertEqual(sorted(actual_values.splitlines()), config_values)
@@ -127,7 +141,7 @@ class TestSettingsList(unittest.TestCase):
 
         # when
         try:
-            settings.list_(config='file', file_=unknown_file)
+            settings.list_(config=unknown_file)
             self.fail('expected to exit but did not')  # pragma: no cover
         except SystemExit:
             pass

@@ -4,7 +4,7 @@ import argparse
 
 from commands import settings
 from commands.utils import git, messages, parse_string
-from commands.utils.parse_actions import multi_set, as_enum
+from commands.utils.parse_actions import as_enum
 
 
 def main():
@@ -23,7 +23,7 @@ def main():
         '--local',
         help='limit to the local config file',
         action='store_const',
-        const='local',
+        const=settings.ConfigOption.LOCAL,
         dest='config'
     )
 
@@ -32,7 +32,7 @@ def main():
         '--global',
         help='limit to the global config file',
         action='store_const',
-        const='global',
+        const=settings.ConfigOption.GLOBAL,
         dest='config'
     )
 
@@ -41,7 +41,7 @@ def main():
         '--system',
         help='limit to the system config file',
         action='store_const',
-        const='system',
+        const=settings.ConfigOption.SYSTEM,
         dest='config'
     )
 
@@ -49,8 +49,7 @@ def main():
     file_group.add_argument(
         '--file',
         help='limit to a specific config file',
-        action=multi_set(config='file_'),
-        dest='file_',
+        dest='config',
         metavar='FILE'
     )
 

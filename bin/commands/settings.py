@@ -12,6 +12,12 @@ from enum import Enum
 from .utils import directories, execute, git, messages
 
 
+class ConfigOption(Enum):
+    SYSTEM = 1
+    GLOBAL = 2
+    LOCAL = 3
+
+
 def _pretty_format_configs(config_map):
     all_sections_map = _get_sections_map(config_map)
     result = []
@@ -81,7 +87,7 @@ class FormatOption(Enum):
     SECTIONS = partial(_sections_printer)
 
 
-def list_(section=None, config=None, format_=FormatOption.COMPACT, file_=None):
+def list_(section=None, config=None, format_=FormatOption.COMPACT):
     """List configuration settings respecting override precedence.
 
     :param section: limit to a specific section
@@ -95,7 +101,8 @@ def list_(section=None, config=None, format_=FormatOption.COMPACT, file_=None):
     git.validate_config(config)
 
     # get config contents
-    config_contents = _get_config_contents(config, file_)
+    config = _resolve_config_option(config)
+    config_contents = _get_config_contents(config)
     if not config_contents:
         return None
     config_contents = config_contents[:-1].split('\x00')  # strip trailing null char and split on null char
@@ -113,15 +120,21 @@ def list_(section=None, config=None, format_=FormatOption.COMPACT, file_=None):
     return os.linesep.join(result)
 
 
-def _get_config_contents(config, file_):
+def _resolve_config_option(config):
+    if config is not None and not isinstance(config, ConfigOption):
+        return ConfigOption[config.upper()] if config.upper() in [e.name for e in ConfigOption] is not None else config
+    return config
+
+
+def _get_config_contents(config):
     if config is None:
         config_contents = execute.check_output(['git', 'config', '--list', '--null'])
-    elif file_ is not None:
-        if not os.path.exists(file_):
-            messages.error("no such file '{}'".format(file_))
-        config_contents = execute.check_output(['git', 'config', '--list', '--null', '--file', file_])
+    elif isinstance(config, ConfigOption):
+        config_contents = execute.stdout(['git', 'config', '--list', '--null', '--{}'.format(config.name.lower())])
     else:
-        config_contents = execute.stdout(['git', 'config', '--list', '--null', '--{}'.format(config)])
+        if not os.path.exists(config):
+            messages.error("no such file '{}'".format(config))
+        config_contents = execute.check_output(['git', 'config', '--list', '--null', '--file', config])
     return config_contents
 
 
