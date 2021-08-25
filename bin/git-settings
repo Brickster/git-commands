@@ -23,7 +23,7 @@ def main():
         '--local',
         help='limit to the local config file',
         action='store_const',
-        const=settings.ConfigOption.LOCAL,
+        const=git.ConfigOption.LOCAL,
         dest='config'
     )
 
@@ -32,7 +32,7 @@ def main():
         '--global',
         help='limit to the global config file',
         action='store_const',
-        const=settings.ConfigOption.GLOBAL,
+        const=git.ConfigOption.GLOBAL,
         dest='config'
     )
 
@@ -41,7 +41,7 @@ def main():
         '--system',
         help='limit to the system config file',
         action='store_const',
-        const=settings.ConfigOption.SYSTEM,
+        const=git.ConfigOption.SYSTEM,
         dest='config'
     )
 

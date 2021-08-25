@@ -18,6 +18,12 @@ class RefType(Enum):
     TAGS = 2
 
 
+class ConfigOption(Enum):
+    SYSTEM = 1
+    GLOBAL = 2
+    LOCAL = 3
+
+
 class GitException(Exception):  # pragma: no cover
     def __init__(self, message):
         self.message = message
@@ -210,3 +216,9 @@ def get_config_value(key, default=None, config=None, file_=None, as_type=str):
             messages.error(
                 "Cannot parse value '{0}' for key '{1}' using format '{2}'".format(value, key, as_type.__name__)
             )
+
+
+def resolve_config_option(config):
+    if config is not None and not isinstance(config, ConfigOption):
+        return ConfigOption[config.upper()] if config.upper() in [e.name for e in ConfigOption] is not None else config
+    return config

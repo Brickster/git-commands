@@ -612,3 +612,17 @@ MM modified.txt
             self.assertEqual(str(e), '{} is not callable'.format(as_type))
 
         mock_validateconfig.assert_called_once()
+
+    def test_resolve_config_option_configIs_configOption(self):
+        self.assertEqual(git.ConfigOption.LOCAL, git.resolve_config_option(git.ConfigOption.LOCAL))
+
+    def test_resolve_config_option_configIs_str(self):
+        self.assertEqual(git.ConfigOption.LOCAL, git.resolve_config_option('local'))
+        self.assertEqual(git.ConfigOption.LOCAL, git.resolve_config_option('LOCAL'))
+        self.assertEqual(git.ConfigOption.LOCAL, git.resolve_config_option('Local'))
+
+    def test_resolve_config_option_configIs_str_butNotValidOption(self):
+        self.assertEqual('/a/file', git.resolve_config_option('/a/file'))
+
+    def test_resolve_config_option_none(self):
+        self.assertEqual(None, git.resolve_config_option(None))

@@ -12,12 +12,6 @@ from enum import Enum
 from .utils import directories, execute, git, messages
 
 
-class ConfigOption(Enum):
-    SYSTEM = 1
-    GLOBAL = 2
-    LOCAL = 3
-
-
 def _pretty_format_configs(config_map):
     all_sections_map = _get_sections_map(config_map)
     result = []
@@ -101,7 +95,7 @@ def list_(section=None, config=None, format_=FormatOption.COMPACT):
     git.validate_config(config)
 
     # get config contents
-    config = _resolve_config_option(config)
+    config = git.resolve_config_option(config)
     config_contents = _get_config_contents(config)
     if not config_contents:
         return None
@@ -120,16 +114,10 @@ def list_(section=None, config=None, format_=FormatOption.COMPACT):
     return os.linesep.join(result)
 
 
-def _resolve_config_option(config):
-    if config is not None and not isinstance(config, ConfigOption):
-        return ConfigOption[config.upper()] if config.upper() in [e.name for e in ConfigOption] is not None else config
-    return config
-
-
 def _get_config_contents(config):
     if config is None:
         config_contents = execute.check_output(['git', 'config', '--list', '--null'])
-    elif isinstance(config, ConfigOption):
+    elif isinstance(config, git.ConfigOption):
         config_contents = execute.stdout(['git', 'config', '--list', '--null', '--{}'.format(config.name.lower())])
     else:
         if not os.path.exists(config):
