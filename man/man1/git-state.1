@@ -37,7 +37,7 @@
 \~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-o\fR|\fB\-\-options\fR) \fIoptions\fR] [\fB\-\-no\-show\fR]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-no\-color\fR] \fIextension\fR
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-no\-color\fR] [\fIfile\-option\fR] \fIextension\fR
 .
 .br
 \fBgit state extensions edit\fR [(\fB\-c\fR|\fB\-\-command\fR) \fIcommand\fR] [(\fB\-n\fR|\fB\-\-name\fR) \fIname\fR]
@@ -46,7 +46,7 @@
 \~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-o\fR|\fB\-\-options\fR) \fIoptions\fR] [\fB\-\-no\-show\fR]
 .
 .br
-\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-no\-color\fR] \fIextension\fR
+\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[\fB\-\-no\-color\fR] [\fIfile\-option\fR] \fIextension\fR
 .
 .br
 \fBgit state extensions delete\fR [(\fB\-q\fR|\fB\-\-quiet\fR)] \fIextension\fR
@@ -170,6 +170,10 @@ Set the extension to not show by default\. \fB\-\-show\fR \fIextension\fR will o
 .TP
 \fB\-\-no\-color\fR
 Do no include coloring option \fB\-\-color=<when>\fR when executing the command\.
+.
+.TP
+\fIfile\-option\fR
+Limits the section values to a specific file\. See \fB\fIFILE OPTIONS\fR\fR section for more details\.
 
 .
 .TP
@@ -199,11 +203,15 @@ Set the extension to not show by default\. \fB\-\-show\fR \fIextension\fR will o
 .TP
 \fB\-\-no\-color\fR
 Do no include coloring option \fB\-\-color=<when>\fR when executing the command\.
+.
+.TP
+\fIfile\-option\fR
+Limits the section values to a specific file\. See \fB\fIFILE OPTIONS\fR\fR section for more details\.
 
 .
 .TP
 \fBextensions delete\fR
-Delete an extension\.
+Delete an extension\. Config values are removed from local, global, and system configs\.
 .
 .TP
 \fBextension\fR
@@ -243,6 +251,25 @@ Run an extension\. This command overrides any option that would otherwise hide t
 \fBextension\fR
 The name of an extension\.
 
+.
+.SH "FILE OPTIONS"
+Some subcommands can be limited to a specific file\. The valid options are:
+.
+.TP
+\fB\-\-local\fR
+Use local config file\.
+.
+.TP
+\fB\-\-global\fR
+Use global config file\.
+.
+.TP
+\fB\-\-system\fR
+Use system config file\.
+.
+.TP
+\fB\-\-file\fR \fIfile\fR
+Use a specific config file\.
 .
 .SH "CONFIGURATION"
 .

@@ -63,6 +63,7 @@
     <a href="#SYNOPSIS">SYNOPSIS</a>
     <a href="#DESCRIPTION">DESCRIPTION</a>
     <a href="#OPTIONS">OPTIONS</a>
+    <a href="#FILE-OPTIONS">FILE OPTIONS</a>
     <a href="#CONFIGURATION">CONFIGURATION</a>
     <a href="#EXTENSIONS">EXTENSIONS</a>
     <a href="#SEE-ALSO">SEE ALSO</a>
@@ -91,10 +92,10 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-O</code>|<code>--options</code>) <em>option</em> [<em>option</em> ...]]<br />
 <code>git state extensions create</code> (<code>-c</code>|<code>--command</code>) <var>command</var> [(<code>-n</code>|<code>--name</code>) <var>name</var>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-o</code>|<code>--options</code>) <var>options</var>] [<code>--no-show</code>]<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--no-color</code>] <var>extension</var><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--no-color</code>] [<var>file-option</var>] <var>extension</var><br />
 <code>git state extensions edit</code> [(<code>-c</code>|<code>--command</code>) <var>command</var>] [(<code>-n</code>|<code>--name</code>) <var>name</var>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-o</code>|<code>--options</code>) <var>options</var>] [<code>--no-show</code>]<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--no-color</code>] <var>extension</var><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--no-color</code>] [<var>file-option</var>] <var>extension</var><br />
 <code>git state extensions delete</code> [(<code>-q</code>|<code>--quiet</code>)] <var>extension</var><br />
 <code>git state extensions config</code> [(<code>-p</code>|<code>--pretty</code>)] [(<code>-f</code>|<code>--format</code>) <var>format</var>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<var>extension</var><br />
@@ -140,6 +141,7 @@
 <dt><code>-o</code>|<code>--options</code> <var>options</var></dt><dd><p>  Any other options to include when running the extension command.</p></dd>
 <dt><code>--no-show</code></dt><dd><p>  Set the extension to not show by default. <code>--show</code> <var>extension</var> will override this setting at execution time.</p></dd>
 <dt><code>--no-color</code></dt><dd><p>  Do no include coloring option <code>--color=&lt;when></code> when executing the command.</p></dd>
+<dt><var>file-option</var></dt><dd><p>  Limits the section values to a specific file. See <strong><a href="#FILE-OPTIONS" title="FILE OPTIONS" data-bare-link="true">FILE OPTIONS</a></strong> section for more details.</p></dd>
 </dl>
 </dd>
 <dt><code>extensions edit</code></dt><dd><p>  Edit an extension.</p>
@@ -151,9 +153,10 @@
 <dt><code>-o</code>|<code>--options</code> <var>options</var></dt><dd><p>  Any other options to include when running the extension command.</p></dd>
 <dt><code>--no-show</code></dt><dd><p>  Set the extension to not show by default. <code>--show</code> <var>extension</var> will override this setting at execution time.</p></dd>
 <dt><code>--no-color</code></dt><dd><p>  Do no include coloring option <code>--color=&lt;when></code> when executing the command.</p></dd>
+<dt><var>file-option</var></dt><dd><p>  Limits the section values to a specific file. See <strong><a href="#FILE-OPTIONS" title="FILE OPTIONS" data-bare-link="true">FILE OPTIONS</a></strong> section for more details.</p></dd>
 </dl>
 </dd>
-<dt><code>extensions delete</code></dt><dd><p>  Delete an extension.</p>
+<dt><code>extensions delete</code></dt><dd><p>  Delete an extension. Config values are removed from local, global, and system configs.</p>
 
 <dl>
 <dt><code>extension</code></dt><dd><p>  The name of an extension.</p></dd>
@@ -175,6 +178,18 @@
 <dt><code>extension</code></dt><dd>  The name of an extension.</dd>
 </dl>
 </dd>
+</dl>
+
+
+<h2 id="FILE-OPTIONS">FILE OPTIONS</h2>
+
+<p>Some subcommands can be limited to a specific file. The valid options are:</p>
+
+<dl>
+<dt><code>--local</code> </dt><dd><p>  Use local config file.</p></dd>
+<dt><code>--global</code></dt><dd><p>  Use global config file.</p></dd>
+<dt><code>--system</code></dt><dd><p>  Use system config file.</p></dd>
+<dt><code>--file</code> <var>file</var></dt><dd><p>  Use a specific config file.</p></dd>
 </dl>
 
 

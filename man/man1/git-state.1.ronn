@@ -12,10 +12,10 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-O`|`--options`) _option_ [_option_ ...]]<br>
 `git state extensions create` (`-c`|`--command`) <command> [(`-n`|`--name`) <name>]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--options`) <options>] [`--no-show`]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--no-color`] <extension><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--no-color`] [<file-option>] <extension><br>
 `git state extensions edit` [(`-c`|`--command`) <command>] [(`-n`|`--name`) <name>]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--options`) <options>] [`--no-show`]<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--no-color`] <extension><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--no-color`] [<file-option>] <extension><br>
 `git state extensions delete` [(`-q`|`--quiet`)] <extension><br>
 `git state extensions config` [(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<extension><br>
@@ -102,6 +102,9 @@ Used to see a more concise and comprehensive view of the working directory throu
     * `--no-color`:
         Do no include coloring option `--color=<when>` when executing the command.
 
+    * <file-option>:
+        Limits the section values to a specific file. See **[FILE OPTIONS][]** section for more details.
+
 * `extensions edit`:
     Edit an extension.
 
@@ -123,8 +126,11 @@ Used to see a more concise and comprehensive view of the working directory throu
     * `--no-color`:
         Do no include coloring option `--color=<when>` when executing the command.
 
+    * <file-option>:
+        Limits the section values to a specific file. See **[FILE OPTIONS][]** section for more details.
+
 * `extensions delete`:
-    Delete an extension.
+    Delete an extension. Config values are removed from local, global, and system configs.
 
     * `extension`:
         The name of an extension.
@@ -152,6 +158,22 @@ Used to see a more concise and comprehensive view of the working directory throu
 
     * `extension`:
         The name of an extension.
+
+## FILE OPTIONS
+
+Some subcommands can be limited to a specific file. The valid options are:
+
+* `--local` :
+    Use local config file.
+
+* `--global`:
+    Use global config file.
+
+* `--system`:
+    Use system config file.
+
+* `--file` <file>:
+    Use a specific config file.
 
 ## CONFIGURATION
 
