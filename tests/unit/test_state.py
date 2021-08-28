@@ -1816,6 +1816,20 @@ git-state.extensions.changes'''
 
         self.assertEqual(extensions, [])
 
+    @mock.patch('bin.commands.settings.list_')
+    def test_state_getExtensions_noExtensionsExist_none(self, mock_list):
+
+        # given
+        mock_list.return_value = None
+
+        # when
+        extensions = state.get_extensions()
+
+        # then
+        mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS)
+
+        self.assertEqual(extensions, [])
+
 
 class TestStatePrintExtensions(unittest.TestCase):
     layer = GitState
@@ -1953,6 +1967,34 @@ class TestStateRunExtension(unittest.TestCase):
         mock_get_config_value.assert_not_called()
         mock_print_section.assert_not_called()
         mock_print_sections.assert_not_called()
+
+    @mock.patch('bin.commands.utils.git.get_config_value')
+    @mock.patch('bin.commands.utils.messages.warn')
+    def test_state__runExtension_extensionIsMissingCommandConfiguration(self, mock_warn, mock_get_config_value):
+
+        # given
+        # mock_resolve_coloring.return_value = 'never'
+        # mock_extension_exists.return_value = True
+        # log_name = 'the log'
+        # log_text = 'log text'
+        # mock_run_extension.return_value = (log_name, log_text)
+        # mock_get_config_value.return_value = 'pretty'
+        # section_text = 'section text'
+        # mock_print_section.return_value = section_text
+        command = 'log'
+        mock_get_config_value.side_effect = [None, command]
+
+        # when
+        extension_name, extension_text = state._run_extension(command, {}, False)
+
+        # then
+        mock_get_config_value.assert_has_calls([
+            mock.call('git-state.extensions.{}.command'.format(command)),
+            mock.call('git-state.extensions.{}.name'.format(command), default=command)
+        ])
+
+        self.assertEqual(extension_name, command)
+        self.assertIsNone(extension_text)
 
 
 class TestStateDeleteExtension(unittest.TestCase):

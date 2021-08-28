@@ -503,6 +503,19 @@ nothing to commit, working directory is clean
         self.assertEqual(self._output('git state --pretty'), expected)
         self.assertEqual(self._output('git state -p'), expected)
 
+    def test_state_viewWithExtension_extensionMissingCommandConfig(self):
+
+        # given
+        self._output('git config git-state.extensions.log.name the-log')
+        self._output('git config --unset git-state.extensions.log.command')
+        expected = '''warn: extension 'log' has no command to execute: run 'git state extensions edit log -c <command>' to remediate
+# status (master)
+nothing to commit, working directory is clean
+'''
+
+        # then
+        self.assertEqual(self._output('git state'), expected)
+
 
 class TestStateExtensions(unittest.TestCase):
     layer = GitStateFunctional

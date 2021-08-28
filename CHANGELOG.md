@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file. This projec
 - **State**: `extensions run` respects global color/format options [#160][]
 - **State**: delete an extension quietly [#162][]
 
+### Fixes
+- **State**: handle incomplete extension configuration
+
 [#147]: https://github.com/Brickster/git-commands/issues/147
 [#158]: https://github.com/Brickster/git-commands/issues/158
 [#159]: https://github.com/Brickster/git-commands/issues/159

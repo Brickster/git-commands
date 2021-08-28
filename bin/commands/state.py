@@ -90,6 +90,12 @@ def _print_sections(sections, order=[], page=False, clear=False):
 def _run_extension(extension, options, show_color):
     extension_command = git.get_config_value('git-state.extensions.' + extension + '.command')
     extension_name = git.get_config_value('git-state.extensions.' + extension + '.name', default=extension)
+    if extension_command is None:
+        messages.warn(
+            "extension '{0}' has no command to execute: run 'git state extensions edit {0} -c <command>' to "
+            "remediate".format(extension)
+        )
+        return extension_name, None
 
     # merge config and command line options
     extension_options = git.get_config_value(
@@ -142,6 +148,8 @@ def _update_extension_config(config, section, key, value):
 
 def get_extensions():
     extensions = settings.list_(format_=settings.FormatOption.SECTIONS)
+    if extensions is None:
+        return []
     return [match.group(1) for match in re.finditer('^git-state\\.extensions\\.([^.\n]+)$', extensions, re.MULTILINE)]
 
 
