@@ -74,6 +74,7 @@ def _extensions_subcommand(subparsers, default_format):
         description='create an extension',
         usage='''git state extensions create [-h] --command COMMAND [--name NAME]
                                    [-o OPTIONS] [--no-show] [--no-color]
+                                   [--local | --global | --system | --file FILE]
                                    EXTENSION'''
     )
     create_parser.set_defaults(func=state.edit_extension)
@@ -96,6 +97,34 @@ def _extensions_subcommand(subparsers, default_format):
         dest='color',
         default=True
     )
+    file_group = create_parser.add_mutually_exclusive_group()
+    file_group.add_argument(
+        '--local',
+        help='limit to the local config file',
+        action='store_const',
+        const=git.ConfigOption.LOCAL,
+        dest='config'
+    )
+    file_group.add_argument(
+        '--global',
+        help='limit to the global config file',
+        action='store_const',
+        const=git.ConfigOption.GLOBAL,
+        dest='config'
+    )
+    file_group.add_argument(
+        '--system',
+        help='limit to the system config file',
+        action='store_const',
+        const=git.ConfigOption.SYSTEM,
+        dest='config'
+    )
+    file_group.add_argument(
+        '--file',
+        help='limit to a specific config file',
+        dest='config',
+        metavar='FILE'
+    )
 
     edit_parser = extensions_subparsers.add_parser(
         'edit',
@@ -103,6 +132,7 @@ def _extensions_subcommand(subparsers, default_format):
         description='edit an extension',
         usage='''git state extensions edit [-h] [--command COMMAND] [--name NAME]
                                  [--options OPTIONS] [--no-show] [--no-color]
+                                 [--local | --global | --system | --file FILE]
                                  EXTENSION'''
     )
     edit_parser.set_defaults(func=state.edit_extension)
@@ -115,7 +145,7 @@ def _extensions_subcommand(subparsers, default_format):
         help='do not show the extension',
         action='store_false',
         dest='show',
-        default=True
+        default=None
     )
     edit_parser.add_argument(
         '--no-color',
@@ -123,7 +153,35 @@ def _extensions_subcommand(subparsers, default_format):
         help='never color output',
         action='store_false',
         dest='color',
-        default=True
+        default=None
+    )
+    file_group = edit_parser.add_mutually_exclusive_group()
+    file_group.add_argument(
+        '--local',
+        help='limit to the local config file',
+        action='store_const',
+        const=git.ConfigOption.LOCAL,
+        dest='config'
+    )
+    file_group.add_argument(
+        '--global',
+        help='limit to the global config file',
+        action='store_const',
+        const=git.ConfigOption.GLOBAL,
+        dest='config'
+    )
+    file_group.add_argument(
+        '--system',
+        help='limit to the system config file',
+        action='store_const',
+        const=git.ConfigOption.SYSTEM,
+        dest='config'
+    )
+    file_group.add_argument(
+        '--file',
+        help='limit to a specific config file',
+        dest='config',
+        metavar='FILE'
     )
 
     delete_parser = extensions_subparsers.add_parser(

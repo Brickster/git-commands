@@ -114,24 +114,30 @@ def _extension_exists(extension):
     return bool(int(settings.list_('git-state.extensions.' + extension, format_=settings.FormatOption.COUNT)))
 
 
-def edit_extension(extension, command=None, name=None, options=None, show=None, color=True):
+def edit_extension(extension, command=None, name=None, options=None, show=None, color=True, config=None):
     extension_section = 'git-state.extensions.' + extension
     already_exists = _extension_exists(extension)
     if command:
-        _update_extension_config(extension_section, 'command', command)
+        _update_extension_config(config, extension_section, 'command', command)
     if name:
-        _update_extension_config(extension_section, 'name', name)
+        _update_extension_config(config, extension_section, 'name', name)
     if options:
-        _update_extension_config(extension_section, 'options', options)
+        _update_extension_config(config, extension_section, 'options', options)
     if show is not None:
-        _update_extension_config(extension_section, 'show', str(show))
+        _update_extension_config(config, extension_section, 'show', str(show))
     if color is not None:
-        _update_extension_config(extension_section, 'color', str(color))
+        _update_extension_config(config, extension_section, 'color', str(color))
     messages.info('Extension {} {}'.format(extension, 'updated' if already_exists else 'created'))
 
 
-def _update_extension_config(section, key, value):
-    execute.call(['git', 'config', '--local', section + '.' + key, value])
+def _update_extension_config(config, section, key, value):
+    config = git.resolve_config_option(config)
+    if config is None:
+        execute.call(['git', 'config', section + '.' + key, value])
+    elif isinstance(config, git.ConfigOption):
+        execute.call(['git', 'config', '--{}'.format(config.name.lower()), section + '.' + key, value])
+    else:
+        execute.call(['git', 'config', '--file', config, section + '.' + key, value])
 
 
 def get_extensions():
@@ -166,7 +172,7 @@ def run_extension(extension):
 
 def delete_extension(extension, quiet=False):
     if _extension_exists(extension):
-        execute.call(['git', 'config', '--local', '--remove-section', 'git-state.extensions.{}'.format(extension)])
+        settings.destroy('git-state.extensions.{}'.format(extension), dry_run=False)
         messages.info('Extension {} deleted'.format(extension), quiet=quiet)
 
 

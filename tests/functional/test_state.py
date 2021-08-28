@@ -1,6 +1,7 @@
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -627,44 +628,85 @@ class TestStateExtensions(unittest.TestCase):
         self.assertIn('git-state.extensions.testlog.show=False', extension_config)
         self.assertIn('git-state.extensions.testlog.color=False', extension_config)
 
+    @unittest.skipIf(
+        '--no-skip' not in sys.argv,
+        'could edit user config if test extension name matches a real one and should only run during non-local builds.'
+    )
     def test_state_extensions_delete(self):
 
         # given
+        extension_name = 'testextensionnamedonotusethiswhatareyoudoing'
         config_writer = self.repo.config_writer('repository')
-        config_writer.set_value('git-state.extensions.log', 'color', 'True')
-        config_writer.set_value('git-state.extensions.log', 'command', 'git log --oneline')
+        config_writer.set_value('git-state.extensions.{}'.format(extension_name), 'color', 'True')
+        config_writer.set_value('git-state.extensions.{}'.format(extension_name), 'command', 'git log --oneline')
         config_writer.release()
 
         # expect
-        self.assertEqual(self._output('git state extensions delete log', set_config=False).strip(), '''Extension log deleted''')
-        self.assertFalse(self._output('git settings list git-state.extensions.log'))
+        self.assertEqual(self._output('git state extensions delete {}'.format(extension_name), set_config=False).strip(), 'Extension {} deleted'.format(extension_name))
+        self.assertFalse(self._output('git settings list git-state.extensions.{}'.format(extension_name)))
 
+    @unittest.skipIf(
+        '--no-skip' not in sys.argv,
+        'could edit user config if test extension name matches a real one and should only run during non-local builds.'
+    )
     def test_state_extensions_delete_quiet(self):
 
         # given
+        extension_name = 'testextensionnamedonotusethiswhatareyoudoing'
         config_writer = self.repo.config_writer('repository')
-        config_writer.set_value('git-state.extensions.log', 'color', 'True')
-        config_writer.set_value('git-state.extensions.log', 'command', 'git log --oneline')
+        config_writer.set_value('git-state.extensions.{}'.format(extension_name), 'color', 'True')
+        config_writer.set_value('git-state.extensions.{}'.format(extension_name), 'command', 'git log --oneline')
         config_writer.release()
 
         # expect
-        self.assertFalse(self._output('git state extensions delete log -q', set_config=False))
-        self.assertFalse(self._output('git settings list git-state.extensions.log'))
+        self.assertFalse(self._output('git state extensions delete {} -q'.format(extension_name), set_config=False))
+        self.assertFalse(self._output('git settings list git-state.extensions.{}'.format(extension_name)))
 
         # given
         config_writer = self.repo.config_writer('repository')
-        config_writer.set_value('git-state.extensions.log', 'color', 'True')
-        config_writer.set_value('git-state.extensions.log', 'command', 'git log --oneline')
+        config_writer.set_value('git-state.extensions.{}'.format(extension_name), 'color', 'True')
+        config_writer.set_value('git-state.extensions.{}'.format(extension_name), 'command', 'git log --oneline')
         config_writer.release()
 
         # expect
-        self.assertFalse(self._output('git state extensions delete log --quiet', set_config=False))
-        self.assertFalse(self._output('git settings list git-state.extensions.log'))
+        self.assertFalse(self._output('git state extensions delete {} --quiet'.format(extension_name), set_config=False))
+        self.assertFalse(self._output('git settings list git-state.extensions.{}'.format(extension_name)))
 
+    @unittest.skipIf(
+        '--no-skip' not in sys.argv,
+        'could edit user config if test extension name matches a real one and should only run during non-local builds.'
+    )
     def test_state_extensions_delete_extensionDoesNotExist(self):
         # expect
-        self.assertFalse(self._output('git state extensions delete blarg', set_config=False))
+        self.assertFalse(self._output('git state extensions delete testextensionnamedonotusethiswhatareyoudoing', set_config=False))
 
+    @unittest.skipIf(
+        '--no-skip' not in sys.argv,
+        'could edit user config if test extension name matches a real one and should only run during non-local builds.'
+    )
+    def test_state_extentions_delete_existsAtMultipleLevels(self):
+
+        # given
+        extension_name = 'testextensionnamedonotusethiswhatareyoudoing'
+        config_writer = self.repo.config_writer('repository')
+        config_writer.set_value('git-state.extensions.{}'.format(extension_name), 'color', 'True')
+        config_writer.set_value('git-state.extensions.{}'.format(extension_name), 'command', 'git log --oneline')
+        config_writer.release()
+
+        # and global config option
+        self.repo.git.config('--global', 'git-state.extensions.{}.command'.format(extension_name), 'git log -1')
+
+        # expect
+        self.assertEqual(
+            self._output('git state extensions delete {}'.format(extension_name), set_config=False).strip(),
+            'Extension {} deleted'.format(extension_name)
+        )
+        self.assertFalse(self._output('git settings list git-state.extensions.{}'.format(extension_name)))
+
+    @unittest.skipIf(
+        '--no-skip' not in sys.argv,
+        'could edit user config if test extension name matches a real one and should only run during non-local builds.'
+    )
     def test_state_extensions_config(self):
 
         # given

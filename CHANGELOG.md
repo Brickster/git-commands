@@ -4,10 +4,12 @@ All notable changes to this project will be documented in this file. This projec
 
 ## [Unreleased][]
 ### Features
+- **State**: `extensions create|edit|delete` recognize config options [#158][]
 - **State**: `extensions config` formatting options [#159][]
 - **State**: `extensions run` respects global color/format options [#160][]
 - **State**: delete an extension quietly [#162][]
 
+[#158]: https://github.com/Brickster/git-commands/issues/158
 [#159]: https://github.com/Brickster/git-commands/issues/159
 [#160]: https://github.com/Brickster/git-commands/issues/160
 [#162]: https://github.com/Brickster/git-commands/issues/162

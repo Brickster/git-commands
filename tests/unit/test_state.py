@@ -8,6 +8,7 @@ import colorama
 from . import testutils
 from ..layers import GitState
 from bin.commands import settings, state
+from bin.commands.utils import git
 
 
 class TestStatePrintSection(unittest.TestCase):
@@ -1641,11 +1642,11 @@ class TestStateEditExtension(unittest.TestCase):
         # then
         mock_extension_exists.assert_called_once_with('log')
         mock_call.assert_has_calls([
-            mock.call(['git', 'config', '--local', 'git-state.extensions.log.command', 'git log']),
-            mock.call(['git', 'config', '--local', 'git-state.extensions.log.name', 'the log']),
-            mock.call(['git', 'config', '--local', 'git-state.extensions.log.options', '-10']),
-            mock.call(['git', 'config', '--local', 'git-state.extensions.log.show', 'True']),
-            mock.call(['git', 'config', '--local', 'git-state.extensions.log.color', 'False'])
+            mock.call(['git', 'config', 'git-state.extensions.log.command', 'git log']),
+            mock.call(['git', 'config', 'git-state.extensions.log.name', 'the log']),
+            mock.call(['git', 'config', 'git-state.extensions.log.options', '-10']),
+            mock.call(['git', 'config', 'git-state.extensions.log.show', 'True']),
+            mock.call(['git', 'config', 'git-state.extensions.log.color', 'False'])
         ])
         mock_info.assert_called_once_with('Extension log created')
 
@@ -1663,11 +1664,11 @@ class TestStateEditExtension(unittest.TestCase):
         # then
         mock_extension_exists.assert_called_once_with('log')
         mock_call.assert_has_calls([
-            mock.call(['git', 'config', '--local', 'git-state.extensions.log.command', 'git log']),
-            mock.call(['git', 'config', '--local', 'git-state.extensions.log.name', 'the log']),
-            mock.call(['git', 'config', '--local', 'git-state.extensions.log.options', '-10']),
-            mock.call(['git', 'config', '--local', 'git-state.extensions.log.show', 'True']),
-            mock.call(['git', 'config', '--local', 'git-state.extensions.log.color', 'False'])
+            mock.call(['git', 'config', 'git-state.extensions.log.command', 'git log']),
+            mock.call(['git', 'config', 'git-state.extensions.log.name', 'the log']),
+            mock.call(['git', 'config', 'git-state.extensions.log.options', '-10']),
+            mock.call(['git', 'config', 'git-state.extensions.log.show', 'True']),
+            mock.call(['git', 'config', 'git-state.extensions.log.color', 'False'])
         ])
         mock_info.assert_called_once_with('Extension log updated')
 
@@ -1684,7 +1685,7 @@ class TestStateEditExtension(unittest.TestCase):
 
         # then
         mock_extension_exists.assert_called_once_with('log')
-        mock_call.assert_called_once_with(['git', 'config', '--local', 'git-state.extensions.log.command', 'git log'])
+        mock_call.assert_called_once_with(['git', 'config', 'git-state.extensions.log.command', 'git log'])
         mock_info.assert_called_once_with('Extension log updated')
 
     @mock.patch('bin.commands.state._extension_exists')
@@ -1700,7 +1701,7 @@ class TestStateEditExtension(unittest.TestCase):
 
         # then
         mock_extension_exists.assert_called_once_with('log')
-        mock_call.assert_called_once_with(['git', 'config', '--local', 'git-state.extensions.log.name', 'the log'])
+        mock_call.assert_called_once_with(['git', 'config', 'git-state.extensions.log.name', 'the log'])
         mock_info.assert_called_once_with('Extension log updated')
 
     @mock.patch('bin.commands.state._extension_exists')
@@ -1716,7 +1717,7 @@ class TestStateEditExtension(unittest.TestCase):
 
         # then
         mock_extension_exists.assert_called_once_with('log')
-        mock_call.assert_called_once_with(['git', 'config', '--local', 'git-state.extensions.log.options', '-10'])
+        mock_call.assert_called_once_with(['git', 'config', 'git-state.extensions.log.options', '-10'])
         mock_info.assert_called_once_with('Extension log updated')
 
     @mock.patch('bin.commands.state._extension_exists')
@@ -1732,7 +1733,7 @@ class TestStateEditExtension(unittest.TestCase):
 
         # then
         mock_extension_exists.assert_called_once_with('log')
-        mock_call.assert_called_once_with(['git', 'config', '--local', 'git-state.extensions.log.show', 'False'])
+        mock_call.assert_called_once_with(['git', 'config', 'git-state.extensions.log.show', 'False'])
         mock_info.assert_called_once_with('Extension log updated')
 
     @mock.patch('bin.commands.state._extension_exists')
@@ -1748,7 +1749,38 @@ class TestStateEditExtension(unittest.TestCase):
 
         # then
         mock_extension_exists.assert_called_once_with('log')
-        mock_call.assert_called_once_with(['git', 'config', '--local', 'git-state.extensions.log.color', 'True'])
+        mock_call.assert_called_once_with(['git', 'config', 'git-state.extensions.log.color', 'True'])
+        mock_info.assert_called_once_with('Extension log updated')
+
+    @mock.patch('bin.commands.state._extension_exists')
+    @mock.patch('bin.commands.utils.execute.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_editExtension_withConfig_flag(self, mock_info, mock_call, mock_extension_exists):
+
+        # given
+        mock_extension_exists.return_value = True
+
+        # when
+        state.edit_extension('log', color=True, config=git.ConfigOption.GLOBAL)
+
+        # then
+        mock_extension_exists.assert_called_once_with('log')
+        mock_call.assert_called_once_with(['git', 'config', '--global', 'git-state.extensions.log.color', 'True'])
+        mock_info.assert_called_once_with('Extension log updated')
+
+    @mock.patch('bin.commands.state._extension_exists')
+    @mock.patch('bin.commands.utils.execute.call')
+    @mock.patch('bin.commands.utils.messages.info')
+    def test_state_editExtension_withConfig_file(self, mock_info, mock_call, mock_extension_exists):
+        # given
+        mock_extension_exists.return_value = True
+
+        # when
+        state.edit_extension('log', color=True, config='/config/path')
+
+        # then
+        mock_extension_exists.assert_called_once_with('log')
+        mock_call.assert_called_once_with(['git', 'config', '--file', '/config/path', 'git-state.extensions.log.color', 'True'])
         mock_info.assert_called_once_with('Extension log updated')
 
 
@@ -1927,9 +1959,9 @@ class TestStateDeleteExtension(unittest.TestCase):
     layer = GitState
 
     @mock.patch('bin.commands.state._extension_exists')
-    @mock.patch('bin.commands.utils.execute.call')
+    @mock.patch('bin.commands.settings.destroy')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_state_deleteExtension(self, mock_info, mock_call, mock_extension_exists):
+    def test_state_deleteExtension(self, mock_info, mock_destroy, mock_extension_exists):
 
         # given
         mock_extension_exists.return_value = True
@@ -1939,13 +1971,13 @@ class TestStateDeleteExtension(unittest.TestCase):
 
         # then
         mock_extension_exists.assert_called_once_with('log')
-        mock_call.assert_called_once_with('git config --local --remove-section git-state.extensions.log'.split())
+        mock_destroy.assert_called_once_with('git-state.extensions.log', dry_run=False)
         mock_info.assert_called_once_with('Extension log deleted', quiet=False)
 
     @mock.patch('bin.commands.state._extension_exists')
-    @mock.patch('bin.commands.utils.execute.call')
+    @mock.patch('bin.commands.settings.destroy')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_state_deleteExtension_quiet_false(self, mock_info, mock_call, mock_extension_exists):
+    def test_state_deleteExtension_quiet_false(self, mock_info, mock_destroy, mock_extension_exists):
         # given
         mock_extension_exists.return_value = True
 
@@ -1954,13 +1986,13 @@ class TestStateDeleteExtension(unittest.TestCase):
 
         # then
         mock_extension_exists.assert_called_once_with('log')
-        mock_call.assert_called_once_with('git config --local --remove-section git-state.extensions.log'.split())
+        mock_destroy.assert_called_once_with('git-state.extensions.log', dry_run=False)
         mock_info.assert_called_once_with('Extension log deleted', quiet=False)
 
     @mock.patch('bin.commands.state._extension_exists')
-    @mock.patch('bin.commands.utils.execute.call')
+    @mock.patch('bin.commands.settings.destroy')
     @mock.patch('bin.commands.utils.messages.info')
-    def test_state_deleteExtension_quiet_true(self, mock_info, mock_call, mock_extension_exists):
+    def test_state_deleteExtension_quiet_true(self, mock_info, mock_destroy, mock_extension_exists):
 
         # given
         mock_extension_exists.return_value = True
@@ -1970,7 +2002,7 @@ class TestStateDeleteExtension(unittest.TestCase):
 
         # then
         mock_extension_exists.assert_called_once_with('log')
-        mock_call.assert_called_once_with('git config --local --remove-section git-state.extensions.log'.split())
+        mock_destroy.assert_called_once_with('git-state.extensions.log', dry_run=False)
         mock_info.assert_called_once_with('Extension log deleted', quiet=True)
 
     @mock.patch('bin.commands.state._extension_exists')
