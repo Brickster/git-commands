@@ -218,7 +218,7 @@ class TestGitUpstream(unittest.TestCase):
         # create a new repo in a sub-directory (lazy)
         os.mkdir(self.dirpath + '/dir')
         os.chdir(self.dirpath + '/dir')
-        subprocess.check_output('git init -b main'.split())
+        subprocess.check_output('git -c init.defaultBranch=main init'.split())
 
         # when
         p = subprocess.Popen('git upstream'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
