@@ -90,6 +90,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--clear</code>] [<code>--no-clear</code>] [<code>--no-page</code>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-o</code>|<code>--order</code>) <var>section</var> [<var>section</var> ...]]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-O</code>|<code>--options</code>) <em>option</em> [<em>option</em> ...]]<br />
+<code>git state extensions</code> [<code>list</code>]<br />
 <code>git state extensions create</code> (<code>-c</code>|<code>--command</code>) <var>command</var> [(<code>-n</code>|<code>--name</code>) <var>name</var>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(<code>-o</code>|<code>--options</code>) <var>options</var>] [<code>--no-show</code>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<code>--no-color</code>] [<var>file-option</var>] <var>extension</var><br />
@@ -99,7 +100,6 @@
 <code>git state extensions delete</code> [(<code>-q</code>|<code>--quiet</code>)] <var>extension</var><br />
 <code>git state extensions config</code> [(<code>-p</code>|<code>--pretty</code>)] [(<code>-f</code>|<code>--format</code>) <var>format</var>]<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<var>extension</var><br />
-<code>git state extensions list</code><br />
 <code>git state extensions run</code> <var>extension</var><br />
 <code>git state</code> (<code>-h</code>|<code>--help</code>)<br />
 <code>git state</code> (<code>-v</code>|<code>--version</code>)</p>
@@ -111,7 +111,7 @@
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
-<dt class="flush"><code>view</code></dt><dd><p>  View the current state of a repository.</p>
+<dt class="flush"><code>view</code></dt><dd><p>  View the current state of a repository. This is the default subcommand.</p>
 
 <dl>
 <dt><code>-h</code>|<code>--help</code></dt><dd><p>  Print a simple help message.</p></dd>
@@ -132,6 +132,7 @@
 <dt><code>-O</code>|<code>--options</code> <em>option</em> [<em>option</em> ...]</dt><dd><p>  A list of options to pass to an extension. Options are formatted as <code>&lt;extension_name>:&lt;option&gt;</code>. See <strong><a href="#EXTENSIONS" title="EXTENSIONS" data-bare-link="true">EXTENSIONS</a></strong> section for more detail.</p></dd>
 </dl>
 </dd>
+<dt><code>extensions list</code></dt><dd><p>  List the names of all extensions. This is the default <code>extensions</code> subcommand and has no options.</p></dd>
 <dt><code>extensions create</code></dt><dd><p>  Create an extension.</p>
 
 <dl>
@@ -171,7 +172,6 @@
 <dt><code>-f</code>|<code>--format</code> <var>format</var></dt><dd><p>  The format used to print the config. Valid values include: <var>compact</var> and <var>pretty</var>.</p></dd>
 </dl>
 </dd>
-<dt><code>extensions list</code></dt><dd><p>  List the names of all extensions. This command has no options.</p></dd>
 <dt><code>extensions run</code></dt><dd><p>  Run an extension. This command overrides any option that would otherwise hide the extension.</p>
 
 <dl>

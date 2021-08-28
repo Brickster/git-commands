@@ -10,6 +10,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--clear`] [`--no-clear`] [`--no-page`]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--order`) <section> [<section> ...]]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-O`|`--options`) _option_ [_option_ ...]]<br>
+`git state extensions` [`list`]<br>
 `git state extensions create` (`-c`|`--command`) <command> [(`-n`|`--name`) <name>]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(`-o`|`--options`) <options>] [`--no-show`]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[`--no-color`] [<file-option>] <extension><br>
@@ -19,7 +20,6 @@
 `git state extensions delete` [(`-q`|`--quiet`)] <extension><br>
 `git state extensions config` [(`-p`|`--pretty`)] [(`-f`|`--format`) <format>]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<extension><br>
-`git state extensions list`<br>
 `git state extensions run` <extension><br>
 `git state` (`-h`|`--help`)<br>
 `git state` (`-v`|`--version`)
@@ -31,7 +31,7 @@ Used to see a more concise and comprehensive view of the working directory throu
 ## OPTIONS
 
 * `view`:
-    View the current state of a repository.
+    View the current state of a repository. This is the default subcommand.
 
     * `-h`|`--help`:
         Print a simple help message.
@@ -80,6 +80,9 @@ Used to see a more concise and comprehensive view of the working directory throu
 
     * `-O`|`--options` _option_ [_option_ ...]:
         A list of options to pass to an extension. Options are formatted as `<extension_name>:<option>`. See **[EXTENSIONS][]** section for more detail.
+
+* `extensions list`:
+    List the names of all extensions. This is the default `extensions` subcommand and has no options.
 
 * `extensions create`:
     Create an extension.
@@ -149,9 +152,6 @@ Used to see a more concise and comprehensive view of the working directory throu
 
     * `-f`|`--format` <format>:
         The format used to print the config. Valid values include: <compact> and <pretty>.
-
-* `extensions list`:
-    List the names of all extensions. This command has no options.
 
 * `extensions run`:
     Run an extension. This command overrides any option that would otherwise hide the extension.

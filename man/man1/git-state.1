@@ -31,6 +31,9 @@
 \~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~[(\fB\-O\fR|\fB\-\-options\fR) \fIoption\fR [\fIoption\fR \.\.\.]]
 .
 .br
+\fBgit state extensions\fR [\fBlist\fR]
+.
+.br
 \fBgit state extensions create\fR (\fB\-c\fR|\fB\-\-command\fR) \fIcommand\fR [(\fB\-n\fR|\fB\-\-name\fR) \fIname\fR]
 .
 .br
@@ -58,9 +61,6 @@
 \~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\fIextension\fR
 .
 .br
-\fBgit state extensions list\fR
-.
-.br
 \fBgit state extensions run\fR \fIextension\fR
 .
 .br
@@ -76,7 +76,7 @@ Used to see a more concise and comprehensive view of the working directory throu
 .
 .TP
 \fBview\fR
-View the current state of a repository\.
+View the current state of a repository\. This is the default subcommand\.
 .
 .TP
 \fB\-h\fR|\fB\-\-help\fR
@@ -142,6 +142,10 @@ A custom section order\.
 \fB\-O\fR|\fB\-\-options\fR \fIoption\fR [\fIoption\fR \.\.\.]
 A list of options to pass to an extension\. Options are formatted as \fB<extension_name>:<option>\fR\. See \fB\fIEXTENSIONS\fR\fR section for more detail\.
 
+.
+.TP
+\fBextensions list\fR
+List the names of all extensions\. This is the default \fBextensions\fR subcommand and has no options\.
 .
 .TP
 \fBextensions create\fR
@@ -238,10 +242,6 @@ Display in pretty format\. This is equivalent to \fB\-f\fR|\fB\-\-format\fR \fIp
 \fB\-f\fR|\fB\-\-format\fR \fIformat\fR
 The format used to print the config\. Valid values include: \fIcompact\fR and \fIpretty\fR\.
 
-.
-.TP
-\fBextensions list\fR
-List the names of all extensions\. This command has no options\.
 .
 .TP
 \fBextensions run\fR

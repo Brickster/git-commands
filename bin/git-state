@@ -25,6 +25,8 @@ def main():
     # default to view mode
     if len(sys.argv) == 1 or sys.argv[1] not in ('view', 'extensions') and not _is_info_usage():
         sys.argv.insert(1, 'view')
+    elif len(sys.argv) == 2 and sys.argv[1] == 'extensions':
+        sys.argv.insert(2, 'list')
 
     # print parser.parse_args()
     parsed_args = vars(parser.parse_args())
@@ -66,8 +68,13 @@ def _extensions_subcommand(subparsers, default_format):
         help='manage extensions',
         description='manage extensions'
     )
-
     extensions_subparsers = parser.add_subparsers(help='extensions sub-command help', dest='extensions_subcommand')
+
+    list_parser = extensions_subparsers.add_parser(
+        'list', help='list extensions', description='list extensions'
+    )
+    list_parser.set_defaults(func=state.print_extensions)
+
     create_parser = extensions_subparsers.add_parser(
         'create',
         help='create an extension',
@@ -226,11 +233,6 @@ def _extensions_subcommand(subparsers, default_format):
         const='pretty',
         dest='format_'
     )
-
-    list_parser = extensions_subparsers.add_parser(
-        'list', help='list extensions', description='list extensions'
-    )
-    list_parser.set_defaults(func=state.print_extensions)
 
     run_parser = extensions_subparsers.add_parser(
         'run',

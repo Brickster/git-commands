@@ -761,8 +761,20 @@ git-state.extensions.log.show=false
         # expect
         self.assertFalse(self._output('git state extensions config blarg'))
 
-    def test_state_extensions_list(self):
+    def test_state_extensions_noExtensionSubcommand_defaultsToList(self):
 
+        # given
+        config_writer = self.repo.config_writer('repository')
+        config_writer.set_value('git-state.extensions.log', 'command', 'git log --oneline')
+        config_writer.set_value('git-state.extensions.changes', 'command', 'git changes')
+        config_writer.release()
+
+        # expect
+        self.assertEqual(self._output('git state extensions'), '''changes
+log
+''')
+
+    def test_state_extensions_list(self):
         # given
         config_writer = self.repo.config_writer('repository')
         config_writer.set_value('git-state.extensions.log', 'command', 'git log --oneline')
