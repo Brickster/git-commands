@@ -139,11 +139,11 @@ git reindex (-v|--version)
 
 ## Testing and OS Support
 
-`git-commands` has been tested using git 2.27.0, Python 2.7.15 and 3.9.6, and on macOS 11 Big Sur and Ubuntu Xenial Xerus. To confirm on your own system, install the test dependencies and run the test suite. Note that some tests are skipped locally as they edit/delete system and global git configs.
+`git-commands` has been tested using git 2.52.0 and Python 3.10 on macOS 26 Tahoe and Ubuntu Resolute Raccoon. To confirm on your own system, install the test dependencies and run the test suite.
 
 ```
 pip install --user -r requirements-test.txt
-nose2
+pytest
 ```
 
 ## Dependencies
