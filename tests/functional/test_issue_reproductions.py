@@ -549,7 +549,7 @@ class TestIssue151(unittest.TestCase):
         stdout, stderr = [x.decode('utf-8') for x in state_proc.communicate()]
 
         # then
+        self.assertFalse(stderr)
         self.assertRegex(stdout, '^# status.*')
         self.assertTrue('# log' not in stdout)
         self.assertTrue('# stashes' not in stdout)
-        self.assertFalse(stderr)
