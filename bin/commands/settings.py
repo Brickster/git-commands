@@ -24,7 +24,7 @@ def _pretty_format_configs(config_map):
 def _get_sections_map(config_map):
     all_sections_map = {}
     for key, value in iter(config_map.items()):
-        match = re.match('^(.*)\.([-a-zA-Z0-9]+)', key)
+        match = re.match(r'^(.*)\.([-a-zA-Z0-9]+)', key)
         subkey = match.group(1)
         key = match.group(2)
 
@@ -39,7 +39,7 @@ def _get_sections_map(config_map):
 
 
 def _append_section_header(result, section):
-    match = re.match('^([-a-zA-Z0-9]+)\.(.*)$', section)
+    match = re.match(r'^([-a-zA-Z0-9]+)\.(.*)$', section)
     if match is None:
         result += ['[{}]'.format(section)]
     else:
@@ -129,7 +129,7 @@ def _get_config_contents(config):
 def _limit_config_to_section(config_contents, section):
     config_section = []
     for config in config_contents:
-        match = re.match('^({})\.[-a-zA-Z0-9]+{}.*$'.format(section, os.linesep), config)
+        match = re.match(r'^({})\.[-a-zA-Z0-9]+{}.*$'.format(section, os.linesep), config)
         if match is not None:
             config_section += [config]
     return config_section
