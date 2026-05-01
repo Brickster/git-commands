@@ -1,7 +1,6 @@
 import os
 import shutil
 import subprocess
-import sys
 import tempfile
 import unittest
 
@@ -31,14 +30,14 @@ class TestState(unittest.TestCase):
     def test_state_version(self):
 
         # expect
-        self.assertRegexpMatches(self._output('git state -v'), '^git-state \\d+\\.\\d+\\.\\d+$')
-        self.assertRegexpMatches(self._output('git state --version'), '^git-state \\d+\\.\\d+\\.\\d+$')
+        self.assertRegex(self._output('git state -v'), '^git-state \\d+\\.\\d+\\.\\d+$')
+        self.assertRegex(self._output('git state --version'), '^git-state \\d+\\.\\d+\\.\\d+$')
 
     def test_state_help(self):
 
         # expect
-        self.assertRegexpMatches(self._output('git state -h'), '^usage: git state')
-        self.assertRegexpMatches(self._output('git state --help'), 'GIT-STATE\\(1\\)')
+        self.assertRegex(self._output('git state -h'), '^usage: git state')
+        self.assertRegex(self._output('git state --help'), 'GIT-STATE\\(1\\)')
 
 
 class TestStateView(unittest.TestCase):
@@ -59,7 +58,23 @@ class TestStateView(unittest.TestCase):
         self.repo = git.Repo.init(self.dirpath)
         testutils.init_local_config(self.repo)
 
+        # redirect global and system configs to local files so tests don't touch real user configs
+        self._orig_git_config_global = os.environ.get('GIT_CONFIG_GLOBAL')
+        self._orig_git_config_system = os.environ.get('GIT_CONFIG_SYSTEM')
+        os.environ['GIT_CONFIG_GLOBAL'] = self.dirpath + '/global_gitconfig'
+        os.environ['GIT_CONFIG_SYSTEM'] = self.dirpath + '/system_gitconfig'
+
     def tearDown(self):
+        if self._orig_git_config_global is not None:
+            os.environ['GIT_CONFIG_GLOBAL'] = self._orig_git_config_global
+        else:
+            os.environ.pop('GIT_CONFIG_GLOBAL', None)
+
+        if self._orig_git_config_system is not None:
+            os.environ['GIT_CONFIG_SYSTEM'] = self._orig_git_config_system
+        else:
+            os.environ.pop('GIT_CONFIG_SYSTEM', None)
+
         shutil.rmtree(self.dirpath)
         os.chdir(self.proj_dir)
 
@@ -213,7 +228,23 @@ class TestStateViewWithExtension(unittest.TestCase):
 
         self.full_log = os.linesep.join([self.commit3_log, self.commit2_log, self.commit1_log, self.commit0_log])
 
+        # redirect global and system configs to local files so tests don't touch real user configs
+        self._orig_git_config_global = os.environ.get('GIT_CONFIG_GLOBAL')
+        self._orig_git_config_system = os.environ.get('GIT_CONFIG_SYSTEM')
+        os.environ['GIT_CONFIG_GLOBAL'] = self.dirpath + '/global_gitconfig'
+        os.environ['GIT_CONFIG_SYSTEM'] = self.dirpath + '/system_gitconfig'
+
     def tearDown(self):
+        if self._orig_git_config_global is not None:
+            os.environ['GIT_CONFIG_GLOBAL'] = self._orig_git_config_global
+        else:
+            os.environ.pop('GIT_CONFIG_GLOBAL', None)
+
+        if self._orig_git_config_system is not None:
+            os.environ['GIT_CONFIG_SYSTEM'] = self._orig_git_config_system
+        else:
+            os.environ.pop('GIT_CONFIG_SYSTEM', None)
+
         shutil.rmtree(self.dirpath)
         os.chdir(self.proj_dir)
 
@@ -575,7 +606,23 @@ class TestStateExtensions(unittest.TestCase):
 
         self.full_log = os.linesep.join([self.commit3_log, self.commit2_log, self.commit1_log, self.commit0_log])
 
+        # redirect global and system configs to local files so tests don't touch real user configs
+        self._orig_git_config_global = os.environ.get('GIT_CONFIG_GLOBAL')
+        self._orig_git_config_system = os.environ.get('GIT_CONFIG_SYSTEM')
+        os.environ['GIT_CONFIG_GLOBAL'] = self.dirpath + '/global_gitconfig'
+        os.environ['GIT_CONFIG_SYSTEM'] = self.dirpath + '/system_gitconfig'
+
     def tearDown(self):
+        if self._orig_git_config_global is not None:
+            os.environ['GIT_CONFIG_GLOBAL'] = self._orig_git_config_global
+        else:
+            os.environ.pop('GIT_CONFIG_GLOBAL', None)
+
+        if self._orig_git_config_system is not None:
+            os.environ['GIT_CONFIG_SYSTEM'] = self._orig_git_config_system
+        else:
+            os.environ.pop('GIT_CONFIG_SYSTEM', None)
+
         shutil.rmtree(self.dirpath)
         os.chdir(self.proj_dir)
 
@@ -641,10 +688,6 @@ class TestStateExtensions(unittest.TestCase):
         self.assertIn('git-state.extensions.testlog.show=False', extension_config)
         self.assertIn('git-state.extensions.testlog.color=False', extension_config)
 
-    @unittest.skipIf(
-        '--no-skip' not in sys.argv,
-        'could edit user config if test extension name matches a real one and should only run during non-local builds.'
-    )
     def test_state_extensions_delete(self):
 
         # given
@@ -658,10 +701,6 @@ class TestStateExtensions(unittest.TestCase):
         self.assertEqual(self._output('git state extensions delete {}'.format(extension_name), set_config=False).strip(), 'Extension {} deleted'.format(extension_name))
         self.assertFalse(self._output('git settings list git-state.extensions.{}'.format(extension_name)))
 
-    @unittest.skipIf(
-        '--no-skip' not in sys.argv,
-        'could edit user config if test extension name matches a real one and should only run during non-local builds.'
-    )
     def test_state_extensions_delete_quiet(self):
 
         # given
@@ -685,18 +724,10 @@ class TestStateExtensions(unittest.TestCase):
         self.assertFalse(self._output('git state extensions delete {} --quiet'.format(extension_name), set_config=False))
         self.assertFalse(self._output('git settings list git-state.extensions.{}'.format(extension_name)))
 
-    @unittest.skipIf(
-        '--no-skip' not in sys.argv,
-        'could edit user config if test extension name matches a real one and should only run during non-local builds.'
-    )
     def test_state_extensions_delete_extensionDoesNotExist(self):
         # expect
         self.assertFalse(self._output('git state extensions delete testextensionnamedonotusethiswhatareyoudoing', set_config=False))
 
-    @unittest.skipIf(
-        '--no-skip' not in sys.argv,
-        'could edit user config if test extension name matches a real one and should only run during non-local builds.'
-    )
     def test_state_extentions_delete_existsAtMultipleLevels(self):
 
         # given
@@ -716,10 +747,6 @@ class TestStateExtensions(unittest.TestCase):
         )
         self.assertFalse(self._output('git settings list git-state.extensions.{}'.format(extension_name)))
 
-    @unittest.skipIf(
-        '--no-skip' not in sys.argv,
-        'could edit user config if test extension name matches a real one and should only run during non-local builds.'
-    )
     def test_state_extensions_config(self):
 
         # given

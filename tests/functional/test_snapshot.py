@@ -42,13 +42,13 @@ class TestGitSnapshot(unittest.TestCase):
         stdout, stderr = self._output('git snapshot'.split())
 
         # verify
-        self.assertRegexpMatches(stdout.strip(), 'Saved working directory and index state WIP on main: \w+ Initial commit')
+        self.assertRegex(stdout.strip(), r'Saved working directory and index state WIP on main: \w+ Initial commit')
         self.assertFalse(stderr)
         self.assertEqual(self._status(), " M CHANGELOG.md\n")
 
         stashes = self._stashes()
         self.assertEqual(len(stashes), 1)
-        self.assertRegexpMatches(stashes[0], 'stash@\{0\}: WIP on main: [0-9a-f]+ Initial commit')
+        self.assertRegex(stashes[0], r'stash@\{0\}: WIP on main: [0-9a-f]+ Initial commit')
 
         call('git reset --hard --quiet'.split())
         call('git stash pop --quiet'.split())
@@ -66,7 +66,7 @@ class TestGitSnapshot(unittest.TestCase):
 
         stashes = self._stashes()
         self.assertEqual(len(stashes), 1)
-        self.assertRegexpMatches(stashes[0], 'stash@\{0\}: WIP on main: [0-9a-f]+ Initial commit')
+        self.assertRegex(stashes[0], r'stash@\{0\}: WIP on main: [0-9a-f]+ Initial commit')
 
         call('git reset --hard --quiet'.split())
         call('git stash pop --quiet'.split())
@@ -153,7 +153,7 @@ A  file3.txt
 
         stashes = self._stashes()
         self.assertEqual(len(stashes), 1)
-        self.assertRegexpMatches(stashes[0], 'stash@\{0\}: On main: ' + message)
+        self.assertRegex(stashes[0], r'stash@\{0\}: On main: ' + message)
 
         call('git reset --hard --quiet'.split())
         call('git stash pop --quiet'.split())
@@ -246,8 +246,8 @@ A  file3.txt
     def test_snapshot_version(self):
 
         # expect
-        self.assertRegexpMatches(Popen('git snapshot -v'.split(), stdout=PIPE, stderr=STDOUT).communicate()[0].decode('utf-8'), 'git-snapshot \\d+\\.\\d+\\.\\d+')
-        self.assertRegexpMatches(Popen('git snapshot --version'.split(), stdout=PIPE, stderr=STDOUT).communicate()[0].decode('utf-8'), 'git-snapshot \\d+\\.\\d+\\.\\d+')
+        self.assertRegex(Popen('git snapshot -v'.split(), stdout=PIPE, stderr=STDOUT).communicate()[0].decode('utf-8'), 'git-snapshot \\d+\\.\\d+\\.\\d+')
+        self.assertRegex(Popen('git snapshot --version'.split(), stdout=PIPE, stderr=STDOUT).communicate()[0].decode('utf-8'), 'git-snapshot \\d+\\.\\d+\\.\\d+')
 
     def test_snapshot_help(self):
 
@@ -274,7 +274,7 @@ A  file3.txt
 
         stashes = self._stashes()
         self.assertEqual(len(stashes), 1)
-        self.assertRegexpMatches(stashes[0], 'stash@\{0\}: On main: ' + message)
+        self.assertRegex(stashes[0], r'stash@\{0\}: On main: ' + message)
 
         call('git reset --hard --quiet'.split())
         call('git stash pop --quiet'.split())

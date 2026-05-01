@@ -38,9 +38,13 @@ jobs:
       run: echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
     - name: Configure git
       run: |
+        git --version
         git config --global init.defaultBranch main
         git config --global user.email "Brickstertwo@users.noreply.github.com"
         git config --global user.name "Marcus Rosenow"
-    - name: Test with nose2
+        # set custom system config file so it can be modified
+        touch $GITHUB_WORKSPACE/system_gitconfig
+        echo "GIT_CONFIG_SYSTEM=$GITHUB_WORKSPACE/system_gitconfig" >> $GITHUB_ENV
+    - name: Test with pytest
       run: |
-        nose2 --verbose --no-skip --log-level=INFO
+        pytest -v --no-skip

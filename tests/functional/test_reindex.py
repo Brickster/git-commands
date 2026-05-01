@@ -207,8 +207,8 @@ class TestGitReindex(unittest.TestCase):
     def test_reindex_version(self):
 
         # expect
-        self.assertRegexpMatches(self._output('git reindex -v'.split()), 'git-reindex \\d+\\.\\d+\\.\\d+')
-        self.assertRegexpMatches(self._output('git reindex --version'.split()), 'git-reindex \\d+\\.\\d+\\.\\d+')
+        self.assertRegex(self._output('git reindex -v'.split()), 'git-reindex \\d+\\.\\d+\\.\\d+')
+        self.assertRegex(self._output('git reindex --version'.split()), 'git-reindex \\d+\\.\\d+\\.\\d+')
 
     def test_reindex_help(self):
 

@@ -1,7 +1,6 @@
 import os
 import shutil
 import subprocess
-import sys
 import tempfile
 import unittest
 
@@ -483,10 +482,6 @@ class TestIssue124(unittest.TestCase):
         self.assertEqual(self.commit0_log, self.repo.git.changes('HEAD^'))
 
 
-@unittest.skipIf(
-    '--no-skip' not in sys.argv,
-    'requires editing user config and should only run during non-local builds.'
-)
 class TestIssue131(unittest.TestCase):
     """Handle missing system config when using git-settings list"""
     layer = Issues
@@ -507,16 +502,15 @@ class TestIssue131(unittest.TestCase):
         """Issue 131: a missing config file should print nothing"""
 
         # given: no system config
-        if os.path.exists('/etc/gitconfig'):
-            os.remove('/etc/gitconfig')
-        if os.path.exists('/usr/local/etc/gitconfig'):
-            os.remove('/usr/local/etc/gitconfig')
+        pyenv = os.environ.copy()
+        pyenv['GIT_CONFIG_SYSTEM'] = self.dirpath + '/nonexistent_gitconfig'
 
         # when
         settings_proc = subprocess.Popen(
             'git settings list --system'.split(),
             stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT
+            stderr=subprocess.STDOUT,
+            env=pyenv
         )
         stdout = settings_proc.communicate()[0]
 
@@ -535,6 +529,7 @@ class TestIssue151(unittest.TestCase):
 
         # initialize repository
         self.repo = git.Repo.init(self.dirpath)
+        testutils.init_local_config(self.repo)
         self.repo.git.state(['extensions', 'create', 'log', '--command', 'git log'])
         self.repo.git.state(['extensions', 'create', 'stashes', '--command', 'git stash list'])
 
@@ -554,7 +549,7 @@ class TestIssue151(unittest.TestCase):
         stdout, stderr = [x.decode('utf-8') for x in state_proc.communicate()]
 
         # then
-        self.assertRegexpMatches(stdout, '^# status.*')
+        self.assertRegex(stdout, '^# status.*')
         self.assertTrue('# log' not in stdout)
         self.assertTrue('# stashes' not in stdout)
         self.assertFalse(stderr)

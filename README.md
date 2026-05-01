@@ -1,6 +1,6 @@
 # git-commands
 
-[![Build Status](https://app.travis-ci.com/Brickster/git-commands.svg?branch=main)](https://app.travis-ci.com/Brickster/git-commands) [![Maintainability](https://api.codeclimate.com/v1/badges/2528d2fb9bba901acf6d/maintainability)](https://codeclimate.com/github/Brickster/git-commands/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/2528d2fb9bba901acf6d/test_coverage)](https://codeclimate.com/github/Brickster/git-commands/test_coverage)
+[![build](https://github.com/Brickster/git-commands/actions/workflows/build.yml/badge.svg)](https://github.com/Brickster/git-commands/actions/workflows/build.yml) [![Maintainability](https://api.codeclimate.com/v1/badges/2528d2fb9bba901acf6d/maintainability)](https://codeclimate.com/github/Brickster/git-commands/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/2528d2fb9bba901acf6d/test_coverage)](https://codeclimate.com/github/Brickster/git-commands/test_coverage)
 
 A collection of custom git commands
 
@@ -139,11 +139,11 @@ git reindex (-v|--version)
 
 ## Testing and OS Support
 
-`git-commands` has been tested using git 2.27.0, Python 2.7.15 and 3.9.6, and on macOS 11 Big Sur and Ubuntu Xenial Xerus. To confirm on your own system, install the test dependencies and run the test suite. Note that some tests are skipped locally as they edit/delete system and global git configs.
+`git-commands` has been tested using git 2.52.0 and Python 3.10 on macOS 26 Tahoe and Ubuntu Resolute Raccoon. To confirm on your own system, install the test dependencies and run the test suite.
 
 ```
 pip install --user -r requirements-test.txt
-nose2
+pytest
 ```
 
 ## Dependencies
