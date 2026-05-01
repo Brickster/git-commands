@@ -1,7 +1,6 @@
 import os
 import shutil
 import subprocess
-import sys
 import tempfile
 import unittest
 
@@ -484,7 +483,7 @@ class TestIssue124(unittest.TestCase):
 
 
 @unittest.skipIf(
-    '--no-skip' not in sys.argv,
+    not os.environ.get('NO_SKIP'),
     'requires editing user config and should only run during non-local builds.'
 )
 class TestIssue131(unittest.TestCase):
@@ -554,7 +553,7 @@ class TestIssue151(unittest.TestCase):
         stdout, stderr = [x.decode('utf-8') for x in state_proc.communicate()]
 
         # then
-        self.assertRegexpMatches(stdout, '^# status.*')
+        self.assertRegex(stdout, '^# status.*')
         self.assertTrue('# log' not in stdout)
         self.assertTrue('# stashes' not in stdout)
         self.assertFalse(stderr)

@@ -1,7 +1,6 @@
 import os
 import shutil
 import subprocess
-import sys
 import tempfile
 import unittest
 
@@ -31,14 +30,14 @@ class TestState(unittest.TestCase):
     def test_state_version(self):
 
         # expect
-        self.assertRegexpMatches(self._output('git state -v'), '^git-state \\d+\\.\\d+\\.\\d+$')
-        self.assertRegexpMatches(self._output('git state --version'), '^git-state \\d+\\.\\d+\\.\\d+$')
+        self.assertRegex(self._output('git state -v'), '^git-state \\d+\\.\\d+\\.\\d+$')
+        self.assertRegex(self._output('git state --version'), '^git-state \\d+\\.\\d+\\.\\d+$')
 
     def test_state_help(self):
 
         # expect
-        self.assertRegexpMatches(self._output('git state -h'), '^usage: git state')
-        self.assertRegexpMatches(self._output('git state --help'), 'GIT-STATE\\(1\\)')
+        self.assertRegex(self._output('git state -h'), '^usage: git state')
+        self.assertRegex(self._output('git state --help'), 'GIT-STATE\\(1\\)')
 
 
 class TestStateView(unittest.TestCase):
@@ -642,7 +641,7 @@ class TestStateExtensions(unittest.TestCase):
         self.assertIn('git-state.extensions.testlog.color=False', extension_config)
 
     @unittest.skipIf(
-        '--no-skip' not in sys.argv,
+        not os.environ.get('NO_SKIP'),
         'could edit user config if test extension name matches a real one and should only run during non-local builds.'
     )
     def test_state_extensions_delete(self):
@@ -659,7 +658,7 @@ class TestStateExtensions(unittest.TestCase):
         self.assertFalse(self._output('git settings list git-state.extensions.{}'.format(extension_name)))
 
     @unittest.skipIf(
-        '--no-skip' not in sys.argv,
+        not os.environ.get('NO_SKIP'),
         'could edit user config if test extension name matches a real one and should only run during non-local builds.'
     )
     def test_state_extensions_delete_quiet(self):
@@ -686,7 +685,7 @@ class TestStateExtensions(unittest.TestCase):
         self.assertFalse(self._output('git settings list git-state.extensions.{}'.format(extension_name)))
 
     @unittest.skipIf(
-        '--no-skip' not in sys.argv,
+        not os.environ.get('NO_SKIP'),
         'could edit user config if test extension name matches a real one and should only run during non-local builds.'
     )
     def test_state_extensions_delete_extensionDoesNotExist(self):
@@ -694,7 +693,7 @@ class TestStateExtensions(unittest.TestCase):
         self.assertFalse(self._output('git state extensions delete testextensionnamedonotusethiswhatareyoudoing', set_config=False))
 
     @unittest.skipIf(
-        '--no-skip' not in sys.argv,
+        not os.environ.get('NO_SKIP'),
         'could edit user config if test extension name matches a real one and should only run during non-local builds.'
     )
     def test_state_extentions_delete_existsAtMultipleLevels(self):
@@ -717,7 +716,7 @@ class TestStateExtensions(unittest.TestCase):
         self.assertFalse(self._output('git settings list git-state.extensions.{}'.format(extension_name)))
 
     @unittest.skipIf(
-        '--no-skip' not in sys.argv,
+        not os.environ.get('NO_SKIP'),
         'could edit user config if test extension name matches a real one and should only run during non-local builds.'
     )
     def test_state_extensions_config(self):

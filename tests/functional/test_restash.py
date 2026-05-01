@@ -185,8 +185,8 @@ class TestGitRestash(unittest.TestCase):
     def test_restash_version(self):
 
         # expect
-        self.assertRegexpMatches(self._output('git restash -v'.split()), 'git-restash \\d+\\.\\d+\\.\\d+')
-        self.assertRegexpMatches(self._output('git restash --version'.split()), 'git-restash \\d+\\.\\d+\\.\\d+')
+        self.assertRegex(self._output('git restash -v'.split()), 'git-restash \\d+\\.\\d+\\.\\d+')
+        self.assertRegex(self._output('git restash --version'.split()), 'git-restash \\d+\\.\\d+\\.\\d+')
 
     def test_restash_help(self):
 

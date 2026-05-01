@@ -6,7 +6,7 @@ from ...layers import UtilsParseString
 from bin.commands.utils import parse_string
 
 
-class TestEnum(enum.Enum):
+class SampleEnum(enum.Enum):
     A = 1
     BB = 2
 
@@ -48,18 +48,18 @@ class TestParseString(unittest.TestCase):
     def test_asEnum(self):
 
         # when
-        parse_enum = parse_string.as_enum(TestEnum)
+        parse_enum = parse_string.as_enum(SampleEnum)
 
         # then
-        self.assertEqual(TestEnum.A, parse_enum('A'))
-        self.assertEqual(TestEnum.BB, parse_enum('BB'))
-        self.assertEqual(TestEnum.BB, parse_enum('bb'))
+        self.assertEqual(SampleEnum.A, parse_enum('A'))
+        self.assertEqual(SampleEnum.BB, parse_enum('BB'))
+        self.assertEqual(SampleEnum.BB, parse_enum('bb'))
 
     def test_asEnum_invalidEnumValue(self):
 
         # when
         with self.assertRaises(KeyError) as context:
-            parse_string.as_enum(TestEnum)('Z')
+            parse_string.as_enum(SampleEnum)('Z')
 
         # then
         self.assertEqual("'Z'", str(context.exception))

@@ -1,7 +1,6 @@
 import os
 import shutil
 import subprocess
-import sys
 import tempfile
 import unittest
 
@@ -21,8 +20,8 @@ class TestSettings(unittest.TestCase):
     def test_settings_version(self):
 
         # expect
-        self.assertRegexpMatches(self._output('git settings -v'.split()), 'git-settings \\d+\\.\\d+\\.\\d+')
-        self.assertRegexpMatches(self._output('git settings --version'.split()), 'git-settings \\d+\\.\\d+\\.\\d+')
+        self.assertRegex(self._output('git settings -v'.split()), 'git-settings \\d+\\.\\d+\\.\\d+')
+        self.assertRegex(self._output('git settings --version'.split()), 'git-settings \\d+\\.\\d+\\.\\d+')
 
     def test_settings_help(self):
 
@@ -56,7 +55,7 @@ class TestSettingsList(unittest.TestCase):
 
     def tearDown(self):
         # put global configs back since some tests remove them
-        if '--no-skip' in sys.argv:
+        if os.environ.get('NO_SKIP'):
             self.repo.git.config('--global', 'user.name', 'Marcus Rosenow')
             self.repo.git.config('--global', 'user.email', 'Brickstertwo@users.noreply.github.com')
         shutil.rmtree(self.dirpath)
@@ -105,7 +104,7 @@ class TestSettingsList(unittest.TestCase):
         self.assertFalse(stdout)
 
     @unittest.skipIf(
-        '--no-skip' not in sys.argv,
+        not os.environ.get('NO_SKIP'),
         'requires editing user config and should only run during non-local builds.'
     )
     def test_list_global(self):
@@ -135,7 +134,7 @@ class TestSettingsList(unittest.TestCase):
         self.assertTrue('git-settings.test2.getc=valuec' not in actual)
 
     @unittest.skipIf(
-        '--no-skip' not in sys.argv,
+        not os.environ.get('NO_SKIP'),
         'requires editing user config and should only run during non-local builds.'
     )
     def test_list_global_configFileDoesNotExist(self):
@@ -154,7 +153,7 @@ class TestSettingsList(unittest.TestCase):
 
     # a bit of a hack since --no-skip is a nosetests flag.
     @unittest.skipIf(
-        '--no-skip' not in sys.argv,
+        not os.environ.get('NO_SKIP'),
         'requires editing user config and should only run during non-local builds.'
     )
     def test_list_system(self):
@@ -184,7 +183,7 @@ class TestSettingsList(unittest.TestCase):
         self.assertTrue('git-settings.test2.getc=valuec' not in actual)
 
     @unittest.skipIf(
-        '--no-skip' not in sys.argv,
+        not os.environ.get('NO_SKIP'),
         'requires editing user config and should only run during non-local builds.'
     )
     def test_list_system_configFileDoesNotExist(self):
@@ -281,7 +280,7 @@ git-settings.test2.getc=valuec""")
 
 
 @unittest.skipIf(
-    '--no-skip' not in sys.argv,
+    not os.environ.get('NO_SKIP'),
     'requires editing user config and should only run during non-local builds.'
 )
 class TestSettingsDestroy(unittest.TestCase):

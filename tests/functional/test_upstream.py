@@ -257,8 +257,8 @@ git upstream: error: argument -R/--no-include-remote: not allowed with argument 
     def test_upstream_version(self):
 
         # expect
-        self.assertRegexpMatches(self._output('git upstream -v'.split()), 'git-upstream \\d+\\.\\d+\\.\\d+')
-        self.assertRegexpMatches(self._output('git upstream --version'.split()), 'git-upstream \\d+\\.\\d+\\.\\d+')
+        self.assertRegex(self._output('git upstream -v'.split()), 'git-upstream \\d+\\.\\d+\\.\\d+')
+        self.assertRegex(self._output('git upstream --version'.split()), 'git-upstream \\d+\\.\\d+\\.\\d+')
 
     def test_upstream_help(self):
 

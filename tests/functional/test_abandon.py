@@ -282,8 +282,8 @@ class TestGitAbandon(unittest.TestCase):
     def test_abandon_version(self):
 
         # expect
-        self.assertRegexpMatches(self._output('git abandon -v'.split()), 'git-abandon \\d+\\.\\d+\\.\\d+')
-        self.assertRegexpMatches(self._output('git abandon --version'.split()), 'git-abandon \\d+\\.\\d+\\.\\d+')
+        self.assertRegex(self._output('git abandon -v'.split()), 'git-abandon \\d+\\.\\d+\\.\\d+')
+        self.assertRegex(self._output('git abandon --version'.split()), 'git-abandon \\d+\\.\\d+\\.\\d+')
 
     def test_abandon_help(self):
 

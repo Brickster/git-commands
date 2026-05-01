@@ -20,8 +20,8 @@ class TestChanges(unittest.TestCase):
     def test_changes_version(self):
 
         # expect
-        self.assertRegexpMatches(self._output('git changes -v'.split()), 'git-changes \\d+\\.\\d+\\.\\d+')
-        self.assertRegexpMatches(self._output('git changes --version'.split()), 'git-changes \\d+\\.\\d+\\.\\d+')
+        self.assertRegex(self._output('git changes -v'.split()), 'git-changes \\d+\\.\\d+\\.\\d+')
+        self.assertRegex(self._output('git changes --version'.split()), 'git-changes \\d+\\.\\d+\\.\\d+')
 
     def test_changes_help(self):
 
