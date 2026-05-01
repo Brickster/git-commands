@@ -42,13 +42,13 @@ class TestGitSnapshot(unittest.TestCase):
         stdout, stderr = self._output('git snapshot'.split())
 
         # verify
-        self.assertRegexpMatches(stdout.strip(), 'Saved working directory and index state WIP on master: \w+ Initial commit')
+        self.assertRegexpMatches(stdout.strip(), 'Saved working directory and index state WIP on main: \w+ Initial commit')
         self.assertFalse(stderr)
         self.assertEqual(self._status(), " M CHANGELOG.md\n")
 
         stashes = self._stashes()
         self.assertEqual(len(stashes), 1)
-        self.assertRegexpMatches(stashes[0], 'stash@\{0\}: WIP on master: [0-9a-f]+ Initial commit')
+        self.assertRegexpMatches(stashes[0], 'stash@\{0\}: WIP on main: [0-9a-f]+ Initial commit')
 
         call('git reset --hard --quiet'.split())
         call('git stash pop --quiet'.split())
@@ -66,7 +66,7 @@ class TestGitSnapshot(unittest.TestCase):
 
         stashes = self._stashes()
         self.assertEqual(len(stashes), 1)
-        self.assertRegexpMatches(stashes[0], 'stash@\{0\}: WIP on master: [0-9a-f]+ Initial commit')
+        self.assertRegexpMatches(stashes[0], 'stash@\{0\}: WIP on main: [0-9a-f]+ Initial commit')
 
         call('git reset --hard --quiet'.split())
         call('git stash pop --quiet'.split())
@@ -147,13 +147,13 @@ A  file3.txt
         stdout, stderr = self._output(('git', 'snapshot', message))
 
         # verify
-        self.assertEqual(stdout.strip(), 'Saved working directory and index state On master: My snapshot message')
+        self.assertEqual(stdout.strip(), 'Saved working directory and index state On main: My snapshot message')
         self.assertFalse(stderr)
         self.assertEqual(self._status(), " M CHANGELOG.md\n")
 
         stashes = self._stashes()
         self.assertEqual(len(stashes), 1)
-        self.assertRegexpMatches(stashes[0], 'stash@\{0\}: On master: ' + message)
+        self.assertRegexpMatches(stashes[0], 'stash@\{0\}: On main: ' + message)
 
         call('git reset --hard --quiet'.split())
         call('git stash pop --quiet'.split())
@@ -268,13 +268,13 @@ A  file3.txt
         stdout, stderr = self._output(('git', 'snapshot', '--replace', message))
 
         # then
-        self.assertEqual(stdout, 'Saved working directory and index state On master: My snapshot message')
+        self.assertEqual(stdout, 'Saved working directory and index state On main: My snapshot message')
         self.assertFalse(stderr)
         self.assertEqual(self._status(), " M CONTRIBUTING.md\n")
 
         stashes = self._stashes()
         self.assertEqual(len(stashes), 1)
-        self.assertRegexpMatches(stashes[0], 'stash@\{0\}: On master: ' + message)
+        self.assertRegexpMatches(stashes[0], 'stash@\{0\}: On main: ' + message)
 
         call('git reset --hard --quiet'.split())
         call('git stash pop --quiet'.split())

@@ -305,10 +305,10 @@ class TestIssue112(unittest.TestCase):
         self.repo.index.add(['README.md'])
         self.repo.index.commit('Initial commit')
 
-        # checkout new develop branch with master as its upstream
+        # checkout new develop branch with main as its upstream
         self.repo.create_head('develop', 'HEAD')
         self.repo.heads.develop.checkout()
-        self.repo.git.branch(set_upstream_to='master')
+        self.repo.git.branch(set_upstream_to='main')
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
@@ -319,7 +319,7 @@ class TestIssue112(unittest.TestCase):
 
         self.assertEqual(
             subprocess.check_output('git changes associate --upstream'.split()).decode('utf-8').strip(),
-            'develop has been associated with refs/heads/master'
+            'develop has been associated with refs/heads/main'
         )
 
 

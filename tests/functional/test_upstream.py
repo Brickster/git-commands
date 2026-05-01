@@ -30,26 +30,26 @@ class TestGitUpstream(unittest.TestCase):
         subprocess.call('git add -A'.split())
         subprocess.call(['git', 'commit', '--quiet', '-m', 'Initial commit'])
         subprocess.call('git checkout -b develop --quiet'.split())
-        subprocess.call('git branch --set-upstream-to=master --quiet'.split())
+        subprocess.call('git branch --set-upstream-to=main --quiet'.split())
 
     def tearDown(self):
         shutil.rmtree(self.dirpath)
         os.chdir(self.proj_dir)
 
     def test_upstream(self):
-        self.assertEqual('master', subprocess.check_output('git upstream'.split()).decode('utf-8').strip())
+        self.assertEqual('main', subprocess.check_output('git upstream'.split()).decode('utf-8').strip())
 
     def test_upstream_includeRemote_shortOption(self):
-        self.assertEqual('./master', subprocess.check_output('git upstream -r'.split()).decode('utf-8').strip())
+        self.assertEqual('./main', subprocess.check_output('git upstream -r'.split()).decode('utf-8').strip())
 
     def test_upstream_includeRemote_longOption(self):
-        self.assertEqual('./master', subprocess.check_output('git upstream --include-remote'.split()).decode('utf-8').strip())
+        self.assertEqual('./main', subprocess.check_output('git upstream --include-remote'.split()).decode('utf-8').strip())
 
     def test_upstream_excludeRemote_shortOption(self):
-        self.assertEqual('master', subprocess.check_output('git upstream -R'.split()).decode('utf-8').strip())
+        self.assertEqual('main', subprocess.check_output('git upstream -R'.split()).decode('utf-8').strip())
 
     def test_upstream_excludeRemote_longOption(self):
-        self.assertEqual('master', subprocess.check_output('git upstream --no-include-remote'.split()).decode('utf-8').strip())
+        self.assertEqual('main', subprocess.check_output('git upstream --no-include-remote'.split()).decode('utf-8').strip())
 
     def test_upstream_showRemoteProperty_never(self):
 
@@ -60,7 +60,7 @@ class TestGitUpstream(unittest.TestCase):
         upstream_result = subprocess.check_output('git upstream'.split()).decode('utf-8').strip()
 
         # verify
-        self.assertEqual('master', upstream_result)
+        self.assertEqual('main', upstream_result)
 
     def test_upstream_showRemoteProperty_always(self):
 
@@ -71,7 +71,7 @@ class TestGitUpstream(unittest.TestCase):
         upstream_result = subprocess.check_output('git upstream'.split()).decode('utf-8').strip()
 
         # verify
-        self.assertEqual('./master', upstream_result)
+        self.assertEqual('./main', upstream_result)
 
     def test_upstream_showRemoteProperty_noneLocal_isLocal(self):
 
@@ -83,7 +83,7 @@ class TestGitUpstream(unittest.TestCase):
         upstream_result = subprocess.check_output('git upstream'.split()).decode('utf-8').strip()
 
         # verify
-        self.assertEqual('origin/master', upstream_result)
+        self.assertEqual('origin/main', upstream_result)
 
     def test_upstream_showRemoteProperty_noneLocal_notLocal(self):
 
@@ -94,7 +94,7 @@ class TestGitUpstream(unittest.TestCase):
         upstream_result = subprocess.check_output('git upstream'.split()).decode('utf-8').strip()
 
         # verify
-        self.assertEqual('master', upstream_result)
+        self.assertEqual('main', upstream_result)
 
     def test_upstream_ignoreShowRemotePropertyWithFlag_includeRemote_shortOption(self):
 
@@ -105,7 +105,7 @@ class TestGitUpstream(unittest.TestCase):
         upstream_result = subprocess.check_output('git upstream -r'.split()).decode('utf-8').strip()
 
         # verify
-        self.assertEqual('./master', upstream_result)
+        self.assertEqual('./main', upstream_result)
 
     def test_upstream_ignoreShowRemotePropertyWithFlag_includeRemote_longOption(self):
 
@@ -116,7 +116,7 @@ class TestGitUpstream(unittest.TestCase):
         upstream_result = subprocess.check_output('git upstream --include-remote'.split()).decode('utf-8').strip()
 
         # verify
-        self.assertEqual('./master', upstream_result)
+        self.assertEqual('./main', upstream_result)
 
     def test_upstream_ignoreShowRemotePropertyWithFlag_excudeRemote_shortOption(self):
 
@@ -127,7 +127,7 @@ class TestGitUpstream(unittest.TestCase):
         upstream_result = subprocess.check_output('git upstream -R'.split()).decode('utf-8').strip()
 
         # verify
-        self.assertEqual('master', upstream_result)
+        self.assertEqual('main', upstream_result)
 
     def test_upstream_ignoreShowRemotePropertyWithFlag_excudeRemote_longOption(self):
 
@@ -138,7 +138,7 @@ class TestGitUpstream(unittest.TestCase):
         upstream_result = subprocess.check_output('git upstream --no-include-remote'.split()).decode('utf-8').strip()
 
         # verify
-        self.assertEqual('master', upstream_result)
+        self.assertEqual('main', upstream_result)
 
     def test_upstream_specifyBranch_shortOption(self):
 
@@ -149,7 +149,7 @@ class TestGitUpstream(unittest.TestCase):
         upstream_result = subprocess.check_output('git upstream -b develop'.split()).decode('utf-8').strip()
 
         # verify
-        self.assertEqual('master', upstream_result)
+        self.assertEqual('main', upstream_result)
 
     def test_upstream_specifyBranch_longOption(self):
 
@@ -160,7 +160,7 @@ class TestGitUpstream(unittest.TestCase):
         upstream_result = subprocess.check_output('git upstream --branch develop'.split()).decode('utf-8').strip()
 
         # verify
-        self.assertEqual('master', upstream_result)
+        self.assertEqual('main', upstream_result)
 
     def test_upstream_specifyBranch_longOptionEqual(self):
 
@@ -171,7 +171,7 @@ class TestGitUpstream(unittest.TestCase):
         upstream_result = subprocess.check_output('git upstream --branch=develop'.split()).decode('utf-8').strip()
 
         # verify
-        self.assertEqual('master', upstream_result)
+        self.assertEqual('main', upstream_result)
 
     def test_upstream_noUpstream(self):
 

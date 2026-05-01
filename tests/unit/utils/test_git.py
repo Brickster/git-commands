@@ -251,7 +251,7 @@ class TestGit(unittest.TestCase):
         self.assertEqual(actual, expected)
         mock_checkoutput.assert_called_once_with(['git', 'rev-parse', '--symbolic-full-name', ref])
 
-    @mock.patch('os.listdir', return_value=['master'])
+    @mock.patch('os.listdir', return_value=['main'])
     @mock.patch('bin.commands.utils.execute.check_output')
     def test_currentBranch(self, mock_checkoutput, mock_listdir):
 
@@ -267,7 +267,7 @@ class TestGit(unittest.TestCase):
         mock_listdir.assert_called_once_with('.git/refs/heads')
         mock_checkoutput.assert_called_once_with('git rev-parse --abbrev-ref HEAD')
 
-    @mock.patch('os.listdir', return_value=['master'])
+    @mock.patch('os.listdir', return_value=['main'])
     @mock.patch('bin.commands.utils.execute.check_output')
     def test_currentBranch_withTrailingWhitespace(self, mock_checkoutput, mock_listdir):
 

@@ -65,7 +65,7 @@ class TestStateView(unittest.TestCase):
 
     def test_state_view_cleanAndEmptyRepository(self):
         # expect
-        self.assertEqual(self._output('git state'), '''# status (master)
+        self.assertEqual(self._output('git state'), '''# status (main)
 nothing to commit, repository is empty
 ''')
 
@@ -79,7 +79,7 @@ nothing to commit, repository is empty
         subprocess.call(['git', 'commit', '--quiet', '-m', 'Initial commit'])
 
         # expect
-        self.assertEqual(self._output('git state'), '''# status (master)
+        self.assertEqual(self._output('git state'), '''# status (main)
 nothing to commit, working directory is clean
 ''')
 
@@ -95,7 +95,7 @@ nothing to commit, working directory is clean
 
         # given
         self._output('git config git-state.status.show-clean-message False')
-        expected = '''# status (master)
+        expected = '''# status (main)
 '''
 
         # expect
@@ -106,7 +106,7 @@ nothing to commit, working directory is clean
         # given
         self._output('git config git-state.status.show-clean-message false')
         self._output('git config git-state.show-empty true')
-        expected = '''# status (master)
+        expected = '''# status (main)
 '''
 
         # expect
@@ -220,7 +220,7 @@ class TestStateViewWithExtension(unittest.TestCase):
     def test_state_viewWithExtension(self):
 
         # expect
-        self.assertEqual(self._output('git state'), '''# status (master)
+        self.assertEqual(self._output('git state'), '''# status (main)
 nothing to commit, working directory is clean
 # log
 {}
@@ -231,7 +231,7 @@ nothing to commit, working directory is clean
         # given
         expected = '''# log
 {}
-# status (master)
+# status (main)
 nothing to commit, working directory is clean
 '''.format(self.full_log)
 
@@ -248,7 +248,7 @@ nothing to commit, working directory is clean
         # expect
         self.assertEqual(self._output('git state'), '''# log
 {}
-# status (master)
+# status (main)
 nothing to commit, working directory is clean
 '''.format(self.full_log))
 
@@ -258,7 +258,7 @@ nothing to commit, working directory is clean
         self._output('git config git-state.order log status')
 
         # expect
-        self.assertEqual(self._output('git state --order status log'), '''# status (master)
+        self.assertEqual(self._output('git state --order status log'), '''# status (main)
 nothing to commit, working directory is clean
 # log
 {}
@@ -267,7 +267,7 @@ nothing to commit, working directory is clean
     def test_state_viewWithExtension_options(self):
 
         # given
-        expected = '''# status (master)
+        expected = '''# status (main)
 nothing to commit, working directory is clean
 # log
 {}
@@ -282,7 +282,7 @@ nothing to commit, working directory is clean
 
         # given
         self.repo.config_writer('repository').set_value('git-state.extensions.log', 'options', '-2').release()
-        expected = '''# status (master)
+        expected = '''# status (main)
 nothing to commit, working directory is clean
 # log
 {}
@@ -296,7 +296,7 @@ nothing to commit, working directory is clean
 
         # given
         self.repo.config_writer('repository').set_value('git-state.extensions.log', 'name', 'git log').release()
-        expected = '''# status (master)
+        expected = '''# status (main)
 nothing to commit, working directory is clean
 # git log
 {}
@@ -308,7 +308,7 @@ nothing to commit, working directory is clean
     def test_state_viewWithExtension_showAllFlag(self):
         # given
         self.repo.config_writer('repository').set_value('git-state.extensions.log', 'show', 'false').release()
-        expected = '''# status (master)
+        expected = '''# status (main)
 nothing to commit, working directory is clean
 # log
 {}
@@ -325,7 +325,7 @@ nothing to commit, working directory is clean
 
         # given
         self.repo.config_writer('repository').set_value('git-state.extensions.log', 'show', 'false').release()
-        expected = '''# status (master)
+        expected = '''# status (main)
 nothing to commit, working directory is clean
 # log
 {}
@@ -343,7 +343,7 @@ nothing to commit, working directory is clean
 
         # given
         self.repo.config_writer('repository').set_value('git-state.extensions.log', 'show', 'true').release()
-        expected = '''# status (master)
+        expected = '''# status (main)
 nothing to commit, working directory is clean
 '''
 
@@ -365,7 +365,7 @@ nothing to commit, working directory is clean
 
         # given
         self._output('git config git-state.extensions.log.show true')
-        expected = '''# status (master)
+        expected = '''# status (main)
 nothing to commit, working directory is clean
 # log
 {}
@@ -378,7 +378,7 @@ nothing to commit, working directory is clean
 
         # given
         self._output('git config git-state.extensions.log.show false')
-        expected = '''# status (master)
+        expected = '''# status (main)
 nothing to commit, working directory is clean
 '''
 
@@ -389,7 +389,7 @@ nothing to commit, working directory is clean
 
         # given
         self.repo.config_writer('repository').set_value('git-state.extensions', 'stashes', 'git stash list').release()
-        expected = '''# status (master)
+        expected = '''# status (main)
 nothing to commit, working directory is clean
 # log
 {}
@@ -404,7 +404,7 @@ nothing to commit, working directory is clean
         self.repo.config_writer('repository').set_value('git-state.extensions.log', 'show', 'false').release()
         self.repo.config_writer('repository').set_value('git-state.extensions.stashes', 'command', 'git stash list').release()
         self.repo.config_writer('repository').set_value('git-state', 'show-empty', 'false').release()
-        expected = '''# status (master)
+        expected = '''# status (main)
 nothing to commit, working directory is clean
 # stashes
 '''
@@ -419,7 +419,7 @@ nothing to commit, working directory is clean
         self.repo.config_writer('repository').set_value('git-state.extensions.log', 'show', 'false').release()
         self.repo.config_writer('repository').set_value('git-state.extensions', 'stashes', 'git stash list').release()
         self.repo.config_writer('repository').set_value('git-state', 'show-empty', 'true').release()
-        expected = '''# status (master)
+        expected = '''# status (main)
 nothing to commit, working directory is clean
 '''
 
@@ -433,7 +433,7 @@ nothing to commit, working directory is clean
         self.repo.config_writer('repository').set_value('git-state.extensions.log', 'show', 'false').release()
         self.repo.config_writer('repository').set_value('git-state.extensions.stashes', 'command', 'git stash list').release()
         self.repo.config_writer('repository').set_value('git-state', 'show-empty', 'true').release()
-        expected = '''# status (master)
+        expected = '''# status (main)
 nothing to commit, working directory is clean
 # stashes
 '''
@@ -447,7 +447,7 @@ nothing to commit, working directory is clean
         self.repo.config_writer('repository').set_value('git-state.extensions.log', 'show', 'false').release()
         self.repo.config_writer('repository').set_value('git-state.extensions.stashes', 'command', 'git stash list').release()
         self.repo.config_writer('repository').set_value('git-state', 'show-empty', 'false').release()
-        expected = '''# status (master)
+        expected = '''# status (main)
 nothing to commit, working directory is clean
 '''
 
@@ -457,7 +457,7 @@ nothing to commit, working directory is clean
     def test_state_viewWithExtension_formatCompactIsDefault(self):
 
         # given
-        expected = '''# status (master)
+        expected = '''# status (main)
 nothing to commit, working directory is clean
 # log
 {}
@@ -470,7 +470,7 @@ nothing to commit, working directory is clean
 
         # given
         self._output('git config git-state.format pretty')
-        expected = '''# status (master)
+        expected = '''# status (main)
 nothing to commit, working directory is clean
 # log
 {}
@@ -484,7 +484,7 @@ nothing to commit, working directory is clean
 
         # given
         self._output('git config git-state.format compact')
-        expected = '''# status (master)
+        expected = '''# status (main)
 
     nothing to commit, working directory is clean
 
@@ -509,7 +509,7 @@ nothing to commit, working directory is clean
         self._output('git config git-state.extensions.log.name the-log')
         self._output('git config --unset git-state.extensions.log.command')
         expected = '''warn: extension 'log' has no command to execute: run 'git state extensions edit log -c <command>' to remediate
-# status (master)
+# status (main)
 nothing to commit, working directory is clean
 '''
 

@@ -1,6 +1,6 @@
 # git-commands
 
-[![Build Status](https://app.travis-ci.com/Brickster/git-commands.svg?branch=master)](https://app.travis-ci.com/Brickster/git-commands) [![Maintainability](https://api.codeclimate.com/v1/badges/2528d2fb9bba901acf6d/maintainability)](https://codeclimate.com/github/Brickster/git-commands/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/2528d2fb9bba901acf6d/test_coverage)](https://codeclimate.com/github/Brickster/git-commands/test_coverage)
+[![Build Status](https://app.travis-ci.com/Brickster/git-commands.svg?branch=main)](https://app.travis-ci.com/Brickster/git-commands) [![Maintainability](https://api.codeclimate.com/v1/badges/2528d2fb9bba901acf6d/maintainability)](https://codeclimate.com/github/Brickster/git-commands/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/2528d2fb9bba901acf6d/test_coverage)](https://codeclimate.com/github/Brickster/git-commands/test_coverage)
 
 A collection of custom git commands
 
@@ -151,11 +151,11 @@ nose2
 - [colorama](https://pypi.python.org/pypi/colorama)
 - [enum34](https://pypi.python.org/pypi/enum34)
 
-[state]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-state.1.html
-[snapshot]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-snapshot.1.html
-[changes]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-changes.1.html
-[settings]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-settings.1.html
-[upstream]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-upstream.1.html
-[abandon]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-abandon.1.html
-[restash]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-restash.1.html
-[reindex]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/master/man/man1/git-reindex.1.html
+[state]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/main/man/man1/git-state.1.html
+[snapshot]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/main/man/man1/git-snapshot.1.html
+[changes]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/main/man/man1/git-changes.1.html
+[settings]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/main/man/man1/git-settings.1.html
+[upstream]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/main/man/man1/git-upstream.1.html
+[abandon]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/main/man/man1/git-abandon.1.html
+[restash]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/main/man/man1/git-restash.1.html
+[reindex]: http://htmlpreview.github.io/?https://raw.githubusercontent.com/Brickster/git-commands/main/man/man1/git-reindex.1.html

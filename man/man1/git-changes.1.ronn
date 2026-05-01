@@ -23,7 +23,7 @@
     View changes between a branch and a commit-ish. This is the default when no subcommand is specified.
 
     * `commit-ish`:
-        Show changes between HEAD and the specified commit-ish. If not specified, following are considered and the first to evaluate is used: (1) config value `git-state.associations.<branch>.with`, (2) config value `git-changes.default-commit-ish`, (3) `refs/heads/master`
+        Show changes between HEAD and the specified commit-ish. If not specified, following are considered and the first to evaluate is used: (1) config value `git-state.associations.<branch>.with`, (2) config value `git-changes.default-commit-ish`, (3) `refs/heads/main`
 
     * `-u`|`--upstream`:
         Show changes between the local and upstream branch.
@@ -102,7 +102,7 @@
 * `git-changes.default-commit-ish` <string>:
     The default commit-ish to use when finding changes. Both `view` option <commit-ish> and configuration `git-changes.associations.<branch>.with` override this setting.
 
-    Default: _refs/heads/master_
+    Default: _refs/heads/main_
 
 * `git-changes.default-view` <string>:
     The default view mode to use when not specified. Options are: log, inverse, count, stat, or diff
@@ -112,7 +112,7 @@
 * `git-changes.associations.*.with` <string>:
     Defines an association between the branch in the key and the value. The value must be a commit-ish. Under normal circumstances, these entries are created/removed automatically.
 
-    Default: _refs/heads/master_
+    Default: _refs/heads/main_
 
 ## SEE ALSO
 

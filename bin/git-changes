@@ -252,7 +252,7 @@ def main():
             sys.exit(0)  # nothing to do
         committish = changes.get_association()
         if not committish:
-            committish = git.get_config_value('git-changes.default-commit-ish', default='refs/heads/master')
+            committish = git.get_config_value('git-changes.default-commit-ish', default='refs/heads/main')
         args['committish'] = committish
         args['files'] = file_args
     elif subcommand == 'view':

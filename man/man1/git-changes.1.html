@@ -101,7 +101,7 @@
 <dt class="flush"><code>view</code></dt><dd><p>  View changes between a branch and a commit-ish. This is the default when no subcommand is specified.</p>
 
 <dl>
-<dt><code>commit-ish</code></dt><dd><p>  Show changes between HEAD and the specified commit-ish. If not specified, following are considered and the first to evaluate is used: (1) config value <code>git-state.associations.&lt;branch>.with</code>, (2) config value <code>git-changes.default-commit-ish</code>, (3) <code>refs/heads/master</code></p></dd>
+<dt><code>commit-ish</code></dt><dd><p>  Show changes between HEAD and the specified commit-ish. If not specified, following are considered and the first to evaluate is used: (1) config value <code>git-state.associations.&lt;branch>.with</code>, (2) config value <code>git-changes.default-commit-ish</code>, (3) <code>refs/heads/main</code></p></dd>
 <dt><code>-u</code>|<code>--upstream</code></dt><dd><p>  Show changes between the local and upstream branch.</p></dd>
 <dt><code>-l</code>|<code>--log</code></dt><dd><p>  Show changes as log entries.</p></dd>
 <dt><code>-i</code>|<code>--inverse</code></dt><dd><p>  Inverse of <code>--log</code> so only common commits are printed.</p></dd>
@@ -144,13 +144,13 @@
 <dl>
 <dt><code>git-changes.default-commit-ish</code> <var>string</var></dt><dd><p>  The default commit-ish to use when finding changes. Both <code>view</code> option <var>commit-ish</var> and configuration <code>git-changes.associations.&lt;branch>.with</code> override this setting.</p>
 
-<p>  Default: <em>refs/heads/master</em></p></dd>
+<p>  Default: <em>refs/heads/main</em></p></dd>
 <dt><code>git-changes.default-view</code> <var>string</var></dt><dd><p>  The default view mode to use when not specified. Options are: log, inverse, count, stat, or diff</p>
 
 <p>  Default: <em>log</em></p></dd>
 <dt><code>git-changes.associations.*.with</code> <var>string</var></dt><dd><p>  Defines an association between the branch in the key and the value. The value must be a commit-ish. Under normal circumstances, these entries are created/removed automatically.</p>
 
-<p>  Default: <em>refs/heads/master</em></p></dd>
+<p>  Default: <em>refs/heads/main</em></p></dd>
 </dl>
 
 

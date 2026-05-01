@@ -47,7 +47,7 @@ View changes between a branch and a commit\-ish\. This is the default when no su
 .
 .TP
 \fBcommit\-ish\fR
-Show changes between HEAD and the specified commit\-ish\. If not specified, following are considered and the first to evaluate is used: (1) config value \fBgit\-state\.associations\.<branch>\.with\fR, (2) config value \fBgit\-changes\.default\-commit\-ish\fR, (3) \fBrefs/heads/master\fR
+Show changes between HEAD and the specified commit\-ish\. If not specified, following are considered and the first to evaluate is used: (1) config value \fBgit\-state\.associations\.<branch>\.with\fR, (2) config value \fBgit\-changes\.default\-commit\-ish\fR, (3) \fBrefs/heads/main\fR
 .
 .TP
 \fB\-u\fR|\fB\-\-upstream\fR
@@ -155,7 +155,7 @@ Print version\.
 The default commit\-ish to use when finding changes\. Both \fBview\fR option \fIcommit\-ish\fR and configuration \fBgit\-changes\.associations\.<branch>\.with\fR override this setting\.
 .
 .IP
-Default: \fIrefs/heads/master\fR
+Default: \fIrefs/heads/main\fR
 .
 .TP
 \fBgit\-changes\.default\-view\fR \fIstring\fR
@@ -169,7 +169,7 @@ Default: \fIlog\fR
 Defines an association between the branch in the key and the value\. The value must be a commit\-ish\. Under normal circumstances, these entries are created/removed automatically\.
 .
 .IP
-Default: \fIrefs/heads/master\fR
+Default: \fIrefs/heads/main\fR
 .
 .SH "SEE ALSO"
 git\-diff(1), git\-log(1)

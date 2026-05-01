@@ -151,7 +151,7 @@ def get_association(branch=None, verbose=False):
     associated_branch = _resolve_association(branch)
 
     if not associated_branch and verbose:
-        return git.get_config_value('git-changes.default-commit-ish', default='refs/heads/master')
+        return git.get_config_value('git-changes.default-commit-ish', default='refs/heads/main')
     return associated_branch
 
 

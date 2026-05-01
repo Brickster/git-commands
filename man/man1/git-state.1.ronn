@@ -245,7 +245,7 @@ $ git state
 
 # graph
 
-    *   b27b2e5 (master) Merge branch 'fix-blank-lines'
+    *   b27b2e5 (main) Merge branch 'fix-blank-lines'
     |\
     | * c40b5cf Fix upstream printing blank line
     | * 918d4f7 Fix settings printing blank line

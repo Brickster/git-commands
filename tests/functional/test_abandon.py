@@ -9,7 +9,7 @@ from ..layers import GitAbandonFunctional
 
 _DROPPED_FORMAT = 'Dropped refs/stash@{{{}}} ({})'
 _DRY_RUN_FORMAT = 'Would drop refs/stash@{{{}}} ({})'
-_STASH_FORMAT = '{} refs/stash@{{{}}}: WIP on master: {}'
+_STASH_FORMAT = '{} refs/stash@{{{}}}: WIP on main: {}'
 
 
 class TestGitAbandon(unittest.TestCase):

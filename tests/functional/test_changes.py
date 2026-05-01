@@ -121,7 +121,7 @@ class TestChangesView(unittest.TestCase):
         self.repo.git.branch('--set-upstream-to=upstream-branch')
 
         # given: an association
-        self.repo.git.config('git-changes.associations.master.with', self.repo.rev_parse('HEAD^^'))
+        self.repo.git.config('git-changes.associations.main.with', self.repo.rev_parse('HEAD^^'))
 
         # expect
         self.assertEqual(self.commit3_log, self.repo.git.changes('-u'))
@@ -176,7 +176,7 @@ class TestChangesView(unittest.TestCase):
     def test_view_useAssociation_changesExist(self):
 
         # given
-        self.repo.git.config('git-changes.associations.master.with', self.repo.rev_parse('HEAD^'))
+        self.repo.git.config('git-changes.associations.main.with', self.repo.rev_parse('HEAD^'))
 
         # expect
         self.assertEqual(self.commit3_log, self.repo.git.changes())
@@ -185,7 +185,7 @@ class TestChangesView(unittest.TestCase):
     def test_view_useAssociation_noChangesExist(self):
 
         # given
-        self.repo.git.config('git-changes.associations.master.with', self.repo.rev_parse('HEAD'))
+        self.repo.git.config('git-changes.associations.main.with', self.repo.rev_parse('HEAD'))
 
         # expect
         self.assertFalse(self.repo.git.changes())
@@ -232,8 +232,8 @@ class TestChangesAssociate(unittest.TestCase):
 
         # then
         sha = str(self.repo.rev_parse('HEAD^'))
-        self.assertEqual('master has been associated with {}'.format(sha), output)
-        self.assertEqual(sha, self.repo.git.config('git-changes.associations.master.with'))
+        self.assertEqual('main has been associated with {}'.format(sha), output)
+        self.assertEqual(sha, self.repo.git.config('git-changes.associations.main.with'))
 
     def test_associate_quiet(self):
 
@@ -244,7 +244,7 @@ class TestChangesAssociate(unittest.TestCase):
         self.assertFalse(output)
         self.assertEqual(
             str(self.repo.rev_parse('HEAD^')),
-            self.repo.git.config('git-changes.associations.master.with')
+            self.repo.git.config('git-changes.associations.main.with')
         )
 
     def test_associate_withUpstream(self):
@@ -257,8 +257,8 @@ class TestChangesAssociate(unittest.TestCase):
         output = self.repo.git.changes('associate', '--upstream')
 
         # then
-        self.assertEqual('master has been associated with refs/heads/upstream-branch', output)
-        self.assertEqual('refs/heads/upstream-branch', self.repo.git.config('git-changes.associations.master.with'))
+        self.assertEqual('main has been associated with refs/heads/upstream-branch', output)
+        self.assertEqual('refs/heads/upstream-branch', self.repo.git.config('git-changes.associations.main.with'))
 
     def test_associate_withUpstream_quiet(self):
 
@@ -271,7 +271,7 @@ class TestChangesAssociate(unittest.TestCase):
 
         # then
         self.assertFalse(output)
-        self.assertEqual('refs/heads/upstream-branch', self.repo.git.config('git-changes.associations.master.with'))
+        self.assertEqual('refs/heads/upstream-branch', self.repo.git.config('git-changes.associations.main.with'))
 
     def test_associate_get_emptyRepository(self):
 
@@ -292,8 +292,8 @@ class TestChangesAssociate(unittest.TestCase):
     def test_associate_get_noAssociationExists_defaultUnspecified_verbose(self):
 
         # expect
-        self.assertEqual('refs/heads/master', self.repo.git.changes('associate', '--verbose'))
-        self.assertEqual('refs/heads/master', self.repo.git.changes('associate', '-V'))
+        self.assertEqual('refs/heads/main', self.repo.git.changes('associate', '--verbose'))
+        self.assertEqual('refs/heads/main', self.repo.git.changes('associate', '-V'))
 
     def test_associate_get_noAssociationExists_defaultOverridden(self):
 
@@ -366,9 +366,9 @@ class TestChangesUnassociate(unittest.TestCase):
             a_file.write('readme\n')
         subprocess.call(['git', 'commit', '--quiet', '-a', '-m', 'edit readme'])
 
-        # associate master
+        # associate main
         head = self.repo.rev_parse('HEAD')
-        self.repo.git.config('git-changes.associations.master.with', head)
+        self.repo.git.config('git-changes.associations.main.with', head)
 
         # associate a valid branch
         self.repo.git.branch('valid-branch')
@@ -388,7 +388,7 @@ class TestChangesUnassociate(unittest.TestCase):
 
         # then
         self.assertFalse(output)
-        self.assertFalse(self._output('git config git-changes.associations.master.with'.split()))
+        self.assertFalse(self._output('git config git-changes.associations.main.with'.split()))
         self.assertTrue(self.repo.git.config('git-changes.associations.valid-branch.with'))
         self.assertTrue(self.repo.git.config('git-changes.associations.stale-branch.with'))
 
@@ -398,10 +398,10 @@ class TestChangesUnassociate(unittest.TestCase):
         output = self.repo.git.changes('unassociate', '--all')
 
         # then
-        self.assertEqual("""Removed association 'master'
+        self.assertEqual("""Removed association 'main'
 Removed association 'valid-branch'
 Removed association 'stale-branch'""", output)
-        self.assertFalse(self._output('git config git-changes.associations.master.with'.split()))
+        self.assertFalse(self._output('git config git-changes.associations.main.with'.split()))
         self.assertFalse(self._output('git config git-changes.associations.valid-branch.with'.split()))
         self.assertFalse(self._output('git config git-changes.associations.stale-branch.with'.split()))
 
@@ -412,7 +412,7 @@ Removed association 'stale-branch'""", output)
 
         # then
         self.assertEqual("Removed association 'stale-branch'", output)
-        self.assertTrue(self.repo.git.config('git-changes.associations.master.with'))
+        self.assertTrue(self.repo.git.config('git-changes.associations.main.with'))
         self.assertTrue(self.repo.git.config('git-changes.associations.valid-branch.with'))
         self.assertFalse(self._output('git config git-changes.associations.stale-branch.with'.split()))
 
@@ -423,7 +423,7 @@ Removed association 'stale-branch'""", output)
 
         # then
         self.assertFalse(output)
-        self.assertFalse(self._output('git config git-changes.associations.master.with'.split()))
+        self.assertFalse(self._output('git config git-changes.associations.main.with'.split()))
         self.assertTrue(self.repo.git.config('git-changes.associations.valid-branch.with'))
         self.assertTrue(self.repo.git.config('git-changes.associations.stale-branch.with'))
 
@@ -434,7 +434,7 @@ Removed association 'stale-branch'""", output)
 
         # then
         self.assertFalse(output)
-        self.assertFalse(self._output('git config git-changes.associations.master.with'.split()))
+        self.assertFalse(self._output('git config git-changes.associations.main.with'.split()))
         self.assertFalse(self._output('git config git-changes.associations.valid-branch.with'.split()))
         self.assertFalse(self._output('git config git-changes.associations.stale-branch.with'.split()))
 
@@ -445,7 +445,7 @@ Removed association 'stale-branch'""", output)
 
         # then
         self.assertFalse(output)
-        self.assertTrue(self.repo.git.config('git-changes.associations.master.with'))
+        self.assertTrue(self.repo.git.config('git-changes.associations.main.with'))
         self.assertTrue(self.repo.git.config('git-changes.associations.valid-branch.with'))
         self.assertFalse(self._output('git config git-changes.associations.stale-branch.with'.split()))
 
@@ -453,10 +453,10 @@ Removed association 'stale-branch'""", output)
 
         # expect
         self.assertEqual(
-            "Would unassociate 'master' from '{}'".format(self.repo.rev_parse('HEAD')),
+            "Would unassociate 'main' from '{}'".format(self.repo.rev_parse('HEAD')),
             self.repo.git.changes('unassociate', '--dry-run')
         )
-        self.assertEqual("""Would remove association 'master'
+        self.assertEqual("""Would remove association 'main'
 Would remove association 'valid-branch'
 Would remove association 'stale-branch'""", self.repo.git.changes('unassociate', '--dry-run', '--all'))
         self.assertEqual(

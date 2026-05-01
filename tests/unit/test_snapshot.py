@@ -116,7 +116,7 @@ class TestSnapshotSnapshot(unittest.TestCase):
         # given
         mock_checkoutput.side_effect = [
             'status\noutput\n',
-            'stash@{0}: WIP on master: 8a3a15e edit readme\nstash@{1}: On master: edit readme\n'
+            'stash@{0}: WIP on main: 8a3a15e edit readme\nstash@{1}: On main: edit readme\n'
         ]
 
         # when
@@ -142,7 +142,7 @@ class TestSnapshotSnapshot(unittest.TestCase):
         # given
         mock_checkoutput.side_effect = [
             'status\noutput\n',
-            'stash@{0}: WIP on master: 8a3a15e edit readme\n'
+            'stash@{0}: WIP on main: 8a3a15e edit readme\n'
         ]
 
         # when

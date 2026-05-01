@@ -76,7 +76,7 @@ class TestChangesAssociate(unittest.TestCase):
 
         # given
         committish = 'abc123'
-        ref_names = ['refs/heads/master', 'refs/tags/master']
+        ref_names = ['refs/heads/main', 'refs/tags/main']
         refs = '\n'.join(['84f9c10be201690f30252c0c6ef1504fad68251d ' + r for r in ref_names]) + '\n'
         mock_checkoutput.return_value = refs
 
@@ -300,7 +300,7 @@ class TestChangesGetAssociatedBranches(unittest.TestCase):
 
         # given
         association_keys = """git-changes.associations.develop.with
-git-changes.associations.master.with
+git-changes.associations.main.with
 """
         mock_stdout.return_value = association_keys
 
@@ -308,7 +308,7 @@ git-changes.associations.master.with
         actual_associations = changes._get_associated_branches()
 
         # then
-        self.assertEqual(actual_associations, ['develop', 'master'])
+        self.assertEqual(actual_associations, ['develop', 'main'])
         mock_stdout.assert_called_once_with('git config --local --name-only --get-regexp git-changes.associations')
 
 
@@ -331,8 +331,8 @@ class TestChangesPruneAssociations(unittest.TestCase):
     def test_prune_associations(self, mock_info, mock_unassociate, mock_getassociatedbranches, mock_checkoutput):
 
         # setup
-        refs = "84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/master\n"
-        association_keys = ['develop', 'master']
+        refs = "84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/main\n"
+        association_keys = ['develop', 'main']
         mock_checkoutput.return_value = refs
         mock_getassociatedbranches.return_value = association_keys
 
@@ -353,8 +353,8 @@ class TestChangesPruneAssociations(unittest.TestCase):
     def test_prune_associations_dryRun(self, mock_info, mock_unassociate, mock_getassociatedbranches, mock_checkoutput):
 
         # setup
-        refs = "84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/master\n"
-        association_keys = ['develop', 'master']
+        refs = "84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/main\n"
+        association_keys = ['develop', 'main']
         mock_checkoutput.return_value = refs
         mock_getassociatedbranches.return_value = association_keys
 
@@ -376,9 +376,9 @@ class TestChangesPruneAssociations(unittest.TestCase):
 
         # setup
         refs = """84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/develop
-84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/master
+84f9c10be201690f30252c0c6ef1504fad68251d refs/heads/main
 """
-        association_keys = ['develop', 'master']
+        association_keys = ['develop', 'main']
         mock_checkoutput.return_value = refs
         mock_getassociatedbranches.return_value = association_keys
 
@@ -391,11 +391,11 @@ class TestChangesPruneAssociations(unittest.TestCase):
         mock_getassociatedbranches.assert_called_once()
         mock_unassociate.assert_has_calls([
             mock.call('develop'),
-            mock.call('master')
+            mock.call('main')
         ])
         mock_info.assert_has_calls([
             mock.call("Removed association 'develop'", quiet),
-            mock.call("Removed association 'master'", quiet)
+            mock.call("Removed association 'main'", quiet)
         ])
 
 
@@ -637,7 +637,7 @@ class TestChangesGetAssociation(unittest.TestCase):
     def test_getassociation_noassociationexists_verbose(self, mock_getconfigvalue, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
 
         # setup
-        default_committish = 'refs/heads/master'
+        default_committish = 'refs/heads/main'
         mock_getconfigvalue.side_effect = [None, default_committish]
 
         # when
@@ -650,7 +650,7 @@ class TestChangesGetAssociation(unittest.TestCase):
         mock_currentbranch.assert_not_called()
         mock_getconfigvalue.assert_has_calls([
             mock.call('git-changes.associations.' + branch + '.with', config='local'),
-            mock.call('git-changes.default-commit-ish', default='refs/heads/master')
+            mock.call('git-changes.default-commit-ish', default='refs/heads/main')
         ])
 
         self.assertEqual(default_committish, actual_association)
@@ -700,7 +700,7 @@ class TestChangesGetAssociation(unittest.TestCase):
     def test_getassociation_detachedhead_verbose(self, mock_getconfigvalue, mock_currentbranch, mock_isemptyrepository, mock_isgitrepository):
 
         # given
-        default_association = 'refs/heads/master'
+        default_association = 'refs/heads/main'
         mock_getconfigvalue.return_value = default_association
 
         # when
@@ -710,7 +710,7 @@ class TestChangesGetAssociation(unittest.TestCase):
         mock_isgitrepository.assert_called_once_with()
         mock_isemptyrepository.assert_called_once_with()
         mock_currentbranch.assert_called_once_with()
-        mock_getconfigvalue.assert_called_once_with('git-changes.default-commit-ish', default='refs/heads/master')
+        mock_getconfigvalue.assert_called_once_with('git-changes.default-commit-ish', default='refs/heads/main')
 
         self.assertEqual(default_association, actual_association)
 
@@ -898,7 +898,7 @@ class TestChangesChanges(unittest.TestCase):
             self, mock_error, mock_checkoutput, mock_isrefambiguous, mock_isref, mock_iscommit, mock_isgitrepository
     ):
         # setup
-        ref_names = ['refs/heads/master', 'refs/tags/mtag']
+        ref_names = ['refs/heads/main', 'refs/tags/mtag']
         refs = '\n'.join(['84f9c10be201690f30252c0c6ef1504fad68251d ' + r for r in ref_names]) + '\n'
         mock_checkoutput.return_value = refs
 

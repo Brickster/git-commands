@@ -22,7 +22,7 @@ class TestStatus(unittest.TestCase):
         # then
         self.assertEqual(
             actual_status,
-            '{no_color}({green}master{no_color})'.format(no_color=Fore.RESET, green=Fore.GREEN)
+            '{no_color}({green}main{no_color})'.format(no_color=Fore.RESET, green=Fore.GREEN)
         )
 
     @mock.patch('bin.commands.utils.execute.check_output', return_value='the full title\n')

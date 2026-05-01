@@ -4,7 +4,7 @@ def init_local_config(repo):
     writer.set_value('user', 'name', 'Marcus Rosenow')
     writer.set_value('user', 'email', 'Brickstertwo@users.noreply.github.com')
 
-    writer.set_value('git-changes', 'default-commit-ish', 'refs/heads/master')
+    writer.set_value('git-changes', 'default-commit-ish', 'refs/heads/main')
     writer.set_value('git-changes', 'default-view', 'log')
 
     writer.set_value('git-settings.list', 'format', 'compact')
