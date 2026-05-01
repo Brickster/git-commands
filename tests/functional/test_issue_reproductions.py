@@ -529,6 +529,7 @@ class TestIssue151(unittest.TestCase):
 
         # initialize repository
         self.repo = git.Repo.init(self.dirpath)
+        testutils.init_local_config(self.repo)
         self.repo.git.state(['extensions', 'create', 'log', '--command', 'git log'])
         self.repo.git.state(['extensions', 'create', 'stashes', '--command', 'git stash list'])
 
