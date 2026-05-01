@@ -47,4 +47,4 @@ jobs:
         echo "GIT_CONFIG_SYSTEM=$GITHUB_WORKSPACE/system_gitconfig" >> $GITHUB_ENV
     - name: Test with pytest
       run: |
-        pytest -v --no-skip
+        pytest -v --no-skip tests/functional/test_issue_reproductions.py
