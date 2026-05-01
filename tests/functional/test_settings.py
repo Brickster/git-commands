@@ -44,6 +44,12 @@ class TestSettingsList(unittest.TestCase):
         self.repo = git.Repo.init(self.dirpath)
         testutils.init_local_config(self.repo)
 
+        # redirect global and system configs to local files so tests don't touch real user configs
+        self._orig_git_config_global = os.environ.get('GIT_CONFIG_GLOBAL')
+        self._orig_git_config_system = os.environ.get('GIT_CONFIG_SYSTEM')
+        os.environ['GIT_CONFIG_GLOBAL'] = self.dirpath + '/global_gitconfig'
+        os.environ['GIT_CONFIG_SYSTEM'] = self.dirpath + '/system_gitconfig'
+
         # recreate the local config
         os.remove(self.dirpath + '/.git/config')
         open(self.dirpath + '/.git/config', 'w').close()
@@ -54,10 +60,17 @@ class TestSettingsList(unittest.TestCase):
         self.repo.git.config('--local', 'git-settings.test2.getc', 'valuec')
 
     def tearDown(self):
-        # put global configs back since some tests remove them
-        if os.environ.get('NO_SKIP'):
-            self.repo.git.config('--global', 'user.name', 'Marcus Rosenow')
-            self.repo.git.config('--global', 'user.email', 'Brickstertwo@users.noreply.github.com')
+        # restore env vars (local, global, and system configs are all cleaned up with dirpath)
+        if self._orig_git_config_global is not None:
+            os.environ['GIT_CONFIG_GLOBAL'] = self._orig_git_config_global
+        else:
+            os.environ.pop('GIT_CONFIG_GLOBAL', None)
+
+        if self._orig_git_config_system is not None:
+            os.environ['GIT_CONFIG_SYSTEM'] = self._orig_git_config_system
+        else:
+            os.environ.pop('GIT_CONFIG_SYSTEM', None)
+
         shutil.rmtree(self.dirpath)
         os.chdir(self.proj_dir)
 
@@ -103,10 +116,6 @@ class TestSettingsList(unittest.TestCase):
         # then
         self.assertFalse(stdout)
 
-    @unittest.skipIf(
-        not os.environ.get('NO_SKIP'),
-        'requires editing user config and should only run during non-local builds.'
-    )
     def test_list_global(self):
 
         # given
@@ -122,28 +131,11 @@ class TestSettingsList(unittest.TestCase):
         # cleanup
         self.repo.git.config('--global', '--remove-section', 'git-settings.test_global')
 
-    # too dangerous to edit the user's configs for anything more complicated
-    def test_list_global_safe(self):
-
-        # when
-        actual = self.repo.git.settings('list', '--global')
-
-        # then
-        self.assertTrue('git-settings.test.geta=valuea' not in actual)
-        self.assertTrue('git-settings.test.getb=valueb' not in actual)
-        self.assertTrue('git-settings.test2.getc=valuec' not in actual)
-
-    @unittest.skipIf(
-        not os.environ.get('NO_SKIP'),
-        'requires editing user config and should only run during non-local builds.'
-    )
     def test_list_global_configFileDoesNotExist(self):
 
         # given: no global config
-        if os.path.exists(os.path.expanduser('~/.gitconfig')):
-            os.remove(os.path.expanduser('~/.gitconfig'))
-        if os.path.exists(os.path.expanduser('~/.config/git/config')):
-            os.remove(os.path.expanduser('~/.config/git/config'))
+        if os.path.exists(self.dirpath + '/global_gitconfig'):
+            os.remove(self.dirpath + '/global_gitconfig')
 
         # when
         stdout = self._output('git settings list --global'.split())
@@ -151,11 +143,6 @@ class TestSettingsList(unittest.TestCase):
         # then
         self.assertFalse(stdout)
 
-    # a bit of a hack since --no-skip is a nosetests flag.
-    @unittest.skipIf(
-        not os.environ.get('NO_SKIP'),
-        'requires editing user config and should only run during non-local builds.'
-    )
     def test_list_system(self):
 
         # given
@@ -170,17 +157,6 @@ class TestSettingsList(unittest.TestCase):
 
         # cleanup
         self.repo.git.config('--system', '--remove-section', 'git-settings.test_system')
-
-    # too dangerous to edit the user's configs for anything more complicated
-    def test_list_system_safe(self):
-
-        # when
-        actual = self.repo.git.settings('list', '--system')
-
-        # then
-        self.assertTrue('git-settings.test.geta=valuea' not in actual)
-        self.assertTrue('git-settings.test.getb=valueb' not in actual)
-        self.assertTrue('git-settings.test2.getc=valuec' not in actual)
 
     def test_list_system_configFileDoesNotExist(self):
 
