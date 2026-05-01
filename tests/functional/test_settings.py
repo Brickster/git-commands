@@ -274,10 +274,6 @@ git-settings.test2.getc=valuec""")
         self.assertEqual('error: argument -k/--keys: not allowed without positional argument section', stderr.strip())
 
 
-@unittest.skipIf(
-    not os.environ.get('NO_SKIP'),
-    'requires editing user config and should only run during non-local builds.'
-)
 class TestSettingsDestroy(unittest.TestCase):
     layer = GitSettingsFunctional
 
@@ -292,6 +288,12 @@ class TestSettingsDestroy(unittest.TestCase):
         self.repo = git.Repo.init(self.dirpath)
         testutils.init_local_config(self.repo)
 
+        # redirect global and system configs to local files so tests don't touch real user configs
+        self._orig_git_config_global = os.environ.get('GIT_CONFIG_GLOBAL')
+        self._orig_git_config_system = os.environ.get('GIT_CONFIG_SYSTEM')
+        os.environ['GIT_CONFIG_GLOBAL'] = self.dirpath + '/global_gitconfig'
+        os.environ['GIT_CONFIG_SYSTEM'] = self.dirpath + '/system_gitconfig'
+
         # recreate the local config
         os.remove(self.dirpath + '/.git/config')
         open(self.dirpath + '/.git/config', 'w').close()
@@ -303,11 +305,16 @@ class TestSettingsDestroy(unittest.TestCase):
 
     def tearDown(self):
 
-        # just in case, clean up config values (use subprocess to suppress errors)
-        with open(os.devnull, 'w') as devnull:
-            subprocess.call(('git', 'config', '--local', '--remove-section', 'git-settings.test'), stdout=devnull, stderr=devnull)
-            subprocess.call(('git', 'config', '--global', '--remove-section', 'git-settings.test'), stdout=devnull, stderr=devnull)
-            subprocess.call(('git', 'config', '--system', '--remove-section', 'git-settings.test'), stdout=devnull, stderr=devnull)
+        # restore env vars (local, global, and system configs are all cleaned up with dirpath)
+        if self._orig_git_config_global is not None:
+            os.environ['GIT_CONFIG_GLOBAL'] = self._orig_git_config_global
+        else:
+            os.environ.pop('GIT_CONFIG_GLOBAL', None)
+
+        if self._orig_git_config_system is not None:
+            os.environ['GIT_CONFIG_SYSTEM'] = self._orig_git_config_system
+        else:
+            os.environ.pop('GIT_CONFIG_SYSTEM', None)
 
         shutil.rmtree(self.dirpath)
         os.chdir(self.proj_dir)
