@@ -319,7 +319,7 @@ class TestSettingsDestroy(unittest.TestCase):
         shutil.rmtree(self.dirpath)
         os.chdir(self.proj_dir)
 
-    def test_destory(self):
+    def test_destroy(self):
 
         # when
         destroy_output = self.repo.git.settings('destroy', 'git-settings.test')
@@ -328,7 +328,7 @@ class TestSettingsDestroy(unittest.TestCase):
         self.assertFalse(destroy_output, 'destroy should have no output')
         self.assertFalse(self._output('git config --get-regexp git-settings.test'.split()))
 
-    def test_destory_localOnly(self):
+    def test_destroy_localOnly(self):
 
         # given
         self.repo.git.config('--system', '--remove-section', 'git-settings.test')
@@ -341,7 +341,7 @@ class TestSettingsDestroy(unittest.TestCase):
         self.assertFalse(destroy_output, 'destroy should have no output')
         self.assertFalse(self._output('git config --get-regexp git-settings.test'.split()))
 
-    def test_destory_globalOnly(self):
+    def test_destroy_globalOnly(self):
 
         # given
         self.repo.git.config('--local', '--remove-section', 'git-settings.test')
@@ -354,7 +354,7 @@ class TestSettingsDestroy(unittest.TestCase):
         self.assertFalse(destroy_output, 'destroy should have no output')
         self.assertFalse(self._output('git config --get-regexp git-settings.test'.split()))
 
-    def test_destory_systemOnly(self):
+    def test_destroy_systemOnly(self):
 
         # given
         self.repo.git.config('--local', '--remove-section', 'git-settings.test')
@@ -367,7 +367,7 @@ class TestSettingsDestroy(unittest.TestCase):
         self.assertFalse(destroy_output, 'destroy should have no output')
         self.assertFalse(self._output('git config --get-regexp git-settings.test'.split()))
 
-    def test_destory_dryRun(self):
+    def test_destroy_dryRun(self):
 
         # when
         dry_destroy_output = self.repo.git.settings('destroy', '--dry-run', 'git-settings.test')
@@ -377,7 +377,7 @@ class TestSettingsDestroy(unittest.TestCase):
 Would be deleted from global: git-settings.test.key=value
 Would be deleted from system: git-settings.test.key=value""")
 
-    def test_destory_dryRun_localOnly(self):
+    def test_destroy_dryRun_localOnly(self):
 
         # given
         self.repo.git.config('--system', '--remove-section', 'git-settings.test')
@@ -389,7 +389,7 @@ Would be deleted from system: git-settings.test.key=value""")
         # then
         self.assertEqual(dry_destroy_output, "Would be deleted from local: git-settings.test.key=value")
 
-    def test_destory_dryRun_globalOnly(self):
+    def test_destroy_dryRun_globalOnly(self):
 
         # given
         self.repo.git.config('--local', '--remove-section', 'git-settings.test')
@@ -401,7 +401,7 @@ Would be deleted from system: git-settings.test.key=value""")
         # then
         self.assertEqual(dry_destroy_output, "Would be deleted from global: git-settings.test.key=value")
 
-    def test_destory_dryRun_systemOnly(self):
+    def test_destroy_dryRun_systemOnly(self):
 
         # given
         self.repo.git.config('--local', '--remove-section', 'git-settings.test')
