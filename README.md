@@ -1,6 +1,6 @@
 # git-commands
 
-[![Build Status](https://app.travis-ci.com/Brickster/git-commands.svg?branch=main)](https://app.travis-ci.com/Brickster/git-commands) [![Maintainability](https://api.codeclimate.com/v1/badges/2528d2fb9bba901acf6d/maintainability)](https://codeclimate.com/github/Brickster/git-commands/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/2528d2fb9bba901acf6d/test_coverage)](https://codeclimate.com/github/Brickster/git-commands/test_coverage)
+[![build](https://github.com/Brickster/git-commands/actions/workflows/build.yml/badge.svg)](https://github.com/Brickster/git-commands/actions/workflows/build.yml) [![Maintainability](https://api.codeclimate.com/v1/badges/2528d2fb9bba901acf6d/maintainability)](https://codeclimate.com/github/Brickster/git-commands/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/2528d2fb9bba901acf6d/test_coverage)](https://codeclimate.com/github/Brickster/git-commands/test_coverage)
 
 A collection of custom git commands
 
