@@ -77,14 +77,15 @@ def _print_sections(sections, order=[], page=False, clear=False):
 
     if state_result:
         state_result = state_result[:-1]  # strip the extra trailing newline
-        state_lines = len(state_result.splitlines())
-        terminal_lines = literal_eval(execute.check_output(['tput', 'lines']))
-        if not page or terminal_lines >= state_lines + 2:  # one for the newline and one for the prompt
-            if clear and sys.stdout.isatty():
-                execute.call('clear')
-            messages.info(state_result)
-        else:
-            execute.pipe(['echo', state_result], ['less', '-r'])
+        if page and sys.stdout.isatty():
+            state_lines = len(state_result.splitlines())
+            terminal_lines = literal_eval(execute.check_output(['tput', 'lines']))
+            if terminal_lines < state_lines + 2:  # one for the newline and one for the prompt
+                execute.pipe(['echo', state_result], ['less', '-r'])
+                return
+        if clear and sys.stdout.isatty():
+            execute.call('clear')
+        messages.info(state_result)
 
 
 def _run_extension(extension, options, show_color):

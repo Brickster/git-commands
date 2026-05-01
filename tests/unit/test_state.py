@@ -191,8 +191,10 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
     @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
+    @mock.patch('sys.stdout.isatty', return_value=True)
     def test_state_status(
             self,
+            mock_isatty,
             mock_info,
             mock_call,
             mock_checkoutput,
@@ -244,6 +246,7 @@ class TestStateState(unittest.TestCase):
         self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS)
         mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_isatty.assert_called_once_with()
         mock_info.assert_called_once_with('status section')
         mock_call.assert_not_called()
 
@@ -326,8 +329,10 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
     @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
+    @mock.patch('sys.stdout.isatty', return_value=True)
     def test_state_showcolor_never(
             self,
+            mock_isatty,
             mock_info,
             mock_call,
             mock_checkoutput,
@@ -393,6 +398,7 @@ class TestStateState(unittest.TestCase):
         self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS)
         mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_isatty.assert_called_once_with()
         mock_info.assert_called_once_with('status section')
         mock_call.assert_not_called()
 
@@ -409,8 +415,10 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
     @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
+    @mock.patch('sys.stdout.isatty', return_value=True)
     def test_state_showcolor_always(
             self,
+            mock_isatty,
             mock_info,
             mock_call,
             mock_checkoutput,
@@ -475,6 +483,7 @@ class TestStateState(unittest.TestCase):
         self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS)
         mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_isatty.assert_called_once_with()
         mock_info.assert_called_once_with('status section')
         mock_call.assert_not_called()
 
@@ -489,8 +498,10 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
     @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
+    @mock.patch('sys.stdout.isatty', return_value=True)
     def test_state_emptyRepository(
             self,
+            mock_isatty,
             mock_info,
             mock_call,
             mock_checkoutput,
@@ -541,6 +552,7 @@ class TestStateState(unittest.TestCase):
         ])
         mock_list.assert_not_called()
         mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_isatty.assert_called_once_with()
         mock_info.assert_called_once_with('section output')
         mock_call.assert_not_called()
 
@@ -612,8 +624,10 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     @mock.patch('bin.commands.utils.execute.execute')
+    @mock.patch('sys.stdout.isatty', return_value=True)
     def test_state_withextensions(
             self,
+            mock_isatty,
             mock_execute,
             mock_info,
             mock_call,
@@ -666,6 +680,7 @@ class TestStateState(unittest.TestCase):
         ])
         mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS)
         mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_isatty.assert_called_once_with()
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
         mock_execute.assert_called_once_with(['changes', 'command', '--color=never'])
@@ -679,8 +694,10 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     @mock.patch('bin.commands.utils.execute.execute')
+    @mock.patch('sys.stdout.isatty', return_value=True)
     def test_state_withextensions_doesNotSupportColor(
             self,
+            mock_isatty,
             mock_execute,
             mock_info,
             mock_call,
@@ -733,6 +750,7 @@ class TestStateState(unittest.TestCase):
         ])
         mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS)
         mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_isatty.assert_called_once_with()
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
         mock_execute.assert_called_once_with(['changes', 'command'])
@@ -746,8 +764,10 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     @mock.patch('bin.commands.utils.execute.execute')
+    @mock.patch('sys.stdout.isatty', return_value=True)
     def test_state_withextensions_withoptions_fromcommandline(
             self,
+            mock_isatty,
             mock_execute,
             mock_info,
             mock_call,
@@ -800,6 +820,7 @@ class TestStateState(unittest.TestCase):
         ])
         mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS)
         mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_isatty.assert_called_once_with()
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
         mock_execute.assert_called_once_with(['changes', 'command', '--option1', '-o', '1 2', '--color=never'])
@@ -813,8 +834,10 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     @mock.patch('bin.commands.utils.execute.execute')
+    @mock.patch('sys.stdout.isatty', return_value=True)
     def test_state_withextensions_withoptions_fromconfig(
             self,
+            mock_isatty,
             mock_execute,
             mock_info,
             mock_call,
@@ -867,6 +890,7 @@ class TestStateState(unittest.TestCase):
         ])
         mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS)
         mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_isatty.assert_called_once_with()
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
         mock_execute.assert_called_once_with(['changes', 'command', '--option1', '-o', '1 2', '--color=never'])
@@ -880,8 +904,10 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     @mock.patch('bin.commands.utils.execute.execute')
+    @mock.patch('sys.stdout.isatty', return_value=True)
     def test_state_withextensions_withoptions_fromcommandlineandconfig(
             self,
+            mock_isatty,
             mock_execute,
             mock_info,
             mock_call,
@@ -934,6 +960,7 @@ class TestStateState(unittest.TestCase):
         ])
         mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS)
         mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_isatty.assert_called_once_with()
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
         mock_execute.assert_called_once_with(['changes', 'command', '--option2', 'true', '--option1', '-o', '1 2', '--color=never'])
@@ -1050,8 +1077,10 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     @mock.patch('bin.commands.utils.execute.execute')
+    @mock.patch('sys.stdout.isatty', return_value=True)
     def test_state_withextensions_ignoredViaConfig_showViaCommandLine(
             self,
+            mock_isatty,
             mock_execute,
             mock_info,
             mock_call,
@@ -1104,6 +1133,7 @@ class TestStateState(unittest.TestCase):
         ])
         mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS)
         mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_isatty.assert_called_once_with()
         mock_info.assert_called_once_with('final changes output')
         mock_call.assert_not_called()
         mock_execute.assert_called_once_with(['changes', 'command', '--color=never'])
@@ -1120,8 +1150,10 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     @mock.patch('bin.commands.utils.execute.execute')
+    @mock.patch('sys.stdout.isatty', return_value=True)
     def test_state_withorder(
             self,
+            mock_isatty,
             mock_execute,
             mock_info,
             mock_call,
@@ -1193,6 +1225,7 @@ class TestStateState(unittest.TestCase):
         self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS)
         mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_isatty.assert_called_once_with()
         mock_info.assert_called_once_with('changes section\nstatus section')
         mock_call.assert_not_called()
         mock_execute.assert_called_once_with(['changes', 'command', '--color=never'])
@@ -1208,8 +1241,10 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
     @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
+    @mock.patch('sys.stdout.isatty', return_value=True)
     def test_state_withorder_withunknownsection(
             self,
+            mock_isatty,
             mock_info,
             mock_call,
             mock_checkoutput,
@@ -1261,6 +1296,7 @@ class TestStateState(unittest.TestCase):
         self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS)
         mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_isatty.assert_called_once_with()
         mock_info.assert_called_once_with('status section')
         mock_call.assert_not_called()
 
@@ -1276,8 +1312,10 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
     @mock.patch('bin.commands.utils.execute.pipe')
+    @mock.patch('sys.stdout.isatty', return_value=True)
     def test_state_pageOutput(
             self,
+            mock_isatty,
             mock_pipe,
             mock_info,
             mock_call,
@@ -1330,6 +1368,7 @@ class TestStateState(unittest.TestCase):
         self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS)
         mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_isatty.assert_called_once_with()
         mock_info.assert_not_called()
         mock_pipe.assert_called_once_with(['echo', 'status section\ntwo\nthree\nfour\nfive'], ['less', '-r'])
 
@@ -1395,7 +1434,7 @@ class TestStateState(unittest.TestCase):
         ])
         self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS)
-        mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_checkoutput.assert_not_called()
         mock_info.assert_called_once_with('status section\ntwo\nthree\nfour\nfive')
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
@@ -1536,7 +1575,7 @@ class TestStateState(unittest.TestCase):
         self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS
         )
-        mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_checkoutput.assert_not_called()
         mock_info.assert_called_once_with('status section')
         mock_call.assert_not_called()
 
@@ -1551,8 +1590,10 @@ class TestStateState(unittest.TestCase):
     @mock.patch('bin.commands.utils.execute.check_output', return_value='100')
     @mock.patch('bin.commands.utils.execute.call')
     @mock.patch('bin.commands.utils.messages.info')
+    @mock.patch('sys.stdout.isatty', return_value=True)
     def test_state_clear_noclear(
             self,
+            mock_isatty,
             mock_info,
             mock_call,
             mock_checkoutput,
@@ -1604,6 +1645,7 @@ class TestStateState(unittest.TestCase):
         self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
         mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS)
         mock_checkoutput.assert_called_once_with('tput lines'.split())
+        mock_isatty.assert_called_once_with()
         mock_info.assert_called_once_with('status section')
         mock_call.assert_not_called()
 
