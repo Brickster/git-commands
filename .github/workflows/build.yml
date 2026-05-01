@@ -36,8 +36,9 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Add bin to PATH
       run: echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
-    - name: Configure git user
+    - name: Configure git
       run: |
+        git config --global init.defaultBranch main
         git config --global user.email "Brickstertwo@users.noreply.github.com"
         git config --global user.name "Marcus Rosenow"
     - name: Test with nose2
