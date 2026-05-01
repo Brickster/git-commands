@@ -182,20 +182,15 @@ class TestSettingsList(unittest.TestCase):
         self.assertTrue('git-settings.test.getb=valueb' not in actual)
         self.assertTrue('git-settings.test2.getc=valuec' not in actual)
 
-    @unittest.skipIf(
-        not os.environ.get('NO_SKIP'),
-        'requires editing user config and should only run during non-local builds.'
-    )
     def test_list_system_configFileDoesNotExist(self):
 
         # given: no system config
-        if os.path.exists('/etc/gitconfig'):
-            os.remove('/etc/gitconfig')
-        if os.path.exists('/usr/local/etc/gitconfig'):
-            os.remove('/usr/local/etc/gitconfig')
+        pyenv = os.environ.copy()
+        pyenv['GIT_CONFIG_SYSTEM'] = self.dirpath + '/nonexistent_gitconfig'
 
         # when
-        stdout = self._output('git settings list --system'.split())
+        proc = subprocess.Popen('git settings list --system'.split(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=pyenv)
+        stdout = proc.communicate()[0].decode('utf-8').strip()
 
         # then
         self.assertFalse(stdout)
