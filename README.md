@@ -139,11 +139,13 @@ git reindex (-v|--version)
 
 ## Testing and OS Support
 
-`git-commands` has been tested using git 2.52.0 and Python 3.10 on macOS 26 Tahoe and Ubuntu Resolute Raccoon. To confirm on your own system, install the test dependencies and run the test suite.
+`git-commands` has been tested using git 2.52.0 and Python 3.10 on macOS 26 Tahoe and Ubuntu Resolute Raccoon. To confirm on your own system, install [nox](https://nox.thea.codes) and run the test suite.
 
-```
-pip install --user -r requirements-test.txt
-pytest
+```bash
+brew install pipx
+pipx ensurepath
+pipx install nox
+nox
 ```
 
 ## Dependencies
