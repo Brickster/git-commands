@@ -6,6 +6,7 @@ from subprocess import call, check_output, PIPE, Popen, STDOUT
 
 from ..layers import GitSnapshotFunctional
 
+
 class TestGitSnapshot(unittest.TestCase):
     layer = GitSnapshotFunctional
 
@@ -159,15 +160,6 @@ A  file3.txt
         call('git stash pop --quiet'.split())
         self.assertEqual(self._status(), " M CHANGELOG.md\n")
 
-    def test_snapshot_quiet(self):
-
-        # run
-        stdout, stderr = self._output('git snapshot --quiet'.split())
-
-        # verify
-        self.assertFalse(stdout)
-        self.assertFalse(stderr)
-
     def test_snapshot_quiet_shortOption(self):
 
         # run
@@ -247,7 +239,10 @@ A  file3.txt
 
         # expect
         self.assertRegex(Popen('git snapshot -v'.split(), stdout=PIPE, stderr=STDOUT).communicate()[0].decode('utf-8'), 'git-snapshot \\d+\\.\\d+\\.\\d+')
-        self.assertRegex(Popen('git snapshot --version'.split(), stdout=PIPE, stderr=STDOUT).communicate()[0].decode('utf-8'), 'git-snapshot \\d+\\.\\d+\\.\\d+')
+        self.assertRegex(
+            Popen('git snapshot --version'.split(), stdout=PIPE, stderr=STDOUT).communicate()[0].decode('utf-8'),
+            'git-snapshot \\d+\\.\\d+\\.\\d+'
+        )
 
     def test_snapshot_help(self):
 

@@ -3,6 +3,7 @@ def and_exit(*args, **kwargs):
     if exit_:
         raise SystemExit('exited')
 
+
 # https://stackoverflow.com/a/8389373
 class PseudoTTY(object):
     def __init__(self, underlying, is_real):

@@ -117,7 +117,6 @@ class TestOptionalList(unittest.TestCase):
         # given
         value = 'v'
         destination = 'd'
-        const = 'c'
         action = parse_actions.optional_list()(None, destination)
         namespace = Namespace()
 

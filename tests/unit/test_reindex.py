@@ -66,7 +66,7 @@ class TestReindex(unittest.TestCase):
         mock_call.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
-    @mock.patch('bin.commands.utils.execute.check_output', return_value = '')
+    @mock.patch('bin.commands.utils.execute.check_output', return_value='')
     @mock.patch('bin.commands.utils.execute.call')
     def test_reindex_noFilesToIndex(self, mock_call, mock_checkoutput, mock_isgitrepository):
 

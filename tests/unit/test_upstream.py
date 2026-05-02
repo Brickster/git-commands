@@ -57,7 +57,6 @@ class TestUpstream(unittest.TestCase):
         self.assertEqual(upstream_result, None)
         mock_isemptyrepository.assert_called_once_with()
 
-
     @mock.patch('bin.commands.utils.git.current_branch', return_value='the-branch')
     @mock.patch('bin.commands.utils.git.is_valid_reference', return_value=True)
     @mock.patch('bin.commands.utils.execute.stdout')

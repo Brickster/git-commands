@@ -174,7 +174,7 @@ class TestStateViewWithExtension(unittest.TestCase):
     layer = GitStateFunctional
 
     def _output(self, command):
-        if type(command) == str:
+        if type(command) is str:
             command = command.split()
         pyenv = os.environ.copy()
         pyenv['GIT_CONFIG'] = self.dirpath + '/.git/config'
@@ -552,7 +552,7 @@ class TestStateExtensions(unittest.TestCase):
     layer = GitStateFunctional
 
     def _output(self, command, set_config=True):
-        if type(command) == str:
+        if type(command) is str:
             command = command.split()
         pyenv = os.environ.copy()
         if set_config:
@@ -629,7 +629,10 @@ class TestStateExtensions(unittest.TestCase):
     def test_state_extensions_create(self):
 
         # when
-        create_output = self._output(['git', 'state', 'extensions', 'create', 'testlog', '--command', 'git log --oneline', '--options', '-10', '--name', 'the log', '--no-show', '--no-color'], set_config=False)
+        create_output = self._output([
+            'git', 'state', 'extensions', 'create', 'testlog', '--command', 'git log --oneline', '--options', '-10',
+            '--name', 'the log', '--no-show', '--no-color'
+        ], set_config=False)
 
         # then
         self.assertEqual('Extension testlog created', create_output.strip())
@@ -646,7 +649,10 @@ class TestStateExtensions(unittest.TestCase):
         self.repo.config_writer('repository').set_value('git-state.extensions.testlog', 'command', 'git log').release()
 
         # when
-        create_output = self._output(['git', 'state', 'extensions', 'create', 'testlog', '--command', 'git log --oneline', '--options', '-10', '--name', 'the log', '--no-show', '--no-color'], set_config=False)
+        create_output = self._output([
+            'git', 'state', 'extensions', 'create', 'testlog', '--command', 'git log --oneline', '--options', '-10',
+            '--name', 'the log', '--no-show', '--no-color'
+        ], set_config=False)
 
         # then
         self.assertEqual('Extension testlog updated', create_output.strip())
@@ -663,7 +669,10 @@ class TestStateExtensions(unittest.TestCase):
         self.repo.config_writer('repository').set_value('git-state.extensions.testlog', 'command', 'git log').release()
 
         # when
-        create_output = self._output(['git', 'state', 'extensions', 'edit', 'testlog', '--command', 'git log --oneline', '--options', '-10', '--name', 'the log', '--no-show', '--no-color'], set_config=False)
+        create_output = self._output([
+            'git', 'state', 'extensions', 'edit', 'testlog', '--command', 'git log --oneline', '--options', '-10',
+            '--name', 'the log', '--no-show', '--no-color'
+        ], set_config=False)
 
         # then
         self.assertEqual('Extension testlog updated', create_output.strip())
@@ -677,7 +686,10 @@ class TestStateExtensions(unittest.TestCase):
     def test_state_extensions_edit_extensionDoesNotExist(self):
 
         # when
-        create_output = self._output(['git', 'state', 'extensions', 'edit', 'testlog', '--command', 'git log --oneline', '--options', '-10', '--name', 'the log', '--no-show', '--no-color'], set_config=False)
+        create_output = self._output([
+            'git', 'state', 'extensions', 'edit', 'testlog', '--command', 'git log --oneline', '--options', '-10',
+            '--name', 'the log', '--no-show', '--no-color'
+        ], set_config=False)
 
         # then
         self.assertEqual('Extension testlog created', create_output.strip())
@@ -698,7 +710,10 @@ class TestStateExtensions(unittest.TestCase):
         config_writer.release()
 
         # expect
-        self.assertEqual(self._output('git state extensions delete {}'.format(extension_name), set_config=False).strip(), 'Extension {} deleted'.format(extension_name))
+        self.assertEqual(
+            self._output('git state extensions delete {}'.format(extension_name), set_config=False).strip(),
+            'Extension {} deleted'.format(extension_name)
+        )
         self.assertFalse(self._output('git settings list git-state.extensions.{}'.format(extension_name)))
 
     def test_state_extensions_delete_quiet(self):

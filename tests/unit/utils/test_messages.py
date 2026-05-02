@@ -48,7 +48,7 @@ class TestMessages(unittest.TestCase):
         # then
         mock_print.assert_called_once_with(prefix + ' ' + message)
 
-    @mock.patch('builtins.print' if sys.version_info >= (3,0) else '__builtin__.print')
+    @mock.patch('builtins.print' if sys.version_info >= (3, 0) else '__builtin__.print')
     def test__print_quiet(self, mock_print):
 
         # given

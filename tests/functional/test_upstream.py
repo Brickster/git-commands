@@ -235,22 +235,30 @@ git upstream: error: argument -R/--no-include-remote: not allowed with argument 
 """
 
         # run 1
-        stdout, stderr = [x.decode('utf-8') for x in subprocess.Popen('git upstream --include-remote --no-include-remote'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()]
+        stdout, stderr = [x.decode('utf-8') for x in
+                          subprocess.Popen('git upstream --include-remote --no-include-remote'.split(),
+                                           stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()]
         self.assertFalse(stdout)
         self.assertEqual(stderr, expected)
 
         # run 2
-        stdout, stderr = [x.decode('utf-8') for x in subprocess.Popen('git upstream --include-remote -R'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()]
+        stdout, stderr = [x.decode('utf-8') for x in
+                          subprocess.Popen('git upstream --include-remote -R'.split(), stdout=subprocess.PIPE,
+                                           stderr=subprocess.PIPE).communicate()]
         self.assertFalse(stdout)
         self.assertEqual(stderr, expected)
 
         # run 3
-        stdout, stderr = [x.decode('utf-8') for x in subprocess.Popen('git upstream -r --no-include-remote'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()]
+        stdout, stderr = [x.decode('utf-8') for x in
+                          subprocess.Popen('git upstream -r --no-include-remote'.split(), stdout=subprocess.PIPE,
+                                           stderr=subprocess.PIPE).communicate()]
         self.assertFalse(stdout)
         self.assertEqual(stderr, expected)
 
         # run 4
-        stdout, stderr = [x.decode('utf-8') for x in subprocess.Popen('git upstream -r -R'.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()]
+        stdout, stderr = [x.decode('utf-8') for x in
+                          subprocess.Popen('git upstream -r -R'.split(), stdout=subprocess.PIPE,
+                                           stderr=subprocess.PIPE).communicate()]
         self.assertFalse(stdout)
         self.assertEqual(stderr, expected)
 

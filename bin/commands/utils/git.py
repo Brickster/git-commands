@@ -100,7 +100,7 @@ def is_ref_ambiguous(ref, limit=None):
 
     show_ref_command = ['git', 'show-ref']
     if limit:
-        show_ref_command += ['--' + l.name.lower() for l in limit]
+        show_ref_command += ['--' + refType.name.lower() for refType in limit]
     show_ref_command += [ref]
 
     show_ref = execute.stdout(show_ref_command)

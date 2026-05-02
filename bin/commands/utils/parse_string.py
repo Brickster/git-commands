@@ -1,7 +1,5 @@
 from __future__ import absolute_import
 
-import enum
-
 
 def as_bool(value):
     """Returns whether the input is a string representation of a boolean.

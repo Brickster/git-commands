@@ -978,8 +978,14 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.resolve_coloring')
     @mock.patch('bin.commands.utils.execute.call')
-    def test_changes_details_asStr(self, mock_call, mock_resolvecoloring, mock_isref, mock_iscommit,
-                                  mock_isgitrepository):
+    def test_changes_details_asStr(
+            self,
+            mock_call,
+            mock_resolvecoloring,
+            mock_isref,
+            mock_iscommit,
+            mock_isgitrepository
+    ):
 
         # given
         committish = 'commit-ish'
@@ -1000,8 +1006,14 @@ class TestChangesChanges(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
     @mock.patch('bin.commands.utils.git.resolve_coloring')
     @mock.patch('bin.commands.utils.execute.call')
-    def test_changes_details_diff_withFiles(self, mock_call, mock_resolvecoloring, mock_isref, mock_iscommit,
-                                  mock_isgitrepository):
+    def test_changes_details_diff_withFiles(
+            self,
+            mock_call,
+            mock_resolvecoloring,
+            mock_isref,
+            mock_iscommit,
+            mock_isgitrepository
+    ):
 
         # given
         committish = 'commit-ish'
@@ -1166,7 +1178,10 @@ class TestChangesChanges(unittest.TestCase):
         mock_iscommit.assert_called_once_with(committish)
         mock_isref.assert_called_once_with(committish)
         mock_checkoutput.assert_called_once_with(['git', 'merge-base', committish, 'HEAD'])
-        mock_call.assert_called_once_with(['git', 'log', '--no-decorate', '--oneline', '-10', merge_base, '--color=' + color_when.name.lower(), '--', ' '.join(files)])
+        mock_call.assert_called_once_with([
+            'git', 'log', '--no-decorate', '--oneline', '-10', merge_base, '--color=' + color_when.name.lower(), '--',
+            ' '.join(files)
+        ])
 
     # same as a previous test but explicitly sets to log mode
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
@@ -1202,4 +1217,3 @@ class TestChangesChanges(unittest.TestCase):
             ['git', 'log', '--no-decorate', '--oneline', '{}..HEAD'.format(committish), '--color=' + color_when.name.lower()]
         )
         mock_checkoutput.assert_not_called()
-

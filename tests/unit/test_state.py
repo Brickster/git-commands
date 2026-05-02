@@ -1573,8 +1573,7 @@ class TestStateState(unittest.TestCase):
             mock.call('git-state.order', default=[], as_type=mock.ANY)
         ])
         self.assertEqual(mock_getconfigvalue.call_args_list[0][1]['as_type'].__name__, 'as_bool')
-        mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS
-        )
+        mock_list.assert_called_once_with(format_=settings.FormatOption.SECTIONS)
         mock_checkoutput.assert_not_called()
         mock_info.assert_called_once_with('status section')
         mock_call.assert_not_called()
@@ -1962,7 +1961,16 @@ class TestStateRunExtension(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.get_config_value')
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.state._print_sections')
-    def test_state_runExtension(self, mock_print_sections, mock_print_section, mock_get_config_value, mock_run_extension, mock_init, mock_resolve_coloring, mock_extension_exists):
+    def test_state_runExtension(
+            self,
+            mock_print_sections,
+            mock_print_section,
+            mock_get_config_value,
+            mock_run_extension,
+            mock_init,
+            mock_resolve_coloring,
+            mock_extension_exists
+    ):
 
         # given
         mock_resolve_coloring.return_value = 'never'
@@ -1993,7 +2001,16 @@ class TestStateRunExtension(unittest.TestCase):
     @mock.patch('bin.commands.utils.git.get_config_value')
     @mock.patch('bin.commands.state._print_section')
     @mock.patch('bin.commands.state._print_sections')
-    def test_state_runExtension_extensionDoesNotExist(self, mock_print_sections, mock_print_section, mock_get_config_value, mock_run_extension, mock_init, mock_resolve_coloring, mock_extension_exists):
+    def test_state_runExtension_extensionDoesNotExist(
+            self,
+            mock_print_sections,
+            mock_print_section,
+            mock_get_config_value,
+            mock_run_extension,
+            mock_init,
+            mock_resolve_coloring,
+            mock_extension_exists
+    ):
 
         # given
         mock_extension_exists.return_value = False
