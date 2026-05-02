@@ -1,6 +1,6 @@
 # git-commands
 
-[![build](https://github.com/Brickster/git-commands/actions/workflows/build.yml/badge.svg)](https://github.com/Brickster/git-commands/actions/workflows/build.yml) [![Maintainability](https://api.codeclimate.com/v1/badges/2528d2fb9bba901acf6d/maintainability)](https://codeclimate.com/github/Brickster/git-commands/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/2528d2fb9bba901acf6d/test_coverage)](https://codeclimate.com/github/Brickster/git-commands/test_coverage)
+[![build](https://github.com/Brickster/git-commands/actions/workflows/build.yml/badge.svg)](https://github.com/Brickster/git-commands/actions/workflows/build.yml) [![Maintainability](https://qlty.sh/gh/Brickster/projects/git-commands/maintainability.svg)](https://qlty.sh/gh/Brickster/projects/git-commands) [![Code Coverage](https://qlty.sh/gh/Brickster/projects/git-commands/coverage.svg)](https://qlty.sh/gh/Brickster/projects/git-commands)
 
 A collection of custom git commands
 
