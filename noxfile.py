@@ -16,3 +16,7 @@ def tests(session):
     session.run("coverage", "run", "-m", "pytest", "-v", *session.posargs)
     session.run("coverage", "lcov", "-o", "coverage.lcov")
     session.run("coverage", "report")
+
+@nox.session(python=PYTHON, default=False)
+def test(session):
+    tests(session)
