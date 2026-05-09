@@ -181,6 +181,7 @@ class TestStateState(unittest.TestCase):
     layer = GitState
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('colorama.init')
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
@@ -205,6 +206,7 @@ class TestStateState(unittest.TestCase):
             mock_statusget,
             mock_isemptyrepository,
             mock_getconfigvalue,
+            mock_init,
             mock_isgitrepository
     ):
 
@@ -230,6 +232,7 @@ class TestStateState(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_init.assert_called_once_with(strip=True)
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_called_once_with(
             mock_statustitle.return_value,
@@ -488,6 +491,7 @@ class TestStateState(unittest.TestCase):
         mock_call.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('colorama.init')
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=True)
     @mock.patch('bin.commands.stateextensions.status.get')
@@ -512,6 +516,7 @@ class TestStateState(unittest.TestCase):
             mock_statusget,
             mock_isemptyrepository,
             mock_getconfigvalue,
+            mock_init,
             mock_isgitrepository
     ):
 
@@ -537,6 +542,7 @@ class TestStateState(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_init.assert_called_once_with(strip=True)
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_called_once_with(
             mock_statustitle.return_value,
@@ -616,6 +622,7 @@ class TestStateState(unittest.TestCase):
         mock_call.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('colorama.init')
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
@@ -636,6 +643,7 @@ class TestStateState(unittest.TestCase):
             mock_printsection,
             mock_isemptyrepository,
             mock_getconfigvalue,
+            mock_init,
             mock_isgitrepository
     ):
 
@@ -661,6 +669,7 @@ class TestStateState(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_init.assert_called_once_with(strip=True)
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_called_once_with(
             title=changes_name,
@@ -686,6 +695,7 @@ class TestStateState(unittest.TestCase):
         mock_execute.assert_called_once_with(['changes', 'command', '--color=never'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('colorama.init')
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
@@ -706,6 +716,7 @@ class TestStateState(unittest.TestCase):
             mock_printsection,
             mock_isemptyrepository,
             mock_getconfigvalue,
+            mock_init,
             mock_isgitrepository
     ):
 
@@ -731,6 +742,7 @@ class TestStateState(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_init.assert_called_once_with(strip=True)
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_called_once_with(
             title=changes_name,
@@ -756,6 +768,7 @@ class TestStateState(unittest.TestCase):
         mock_execute.assert_called_once_with(['changes', 'command'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('colorama.init')
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
@@ -776,6 +789,7 @@ class TestStateState(unittest.TestCase):
             mock_printsection,
             mock_isemptyrepository,
             mock_getconfigvalue,
+            mock_init,
             mock_isgitrepository
     ):
 
@@ -801,6 +815,7 @@ class TestStateState(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_init.assert_called_once_with(strip=True)
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_called_once_with(
             title=changes_name,
@@ -826,6 +841,7 @@ class TestStateState(unittest.TestCase):
         mock_execute.assert_called_once_with(['changes', 'command', '--option1', '-o', '1 2', '--color=never'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('colorama.init')
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
@@ -846,6 +862,7 @@ class TestStateState(unittest.TestCase):
             mock_printsection,
             mock_isemptyrepository,
             mock_getconfigvalue,
+            mock_init,
             mock_isgitrepository
     ):
 
@@ -871,6 +888,7 @@ class TestStateState(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_init.assert_called_once_with(strip=True)
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_called_once_with(
             title=changes_name,
@@ -896,6 +914,7 @@ class TestStateState(unittest.TestCase):
         mock_execute.assert_called_once_with(['changes', 'command', '--option1', '-o', '1 2', '--color=never'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('colorama.init')
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
@@ -916,6 +935,7 @@ class TestStateState(unittest.TestCase):
             mock_printsection,
             mock_isemptyrepository,
             mock_getconfigvalue,
+            mock_init,
             mock_isgitrepository
     ):
 
@@ -941,6 +961,7 @@ class TestStateState(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_init.assert_called_once_with(strip=True)
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_called_once_with(
             title=changes_name,
@@ -1069,6 +1090,7 @@ class TestStateState(unittest.TestCase):
         mock_popen.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('colorama.init')
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.state._print_section')
@@ -1089,6 +1111,7 @@ class TestStateState(unittest.TestCase):
             mock_printsection,
             mock_isemptyrepository,
             mock_getconfigvalue,
+            mock_init,
             mock_isgitrepository
     ):
 
@@ -1115,6 +1138,7 @@ class TestStateState(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_init.assert_called_once_with(strip=True)
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_called_once_with(
             title=changes_name,
@@ -1139,6 +1163,7 @@ class TestStateState(unittest.TestCase):
         mock_execute.assert_called_once_with(['changes', 'command', '--color=never'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('colorama.init')
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
@@ -1165,6 +1190,7 @@ class TestStateState(unittest.TestCase):
             mock_statusget,
             mock_isemptyrepository,
             mock_getconfigvalue,
+            mock_init,
             mock_isgitrepository
     ):
 
@@ -1195,6 +1221,7 @@ class TestStateState(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_init.assert_called_once_with(strip=True)
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_has_calls([
             mock.call(
@@ -1231,6 +1258,7 @@ class TestStateState(unittest.TestCase):
         mock_execute.assert_called_once_with(['changes', 'command', '--color=never'])
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('colorama.init')
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
@@ -1255,6 +1283,7 @@ class TestStateState(unittest.TestCase):
             mock_statusget,
             mock_isemptyrepository,
             mock_getconfigvalue,
+            mock_init,
             mock_isgitrepository
     ):
 
@@ -1280,6 +1309,7 @@ class TestStateState(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_init.assert_called_once_with(strip=True)
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_called_once_with(
             mock_statustitle.return_value,
@@ -1301,6 +1331,7 @@ class TestStateState(unittest.TestCase):
         mock_call.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('colorama.init')
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
@@ -1327,6 +1358,7 @@ class TestStateState(unittest.TestCase):
             mock_statusget,
             mock_isemptyrepository,
             mock_getconfigvalue,
+            mock_init,
             mock_isgitrepository
     ):
 
@@ -1352,6 +1384,7 @@ class TestStateState(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_init.assert_called_once_with(strip=True)
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_called_once_with(
             mock_statustitle.return_value,
@@ -1579,6 +1612,7 @@ class TestStateState(unittest.TestCase):
         mock_call.assert_not_called()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('colorama.init')
     @mock.patch('bin.commands.utils.git.get_config_value', return_value=False)
     @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
     @mock.patch('bin.commands.stateextensions.status.get')
@@ -1603,6 +1637,7 @@ class TestStateState(unittest.TestCase):
             mock_statusget,
             mock_isemptyrepository,
             mock_getconfigvalue,
+            mock_init,
             mock_isgitrepository
     ):
 
@@ -1628,6 +1663,7 @@ class TestStateState(unittest.TestCase):
 
         # then
         mock_isgitrepository.assert_called_once_with()
+        mock_init.assert_called_once_with(strip=True)
         mock_isemptyrepository.assert_called_once_with()
         mock_printsection.assert_called_once_with(
             mock_statustitle.return_value,
