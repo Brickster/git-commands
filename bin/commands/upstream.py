@@ -4,8 +4,6 @@ from enum import Enum
 
 from .utils import execute, git, messages
 
-_MERGE_CONFIG = 'git config --local branch.{}.merge'
-_REMOTE_CONFIG = 'git config --local branch.{}.remote'
 _LOCAL_REMOTE = '.'
 
 
@@ -32,7 +30,7 @@ def upstream(branch=None, include_remote=IncludeRemote.NEVER):
     if not branch:
         branch = git.current_branch()
     elif not git.is_valid_reference(branch):
-        messages.error("'{}' is not a valid branch".format(branch))
+        messages.error(f"'{branch}' is not a valid branch")
 
     # get remote branch name
     remote_branch = _get_remote_branch(branch)
@@ -40,13 +38,13 @@ def upstream(branch=None, include_remote=IncludeRemote.NEVER):
     # get remote name
     remote_name = None
     if remote_branch and include_remote != IncludeRemote.NEVER:
-        remote_name = execute.check_output(_REMOTE_CONFIG.format(branch)).strip()
+        remote_name = execute.check_output(f'git config --local branch.{branch}.remote').strip()
 
     return _upstream_info(remote_name, remote_branch, include_remote)
 
 
 def _get_remote_branch(branch):
-    upstream_info = execute.stdout(_MERGE_CONFIG.format(branch)).strip()
+    upstream_info = execute.stdout(f'git config --local branch.{branch}.merge').strip()
     remote_branch = upstream_info.rsplit('/', 1)[-1]
     return remote_branch
 

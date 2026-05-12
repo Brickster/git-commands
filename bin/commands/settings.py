@@ -39,9 +39,9 @@ def _get_sections_map(config_map):
 def _append_section_header(result, section):
     match = re.match(r'^([-a-zA-Z0-9]+)\.(.*)$', section)
     if match is None:
-        result += ['[{}]'.format(section)]
+        result += [f'[{section}]']
     else:
-        result += ['[{} "{}"]'.format(match.group(1), match.group(2))]
+        result += [f'[{match.group(1)} "{match.group(2)}"]']
 
 
 def _append_section_keys(result, result_format, section_map):
@@ -116,10 +116,10 @@ def _get_config_contents(config):
     if config is None:
         config_contents = execute.check_output(['git', 'config', '--list', '--null'])
     elif isinstance(config, git.ConfigOption):
-        config_contents = execute.stdout(['git', 'config', '--list', '--null', '--{}'.format(config.name.lower())])
+        config_contents = execute.stdout(['git', 'config', '--list', '--null', f'--{config.name.lower()}'])
     else:
         if not os.path.exists(config):
-            messages.error("no such file '{}'".format(config))
+            messages.error(f"no such file '{config}'")
         config_contents = execute.check_output(['git', 'config', '--list', '--null', '--file', config])
     return config_contents
 
@@ -127,7 +127,7 @@ def _get_config_contents(config):
 def _limit_config_to_section(config_contents, section):
     config_section = []
     for config in config_contents:
-        match = re.match(r'^({})\.[-a-zA-Z0-9]+{}.*$'.format(section, os.linesep), config)
+        match = re.match(rf'^({section})\.[-a-zA-Z0-9]+{os.linesep}.*$', config)
         if match is not None:
             config_section += [config]
     return config_section
@@ -136,12 +136,12 @@ def _limit_config_to_section(config_contents, section):
 def _dry_destroy_section(config, section):
 
     # get the current section
-    command = ('git', 'settings', 'list', '--format', 'compact', '--{}'.format(config), section)
+    command = ('git', 'settings', 'list', '--format', 'compact', f'--{config}', section)
     list_output = execute.stdout(command)
 
     # print all key/values in the section that would be removed
     for line in list_output.splitlines():
-        messages.info('Would be deleted from {}: {}'.format(config, line))
+        messages.info(f'Would be deleted from {config}: {line}')
 
 
 def destroy(section, dry_run):

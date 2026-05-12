@@ -94,7 +94,7 @@ def is_ref_ambiguous(ref, limit=None):
         limit = [limit]
 
     if not is_ref(ref):
-        raise GitException("'{}' is not a ref".format(ref))
+        raise GitException(f"'{ref}' is not a ref")
 
     show_ref_command = ['git', 'show-ref']
     if limit:
@@ -171,7 +171,7 @@ def _get_command(key, config, file_):
         return 'git', 'config', key
     elif file_ is not None:
         return 'git', 'config', '--file', file_, key
-    return 'git', 'config', '--{}'.format(config), key
+    return 'git', 'config', f'--{config}', key
 
 
 def validate_config(config=None):
@@ -181,7 +181,7 @@ def validate_config(config=None):
     """
 
     if config == 'local' and not directories.is_git_repository():
-        messages.error("'{}' is not a git repository".format(os.getcwd()), exit_=False)
+        messages.error(f"'{os.getcwd()}' is not a git repository", exit_=False)
         messages.error("'local' does not apply")
 
 
@@ -200,7 +200,7 @@ def get_config_value(key, default=None, config=None, file_=None, as_type=str):
     validate_config(config)
 
     if not hasattr(as_type, '__call__') and not hasattr(as_type, '__bases__'):
-        raise TypeError('{} is not callable'.format(as_type))
+        raise TypeError(f'{as_type} is not callable')
 
     command = _get_command(key, config, file_)
     value = execute.stdout(command).strip()
@@ -212,7 +212,7 @@ def get_config_value(key, default=None, config=None, file_=None, as_type=str):
             return as_type(value)
         except ValueError:
             messages.error(
-                "Cannot parse value '{0}' for key '{1}' using format '{2}'".format(value, key, as_type.__name__)
+                f"Cannot parse value '{value}' for key '{key}' using format '{as_type.__name__}'"
             )
 
 

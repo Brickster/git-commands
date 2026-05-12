@@ -21,17 +21,17 @@ def abandon(start, end, dry_run=False, quiet=False):
 
 def _dry_run(start, end):
     for i in range(start, end):
-        stash = 'stash@{{{}}}'.format(i)
+        stash = f'stash@{{{i}}}'
         stash_sha = execute.check_output(['git', 'rev-parse', stash]).splitlines()[0]
-        messages.info('Would drop refs/{} ({})'.format(stash, stash_sha))
+        messages.info(f'Would drop refs/{stash} ({stash_sha})')
 
 
 def _run(start, end, quiet):
-    start_stash = 'stash@{{{}}}'.format(start)
+    start_stash = f'stash@{{{start}}}'
     for i in range(start, end):
         stash_sha = execute.check_output(['git', 'rev-parse', start_stash]).splitlines()[0]
         execute.call(['git', 'stash', 'drop', '--quiet', start_stash])
-        messages.info('Dropped refs/stash@{{{}}} ({})'.format(i, stash_sha), quiet)
+        messages.info(f'Dropped refs/stash@{{{i}}} ({stash_sha})', quiet)
 
 
 def _validate_bounds(start, end):
@@ -42,7 +42,7 @@ def _validate_bounds(start, end):
         messages.error('end of range cannot come before the start')
     elif start > stash_count:
         messages.error('start too high', exit_=False)
-        messages.error('only {} stashes exist'.format(stash_count))
+        messages.error(f'only {stash_count} stashes exist')
     elif end > stash_count:
         end = stash_count
     return start, end

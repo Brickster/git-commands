@@ -16,13 +16,13 @@ def accent(**kwargs):
     show_color = kwargs.get('show_color', 'always')
 
     if new_repository:
-        status_title = '{no_color}({green}main{no_color})'.format(no_color=Fore.RESET, green=Fore.GREEN)
+        status_title = f'{Fore.RESET}({Fore.GREEN}main{Fore.RESET})'
     else:
         status_title = execute.check_output(
             ['git', '-c', 'color.status=' + show_color, 'status', '--branch', '--short']
         ).splitlines()[0]
         status_title = re.match('.*##.*? (.*)', status_title).group(1)
-        status_title = '{}({})'.format(Fore.RESET, status_title)
+        status_title = f'{Fore.RESET}({status_title})'
 
     return status_title
 

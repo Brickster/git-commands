@@ -23,9 +23,9 @@ def _print_section(title, accent=None, text=None, format_='compact', show_empty=
     header_color = _resolve_header_color(color)
 
     if accent:
-        section = '# {}{} {}{}'.format(header_color, title, accent, colorama.Fore.RESET) + os.linesep
+        section = f'# {header_color}{title} {accent}{colorama.Fore.RESET}' + os.linesep
     else:
-        section = '# {}{}{}'.format(header_color, title, colorama.Fore.RESET) + os.linesep
+        section = f'# {header_color}{title}{colorama.Fore.RESET}' + os.linesep
 
     if format_ == 'pretty':
         section += _pretty_print_section_text(text)
@@ -33,7 +33,7 @@ def _print_section(title, accent=None, text=None, format_='compact', show_empty=
         if text is not None:
             section += text
     else:
-        messages.error("unknown format '{}'".format(format_))
+        messages.error(f"unknown format '{format_}'")
 
     return section
 
@@ -91,8 +91,7 @@ def _run_extension(extension, options, show_color):
     extension_name = git.get_config_value('git-state.extensions.' + extension + '.name', default=extension)
     if extension_command is None:
         messages.warn(
-            "extension '{0}' has no command to execute: run 'git state extensions edit {0} -c <command>' to "
-            "remediate".format(extension)
+            f"extension '{extension}' has no command to execute: run 'git state extensions edit {extension} -c <command>' to remediate"
         )
         return extension_name, None
 
@@ -107,7 +106,7 @@ def _run_extension(extension, options, show_color):
 
     extension_command = shlex.split(extension_command) + extension_options
     if git.get_config_value('git-state.extensions.' + extension + '.color', default=True, as_type=parse_string.as_bool):
-        extension_command += ['--color={}'.format(show_color)]
+        extension_command += [f'--color={show_color}']
 
     extension_out, extension_error, extension_code = execute.execute(extension_command)
     extension_text = extension_out if not extension_code else extension_error
@@ -132,7 +131,7 @@ def edit_extension(extension, command=None, name=None, options=None, show=None, 
         _update_extension_config(config, extension_section, 'show', str(show))
     if color is not None:
         _update_extension_config(config, extension_section, 'color', str(color))
-    messages.info('Extension {} {}'.format(extension, 'updated' if already_exists else 'created'))
+    messages.info(f"Extension {extension} {'updated' if already_exists else 'created'}")
 
 
 def _update_extension_config(config, section, key, value):
@@ -140,7 +139,7 @@ def _update_extension_config(config, section, key, value):
     if config is None:
         execute.call(['git', 'config', section + '.' + key, value])
     elif isinstance(config, git.ConfigOption):
-        execute.call(['git', 'config', '--{}'.format(config.name.lower()), section + '.' + key, value])
+        execute.call(['git', 'config', f'--{config.name.lower()}', section + '.' + key, value])
     else:
         execute.call(['git', 'config', '--file', config, section + '.' + key, value])
 
@@ -179,8 +178,8 @@ def run_extension(extension):
 
 def delete_extension(extension, quiet=False):
     if _extension_exists(extension):
-        settings.destroy('git-state.extensions.{}'.format(extension), dry_run=False)
-        messages.info('Extension {} deleted'.format(extension), quiet=quiet)
+        settings.destroy(f'git-state.extensions.{extension}', dry_run=False)
+        messages.info(f'Extension {extension} deleted', quiet=quiet)
 
 
 def state(**kwargs):
@@ -198,7 +197,7 @@ def state(**kwargs):
     """
 
     if not directories.is_git_repository():
-        messages.error("'{}' not a git repository".format(os.getcwd()))
+        messages.error(f"'{os.getcwd()}' not a git repository")
 
     show_color = git.resolve_coloring(kwargs.get('show_color').lower())
     colorama.init(strip=(show_color == 'never'))
