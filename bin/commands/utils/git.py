@@ -199,7 +199,7 @@ def get_config_value(key, default=None, config=None, file_=None, as_type=str):
 
     validate_config(config)
 
-    if not hasattr(as_type, '__call__') and not hasattr(as_type, '__bases__'):
+    if not callable(as_type):
         raise TypeError(f'{as_type} is not callable')
 
     command = _get_command(key, config, file_)
