@@ -1,7 +1,5 @@
 """More ways to view and edit config files."""
 
-from __future__ import absolute_import
-
 import operator
 import os
 import re

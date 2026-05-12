@@ -1,7 +1,5 @@
 """Restash changes."""
 
-from __future__ import absolute_import
-
 import re
 
 from .utils import execute, messages

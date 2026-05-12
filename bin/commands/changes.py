@@ -1,7 +1,5 @@
 """List the commits between this branch and another."""
 
-from __future__ import absolute_import
-
 import os
 
 from enum import Enum

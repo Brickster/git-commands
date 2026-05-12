@@ -1,7 +1,5 @@
 """Re-add already indexed files to the index."""
 
-from __future__ import absolute_import
-
 import os
 
 from .utils import directories, execute, git, messages

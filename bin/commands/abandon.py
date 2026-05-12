@@ -1,7 +1,5 @@
 """Drop a count or range of stashes."""
 
-from __future__ import absolute_import
-
 from .utils import execute, messages
 
 

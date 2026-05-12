@@ -1,7 +1,5 @@
 """A collection of wrappers around subprocess."""
 
-from __future__ import absolute_import
-
 import os
 import subprocess  # nosec
 

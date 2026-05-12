@@ -1,7 +1,5 @@
 """A collection of common git actions."""
 
-from __future__ import absolute_import
-
 import os
 import re
 import sys
