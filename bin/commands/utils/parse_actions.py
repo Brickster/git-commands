@@ -10,7 +10,7 @@ def multi_set(**kwargs):
         def __call__(self, parser, namespace, values, option_string=None):
             if values is not None:
                 setattr(namespace, self.dest, values)
-            for dest, value in iter(kwargs.items()):
+            for dest, value in kwargs.items():
                 setattr(namespace, dest, value)
     return MultiSet
 
@@ -30,8 +30,8 @@ def append_list(*args):
 
         def __call__(self, parser, namespace, values, option_string=None):
             current_values = getattr(namespace, self.dest)
-            [current_values.append(v) for v in args or []]
-            [current_values.append(v) for v in values or []]
+            current_values.extend(args or [])
+            current_values.extend(values or [])
             setattr(namespace, self.dest, current_values)
     return AppendList
 
