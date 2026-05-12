@@ -38,13 +38,9 @@ def _print_section(title, accent=None, text=None, format_='compact', show_empty=
 
 
 def _pretty_print_section_text(text):
-    if text is not None and len(text) > 0:
-        result = os.linesep
-        text = text.splitlines()
-        for line in text:
-            result += '    ' + line + os.linesep
-        result += os.linesep
-        return result
+    if text:
+        indented = os.linesep.join('    ' + line for line in text.splitlines())
+        return os.linesep + indented + os.linesep + os.linesep
     else:
         # there's no text but we still want some nicer formatting
         return os.linesep
