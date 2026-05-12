@@ -5,7 +5,6 @@ import re
 import shlex
 import sys
 from ast import literal_eval
-from collections import OrderedDict
 
 import colorama
 
@@ -214,7 +213,7 @@ def state(**kwargs):
     ignore_extensions = kwargs.get('ignore_extensions')
     show_extensions = list(set(kwargs.get('show_extensions', [])))
 
-    sections = OrderedDict()
+    sections = {}
     if git.is_empty_repository():
         extensions = ['status']
         extensions = _resolve_extensions(extensions, show_extensions, ignore_extensions)
