@@ -1,6 +1,5 @@
 """More ways to view and edit config files."""
 
-import operator
 import os
 import re
 from functools import partial
@@ -13,7 +12,7 @@ from .utils import directories, execute, git, messages
 def _pretty_format_configs(config_map):
     all_sections_map = _get_sections_map(config_map)
     result = []
-    for section, section_map in iter(sorted(all_sections_map.items(), key=operator.itemgetter(0))):
+    for section, section_map in sorted(all_sections_map.items()):
         _append_section_header(result, section)
         _append_section_keys(result, '    {} = {}', section_map)
     return result
@@ -21,7 +20,7 @@ def _pretty_format_configs(config_map):
 
 def _get_sections_map(config_map):
     all_sections_map = {}
-    for key, value in iter(config_map.items()):
+    for key, value in config_map.items():
         match = re.match(r'^(.*)\.([-a-zA-Z0-9]+)', key)
         subkey = match.group(1)
         key = match.group(2)
@@ -45,7 +44,7 @@ def _append_section_header(result, section):
 
 
 def _append_section_keys(result, result_format, section_map):
-    for key, value in iter(sorted(section_map.items(), key=operator.itemgetter(0))):
+    for key, value in sorted(section_map.items()):
         result += [result_format.format(key, value)]
 
 
@@ -54,11 +53,11 @@ def _count_printer(config_map):
 
 
 def _keys_printer(config_map):
-    return [key[key.rfind('.') + 1:] for key in config_map.keys()]
+    return [key[key.rfind('.') + 1:] for key in config_map]
 
 
 def _sections_printer(config_map):
-    return list(set([key[0:key.rfind('.')] for key in config_map.keys()]))
+    return list(set([key[0:key.rfind('.')] for key in config_map]))
 
 
 def _pretty_printer(config_map):
