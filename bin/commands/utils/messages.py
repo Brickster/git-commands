@@ -1,7 +1,8 @@
 import sys
+from typing import IO
 
 
-def _print(message, prefix=None, quiet=False, exit_=False, file_=None):
+def _print(message: str, prefix: str | None = None, quiet: bool = False, exit_: bool = False, file_: IO[str] | None = None) -> None:
     message = prefix + ' ' + message if prefix else message
     if not quiet:
         _print_to_file(message, file_)
@@ -9,14 +10,14 @@ def _print(message, prefix=None, quiet=False, exit_=False, file_=None):
         sys.exit(1)
 
 
-def _print_to_file(message, file_):
+def _print_to_file(message: str, file_: IO[str] | None) -> None:
     if file_:
         print(message, file=file_)
     else:
         print(message)  # defaulting file_ to sys.stdout messes with colorama
 
 
-def error(message, prefix='error:', exit_=True):
+def error(message: str, prefix: str = 'error:', exit_: bool = True) -> None:
     """Print an error message and optionally exit.
 
     :param str or unicode message: the error message to print
@@ -26,7 +27,7 @@ def error(message, prefix='error:', exit_=True):
     _print(message, prefix=prefix, exit_=exit_, file_=sys.stderr)
 
 
-def warn(message, quiet=False, ignore=False):
+def warn(message: str, quiet: bool = False, ignore: bool = False) -> bool:
     """Print a simple warning message.
 
     Ignore repeated warnings by feeding warn() back into itself:
@@ -44,7 +45,7 @@ def warn(message, quiet=False, ignore=False):
     return True
 
 
-def usage(message):
+def usage(message: str) -> None:
     """Print a simple usage message.
 
     :param str or unicode message: the usage message to print
@@ -52,7 +53,7 @@ def usage(message):
     _print(message, prefix='usage:')
 
 
-def info(message, quiet=False):
+def info(message: str, quiet: bool = False) -> None:
     """Print a simple info message.
 
     :param str or unicode message: the message to print

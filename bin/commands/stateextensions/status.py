@@ -1,16 +1,17 @@
 import os
 import re
+from typing import Any
 
 from colorama import Fore
 
 from ..utils import execute
 
 
-def title():
+def title() -> str:
     return 'status'
 
 
-def accent(**kwargs):
+def accent(**kwargs: Any) -> str:
 
     new_repository = kwargs.get('new_repository', False)
     show_color = kwargs.get('show_color', 'always')
@@ -21,13 +22,14 @@ def accent(**kwargs):
         status_title = execute.check_output(
             ['git', '-c', 'color.status=' + show_color, 'status', '--branch', '--short']
         ).splitlines()[0]
-        status_title = re.match('.*##.*? (.*)', status_title).group(1)
+        match = re.match('.*##.*? (.*)', status_title)
+        status_title = match.group(1) if match else ''
         status_title = f'{Fore.RESET}({status_title})'
 
     return status_title
 
 
-def get(**kwargs):
+def get(**kwargs: Any) -> str:
 
     new_repository = kwargs.get('new_repository', False)
     show_color = kwargs.get('show_color', 'always')

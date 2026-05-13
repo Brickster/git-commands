@@ -5,7 +5,7 @@ import os
 from .utils import directories, execute, git, messages
 
 
-def reindex():
+def reindex() -> None:
 
     if not directories.is_git_repository():
         messages.error(f"'{os.getcwd()}' not a git repository")

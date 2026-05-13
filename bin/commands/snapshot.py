@@ -5,7 +5,7 @@ import time
 from .utils import execute, messages
 
 
-def _stash_buffer(quiet):
+def _stash_buffer(quiet: bool) -> None:
     """
     You cannot create two stashes of the same contents within the same second. So wait if we've executed too quickly.
     """
@@ -19,7 +19,7 @@ def _stash_buffer(quiet):
             time.sleep(0.1)
 
 
-def _drop_stash_by_message(message):
+def _drop_stash_by_message(message: str | None) -> None:
     if not message:
         return
 
@@ -32,7 +32,7 @@ def _drop_stash_by_message(message):
             return
 
 
-def snapshot(message=None, replace=False, quiet=False, files=None):
+def snapshot(message: str | None = None, replace: bool = False, quiet: bool = False, files: list[str] | None = None) -> None:
     """Create a snapshot of the working directory and index.
 
     :param str or unicode message: the message to use when creating the underlying stash

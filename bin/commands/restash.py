@@ -5,7 +5,7 @@ import re
 from .utils import execute, messages
 
 
-def _is_valid_stash(stash):
+def _is_valid_stash(stash: str) -> bool:
     """Determines if a stash reference is valid.
 
     :param str or unicode stash: a stash reference
@@ -18,7 +18,7 @@ def _is_valid_stash(stash):
     return execute.swallow(['git', 'cat-file', '-t', stash]) == 0
 
 
-def _parents(commit):
+def _parents(commit: str) -> list[str]:
     """Returns the parents of a commit.
 
     :param str or unicode commit: a commit to find parents of
@@ -29,7 +29,7 @@ def _parents(commit):
     return execute.check_output(['git', 'rev-list', '--parents', '-1', commit]).strip().split(' ')[1:]
 
 
-def restash(stash='stash@{0}', quiet=False):
+def restash(stash: str = 'stash@{0}', quiet: bool = False) -> None:
     """Restash a stash reference.
 
     :param str or unicode stash: stash reference to reverse apply
@@ -48,7 +48,7 @@ def restash(stash='stash@{0}', quiet=False):
     messages.info(f'Restashed {stash} ({stash_sha})', quiet)
 
 
-def _reverse_modifications(stash):
+def _reverse_modifications(stash: str) -> None:
     # if there are modifications, reverse apply them
     reverse_patch = execute.check_output(['git', 'stash', 'show', '--patch', '--no-color', stash])
     if reverse_patch:
@@ -57,7 +57,7 @@ def _reverse_modifications(stash):
             messages.error('unable to reverse modifications', exit_=True)
 
 
-def _remove_untracked_files(stash):
+def _remove_untracked_files(stash: str) -> None:
     # check if we need remove any untracked files. For a stash ref, the third parent contains the untracked files.
     parents = _parents(stash)
     if len(parents) == 3:
