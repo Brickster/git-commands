@@ -1,12 +1,11 @@
 """A collection of common git actions."""
 
-from __future__ import absolute_import
-
 import os
 import re
 import sys
-
+from collections.abc import Callable
 from enum import Enum
+from typing import Any
 
 from . import directories
 from . import execute
@@ -25,14 +24,14 @@ class ConfigOption(Enum):
 
 
 class GitException(Exception):  # pragma: no cover
-    def __init__(self, message):
+    def __init__(self, message: str) -> None:
         self.message = message
 
-    def __str__(self):
+    def __str__(self) -> str:
         return repr(self.message)
 
 
-def is_valid_reference(reference):
+def is_valid_reference(reference: str) -> bool:
     """Determines if a reference is valid.
 
     :param str reference: name of the reference to validate
@@ -43,7 +42,7 @@ def is_valid_reference(reference):
     return not execute.swallow(['git', 'show-ref', '--quiet', reference])
 
 
-def is_commit(object_):
+def is_commit(object_: str) -> bool:
     """Determines if an object is a commit.
 
     :param str object_: a git object
@@ -54,13 +53,13 @@ def is_commit(object_):
     return execute.stdout(['git', 'cat-file', '-t', object_]).strip() == 'commit'
 
 
-def is_detached():
+def is_detached() -> bool:
     """Returns whether HEAD is detached."""
 
     return not bool(symbolic_ref('HEAD'))
 
 
-def symbolic_ref(object_):
+def symbolic_ref(object_: str) -> str:
     """Returns symbolic ref"""
 
     revolved_symbolic_ref = execute.stdout(['git', 'symbolic-ref', '--quiet', object_])
@@ -69,7 +68,7 @@ def symbolic_ref(object_):
     return revolved_symbolic_ref
 
 
-def is_ref(object_):
+def is_ref(object_: str) -> bool:
     """Determines if an object is a ref.
 
     :param str object_: a git object
@@ -80,7 +79,7 @@ def is_ref(object_):
     return not execute.swallow(['git', 'show-ref', object_])
 
 
-def is_ref_ambiguous(ref, limit=None):
+def is_ref_ambiguous(ref: str, limit: RefType | list[RefType] | tuple[RefType, ...] | None = None) -> bool:
     """Determines is a ref is ambiguous.
 
     :param str ref: a git ref
@@ -96,7 +95,7 @@ def is_ref_ambiguous(ref, limit=None):
         limit = [limit]
 
     if not is_ref(ref):
-        raise GitException("'{}' is not a ref".format(ref))
+        raise GitException(f"'{ref}' is not a ref")
 
     show_ref_command = ['git', 'show-ref']
     if limit:
@@ -107,7 +106,7 @@ def is_ref_ambiguous(ref, limit=None):
     return len(show_ref.splitlines()) > 1
 
 
-def symbolic_full_name(ref):
+def symbolic_full_name(ref: str) -> str:
     """Determines the symbolic full name for a ref.
 
     :param str ref: the ref
@@ -118,7 +117,7 @@ def symbolic_full_name(ref):
     return execute.check_output(['git', 'rev-parse', '--symbolic-full-name', ref]).strip()
 
 
-def current_branch():
+def current_branch() -> str | None:
     """Returns the current branch. 'HEAD' is returned if detached.
 
     :return str or unicode: the name of the current branch
@@ -129,7 +128,7 @@ def current_branch():
     return execute.check_output('git rev-parse --abbrev-ref HEAD').strip()
 
 
-def deleted_files():
+def deleted_files() -> list[str]:
     """Get the deleted files in a dirty working tree.
 
     :return list: a list of deleted file paths
@@ -139,7 +138,7 @@ def deleted_files():
     return [match.group(1) for match in re.finditer('^(?:D\\s|\\sD)\\s(.*)', all_files, re.MULTILINE)]
 
 
-def is_empty_repository():
+def is_empty_repository() -> bool:
     """Determines whether a repository is empty.
 
     :return bool: whether or not the repository is empty
@@ -147,7 +146,7 @@ def is_empty_repository():
     return execute.swallow(['git', 'log', '--oneline', '-1']) != 0
 
 
-def resolve_sha1(revision):
+def resolve_sha1(revision: str) -> str | None:
     """Resolve the SHA1 from a revision.
 
     :param str revision: revision to resolve
@@ -161,33 +160,39 @@ def resolve_sha1(revision):
     return sha1
 
 
-def resolve_coloring(color):
+def resolve_coloring(color: str | None) -> str:
     color_when = color.lower() if color else get_config_value('color.ui', default='auto')
     if color_when == 'auto':
         return 'always' if sys.stdout.isatty() else 'never'
     return color_when
 
 
-def _get_command(key, config, file_):
+def _get_command(key: str, config: str | None, file_: str | None) -> tuple[str, ...]:
     if config is None:
         return 'git', 'config', key
     elif file_ is not None:
         return 'git', 'config', '--file', file_, key
-    return 'git', 'config', '--{}'.format(config), key
+    return 'git', 'config', f'--{config}', key
 
 
-def validate_config(config=None):
+def validate_config(config: str | None = None) -> None:
     """Validates that the directory and file specified are compatible.
 
     :param config: the config name
     """
 
     if config == 'local' and not directories.is_git_repository():
-        messages.error("'{}' is not a git repository".format(os.getcwd()), exit_=False)
+        messages.error(f"'{os.getcwd()}' is not a git repository", exit_=False)
         messages.error("'local' does not apply")
 
 
-def get_config_value(key, default=None, config=None, file_=None, as_type=str):
+def get_config_value(
+    key: str,
+    default: Any = None,
+    config: str | None = None,
+    file_: str | None = None,
+    as_type: Callable[..., Any] = str,
+) -> Any:
     """Retrieve a configuration value.
 
     :param str or unicode key: the value key
@@ -201,8 +206,8 @@ def get_config_value(key, default=None, config=None, file_=None, as_type=str):
 
     validate_config(config)
 
-    if not hasattr(as_type, '__call__') and not hasattr(as_type, '__bases__'):
-        raise TypeError('{} is not callable'.format(as_type))
+    if not callable(as_type):
+        raise TypeError(f'{as_type} is not callable')
 
     command = _get_command(key, config, file_)
     value = execute.stdout(command).strip()
@@ -214,11 +219,11 @@ def get_config_value(key, default=None, config=None, file_=None, as_type=str):
             return as_type(value)
         except ValueError:
             messages.error(
-                "Cannot parse value '{0}' for key '{1}' using format '{2}'".format(value, key, as_type.__name__)
+                f"Cannot parse value '{value}' for key '{key}' using format '{as_type.__name__}'"
             )
 
 
-def resolve_config_option(config):
+def resolve_config_option(config: ConfigOption | str | None) -> ConfigOption | str | None:
     if config is not None and not isinstance(config, ConfigOption):
         return ConfigOption[config.upper()] if config.upper() in [e.name for e in ConfigOption] is not None else config
     return config

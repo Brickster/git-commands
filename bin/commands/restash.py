@@ -1,13 +1,11 @@
 """Restash changes."""
 
-from __future__ import absolute_import
-
 import re
 
 from .utils import execute, messages
 
 
-def _is_valid_stash(stash):
+def _is_valid_stash(stash: str) -> bool:
     """Determines if a stash reference is valid.
 
     :param str or unicode stash: a stash reference
@@ -20,7 +18,7 @@ def _is_valid_stash(stash):
     return execute.swallow(['git', 'cat-file', '-t', stash]) == 0
 
 
-def _parents(commit):
+def _parents(commit: str) -> list[str]:
     """Returns the parents of a commit.
 
     :param str or unicode commit: a commit to find parents of
@@ -31,7 +29,7 @@ def _parents(commit):
     return execute.check_output(['git', 'rev-list', '--parents', '-1', commit]).strip().split(' ')[1:]
 
 
-def restash(stash='stash@{0}', quiet=False):
+def restash(stash: str = 'stash@{0}', quiet: bool = False) -> None:
     """Restash a stash reference.
 
     :param str or unicode stash: stash reference to reverse apply
@@ -41,16 +39,16 @@ def restash(stash='stash@{0}', quiet=False):
     if not execute.check_output('git stash list'):
         messages.error('no stashes exist')
     if not _is_valid_stash(stash):
-        messages.error('{} is not a valid stash reference'.format(stash))
+        messages.error(f'{stash} is not a valid stash reference')
 
     _reverse_modifications(stash)
     _remove_untracked_files(stash)
 
     stash_sha = execute.check_output(['git', 'rev-parse', stash]).splitlines()[0]
-    messages.info('Restashed {} ({})'.format(stash, stash_sha), quiet)
+    messages.info(f'Restashed {stash} ({stash_sha})', quiet)
 
 
-def _reverse_modifications(stash):
+def _reverse_modifications(stash: str) -> None:
     # if there are modifications, reverse apply them
     reverse_patch = execute.check_output(['git', 'stash', 'show', '--patch', '--no-color', stash])
     if reverse_patch:
@@ -59,11 +57,11 @@ def _reverse_modifications(stash):
             messages.error('unable to reverse modifications', exit_=True)
 
 
-def _remove_untracked_files(stash):
+def _remove_untracked_files(stash: str) -> None:
     # check if we need remove any untracked files. For a stash ref, the third parent contains the untracked files.
     parents = _parents(stash)
     if len(parents) == 3:
-        untracked_files = execute.check_output(['git', 'ls-tree', '--name-only', '{}^3'.format(stash)]).splitlines()
+        untracked_files = execute.check_output(['git', 'ls-tree', '--name-only', f'{stash}^3']).splitlines()
 
         # it's possible to have three parents and no untracked files if --include-untracked was unnecessarily used
         if untracked_files:

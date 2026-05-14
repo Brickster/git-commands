@@ -1,13 +1,9 @@
 """Get the current upstream branch."""
 
-from __future__ import absolute_import
-
 from enum import Enum
 
 from .utils import execute, git, messages
 
-_MERGE_CONFIG = 'git config --local branch.{}.merge'
-_REMOTE_CONFIG = 'git config --local branch.{}.remote'
 _LOCAL_REMOTE = '.'
 
 
@@ -19,7 +15,7 @@ class IncludeRemote(Enum):
     NONE_LOCAL = 'Only when not a local remote'
 
 
-def upstream(branch=None, include_remote=IncludeRemote.NEVER):
+def upstream(branch: str | None = None, include_remote: IncludeRemote = IncludeRemote.NEVER) -> str | None:
     """Get the upstream branch of the current branch.
 
     :param str or unicode branch: the branch whose upstream to find
@@ -34,26 +30,26 @@ def upstream(branch=None, include_remote=IncludeRemote.NEVER):
     if not branch:
         branch = git.current_branch()
     elif not git.is_valid_reference(branch):
-        messages.error("'{}' is not a valid branch".format(branch))
+        messages.error(f"'{branch}' is not a valid branch")
 
     # get remote branch name
-    remote_branch = _get_remote_branch(branch)
+    remote_branch = _get_remote_branch(branch or '')
 
     # get remote name
     remote_name = None
     if remote_branch and include_remote != IncludeRemote.NEVER:
-        remote_name = execute.check_output(_REMOTE_CONFIG.format(branch)).strip()
+        remote_name = execute.check_output(f'git config --local branch.{branch}.remote').strip()
 
     return _upstream_info(remote_name, remote_branch, include_remote)
 
 
-def _get_remote_branch(branch):
-    upstream_info = execute.stdout(_MERGE_CONFIG.format(branch)).strip()
+def _get_remote_branch(branch: str) -> str:
+    upstream_info = execute.stdout(f'git config --local branch.{branch}.merge').strip()
     remote_branch = upstream_info.rsplit('/', 1)[-1]
     return remote_branch
 
 
-def _upstream_info(remote_name, remote_branch, include_remote):
+def _upstream_info(remote_name: str | None, remote_branch: str, include_remote: IncludeRemote) -> str:
     if not remote_branch or not remote_name:
         return remote_branch
     elif include_remote == IncludeRemote.NONE_LOCAL and remote_name == _LOCAL_REMOTE:

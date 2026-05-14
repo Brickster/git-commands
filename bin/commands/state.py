@@ -1,13 +1,11 @@
 """View the state of the working tree."""
 
-from __future__ import absolute_import
-
 import os
 import re
 import shlex
 import sys
 from ast import literal_eval
-from collections import OrderedDict
+from typing import Any
 
 import colorama
 
@@ -16,7 +14,14 @@ from .stateextensions import status
 from .utils import directories, execute, git, messages, parse_string
 
 
-def _print_section(title, accent=None, text=None, format_='compact', show_empty=False, color='auto'):
+def _print_section(
+        title: str,
+        accent: str | None = None,
+        text: str | None = None,
+        format_: str | None = 'compact',
+        show_empty: bool | None = False,
+        color: str = 'auto'
+) -> str:
     """Print a section."""
 
     if not show_empty and not text:
@@ -25,9 +30,9 @@ def _print_section(title, accent=None, text=None, format_='compact', show_empty=
     header_color = _resolve_header_color(color)
 
     if accent:
-        section = '# {}{} {}{}'.format(header_color, title, accent, colorama.Fore.RESET) + os.linesep
+        section = f'# {header_color}{title} {accent}{colorama.Fore.RESET}' + os.linesep
     else:
-        section = '# {}{}{}'.format(header_color, title, colorama.Fore.RESET) + os.linesep
+        section = f'# {header_color}{title}{colorama.Fore.RESET}' + os.linesep
 
     if format_ == 'pretty':
         section += _pretty_print_section_text(text)
@@ -35,25 +40,21 @@ def _print_section(title, accent=None, text=None, format_='compact', show_empty=
         if text is not None:
             section += text
     else:
-        messages.error("unknown format '{}'".format(format_))
+        messages.error(f"unknown format '{format_}'")
 
     return section
 
 
-def _pretty_print_section_text(text):
-    if text is not None and len(text) > 0:
-        result = os.linesep
-        text = text.splitlines()
-        for line in text:
-            result += '    ' + line + os.linesep
-        result += os.linesep
-        return result
+def _pretty_print_section_text(text: str | None) -> str:
+    if text:
+        indented = os.linesep.join('    ' + line for line in text.splitlines())
+        return os.linesep + indented + os.linesep + os.linesep
     else:
         # there's no text but we still want some nicer formatting
         return os.linesep
 
 
-def _resolve_header_color(color):
+def _resolve_header_color(color: str) -> str:
     header_color = colorama.Fore.RESET
     if color == 'auto' and sys.stdout.isatty():
         header_color = colorama.Fore.GREEN
@@ -62,7 +63,7 @@ def _resolve_header_color(color):
     return header_color
 
 
-def _print_sections(sections, order=[], page=False, clear=False):
+def _print_sections(sections: dict[str, str], order: list[str] = [], page: bool = False, clear: bool = False) -> None:
 
     state_result = ''
 
@@ -88,13 +89,12 @@ def _print_sections(sections, order=[], page=False, clear=False):
         messages.info(state_result)
 
 
-def _run_extension(extension, options, show_color):
+def _run_extension(extension: str, options: dict[str, list[str]], show_color: str) -> tuple[str, str | None]:
     extension_command = git.get_config_value('git-state.extensions.' + extension + '.command')
     extension_name = git.get_config_value('git-state.extensions.' + extension + '.name', default=extension)
     if extension_command is None:
         messages.warn(
-            "extension '{0}' has no command to execute: run 'git state extensions edit {0} -c <command>' to "
-            "remediate".format(extension)
+            f"extension '{extension}' has no command to execute: run 'git state extensions edit {extension} -c <command>' to remediate"
         )
         return extension_name, None
 
@@ -109,7 +109,7 @@ def _run_extension(extension, options, show_color):
 
     extension_command = shlex.split(extension_command) + extension_options
     if git.get_config_value('git-state.extensions.' + extension + '.color', default=True, as_type=parse_string.as_bool):
-        extension_command += ['--color={}'.format(show_color)]
+        extension_command += [f'--color={show_color}']
 
     extension_out, extension_error, extension_code = execute.execute(extension_command)
     extension_text = extension_out if not extension_code else extension_error
@@ -117,11 +117,19 @@ def _run_extension(extension, options, show_color):
     return extension_name, extension_text
 
 
-def _extension_exists(extension):
-    return bool(int(settings.list_('git-state.extensions.' + extension, format_=settings.FormatOption.COUNT)))
+def _extension_exists(extension: str) -> bool:
+    return bool(int(settings.list_('git-state.extensions.' + extension, format_=settings.FormatOption.COUNT) or 0))
 
 
-def edit_extension(extension, command=None, name=None, options=None, show=None, color=True, config=None):
+def edit_extension(
+        extension: str,
+        command: str | None = None,
+        name: str | None = None,
+        options: list[str] | None = None,
+        show: bool | None = None,
+        color: bool | None = True,
+        config: str | None = None
+) -> None:
     extension_section = 'git-state.extensions.' + extension
     already_exists = _extension_exists(extension)
     if command:
@@ -134,41 +142,42 @@ def edit_extension(extension, command=None, name=None, options=None, show=None, 
         _update_extension_config(config, extension_section, 'show', str(show))
     if color is not None:
         _update_extension_config(config, extension_section, 'color', str(color))
-    messages.info('Extension {} {}'.format(extension, 'updated' if already_exists else 'created'))
+    messages.info(f"Extension {extension} {'updated' if already_exists else 'created'}")
 
 
-def _update_extension_config(config, section, key, value):
+def _update_extension_config(config: git.ConfigOption | str | None, section: str, key: str, value: Any) -> None:
     config = git.resolve_config_option(config)
     if config is None:
         execute.call(['git', 'config', section + '.' + key, value])
     elif isinstance(config, git.ConfigOption):
-        execute.call(['git', 'config', '--{}'.format(config.name.lower()), section + '.' + key, value])
+        execute.call(['git', 'config', f'--{config.name.lower()}', section + '.' + key, value])
     else:
         execute.call(['git', 'config', '--file', config, section + '.' + key, value])
 
 
-def get_extensions():
+def get_extensions() -> list[str]:
     extensions = settings.list_(format_=settings.FormatOption.SECTIONS)
     if extensions is None:
         return []
     return [match.group(1) for match in re.finditer('^git-state\\.extensions\\.([^.\n]+)$', extensions, re.MULTILINE)]
 
 
-def print_extensions():
+def print_extensions() -> None:
     extensions = get_extensions()
     if extensions:
         messages.info(os.linesep.join(sorted(extensions)))
 
 
-def print_extension_config(extension, format_=settings.FormatOption.COMPACT):
+def print_extension_config(extension: str, format_: settings.FormatOption | str = settings.FormatOption.COMPACT) -> None:
     if format_ and isinstance(format_, str):
         format_ = settings.FormatOption[format_.upper()]
-    config = settings.list_(section='git-state.extensions.' + extension, format_=format_)
+    resolved_format = format_ if isinstance(format_, settings.FormatOption) else settings.FormatOption.COMPACT
+    config = settings.list_(section='git-state.extensions.' + extension, format_=resolved_format)
     if config:
         messages.info(config)
 
 
-def run_extension(extension):
+def run_extension(extension: str) -> None:
     if _extension_exists(extension):
         color_when = git.resolve_coloring(None)
         colorama.init(strip=(color_when == 'never'))
@@ -179,13 +188,13 @@ def run_extension(extension):
         _print_sections(sections, page=True)
 
 
-def delete_extension(extension, quiet=False):
+def delete_extension(extension: str, quiet: bool = False) -> None:
     if _extension_exists(extension):
-        settings.destroy('git-state.extensions.{}'.format(extension), dry_run=False)
-        messages.info('Extension {} deleted'.format(extension), quiet=quiet)
+        settings.destroy(f'git-state.extensions.{extension}', dry_run=False)
+        messages.info(f'Extension {extension} deleted', quiet=quiet)
 
 
-def state(**kwargs):
+def state(**kwargs: Any) -> None:
     """Print the state of the working tree.
 
     :keyword str show_color: color when (always, never, or auto)
@@ -200,9 +209,9 @@ def state(**kwargs):
     """
 
     if not directories.is_git_repository():
-        messages.error("'{}' not a git repository".format(os.getcwd()))
+        messages.error(f"'{os.getcwd()}' not a git repository")
 
-    show_color = git.resolve_coloring(kwargs.get('show_color').lower())
+    show_color = git.resolve_coloring((kwargs.get('show_color') or 'auto').lower())
     colorama.init(strip=(show_color == 'never'))
 
     kwargs['show_color'] = show_color
@@ -217,7 +226,7 @@ def state(**kwargs):
     ignore_extensions = kwargs.get('ignore_extensions')
     show_extensions = list(set(kwargs.get('show_extensions', [])))
 
-    sections = OrderedDict()
+    sections: dict[str, str] = {}
     if git.is_empty_repository():
         extensions = ['status']
         extensions = _resolve_extensions(extensions, show_extensions, ignore_extensions)
@@ -240,7 +249,7 @@ def state(**kwargs):
             extensions.remove('status')
 
         # show any user defined sections
-        options = kwargs.get('options')
+        options: dict[str, list[str]] = kwargs.get('options') or {}
         for extension in extensions or []:
 
             # skip if we should ignore this extension
@@ -259,8 +268,8 @@ def state(**kwargs):
             )
 
     order = kwargs.get('order', git.get_config_value('git-state.order', default=[], as_type=parse_string.as_delimited_list('|')))
-    _print_sections(sections, order, kwargs.get('page', True), kwargs.get('clear'))
+    _print_sections(sections, order, kwargs.get('page', True), kwargs.get('clear', False))
 
 
-def _resolve_extensions(all_extensions, show_extensions, ignore_extensions):
-    return list(set(show_extensions).union(set(all_extensions) - set(ignore_extensions)))
+def _resolve_extensions(all_extensions: list[str], show_extensions: list[str], ignore_extensions: list[str] | None) -> list[str]:
+    return list(set(show_extensions).union(set(all_extensions) - set(ignore_extensions or [])))

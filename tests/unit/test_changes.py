@@ -174,6 +174,27 @@ class TestChangesAssociate(unittest.TestCase):
         mock_resolvesha1.assert_called_once_with(committish)
         mock_error.assert_called_once_with('{} is not a valid revision'.format(committish))
 
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.is_empty_repository', return_value=False)
+    @mock.patch('bin.commands.utils.git.is_detached', return_value=False)
+    @mock.patch('bin.commands.utils.git.is_ref', return_value=False)
+    @mock.patch('bin.commands.utils.git.resolve_sha1', return_value=None)
+    @mock.patch('bin.commands.utils.messages.error')
+    def test_associate_notARef_invalidRevision_raisesValueError(
+            self,
+            mock_error,
+            mock_resolvesha1,
+            mock_isref,
+            mock_isdetached,
+            mock_isemptyrepository,
+            mock_isgitrepository
+    ):
+
+        # when / then
+        committish = 'c123'
+        with self.assertRaises(ValueError):
+            changes.associate(committish)
+
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
     @mock.patch('os.getcwd', return_value='/working/dir')
@@ -273,6 +294,20 @@ class TestChangesAssociateUpstream(unittest.TestCase):
 
         # then
         mock_error.assert_called_once_with('{} has no upstream branch'.format(branch))
+
+    @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=True)
+    @mock.patch('bin.commands.utils.git.current_branch')
+    @mock.patch('bin.commands.upstream.upstream')
+    @mock.patch('bin.commands.utils.messages.error')
+    def test_associate_upstream_noupstream_raisesValueError(self, mock_error, mock_upstream, mock_currentbranch, mock_isgitrepository):
+
+        # given
+        mock_currentbranch.return_value = 'cur-branch'
+        mock_upstream.return_value = ''
+
+        # when / then
+        with self.assertRaises(ValueError):
+            changes.associate_upstream()
 
     @mock.patch('bin.commands.utils.directories.is_git_repository', return_value=False)
     @mock.patch('bin.commands.utils.messages.error', side_effect=testutils.and_exit)
