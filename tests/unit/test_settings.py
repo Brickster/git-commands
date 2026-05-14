@@ -11,6 +11,15 @@ from bin.commands.utils import git
 class TestSettings(unittest.TestCase):
     layer = GitSettings
 
+    def test__getSectionsMap_invalidKeyFormat(self):
+
+        # given
+        config_map = {'invalidkey': 'value'}
+
+        # when / then
+        with self.assertRaises(ValueError):
+            settings._get_sections_map(config_map)
+
     def test__prettyFormatConfigs(self):
 
         # given

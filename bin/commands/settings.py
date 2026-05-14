@@ -22,7 +22,8 @@ def _get_sections_map(config_map: dict[str, str]) -> dict[str, dict[str, str]]:
     all_sections_map: dict[str, dict[str, str]] = {}
     for key, value in config_map.items():
         match = re.match(r'^(.*)\.([-a-zA-Z0-9]+)', key)
-        assert match is not None
+        if match is None:
+            raise ValueError(f"Unexpected config key format: {key!r}")
         subkey = match.group(1)
         key = match.group(2)
 

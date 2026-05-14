@@ -57,7 +57,7 @@ def associate(committish: str, quiet: bool = False) -> None:
         resolved_committish = git.resolve_sha1(committish)
         if not resolved_committish:
             messages.error(f'{committish} is not a valid revision')
-        assert resolved_committish
+            raise ValueError(f'{committish} is not a valid revision')
         committish = resolved_committish
 
     current_branch = git.current_branch() or ''
@@ -78,7 +78,7 @@ def associate_upstream(quiet: bool = False) -> None:
     upstream_branch = upstream.upstream(branch, include_remote=upstream.IncludeRemote.NONE_LOCAL)
     if not upstream_branch:
         messages.error(f'{branch} has no upstream branch')
-    assert upstream_branch
+        raise ValueError(f'{branch} has no upstream branch')
     associate(upstream_branch, quiet)
 
 
