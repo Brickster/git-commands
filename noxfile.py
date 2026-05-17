@@ -1,6 +1,14 @@
+import os
+
 import nox
 
 PYTHON = "3.10"
+
+@nox.session(python=False)
+def quality(session):
+    if os.environ.get('CI'):
+        session.skip('skipping qlty in CI')
+    session.run('qlty', 'check', external=True)
 
 
 @nox.session(python=PYTHON)
