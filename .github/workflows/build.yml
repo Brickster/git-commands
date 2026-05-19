@@ -25,13 +25,19 @@ jobs:
       with:
         python-version: "3.10"
 
+    - name: Install qlty
+      uses: qltysh/qlty-action/install@a19242102d17e497f437d7466aa01b528537e899 # v2
+
     - name: Install nox
       run: |
         python -m pip install --upgrade pip
         pip install nox
 
     - name: Run linter
-      run: nox -s lint
+      run: nox -s quality
+
+    - name: Run type checker
+      run: nox -s typecheck
 
     - name: Add bin to PATH
       run: echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH

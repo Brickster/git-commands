@@ -49,3 +49,9 @@ default = true
 
 [[plugin]]
 name = "bandit"
+
+[[plugin]]
+name = "ruff"
+drivers = [
+  "lint",
+]

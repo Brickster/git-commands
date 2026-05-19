@@ -15,11 +15,12 @@ The 8 commands: `git state`, `git snapshot`, `git changes`, `git settings`, `git
 brew install pipx && pipx ensurepath
 pipx install nox
 
-# Run lint + tests
+# Run quality + tests
 nox
 
 # Run a single session
-nox -s lint
+nox -s quality
+nox -s typecheck
 nox -s tests
 
 # Pass args to pytest
@@ -64,5 +65,4 @@ Each `bin/git-*` entry point parses arguments and delegates to the matching `com
 - **Subprocess calls**: always go through `utils/execute.py`, not bare `subprocess`.
 - **Output**: use `utils/messages.py` (`info`, `warn`, `error`) rather than `print`.
 - **Argparse**: reuse helpers from `utils/parse_*.py` for flags that appear across multiple commands.
-- **Line length**: flake8 is configured to 160 characters (`setup.cfg`).
 - **Python version**: targets Python 3.10+; `from __future__ import` guards are legacy and can be ignored.
