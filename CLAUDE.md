@@ -14,6 +14,7 @@ The 8 commands: `git state`, `git snapshot`, `git changes`, `git settings`, `git
 # Setup (once)
 brew install pipx && pipx ensurepath
 pipx install nox
+# Install qlty (required for `nox -s quality`): https://qlty.sh
 
 # Run quality + tests
 nox
@@ -50,8 +51,14 @@ bin/
       directories.py             # directory helpers
       parse_*.py                 # shared argparse helpers
 tests/
+  layers.py                      # test layer base classes (Unit, Functional, per-command)
   unit/                          # per-command unit tests
+    testutils.py                 # unit test helpers
+    stateextensions/             # tests for stateextensions/
+    utils/                       # tests for commands/utils/
   functional/                    # integration tests against real git repos
+    testutils.py                 # functional test helpers
+    test_issue_reproductions.py  # regression tests for specific issues
 ```
 
 Each `bin/git-*` entry point parses arguments and delegates to the matching `commands/*.py` module. Shared behavior (running git, printing messages, resolving paths) lives in `commands/utils/`.
@@ -66,3 +73,7 @@ Each `bin/git-*` entry point parses arguments and delegates to the matching `com
 - **Output**: use `utils/messages.py` (`info`, `warn`, `error`) rather than `print`.
 - **Argparse**: reuse helpers from `utils/parse_*.py` for flags that appear across multiple commands.
 - **Python version**: targets Python 3.10+; `from __future__ import` guards are legacy and can be ignored.
+
+## Workflow
+
+After implementing a plan, suggest a commit message following [Conventional Commits](https://www.conventionalcommits.org/) format, max 72 characters.
