@@ -3,6 +3,9 @@
 # Drop a count or range of stashes.
 #
 
+import _version_check
+_version_check.check()
+
 import argparse
 
 from commands import abandon
