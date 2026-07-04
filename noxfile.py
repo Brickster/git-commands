@@ -26,3 +26,10 @@ def tests(session):
 @nox.session(python=PYTHON, default=False)
 def test(session):
     tests(session)
+
+@nox.session(python=PYTHON, default=False)
+def unit(session):
+    session.install("-r", "requirements-test.txt")
+    session.run("coverage", "run", "-m", "pytest", "-v", "tests/unit/", *session.posargs)
+    session.run("coverage", "lcov", "-o", "coverage.lcov")
+    session.run("coverage", "report")
