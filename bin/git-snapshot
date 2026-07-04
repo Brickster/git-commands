@@ -7,6 +7,9 @@
 import argparse
 import sys
 
+import _version_check
+_version_check.check()
+
 from commands import snapshot
 from commands.utils import directories, messages
 

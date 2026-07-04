@@ -1,5 +1,8 @@
 #! /usr/bin/env python
 
+import _version_check
+_version_check.check()
+
 import argparse
 
 from commands import upstream

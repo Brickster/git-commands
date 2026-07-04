@@ -10,6 +10,12 @@ class Unit(object):
         pass
 
 
+class VersionCheck(Unit):
+    @classmethod
+    def setUp(cls):
+        pass
+
+
 class GitAbandon(Unit):
     @classmethod
     def setUp(cls):
