@@ -18,15 +18,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
 
     - name: Set up Python 3.10
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v6
       with:
         python-version: "3.10"
 
     - name: Install qlty
-      uses: qltysh/qlty-action/install@a19242102d17e497f437d7466aa01b528537e899 # v2
+      uses: qltysh/qlty-action/install@fd52dc852530a708d68c3b7342f8d33d1df4cd55 # v2
 
     - name: Install nox
       run: |
@@ -56,7 +56,7 @@ jobs:
       run: nox -s tests
 
     - name: Upload coverage report
-      uses: qltysh/qlty-action/coverage@v2
+      uses: qltysh/qlty-action/coverage@fd52dc852530a708d68c3b7342f8d33d1df4cd55 # v2
       with:
         token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
         files: coverage.lcov
