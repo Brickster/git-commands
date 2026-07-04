@@ -2,7 +2,7 @@ import os
 import sys
 
 
-def check(min_version=(3, 10)):
+def check(min_version: tuple[int, ...] = (3, 10)) -> None:
     if sys.version_info < min_version:
         cmd = os.path.basename(sys.argv[0]).replace('git-', 'git ')
         version = f'{sys.version_info.major}.{sys.version_info.minor}'
