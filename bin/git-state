@@ -3,6 +3,9 @@
 import argparse
 import sys
 
+import _version_check
+_version_check.check()
+
 from commands import state
 from commands.utils import git, parse_string
 from commands.utils.parse_actions import append_list, dict_set

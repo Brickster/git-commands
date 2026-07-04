@@ -3,6 +3,9 @@
 import argparse
 import sys
 
+import _version_check
+_version_check.check()
+
 from commands import changes, upstream
 from commands.utils import git, messages
 from commands.utils.messages import error
