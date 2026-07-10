@@ -26,7 +26,7 @@ jobs:
         python-version: "3.10"
 
     - name: Install qlty
-      uses: qltysh/qlty-action/install@fd52dc852530a708d68c3b7342f8d33d1df4cd55 # v2
+      uses: qltysh/qlty-action/install@08a0a862c159eae9b9003081da6663d96efef637 # v2
 
     - name: Install nox
       run: |
